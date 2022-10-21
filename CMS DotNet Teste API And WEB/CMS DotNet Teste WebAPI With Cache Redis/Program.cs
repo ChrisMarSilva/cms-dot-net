@@ -1,4 +1,5 @@
 using StackExchange.Redis;
+using WebApplication1.Services;
 //using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,8 +9,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
 // builder.Services.AddMemoryCache();
 builder.Services.AddSingleton<IConnectionMultiplexer>(config => ConnectionMultiplexer.Connect(builder.Configuration.GetConnectionString("Redis")));
+// builder.Services.AddSingleton<ICacheService, InMemoryCacheService>();
+builder.Services.AddSingleton<ICacheService, RedisCacheService>();
 
 var app = builder.Build();
 
