@@ -1,0 +1,124 @@
+﻿@model IEnumerable<Produto>
+
+<h1 class="mt-5">@ViewBag.Title</h1>
+
+<br>
+
+<div class="row text-right">
+    <div class="col">
+        <a class="btn btn-success" asp-action="AddEdit" asp-controller="Produtos" role="button">Adicionar Produto</a>
+    </div>
+</div>
+
+<br>
+
+<div class="table-responsive-sm">
+    <table id="myTableProduto" class="table table-sm table-striped table-borderless table-hover">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">#</th>
+                <th>Nome</th>
+                <th>Categoria</th>
+                <th>Preço</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr id="TrPr-@item.Id">
+                    <th scope="row">@item.Id</th>
+                    <td>@item.Nome</td>
+                    <td>@item.Categoria.Nome</td>
+                    <td>@item.PrecoUnitario.ToString()</td>
+                    <td>
+                        <a class="btn btn-outline-warning te xt-white" href="@Url.Action("AddEdit", "Produtos", new { id = item.Id})" role="button">  <i class="fa fa-pencil fa-lg" aria-hidden="true"></i> </a>
+                        &nbsp;
+                        @*<a class="btn btn-outline-danger" href="@Url.Action("Excluir", "Produtos", new { id = item.Id})" role="button">  <i class="fa fa-trash fa-lg" aria-hidden="true"></i> </a>*@
+                        @*<a class="btn btn-outline-danger" href="javascript:void(0);" onclick="ExcluirProduto(@item.Id, '@item.Nome');" role="button">  <i class="fa fa-trash-o fa-lg" aria-hidden="true"></i> </a>*@
+                        <button type="button" class="btn btn-outline-danger" href="javascript:void(0);" onclick="AbrirModalExcluir(@item.Id, '@item.Nome', 'Produto');"> <i class="fa fa-trash-o fa-lg" aria-hidden="true"></i> </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="ModalExcluir" tabindex="-1" role="dialog" aria-labelledby="ModalExcluirLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-dark text-white">
+                <h5 class="modal-title" id="ModalExcluirLabel">Exclusão</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Fechar"> <span aria-hidden="true">&times;</span> </button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="TxtProdId" />
+                <p>Deseja realmente excluir o <span id="TxtProdTitle"></span> <ins class="text-danger"><span class="font-weight-bold font-italic text-danger" id="TxtProdNome"></span></ins>?</p>
+            </div>
+            <div class="modal-footer">
+                <button style="width: 150px;" type="button" class="btn btn-dark" href="javascript:void(0);" onclick="ExcluirRegistro();">Confirmar</button>
+                <button style="width: 150px;" type="button" class="btn btn-outline-secondary" data-dismiss="modal">Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal -->
+
+
+@*<script src="~/js/jquery.min.js"></script>*@
+
+<script>
+
+    // let data = {};
+
+    //$(document).ready(function () {
+    //    $('#myTableProduto').DataTable();
+    //});
+
+    function AbrirModalExcluir(id, nome, title) {
+        //data.id = id;
+        $('#TxtProdId').val(id);
+        $('#TxtProdTitle').text(title);
+        $('#TxtProdNome').text(nome);
+        toastr.remove();
+        $('#ModalExcluir').modal('show');
+    }
+
+    function ExcluirRegistro() {
+
+        let id = $('#TxtProdId').val();
+        let nome = $('#TxtProdNome').text();
+
+        toastr.options.escapeHtml = true;
+        toastr.options.closeButton = true;
+        toastr.options.closeHtml = '<button><i class="icon-off"></i></button>';
+        toastr.options.closeMethod = 'fadeOut';
+        toastr.options.closeDuration = 300;
+        toastr.options.closeEasing = 'swing';
+        toastr.options.onShown = function () { console.log('hello'); }
+        toastr.options.onclick = function () { console.log('clicked'); }
+        toastr.options.onHidden = function () { console.log('goodbye'); }
+        toastr.options.onCloseClick = function () { console.log('close button clicked'); }
+
+        $.ajax({
+            //type: "post",
+            method: "delete",
+            url: `/Produtos/Excluir/${id}`,
+            //data: { id: id },
+            success: (result) => {
+                $('#ModalExcluir').modal('hide');
+                $(`#TrPr-${id}`).closest('tr').fadeOut(400);
+                // toastr.success('Produto Excluido com Sucesso.');
+                toastr.remove();
+                toastr.success('Excluido com Sucesso!', 'Produto ' + nome, { timeOut: 5000 });
+            },
+            error: (request, status, error) => {
+                //alert("cms: " + error + " - " + request.responseText
+                toastr.remove();
+                toastr.error('Falha ao Excluir Produto', 'Produto ' + nome, { timeOut: 5000 });
+            }
+        });
+    }
+
+</script>

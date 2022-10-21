@@ -1,0 +1,13 @@
+﻿
+$color1: #f00;
+$color2: #0f0;
+$color3: #00f;
+
+h1.colors {
+    background-color: $color1;
+    color: $color2;
+    border: dashed 2px $color3;
+    text-align: center;
+}
+
+

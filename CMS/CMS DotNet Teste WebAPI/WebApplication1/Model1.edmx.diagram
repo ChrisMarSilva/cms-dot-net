@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="bc1b334e0efd4579a2d86a83b168d04d" Name="Diagram1">
+        <EntityTypeShape EntityType="CMS_DOTNETModel.TbAula" Width="1.5" PointX="8" PointY="5.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="CMS_DOTNETModel.TbCurso" Width="1.5" PointX="5.75" PointY="5" IsExpanded="true" />
+        <EntityTypeShape EntityType="CMS_DOTNETModel.TBEmpresa" Width="1.5" PointX="0.75" PointY="1.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="CMS_DOTNETModel.TbItemVenda" Width="1.5" PointX="3" PointY="4.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="CMS_DOTNETModel.TbRequisito" Width="1.5" PointX="5.25" PointY="1.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="CMS_DOTNETModel.TBTarefa" Width="1.5" PointX="7.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CMS_DOTNETModel.TbVaga" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="CMS_DOTNETModel.TbVenda" Width="1.5" PointX="0.75" PointY="5" IsExpanded="true" />
+        <AssociationConnector Association="CMS_DOTNETModel.FK_dbo_TbAula_dbo_TbCurso_IdCurso" ManuallyRouted="false" />
+        <AssociationConnector Association="CMS_DOTNETModel.FK_dbo_TbVaga_dbo_TBEmpresa_EmpresaId" ManuallyRouted="false" />
+        <AssociationConnector Association="CMS_DOTNETModel.FK_dbo_TbItemVenda_dbo_TbVenda_Venda_Id" ManuallyRouted="false" />
+        <AssociationConnector Association="CMS_DOTNETModel.FK_dbo_TbRequisito_dbo_TbVaga_Vaga_Id" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

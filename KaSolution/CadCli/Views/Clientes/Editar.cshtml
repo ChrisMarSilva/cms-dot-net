@@ -1,0 +1,30 @@
+﻿
+<h1 class="mt-1">Editar Cliente</h1>
+
+<br>
+
+<form action="/Clientes/Salvar" method="post">
+    <input type="hidden" name="Id" value="@Model.Id">
+    <input type="hidden" name="DataCadastro" value="@Model.DataCadastro">
+    <div class="form-group row">
+        <label class="col-sm-1 col-form-label font-weight-bold text-left">Nome:</label>
+        <div class="col-sm-4">
+            <input type="text" class="form-control" name="Nome" placeholder="Seu Nome" value="@Model.Nome" autofocus>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-sm-1 col-form-label font-weight-bold text-left">Idade:</label>
+        <div class="col-sm-4">
+            <input type="number" step="1" min="0" max="99" class="form-control" name="Idade" value="@Model.Idade" placeholder="Sua Idade">
+        </div>
+    </div>
+    <div class="form-group row text-center">
+        <div class="col-sm-1">
+        </div>
+        <div class="col-sm-4">
+            <button type="submit" class="btn btn-dark font-weight-bold">SALVAR</button>
+            <button type="reset" class="btn btn-outline-dark font-weight-bold">LIMPAR</button>
+            <a class="btn btn-outline-dark font-weight-bold" href="/Clientes" role="button">VOLTAR</a>
+        </div>
+    </div>
+</form>

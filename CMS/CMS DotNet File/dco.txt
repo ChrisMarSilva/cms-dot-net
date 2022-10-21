@@ -1,0 +1,97 @@
+<STR0014>
+1 <CodMsg> Código Mensagem [1..1]
+2 <NumCtrlIF_LDL> Número Controle IF ou LDL [1..1]
+3 <ISPBIF_LDL> ISPB IF ou LDL [1..1]
+4 <TpRet> Tipo Retorno [1..1]
+5 <DtHrIni> Data Hora Início [0..1]
+6 <DtHrFim> Data Hora Fim [0..1]
+7 <DtMovto> Data Movimento [1..1]
+</STR0014>
+
+
+<STR0014R1>
+	1 <CodMsg> Código Mensagem [1..1]
+	2 <NumCtrlIF_LDL> Número Controle IF ou LDL [1..1]
+	3 <ISPBIF_LDL> ISPB IF ou LDL [1..1]
+	4 <DtHrIni> Data Hora Início [1..1]
+	5 <SldInial> Saldo Inicial [1..1]
+	6 <Grupo_STR0014R1_Lanc> Grupo Lançamento [0..200]
+		7 <CodMsgOr> Código Mensagem Original [1..1]
+		8 <NumCtrlIF_LDLOr> Número Controle IF ou LDL Original [0..1]
+		9 <ISPBCtrapart> ISPB Contraparte [0..1]
+		10 <NumCtrlSTROr> Número Controle STR Original [1..1]
+		11 <DtHrSit> Data Hora Situação [1..1]
+		12 <TpDeb_Cred> Tipo Débito ou Crédito [1..1]
+		13 <VlrLanc> Valor Lançamento [1..1]
+	14 </Grupo_STR0014R1_Lanc> Fim Grupo Lançamento [0..200]
+	15 <SldFinl> Saldo Final [1..1]
+	16 <DtHrBC> Data Hora Bacen [1..1]
+	17 <DtMovto> Data Movimento [1..1]
+	18 <TamArq> Tamanho Arquivo [0..1]
+	19 <IdentdArq> Identificador Arquivo [0..1]
+</STR0014R1>
+
+
+TpRet = “P” – arquivo posicional
+
+
+Arquivo Posicional disponibilizado pelo prestador:
+0099777666SLC9876543bbbbbbbbbb20181108154507
+01STR0014R1SLC9876543bbbbbbbbbb997776662018-11-
+08T11:41:23000000000384569875400000000035809657542018-11-
+08T15:45:072018-11-08
+02STR0004NUMEROCTRLIF00000001STR201811080000000132018-11-
+08T11:23:25D0000000001234572300
+02STR0006NUMEROCTRLIF00000002STR201811080000002302018-11-
+08T12:02:34C0000000000709812340
+02SLB0005bbbbbbbbbbbbbbbbbbbbSTR201811080000044402018-11-
+08T13:02:25C0000000000498764504
+02STR0005NUMEROCTRLIF00000003STR201811080000121112018-11-
+08T14:52:48D0000000000238746544
+9999777666SLC9876543bbbbbbbbbb2018110815450700000007
+
+
+TpRet = “X” – arquivo XML:
+<STR0014R1>
+	<CodMsg>STR0014R1</CodMsg>
+	<NumCtrlIF>SLC9876543<NumCtrlIF>
+	<ISPBIF>99777666</ISPBIF>
+	<DtHrIni>2018-11-08T11:41:23</DtHrIni>
+	<SldInial>38456987.54</SldInial>
+	<Grupo_STR0014R1_Lanc>
+		<CodMsgOr>STR0004</CodMsgOr>
+		<NumCtrlIFOr>NUMEROCTRLIF00000001</NumCtrlIFOr>
+		<NumCtrlSTROr>STR20181108000000013</NumCtrlSTROr>
+		<DtHrSit>2018-11-08T11:23:25</DtHrSit>
+		<TpDeb_Cred>D</TpDeb_Cred>
+		<VlrLanc>12345723</VlrLanc>
+	</Grupo_STR0014R1_Lanc>
+	<Grupo_STR0014R1_Lanc>
+		<CodMsgOr>STR0006</CodMsgOr>
+		<NumCtrlIFOr>NUMEROCTRLIF00000002</NumCtrlIFOr>
+		<NumCtrlSTROr>STR20181108000000230</NumCtrlSTROr>
+		<DtHrSit>2018-11-08T12:02:34</DtHrSit>
+		<TpDeb_Cred>C</TpDeb_Cred>
+		<VlrLanc>7098123.4</VlrLanc>
+	</Grupo_STR0014R1_Lanc>
+	<Grupo_STR0014R1_Lanc>
+		<CodMsgOr>SLB0005</CodMsgOr>
+		<NumCtrlSTROr>STR20181108000004440</NumCtrlSTROr>
+		<DtHrSit>2018-11-08T13:02:25</DtHrSit>
+		<TpDeb_Cred>C</TpDeb_Cred>
+		<VlrLanc>4987645.04</VlrLanc>
+	</Grupo_STR0014R1_Lanc>
+	<Grupo_STR0014R1_Lanc>
+		<CodMsgOr>STR0005</CodMsgOr>
+		<NumCtrlIFOr>NUMEROCTRLIF00000003</NumCtrlIFOr>
+		<NumCtrlSTROr>STR20181108000012111</NumCtrlSTROr>
+		<DtHrSit>2018-11-08T14:52:48</DtHrSit>
+		<TpDeb_Cred>D</TpDeb_Cred>
+		<VlrLanc>2387465.44</VlrLanc>
+	</Grupo_STR0014R1_Lanc>
+	<SldFinl>35809657.54</SldFinl>
+	<DtHrBC>2018-11-08T15:45:07</DtHrBC>
+	<DtMovto>2018-11-08</DtMovto>
+</STR0014R1>
+
+

@@ -1,0 +1,43 @@
+﻿
+<h1 class="mt-1">Listagem de Clientes</h1>
+
+<br>
+
+<div class="row text-right">
+    <div class="col">
+        <a class="btn btn-outline-dark" href="/Clientes/Adicionar" role="button">Adicionar Cliente</a>
+    </div>
+ </div>
+
+<br>
+
+<div class="table-responsive-sm">
+    <table id="myTable" class="table table-sm table-striped table-borderless table-hover">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">#</th>
+                <th>Nome</th>
+                <th>Idade</th>
+                <th>Data do Cadastro</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (CadCli.Models.Cliente item in Model)
+            {
+                <tr id="Tr-@item.Id">
+                    <th scope="row">@item.Id</th>
+                    <td>@item.Nome</td>
+                    <td>@item.Idade</td>
+                    <td>@item.DataCadastro.ToShortDateString()</td>
+                    <td>
+                        <a class="btn btn-outline-warning" href="/Clientes/Editar/@item.Id" role="button">  <i class="fa fa-pencil fa-lg" aria-hidden="true"></i> </a>
+                        &nbsp;
+                        <a class="btn btn-outline-danger" href="javascript:void(0);" onclick="ExcluirCliente(@item.Id, '@item.Nome');" role="button">  <i class="fa fa-trash-o fa-lg" aria-hidden="true"></i> </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

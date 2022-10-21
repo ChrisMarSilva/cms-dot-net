@@ -1,0 +1,53 @@
+﻿@model SignInVM
+@{
+
+    ViewBag.Title = "Login";
+    // ViewData.ModelState
+}
+
+<h1 class="mt-5">@ViewBag.Title</h1>
+
+<br>
+
+<form method="post" action="@Url.Action("SignIn", "Auth")" asp-antiforgery="true">
+
+    <div class="form-group row">
+        @*<label class="col-sm-1 col-form-label font-weight-bold text-left">Email:</label>*@
+        @Html.LabelFor(m => m.Email, null, new { @class = "col-sm-1 col-form-label font-weight-bold text-left" })
+        <div class="col-sm-4">
+            <input type="email" class="form-control" name="Email" placeholder="Seu Email" value="Pessoa02@gmail.com"> @* @Model?.Emailrequired*@
+            @*@Html.TextBoxFor(m => m.Email, null, new { @class = "form-control", autofocus = "", required = "", type = "email", value = "Pessoa02@teste.com" })*@
+        </div>
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-1 col-form-label font-weight-bold text-left">Senha:</label>
+        <div class="col-sm-4">
+            <input type="password" class="form-control" name="Senha" placeholder="Sua Senha" value="123">
+        </div>
+        <span asp-validation-for="Senha" class="text-danger"></span>
+    </div>
+
+    <div class="custom-control custom-checkbox">
+        <input type="checkbox" class="custom-control-input" id="customControlAutosizing" value="true" checked name="Lembrar">
+        <label class="custom-control-label" for="customControlAutosizing">Lembrar-me</label>
+    </div>
+
+    <div class="form-group row col text-danger" asp-validation-summary="ModelOnly"> </div>
+
+    <div class="form-group row text-center">
+        <div class="col-sm-1">
+        </div>
+        <div class="col-sm-4">
+            <button type="submit" class="btn btn-success font-weight-bold">ACESSAR</button>
+            <a class="btn btn-dark font-weight-bold" href="@Url.Action("Index", "Home")" role="button">VOLTAR</a>
+        </div>
+    </div>
+
+</form>
+
+@section scripts{
+    <script src="~/node_modules/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/node_modules/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.min.js"></script>
+}

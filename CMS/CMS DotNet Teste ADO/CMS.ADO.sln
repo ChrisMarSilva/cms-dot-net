@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29519.181
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CMS.ADO.Console", "CMS.ADO.Console\CMS.ADO.Console.csproj", "{F7B00F58-3531-4FC5-960B-6702DD8621B5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CMS.ADO.Forms", "CMS.ADO.Forms\CMS.ADO.Forms.csproj", "{1BC252DA-4EC3-4A72-A2B1-0691A2DD2EB9}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F7B00F58-3531-4FC5-960B-6702DD8621B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F7B00F58-3531-4FC5-960B-6702DD8621B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F7B00F58-3531-4FC5-960B-6702DD8621B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F7B00F58-3531-4FC5-960B-6702DD8621B5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1BC252DA-4EC3-4A72-A2B1-0691A2DD2EB9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1BC252DA-4EC3-4A72-A2B1-0691A2DD2EB9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1BC252DA-4EC3-4A72-A2B1-0691A2DD2EB9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1BC252DA-4EC3-4A72-A2B1-0691A2DD2EB9}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2DD5A271-3945-42D8-9CD9-801706806D79}
+	EndGlobalSection
+EndGlobal

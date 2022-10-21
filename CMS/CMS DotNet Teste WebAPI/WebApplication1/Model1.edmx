@@ -1,0 +1,443 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="CMS_DOTNETModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="TbAula">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Titulo" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Ordem" Type="int" Nullable="false" />
+          <Property Name="IdCurso" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TbCurso">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Titulo" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="URL" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Canal" Type="int" Nullable="false" />
+          <Property Name="DataPublicacao" Type="datetime" Nullable="false" />
+          <Property Name="CargaHoraria" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TBEmpresa">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="NomeEmp" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Descr" Type="nvarchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="TbItemVenda">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Descricao" Type="nvarchar(max)" />
+          <Property Name="Preco" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Quantidade" Type="int" Nullable="false" />
+          <Property Name="Venda_Id" Type="int" />
+        </EntityType>
+        <EntityType Name="TbRequisito">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Descricao" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Vaga_Id" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TBTarefa">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nome" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="TbVaga">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Titulo" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Descricao" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="Salario" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Ativa" Type="bit" Nullable="false" />
+          <Property Name="DataCadastro" Type="datetime" Nullable="false" />
+          <Property Name="LocalTrabalho" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="EmpresaId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TbVenda">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Data" Type="datetime" Nullable="false" />
+          <Property Name="Total" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Tipo" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_dbo_TbAula_dbo_TbCurso_IdCurso">
+          <End Role="TbCurso" Type="Self.TbCurso" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="TbAula" Type="Self.TbAula" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TbCurso">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="TbAula">
+              <PropertyRef Name="IdCurso" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_TbItemVenda_dbo_TbVenda_Venda_Id">
+          <End Role="TbVenda" Type="Self.TbVenda" Multiplicity="0..1" />
+          <End Role="TbItemVenda" Type="Self.TbItemVenda" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TbVenda">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="TbItemVenda">
+              <PropertyRef Name="Venda_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_TbRequisito_dbo_TbVaga_Vaga_Id">
+          <End Role="TbVaga" Type="Self.TbVaga" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="TbRequisito" Type="Self.TbRequisito" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TbVaga">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="TbRequisito">
+              <PropertyRef Name="Vaga_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_TbVaga_dbo_TBEmpresa_EmpresaId">
+          <End Role="TBEmpresa" Type="Self.TBEmpresa" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="TbVaga" Type="Self.TbVaga" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TBEmpresa">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="TbVaga">
+              <PropertyRef Name="EmpresaId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="CMS_DOTNETModelStoreContainer">
+          <EntitySet Name="TbAula" EntityType="Self.TbAula" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TbCurso" EntityType="Self.TbCurso" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TBEmpresa" EntityType="Self.TBEmpresa" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TbItemVenda" EntityType="Self.TbItemVenda" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TbRequisito" EntityType="Self.TbRequisito" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TBTarefa" EntityType="Self.TBTarefa" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TbVaga" EntityType="Self.TbVaga" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TbVenda" EntityType="Self.TbVenda" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_dbo_TbAula_dbo_TbCurso_IdCurso" Association="Self.FK_dbo_TbAula_dbo_TbCurso_IdCurso">
+            <End Role="TbCurso" EntitySet="TbCurso" />
+            <End Role="TbAula" EntitySet="TbAula" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_TbItemVenda_dbo_TbVenda_Venda_Id" Association="Self.FK_dbo_TbItemVenda_dbo_TbVenda_Venda_Id">
+            <End Role="TbVenda" EntitySet="TbVenda" />
+            <End Role="TbItemVenda" EntitySet="TbItemVenda" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_TbRequisito_dbo_TbVaga_Vaga_Id" Association="Self.FK_dbo_TbRequisito_dbo_TbVaga_Vaga_Id">
+            <End Role="TbVaga" EntitySet="TbVaga" />
+            <End Role="TbRequisito" EntitySet="TbRequisito" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_TbVaga_dbo_TBEmpresa_EmpresaId" Association="Self.FK_dbo_TbVaga_dbo_TBEmpresa_EmpresaId">
+            <End Role="TBEmpresa" EntitySet="TBEmpresa" />
+            <End Role="TbVaga" EntitySet="TbVaga" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="CMS_DOTNETModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="TbAula">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Titulo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Ordem" Type="Int32" Nullable="false" />
+          <Property Name="IdCurso" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="TbCurso" Relationship="Self.FK_dbo_TbAula_dbo_TbCurso_IdCurso" FromRole="TbAula" ToRole="TbCurso" />
+        </EntityType>
+        <EntityType Name="TbCurso">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Titulo" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="URL" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Canal" Type="Int32" Nullable="false" />
+          <Property Name="DataPublicacao" Type="DateTime" Nullable="false" />
+          <Property Name="CargaHoraria" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="TbAula" Relationship="Self.FK_dbo_TbAula_dbo_TbCurso_IdCurso" FromRole="TbCurso" ToRole="TbAula" />
+        </EntityType>
+        <EntityType Name="TBEmpresa">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="NomeEmp" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Descr" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="TbVaga" Relationship="Self.FK_dbo_TbVaga_dbo_TBEmpresa_EmpresaId" FromRole="TBEmpresa" ToRole="TbVaga" />
+        </EntityType>
+        <EntityType Name="TbItemVenda">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Descricao" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Preco" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Quantidade" Type="Int32" Nullable="false" />
+          <Property Name="Venda_Id" Type="Int32" />
+          <NavigationProperty Name="TbVenda" Relationship="Self.FK_dbo_TbItemVenda_dbo_TbVenda_Venda_Id" FromRole="TbItemVenda" ToRole="TbVenda" />
+        </EntityType>
+        <EntityType Name="TbRequisito">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Descricao" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Vaga_Id" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="TbVaga" Relationship="Self.FK_dbo_TbRequisito_dbo_TbVaga_Vaga_Id" FromRole="TbRequisito" ToRole="TbVaga" />
+        </EntityType>
+        <EntityType Name="TBTarefa">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nome" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="TbVaga">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Titulo" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Descricao" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Salario" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Ativa" Type="Boolean" Nullable="false" />
+          <Property Name="DataCadastro" Type="DateTime" Nullable="false" />
+          <Property Name="LocalTrabalho" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="EmpresaId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="TBEmpresa" Relationship="Self.FK_dbo_TbVaga_dbo_TBEmpresa_EmpresaId" FromRole="TbVaga" ToRole="TBEmpresa" />
+          <NavigationProperty Name="TbRequisito" Relationship="Self.FK_dbo_TbRequisito_dbo_TbVaga_Vaga_Id" FromRole="TbVaga" ToRole="TbRequisito" />
+        </EntityType>
+        <EntityType Name="TbVenda">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Data" Type="DateTime" Nullable="false" />
+          <Property Name="Total" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Tipo" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="TbItemVenda" Relationship="Self.FK_dbo_TbItemVenda_dbo_TbVenda_Venda_Id" FromRole="TbVenda" ToRole="TbItemVenda" />
+        </EntityType>
+        <Association Name="FK_dbo_TbAula_dbo_TbCurso_IdCurso">
+          <End Role="TbCurso" Type="Self.TbCurso" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="TbAula" Type="Self.TbAula" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TbCurso">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="TbAula">
+              <PropertyRef Name="IdCurso" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_TbVaga_dbo_TBEmpresa_EmpresaId">
+          <End Role="TBEmpresa" Type="Self.TBEmpresa" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="TbVaga" Type="Self.TbVaga" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TBEmpresa">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="TbVaga">
+              <PropertyRef Name="EmpresaId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_TbItemVenda_dbo_TbVenda_Venda_Id">
+          <End Role="TbVenda" Type="Self.TbVenda" Multiplicity="0..1" />
+          <End Role="TbItemVenda" Type="Self.TbItemVenda" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TbVenda">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="TbItemVenda">
+              <PropertyRef Name="Venda_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_TbRequisito_dbo_TbVaga_Vaga_Id">
+          <End Role="TbVaga" Type="Self.TbVaga" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="TbRequisito" Type="Self.TbRequisito" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TbVaga">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="TbRequisito">
+              <PropertyRef Name="Vaga_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="CMS_DOTNETEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="TbAula" EntityType="Self.TbAula" />
+          <EntitySet Name="TbCurso" EntityType="Self.TbCurso" />
+          <EntitySet Name="TBEmpresa" EntityType="Self.TBEmpresa" />
+          <EntitySet Name="TbItemVenda" EntityType="Self.TbItemVenda" />
+          <EntitySet Name="TbRequisito" EntityType="Self.TbRequisito" />
+          <EntitySet Name="TBTarefa" EntityType="Self.TBTarefa" />
+          <EntitySet Name="TbVaga" EntityType="Self.TbVaga" />
+          <EntitySet Name="TbVenda" EntityType="Self.TbVenda" />
+          <AssociationSet Name="FK_dbo_TbAula_dbo_TbCurso_IdCurso" Association="Self.FK_dbo_TbAula_dbo_TbCurso_IdCurso">
+            <End Role="TbCurso" EntitySet="TbCurso" />
+            <End Role="TbAula" EntitySet="TbAula" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_TbVaga_dbo_TBEmpresa_EmpresaId" Association="Self.FK_dbo_TbVaga_dbo_TBEmpresa_EmpresaId">
+            <End Role="TBEmpresa" EntitySet="TBEmpresa" />
+            <End Role="TbVaga" EntitySet="TbVaga" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_TbItemVenda_dbo_TbVenda_Venda_Id" Association="Self.FK_dbo_TbItemVenda_dbo_TbVenda_Venda_Id">
+            <End Role="TbVenda" EntitySet="TbVenda" />
+            <End Role="TbItemVenda" EntitySet="TbItemVenda" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_TbRequisito_dbo_TbVaga_Vaga_Id" Association="Self.FK_dbo_TbRequisito_dbo_TbVaga_Vaga_Id">
+            <End Role="TbVaga" EntitySet="TbVaga" />
+            <End Role="TbRequisito" EntitySet="TbRequisito" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="CMS_DOTNETModelStoreContainer" CdmEntityContainer="CMS_DOTNETEntities">
+          <EntitySetMapping Name="TbAula">
+            <EntityTypeMapping TypeName="CMS_DOTNETModel.TbAula">
+              <MappingFragment StoreEntitySet="TbAula">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Titulo" ColumnName="Titulo" />
+                <ScalarProperty Name="Ordem" ColumnName="Ordem" />
+                <ScalarProperty Name="IdCurso" ColumnName="IdCurso" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TbCurso">
+            <EntityTypeMapping TypeName="CMS_DOTNETModel.TbCurso">
+              <MappingFragment StoreEntitySet="TbCurso">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Titulo" ColumnName="Titulo" />
+                <ScalarProperty Name="URL" ColumnName="URL" />
+                <ScalarProperty Name="Canal" ColumnName="Canal" />
+                <ScalarProperty Name="DataPublicacao" ColumnName="DataPublicacao" />
+                <ScalarProperty Name="CargaHoraria" ColumnName="CargaHoraria" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TBEmpresa">
+            <EntityTypeMapping TypeName="CMS_DOTNETModel.TBEmpresa">
+              <MappingFragment StoreEntitySet="TBEmpresa">
+                <ScalarProperty Name="NomeEmp" ColumnName="NomeEmp" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TbItemVenda">
+            <EntityTypeMapping TypeName="CMS_DOTNETModel.TbItemVenda">
+              <MappingFragment StoreEntitySet="TbItemVenda">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Descricao" ColumnName="Descricao" />
+                <ScalarProperty Name="Preco" ColumnName="Preco" />
+                <ScalarProperty Name="Quantidade" ColumnName="Quantidade" />
+                <ScalarProperty Name="Venda_Id" ColumnName="Venda_Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TbRequisito">
+            <EntityTypeMapping TypeName="CMS_DOTNETModel.TbRequisito">
+              <MappingFragment StoreEntitySet="TbRequisito">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Descricao" ColumnName="Descricao" />
+                <ScalarProperty Name="Vaga_Id" ColumnName="Vaga_Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TBTarefa">
+            <EntityTypeMapping TypeName="CMS_DOTNETModel.TBTarefa">
+              <MappingFragment StoreEntitySet="TBTarefa">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Nome" ColumnName="Nome" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TbVaga">
+            <EntityTypeMapping TypeName="CMS_DOTNETModel.TbVaga">
+              <MappingFragment StoreEntitySet="TbVaga">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Titulo" ColumnName="Titulo" />
+                <ScalarProperty Name="Descricao" ColumnName="Descricao" />
+                <ScalarProperty Name="Salario" ColumnName="Salario" />
+                <ScalarProperty Name="Ativa" ColumnName="Ativa" />
+                <ScalarProperty Name="DataCadastro" ColumnName="DataCadastro" />
+                <ScalarProperty Name="LocalTrabalho" ColumnName="LocalTrabalho" />
+                <ScalarProperty Name="EmpresaId" ColumnName="EmpresaId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TbVenda">
+            <EntityTypeMapping TypeName="CMS_DOTNETModel.TbVenda">
+              <MappingFragment StoreEntitySet="TbVenda">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Data" ColumnName="Data" />
+                <ScalarProperty Name="Total" ColumnName="Total" />
+                <ScalarProperty Name="Tipo" ColumnName="Tipo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

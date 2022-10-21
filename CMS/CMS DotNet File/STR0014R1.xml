@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<STR0014R1>
+	<CodMsg>STR0014R1</CodMsg>
+	<NumCtrlIF>SLC9876543</NumCtrlIF>
+	<ISPBIF>99777666</ISPBIF>
+	<DtHrIni>2018-11-08T11:41:23</DtHrIni>
+	<SldInial>38456987.54</SldInial>
+	<Grupo_STR0014R1_Lanc>
+		<CodMsgOr>STR0004</CodMsgOr>
+		<NumCtrlIFOr>NUMEROCTRLIF00000001</NumCtrlIFOr>
+		<NumCtrlSTROr>STR20181108000000013</NumCtrlSTROr>
+		<DtHrSit>2018-11-08T11:23:25</DtHrSit>
+		<TpDeb_Cred>D</TpDeb_Cred>
+		<VlrLanc>12345723</VlrLanc>
+	</Grupo_STR0014R1_Lanc>
+	<Grupo_STR0014R1_Lanc>
+		<CodMsgOr>STR0006</CodMsgOr>
+		<NumCtrlIFOr>NUMEROCTRLIF00000002</NumCtrlIFOr>
+		<NumCtrlSTROr>STR20181108000000230</NumCtrlSTROr>
+		<DtHrSit>2018-11-08T12:02:34</DtHrSit>
+		<TpDeb_Cred>C</TpDeb_Cred>
+		<VlrLanc>7098123.4</VlrLanc>
+	</Grupo_STR0014R1_Lanc>
+	<Grupo_STR0014R1_Lanc>
+		<CodMsgOr>SLB0005</CodMsgOr>
+		<NumCtrlSTROr>STR20181108000004440</NumCtrlSTROr>
+		<DtHrSit>2018-11-08T13:02:25</DtHrSit>
+		<TpDeb_Cred>C</TpDeb_Cred>
+		<VlrLanc>4987645.04</VlrLanc>
+	</Grupo_STR0014R1_Lanc>
+	<Grupo_STR0014R1_Lanc>
+		<CodMsgOr>STR0005</CodMsgOr>
+		<NumCtrlIFOr>NUMEROCTRLIF00000003</NumCtrlIFOr>
+		<NumCtrlSTROr>STR20181108000012111</NumCtrlSTROr>
+		<DtHrSit>2018-11-08T14:52:48</DtHrSit>
+		<TpDeb_Cred>D</TpDeb_Cred>
+		<VlrLanc>2387465.44</VlrLanc>
+	</Grupo_STR0014R1_Lanc>
+	<SldFinl>35809657.54</SldFinl>
+	<DtHrBC>2018-11-08T15:45:07</DtHrBC>
+	<DtMovto>2018-11-08</DtMovto>
+</STR0014R1>

@@ -1,0 +1,21 @@
+﻿using System.Data.Entity.ModelConfiguration;
+using WebApplication1.Models.Entities;
+
+namespace WebApplication1.Models.Mapping
+{
+    public class ProductMap : EntityTypeConfiguration<Product>
+    {
+        public ProductMap()
+        {
+            ToTable("Product");
+
+            HasKey(x => x.Id);
+
+            Property(x => x.Title).HasMaxLength(160).IsRequired();
+            Property(x => x.Price).IsRequired();
+            Property(x => x.AcquireDate).IsRequired();
+
+            HasRequired(x => x.Category);
+        }
+    }
+}

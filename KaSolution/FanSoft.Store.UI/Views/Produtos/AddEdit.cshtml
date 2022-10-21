@@ -1,0 +1,63 @@
+﻿@model ProdutosAddEditVM
+
+<h1 class="mt-5">@ViewBag.Title</h1>
+
+<br>
+
+<form method="post" action="@Url.Action("AddEdit", "Produtos")">
+
+    <div class="form-group row">
+        <label class="col-sm-1 col-form-label font-weight-bold text-left">Nome:</label>
+        <div class="col-sm-4">
+            <input type="text" class="form-control" name="Nome" placeholder="Seu Nome" value="@Model?.Nome" autofocus>
+        </div>
+        <span asp-validation-for="Nome" class="text-danger"></span>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-1 col-form-label font-weight-bold text-left">Categoria:</label>
+        <div class="col-sm-4">
+            <select class="form-control" asp-for="CategoriaId" name="CategoriaId" asp-items="ViewBag.Categorias">
+                <option value="">Selecione ...</option>
+                @*@foreach (Categoria categ in ViewBag.Categorias)
+                {
+                    <option value="@categ.Id">@categ.Nome</option>
+                }*@
+            </select>
+        </div>
+        <span asp-validation-for="CategoriaId" class="text-danger"></span>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-1 col-form-label font-weight-bold text-left">Preço:</label>
+        <div class="col-sm-4">
+            <input type="number" step="any" min="0" max="100000" class="form-control" name="PrecoUnitario" asp-for="PrecoUnitario" placeholder="Seu Preço" value="@Model?.PrecoUnitario.ToString().Replace(",", ".")">
+        </div>
+        <span asp-validation-for="PrecoUnitario" class="text-danger"></span>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-1 col-form-label font-weight-bold text-left">Descrição:</label>
+        <div class="col-sm-4">
+            <textarea class="form-control" name="Descricao" rows="4" cols="10">@Model?.Descricao</textarea>
+        </div>
+        <span asp-validation-for="Descricao" class="text-danger"></span>
+    </div>
+
+    <div class="form-group row col text-danger" asp-validation-summary="ModelOnly"> </div>
+
+    <div class="form-group row text-center">
+        <div class="col-sm-1">
+        </div>
+        <div class="col-sm-4">
+            <button type="submit" class="btn btn-success font-weight-bold">SALVAR</button>
+            <button type="reset" class="btn btn-outline-dark font-weight-bold">LIMPAR</button>
+            <a class="btn btn-dark font-weight-bold" href="@Url.Action("Index", "Produtos")" role="button">VOLTAR</a>
+        </div>
+    </div>
+</form>
+
+@section scripts{
+    <script src="~/node_modules/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/node_modules/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.min.js"></script>
+}

@@ -1,0 +1,58 @@
+
+
+
+
+
+-------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------
+
+
+ System.Console.Write("Nome:");
+            var nome = Convert.ToString(System.Console.ReadLine());
+
+            System.Console.Write("Idade:");
+            var idade = Convert.ToInt32(System.Console.ReadLine());
+
+            // Ask the user to choose an option.
+            System.Console.WriteLine("Choose an option from the following list:");
+            System.Console.WriteLine("\ta - Add");
+            System.Console.WriteLine("\ts - Subtract");
+            System.Console.WriteLine("\tm - Multiply");
+            System.Console.WriteLine("\td - Divide");
+            System.Console.Write("Your option? ");
+            switch (System.Console.ReadLine())
+            {
+                case "a":
+                    System.Console.WriteLine($"Your result: {idade} + {idade} = " + (idade + idade));
+                    break;
+                case "s":
+                    System.Console.WriteLine($"Your result: {idade} - {idade} = " + (idade - idade));
+                    break;
+                case "m":
+                    System.Console.WriteLine($"Your result: {idade} * {idade} = " + (idade * idade));
+                    break;
+                case "d":
+                    System.Console.WriteLine($"Your result: {idade} / {idade} = " + (idade / idade));
+                    break;
+            }
+-------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------
+
+Description("Instituição")
+InstituicaoPagamento = 1,
+
+OrigemPendenteIntegrador = (int)OrigemEnum.InstituicaoPagamento,
+
+public static class EnumExtensions
+{
+    public static string GetDescription(this System.Enum value)
+    {
+        return EnumHelper.GetDescription(value);
+    }
+}
+
+    Id = Guid.NewGuid();
+    Descricao = string.IsNullOrEmpty(descricao) ? null : descricao;
+
+-------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------

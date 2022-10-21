@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32126.317
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SuperHeroAPI2", "SuperHeroAPI2.csproj", "{2F7BC231-0322-45E4-B832-C47F27047253}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{D1E551CC-4CA8-4943-99AB-FBA5426D1AB6}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2F7BC231-0322-45E4-B832-C47F27047253}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F7BC231-0322-45E4-B832-C47F27047253}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2F7BC231-0322-45E4-B832-C47F27047253}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2F7BC231-0322-45E4-B832-C47F27047253}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D1E551CC-4CA8-4943-99AB-FBA5426D1AB6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D1E551CC-4CA8-4943-99AB-FBA5426D1AB6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D1E551CC-4CA8-4943-99AB-FBA5426D1AB6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D1E551CC-4CA8-4943-99AB-FBA5426D1AB6}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {76B1CE3E-7CDD-406F-8F74-AA7297BC8994}
+	EndGlobalSection
+EndGlobal

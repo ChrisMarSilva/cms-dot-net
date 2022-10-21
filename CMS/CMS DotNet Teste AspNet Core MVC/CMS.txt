@@ -1,0 +1,25 @@
+
+Cabine JDSVR 
+Tela de Contingencia para digitação manual dos cliente e valores a receber
+Tela de Contingencia para digitação manual dos valores devolvidos
+Tela para registro de solicitações de devolução
+Monitor de Devolução para cumprimento do prazo de devolução
+Monitor dos Arquivos Enviados/Recebidos
+Relatórios gerencias
+Volume de recursos a devolver 
+Volume de recursos devolvidos
+
+New Project -> ASP.NET Core Web App (Model-View-Controller) -> .NET 3.1(Current) - Configure for HTTPS
+
+Controllers
+Data - Context
+Models
+Views
+  _ViewStart.cshtml
+  Shared
+     _Layout.cshtml 
+     _menuTop.cshtml
+   Home
+     Index.cshtml
+   Login
+     Index.cshtml
