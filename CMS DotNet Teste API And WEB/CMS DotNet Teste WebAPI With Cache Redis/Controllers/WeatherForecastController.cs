@@ -30,5 +30,23 @@ namespace WebApplication1.Controllers
             })
             .ToArray();
         }
+
+
+        [HttpGet("ping")]
+        public string Ping() => "Ping";
+        // public IActionResult Ping() => Ok();
+
+        //[HttpGet(Name = "health")]
+        //public IActionResult Health() => Ok();
+        //public string Health() => "Health";
+
+        //[HttpGet(Name = "data")]
+        //public IActionResult Data() => Ok();
+        //public string GetData() => "Data";
+
+        //[HttpGet(Name = "getall")]
+        //public IActionResult Getall() => Ok();
+        //public string Getall() => "Getall";
+
     }
 }
