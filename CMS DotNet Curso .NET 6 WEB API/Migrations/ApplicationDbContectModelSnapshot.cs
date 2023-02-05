@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CMSDotNetCurso.NET6WEBAPI.Migrations
 {
-    [DbContext(typeof(ApplicationDbContect))]
+    [DbContext(typeof(ApplicationDbContext))]
     partial class ApplicationDbContectModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

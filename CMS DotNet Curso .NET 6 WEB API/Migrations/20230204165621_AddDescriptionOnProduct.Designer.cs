@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CMSDotNetCurso.NET6WEBAPI.Migrations
 {
-    [DbContext(typeof(ApplicationDbContect))]
+    [DbContext(typeof(ApplicationDbContext))]
     [Migration("20230204165621_AddDescriptionOnProduct")]
     partial class AddDescriptionOnProduct
     {
