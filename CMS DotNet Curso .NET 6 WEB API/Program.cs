@@ -9,7 +9,7 @@ builder.Services.AddSqlServer<ApplicationDbContext>(builder.Configuration["Datab
 
 var app = builder.Build();
 var configuration = app.Configuration;
-ProductRepository.Init(configuration);
+//ProductRepository.Init(configuration);
 
 
 app.MapGet("/", () => "Hello World!");
