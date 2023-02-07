@@ -1,4 +1,4 @@
-﻿using IWantApp.Domain.Infra.Data;
+﻿using IWantApp.Infra.Data;
 using Microsoft.AspNetCore.Mvc;
 
 namespace IWantApp.Endpoints.Categories;
@@ -19,12 +19,8 @@ public class CategoryGet
         if (category == null)
             return Results.NotFound("Category not found");
 
-        var categoryResponse = new CategoryResponse
-        {
-            Id = category.Id,
-            Name = category.Name,
-            Active = category.Active
-        };
+        var categoryResponse = 
+            new CategoryResponse(category.Id, category.Name, category.Active);
 
         return Results.Ok(categoryResponse);
     }

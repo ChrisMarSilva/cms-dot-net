@@ -1,5 +1,5 @@
-﻿using IWantApp.Domain.Infra.Data;
-using IWantApp.Domain.Products;
+﻿using IWantApp.Domain.Products;
+using IWantApp.Infra.Data;
 using Microsoft.AspNetCore.Mvc;
 
 namespace IWantApp.Endpoints.Categories;

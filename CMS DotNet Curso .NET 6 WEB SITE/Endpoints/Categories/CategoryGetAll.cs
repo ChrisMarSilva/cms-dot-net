@@ -1,5 +1,5 @@
-﻿using IWantApp.Domain.Infra.Data;
-using IWantApp.Domain.Products;
+﻿using IWantApp.Domain.Products;
+using IWantApp.Infra.Data;
 
 namespace IWantApp.Endpoints.Categories;
 
@@ -19,11 +19,7 @@ public class CategoryGetAll
             return Results.NotFound("Category not found");
 
         var categoryResponse = categories
-            .Select(c => new CategoryResponse {
-                Id = c.Id,
-                Name = c.Name, 
-                Active = c.Active 
-            });
+            .Select(c => new CategoryResponse(c.Id, c.Name, c.Active ));
 
         return Results.Ok(categoryResponse);
     }
