@@ -7,13 +7,13 @@ public class Category : Entity
 
     private Category() { }
 
-    public Category(string name, string createdBy, string editedBy)
+    public Category(string name, string createdBy)
     {
         this.Name = name;
         this.Active = true;
         this.CreatedBy = createdBy;
         this.CreatedOn = DateTime.Now;
-        this.EditedBy = editedBy;
+        this.EditedBy = createdBy;
         this.EditedOn = DateTime.Now;
 
         this.Validate();

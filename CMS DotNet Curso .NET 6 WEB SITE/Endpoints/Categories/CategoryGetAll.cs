@@ -2,6 +2,7 @@
 using IWantApp.Infra.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace IWantApp.Endpoints.Categories;
 
@@ -12,16 +13,18 @@ public class CategoryGetAll
     public static Delegate Handle => Action;
 
     [Authorize(Policy = "EmployeePolicy")]
-    public static async Task<IResult> Action(ApplicationDbContext context)
+    public static async Task<IResult> Action(int? page, int? rows, ApplicationDbContext context)
     {
-        var categories = await context.Categories.ToListAsync();
+        page = page == null || page <= 0 ? 1 : page;
+        rows = rows == null || rows <= 0 ? 10 : rows;
 
-        if (categories == null || categories.Count <= 0)
-            return Results.NotFound("Category not found");
+        var categories = await context.Categories.AsNoTracking().OrderBy(p => p.Name).Skip((page.Value - 1) * rows.Value).Take(rows.Value).ToListAsync();
 
-        var categoryResponse = categories.Select(c => new CategoryResponse(c.Id, c.Name, c.Active ));
+        //if (categories == null || categories.Count <= 0)
+        //    return Results.NotFound("Category not found");
 
-        return Results.Ok(categoryResponse);
+        var results = categories.Select(c => new CategoryResponse(c.Id, c.Name, c.Active ));
+
+        return Results.Ok(results);
     }
-
 }

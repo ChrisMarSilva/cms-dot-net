@@ -37,10 +37,9 @@ public class EmployeeGetAll
         // Teste 04
         page = page == null || page <= 0 ? 1 : page;
         rows = rows == null || rows <= 0 || rows >= 10 ? 3 : rows;
-        
+
         var result = await query.ExecuteAsync(page.Value, rows.Value);
 
         return Results.Ok(result);
     }
-
 }

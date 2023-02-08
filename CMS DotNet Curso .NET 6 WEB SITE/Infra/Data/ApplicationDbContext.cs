@@ -5,7 +5,7 @@ public class ApplicationDbContext : IdentityDbContext<IdentityUser>
 
     public DbSet<Category> Categories { get; set; }
     public DbSet<Product> Products { get; set; }
-    // public DbSet<Order> Orders { get; set; }
+    public DbSet<Order> Orders { get; set; }
 
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 
@@ -42,21 +42,21 @@ public class ApplicationDbContext : IdentityDbContext<IdentityUser>
             .HasColumnType("decimal(10,2)")
             .IsRequired();
 
-        // Orders
+        //Orders
 
-        // builder.Entity<Order>()
-        //        .ToTable("Orders");
+        builder.Entity<Order>()
+                .ToTable("Orders");
 
-        // builder.Entity<Order>()
-        //    .Property(o => o.ClientId).IsRequired();
+        builder.Entity<Order>()
+           .Property(o => o.ClientId).IsRequired();
 
-        // builder.Entity<Order>()
-        //    .Property(o => o.DeliveryAddress).IsRequired();
+        builder.Entity<Order>()
+           .Property(o => o.DeliveryAddress).IsRequired();
 
-        // builder.Entity<Order>()
-        //    .HasMany(o => o.Products)
-        //    .WithMany(p => p.Orders)
-        //    .UsingEntity(x => x.ToTable("OrderProducts"));
+        builder.Entity<Order>()
+           .HasMany(o => o.Products)
+           .WithMany(p => p.Orders)
+           .UsingEntity(x => x.ToTable("OrderProducts"));
     }
 
     protected override void ConfigureConventions(ModelConfigurationBuilder configuration)

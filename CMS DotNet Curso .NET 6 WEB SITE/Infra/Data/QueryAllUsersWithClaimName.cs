@@ -13,7 +13,7 @@ public class QueryAllUsersWithClaimName
     {
         // this._configuration["ConnectionStrings.IWantDb"]
         // this._configuration.GetSection("ConnectionStrings").GetValue<string>("IWantDb")
-        var db = new SqlConnection(this._configuration.GetSection("ConnectionStrings").GetValue<string>("IWantDb")); 
+        var db = new SqlConnection(this._configuration.GetSection("ConnectionStrings").GetValue<string>("IWantDb"));
 
         var query = @"
           SELECT U.Email, C.ClaimValue AS Name 
@@ -29,5 +29,4 @@ public class QueryAllUsersWithClaimName
 
         return result;
     }
-
 }
