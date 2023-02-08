@@ -1,16 +1,11 @@
-﻿using Flunt.Notifications;
-using IWantApp.Domain.Products;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
-
-namespace IWantApp.Infra.Data;
+﻿namespace IWantApp.Infra.Data;
 
 public class ApplicationDbContext : IdentityDbContext<IdentityUser>
 {
 
     public DbSet<Category> Categories { get; set; }
     public DbSet<Product> Products { get; set; }
+    // public DbSet<Order> Orders { get; set; }
 
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 
@@ -29,24 +24,6 @@ public class ApplicationDbContext : IdentityDbContext<IdentityUser>
             .Property(p => p.Name)
             .IsRequired();
 
-        //builder.Entity<Category>()
-        //    .Property(p => p.CreatedBy)
-        //    .HasMaxLength(120)
-        //    .IsRequired();
-
-        //builder.Entity<Category>()
-        //    .Property(p => p.CreatedOn)
-        //    .IsRequired();
-
-        //builder.Entity<Category>()
-        //    .Property(p => p.EditedBy)
-        //    .HasMaxLength(120)
-        //    .IsRequired(false);
-
-        //builder.Entity<Category>()
-        //    .Property(p => p.EditedOn)
-        //    .IsRequired(false);
-
         // Products
 
         builder.Entity<Product>()
@@ -60,28 +37,26 @@ public class ApplicationDbContext : IdentityDbContext<IdentityUser>
             .Property(p => p.Description)
             .HasMaxLength(255);
 
-        //builder.Entity<Product>()
-        //    .Property(p => p.IsStock)
-        //    .IsRequired(false);
+        builder.Entity<Product>()
+            .Property(p => p.Price)
+            .HasColumnType("decimal(10,2)")
+            .IsRequired();
 
-        //builder.Entity<Product>()
-        //    .Property(p => p.CreatedBy)
-        //    .HasMaxLength(120)
-        //    .IsRequired();
+        // Orders
 
-        //builder.Entity<Product>()
-        //    .Property(p => p.CreatedOn)
-        //    .IsRequired();
+        // builder.Entity<Order>()
+        //        .ToTable("Orders");
 
-        //builder.Entity<Product>()
-        //    .Property(p => p.EditedBy)
-        //    .HasMaxLength(120)
-        //    .IsRequired(false);
+        // builder.Entity<Order>()
+        //    .Property(o => o.ClientId).IsRequired();
 
-        //builder.Entity<Product>()
-        //    .Property(p => p.EditedOn)
-        //    .IsRequired(false);
+        // builder.Entity<Order>()
+        //    .Property(o => o.DeliveryAddress).IsRequired();
 
+        // builder.Entity<Order>()
+        //    .HasMany(o => o.Products)
+        //    .WithMany(p => p.Orders)
+        //    .UsingEntity(x => x.ToTable("OrderProducts"));
     }
 
     protected override void ConfigureConventions(ModelConfigurationBuilder configuration)

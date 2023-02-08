@@ -1,0 +1,11 @@
+{
+  "ConnectionStrings": {
+    "IWantDb": "Server=Localhost;Database=IWantDb;User Id=sa;Password=@Sql2022;MultipleActiveResultSets=true;Encrypt=YES;TrustServerCertificate=YES;"
+  },
+  "Logging": {
+    "LogLevel": {
+      "Default": "Error",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  }
+}

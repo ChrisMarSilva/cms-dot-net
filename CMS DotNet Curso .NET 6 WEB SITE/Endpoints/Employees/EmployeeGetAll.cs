@@ -1,7 +1,4 @@
-﻿using IWantApp.Infra.Data;
-using Microsoft.AspNetCore.Authorization;
-
-namespace IWantApp.Endpoints.Employees;
+﻿namespace IWantApp.Endpoints.Employees;
 
 public class EmployeeGetAll
 {
@@ -10,11 +7,8 @@ public class EmployeeGetAll
     public static Delegate Handle => Action;
 
     [Authorize(Policy = "EmployeePolicy")]
-    public static IResult Action(int? page, int? rows, QueryAllUsersWithClaimName query)
+    public static async Task<IResult> Action(int? page, int? rows, QueryAllUsersWithClaimName query)
     {
-        page = page == null || page <= 0 ? 1 : page;
-        rows = rows == null || rows <= 0 || rows >= 10 ? 3 : rows;
-
         // Teste 01
         // public static IResult Action(int page, int rows, UserManager<IdentityUser> userManager)
         // var users = userManager.Users.OrderBy(u => u.UserName).ToList();
@@ -41,9 +35,12 @@ public class EmployeeGetAll
         // var employees = db.Query<EmployeeResponse>(query, param);
 
         // Teste 04
-        var employees = query.Execute(page.Value, rows.Value);
+        page = page == null || page <= 0 ? 1 : page;
+        rows = rows == null || rows <= 0 || rows >= 10 ? 3 : rows;
+        
+        var result = await query.ExecuteAsync(page.Value, rows.Value);
 
-        return Results.Ok(employees);
+        return Results.Ok(result);
     }
 
 }

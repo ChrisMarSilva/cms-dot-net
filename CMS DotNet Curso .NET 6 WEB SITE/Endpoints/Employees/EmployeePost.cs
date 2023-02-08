@@ -1,8 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
-using System.Security.Claims;
-
-namespace IWantApp.Endpoints.Categories;
+﻿namespace IWantApp.Endpoints.Categories;
 
 public class EmployeePost
 {
@@ -11,13 +7,13 @@ public class EmployeePost
     public static Delegate Handle => Action;
 
     [Authorize(Policy = "EmployeePolicy")]
-    public static IResult Action(
+    public static async Task<IResult> Action(
         EmployeeRequest employeeRequest,
         HttpContext http,
         UserManager<IdentityUser> userManager)
     {
         var newUser = new IdentityUser{ UserName = employeeRequest.Email, Email = employeeRequest.Email};
-        var userResult = userManager.CreateAsync(newUser, employeeRequest.Password).Result;
+        var userResult = await userManager.CreateAsync(newUser, employeeRequest.Password);
 
         if (!userResult.Succeeded)
             return Results.ValidationProblem(userResult.Errors.ConvertToProblemDetails());
@@ -39,7 +35,7 @@ public class EmployeePost
             new Claim("CreatedBy", userId),
         };
 
-        var claimsResult = userManager.AddClaimsAsync(newUser, userClaims).Result;
+        var claimsResult = await userManager.AddClaimsAsync(newUser, userClaims);
 
         if (!claimsResult.Succeeded)
             return Results.ValidationProblem(claimsResult.Errors.ConvertToProblemDetails());

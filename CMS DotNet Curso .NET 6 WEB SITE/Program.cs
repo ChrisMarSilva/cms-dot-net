@@ -1,12 +1,3 @@
-using IWantApp.Endpoints.Categories;
-using Microsoft.AspNetCore.Identity;
-using IWantApp.Infra.Data;
-using IWantApp.Endpoints.Employees;
-using IWantApp.Endpoints.Security;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
-using Microsoft.AspNetCore.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -60,6 +51,20 @@ builder.Services.AddScoped<QueryAllUsersWithClaimName>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.WebHost.UseSerilog((context, configuration) =>
+{
+    configuration
+        .WriteTo.Console()
+        .WriteTo.MSSqlServer(
+            // context.Configuration["ConnectionString:IWantDb"],
+            context.Configuration.GetSection("ConnectionStrings").GetValue<string>("IWantDb"),
+            sinkOptions: new MSSqlServerSinkOptions()
+            {
+                AutoCreateSqlTable = true,
+                TableName = "LogAPI"
+            });
+});
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -86,6 +91,24 @@ app.MapMethods(CategoryGetAll.Template, CategoryGetAll.Methods, CategoryGetAll.H
 app.MapMethods(CategoryGet.Template, CategoryGet.Methods, CategoryGet.Handle);
 app.MapMethods(CategoryPut.Template, CategoryPut.Methods, CategoryPut.Handle);
 app.MapMethods(CategoryDelete.Template, CategoryDelete.Methods, CategoryDelete.Handle);
+
+app.UseExceptionHandler("/error");
+
+app.Map("/error", (HttpContext http) => 
+{
+    var error = http.Features?.Get<IExceptionHandlerFeature>()?.Error;
+
+    if (error != null)
+    {
+        if (error is SqlException)
+            return Results.Problem(title: "Database out", statusCode: 500);
+
+        if (error is BadHttpRequestException)
+            return Results.Problem(title: "Error to convert data to other type. See all the information sent", statusCode: 500);
+    }
+
+    return Results.Problem(title: "An error ocurred", statusCode: 500);
+});
 
 app.Run();
 

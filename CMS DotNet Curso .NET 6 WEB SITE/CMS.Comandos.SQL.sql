@@ -24,6 +24,8 @@ SELECT * FROM Categories;
 SELECT * FROM Products;
 -- DELETE FROM Products;
 
+SELECT * FROM LogAPI;
+-- DELETE FROM LogAPI;
 
 ------------------------------------------------------------------------------
 ------------------------------------------------------------------------------

@@ -1,11 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
-
-namespace IWantApp.Endpoints.Security;
+﻿namespace IWantApp.Endpoints.Security;
 
 public class TokenPost
 {
@@ -14,18 +7,21 @@ public class TokenPost
     public static Delegate Handle => Action;
 
     [AllowAnonymous]
-    public static IResult Action(
+    public static async Task<IResult> Action(
         LoginRequest loginRequest,
         IConfiguration configuration,
         UserManager<IdentityUser> userManager,
+        ILogger<TokenPost> log,
         IWebHostEnvironment environment)
     {
-       var user = userManager.FindByEmailAsync(loginRequest.Email).Result;
+        log.LogInformation("Getting token");
+
+        var user = await userManager.FindByEmailAsync(loginRequest.Email);
 
         if (user == null)
             return Results.BadRequest("Email Invalido");
 
-        var userCheckPassword = userManager.CheckPasswordAsync(user, loginRequest.Password).Result;
+        var userCheckPassword = await userManager.CheckPasswordAsync(user, loginRequest.Password);
 
         if (!userCheckPassword)
             return Results.BadRequest("Senha Invalida");
@@ -36,7 +32,7 @@ public class TokenPost
             new Claim(ClaimTypes.Email, user.UserName), //  loginRequest.Email
         });
 
-        var claims = userManager.GetClaimsAsync(user).Result; 
+        var claims = await userManager.GetClaimsAsync(user); 
 
         if (claims != null)
             subject.AddClaims(claims);
@@ -46,12 +42,10 @@ public class TokenPost
         var tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = subject,
-            SigningCredentials = new SigningCredentials(
-                new SymmetricSecurityKey(key),  SecurityAlgorithms.HmacSha256Signature),
+            SigningCredentials = new SigningCredentials( new SymmetricSecurityKey(key),  SecurityAlgorithms.HmacSha256Signature),
             Audience = configuration["JwtBearerTokenSettings:Audience"],
             Issuer = configuration["JwtBearerTokenSettings:Issuer"],
-            Expires = environment.IsDevelopment() || environment.IsStaging() ? 
-                DateTime.UtcNow.AddYears(1) : DateTime.UtcNow.AddMinutes(60),
+            Expires = environment.IsDevelopment() || environment.IsStaging() ? DateTime.UtcNow.AddYears(1) : DateTime.UtcNow.AddMinutes(60),
         };
 
         var tokenHandler = new JwtSecurityTokenHandler();

@@ -7,6 +7,32 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Using Include="Microsoft.Data.SqlClient" />
+    <Using Include="Microsoft.AspNetCore.Identity" />
+    <Using Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" />
+    <Using Include="Microsoft.AspNetCore.Authorization" />
+	<Using Include="Microsoft.AspNetCore.Mvc" />
+	<Using Include="Microsoft.AspNetCore.Diagnostics" />
+    <Using Include="Microsoft.AspNetCore.Authentication.JwtBearer" />
+	<Using Include="Microsoft.EntityFrameworkCore" />
+    <Using Include="Microsoft.IdentityModel.Tokens" />
+    <Using Include="System.IdentityModel.Tokens.Jwt" />
+    <Using Include="System.Security.Claims" />
+    <Using Include="System.Text" />
+	<Using Include="Dapper" />
+    <Using Include="Flunt.Notifications" />
+    <Using Include="Flunt.Validations" />
+	<Using Include="Serilog" />
+	<Using Include="Serilog.Sinks.MSSqlServer" />
+
+    <Using Include="IWantApp.Domain.Products" />
+    <Using Include="IWantApp.Infra.Data" />
+    <Using Include="IWantApp.Endpoints.Employees" />
+    <Using Include="IWantApp.Endpoints.Categories" />
+    <Using Include="IWantApp.Endpoints.Security" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Dapper" Version="2.0.123" />
     <PackageReference Include="Flunt" Version="2.0.5" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.0" />
@@ -17,11 +43,9 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.0" />
+    <PackageReference Include="Serilog.AspNetCore" Version="6.1.1-dev-00295" />
+    <PackageReference Include="Serilog.Sinks.MSSqlServer" Version="6.3.0-dev-00049" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="C:\Users\chris\Desktop\CMS DotNet\CMS DotNet Curso .NET 6 WEB SITE\.editorconfig" />
   </ItemGroup>
 
 </Project>

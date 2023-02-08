@@ -1,6 +1,7 @@
 ﻿using IWantApp.Domain.Products;
 using IWantApp.Infra.Data;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
 
 namespace IWantApp.Endpoints.Categories;
 
@@ -11,9 +12,9 @@ public class CategoryGetAll
     public static Delegate Handle => Action;
 
     [Authorize(Policy = "EmployeePolicy")]
-    public static IResult Action(ApplicationDbContext context)
+    public static async Task<IResult> Action(ApplicationDbContext context)
     {
-        var categories = context.Categories.ToList();
+        var categories = await context.Categories.ToListAsync();
 
         if (categories == null || categories.Count <= 0)
             return Results.NotFound("Category not found");

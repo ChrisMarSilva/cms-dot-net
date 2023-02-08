@@ -1,8 +1,4 @@
-﻿using IWantApp.Infra.Data;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-
-namespace IWantApp.Endpoints.Categories;
+﻿namespace IWantApp.Endpoints.Categories;
 
 public class CategoryDelete
 {
@@ -11,15 +7,15 @@ public class CategoryDelete
     public static Delegate Handle => Action;
 
     [Authorize(Policy = "EmployeePolicy")]
-    public static IResult Action([FromRoute] Guid id, ApplicationDbContext context)
+    public static async Task<IResult> Action([FromRoute] Guid id, ApplicationDbContext context)
     {
-        var category = context.Categories.Where(c => c.Id == id).FirstOrDefault();
+        var category = await context.Categories.Where(c => c.Id == id).FirstOrDefaultAsync();
 
         if (category == null)
             return Results.NotFound("Category not found");
 
         context.Categories.Remove(category);
-        context.SaveChanges();
+        await context.SaveChangesAsync();
 
         return Results.Ok();
     }

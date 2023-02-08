@@ -1,11 +1,11 @@
-using Flunt.Validations;
-
 namespace IWantApp.Domain.Products;
 
 public class Category : Entity
 {
     public string Name { get; private set; }
     public bool Active { get; private set; } = true;
+
+    private Category() { }
 
     public Category(string name, string createdBy, string editedBy)
     {
