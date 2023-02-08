@@ -1,0 +1,1 @@
+Testes: Unitário, Funcional, Smoke Test, Carga/Performance, Integração e  Segurança
