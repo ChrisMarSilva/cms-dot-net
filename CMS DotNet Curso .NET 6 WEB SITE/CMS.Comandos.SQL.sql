@@ -1,7 +1,6 @@
 
 USE IWantDb;
 
-
 SELECT * FROM AspNetRoles;
 
 SELECT * FROM AspNetUsers;
@@ -12,8 +11,10 @@ SELECT * FROM AspNetUsers;
 SELECT * FROM AspNetUserClaims;
 -- DELETE FROM AspNetUserClaims;
 
-
-SELECT U.Email, C.ClaimValue AS Name FROM AspNetUsers U INNER JOIN AspNetUserClaims C ON (C.UserId = U.Id and C.ClaimType = 'Name') ORDER BY C.ClaimValue;
+SELECT U.Email, C.ClaimValue AS Name 
+FROM AspNetUsers U 
+  INNER JOIN AspNetUserClaims C ON (C.UserId = U.Id and C.ClaimType = 'Name') 
+ORDER BY C.ClaimValue;
 
 
 SELECT * FROM Categories;
@@ -25,5 +26,4 @@ SELECT * FROM Products;
 
 
 ------------------------------------------------------------------------------
-
 ------------------------------------------------------------------------------
