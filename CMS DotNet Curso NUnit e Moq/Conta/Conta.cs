@@ -1,34 +1,35 @@
 ﻿using System;
+using System.Threading;
 
 namespace Principal
 {
     public class Conta
     {
-        public string _cpf;
-        public decimal _saldo;
+        public string Cpf;
+        public decimal Saldo;
 
         public Conta(string cpf, decimal saldo)
         {
-            this._cpf = cpf;
-            this._saldo = saldo;
+            this.Cpf = cpf;
+            this.Saldo = saldo;
         }
 
-        public decimal GetSaldo() 
-        { 
-            return this._saldo;
-        }
+        public decimal GetSaldo()  => this.Saldo;
 
-        public void Depoistar(decimal valor)
-        {
-            this._saldo += valor;
-        }
+        public void Depoistar(decimal valor) => this.Saldo += valor;
 
         public bool Sacar(decimal valor)
         {
-            if (this._saldo < valor)
+            if (valor == 0.00M)
+                throw new ArgumentOutOfRangeException();
+
+            if (valor <= 0.00M || valor > this.Saldo)
                 return false;
 
-            this._saldo -= valor;
+            if (valor == 99)
+                Thread.Sleep(1000);
+
+            this.Saldo -= valor;
             return true;
         }
 
