@@ -7,11 +7,25 @@ namespace Principal
     {
         public string Cpf;
         public decimal Saldo;
+        private IValidadorCredito _validadorCredito;
 
         public Conta(string cpf, decimal saldo)
         {
             this.Cpf = cpf;
             this.Saldo = saldo;
+            // this._validadorCredito = new ValidadorCredito();
+        }
+
+        public Conta(string cpf, decimal saldo, IValidadorCredito validadorCredito)
+        {
+            this.Cpf = cpf;
+            this.Saldo = saldo;
+            this._validadorCredito = validadorCredito;
+        }
+
+        public void SetValidadorCredito(IValidadorCredito validadorCredito)
+        {
+            this._validadorCredito = validadorCredito;
         }
 
         public decimal GetSaldo()  => this.Saldo;
@@ -31,6 +45,30 @@ namespace Principal
 
             this.Saldo -= valor;
             return true;
+        }
+
+        public bool SolicitarEmprestimo(decimal valor)
+        {
+            bool resultado = false;
+
+            var limite = this.Saldo * 10;
+
+            if (valor >= limite)
+                return resultado;
+
+            try
+            {
+                resultado = this._validadorCredito.Validar(this.Cpf, valor);
+            }
+            catch (InvalidOperationException)
+            {
+                return resultado;
+            }
+
+            if (resultado)
+                this.Depoistar(valor);
+
+            return resultado;
         }
 
     }

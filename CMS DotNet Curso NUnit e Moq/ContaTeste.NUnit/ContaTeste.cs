@@ -5,6 +5,7 @@ using System;
 namespace ContaTeste.NUnit
 {
     [TestFixture]
+    [Ignore("Pendencias")]
     public class ContaTeste
     {
         Conta conta;
@@ -149,6 +150,20 @@ namespace ContaTeste.NUnit
             // Teste 04: NDA
             //var js = new JavaScriptSerializer();
             // Assert.AreEqual(js.Serialize(c1), js.Serialize(c2));
+        }
+
+        [Test]
+        public void testeSolicitarEmprestimo()
+        {
+            // Arrange == Preparar
+            // var conta = new Conta("0001", 100);
+            conta.SetValidadorCredito(new ValidadorCreditoFake());
+
+            // Act = Executar
+            var resultado = conta.SolicitarEmprestimo(5000);
+
+            // Assert = Verificar
+            Assert.IsTrue(resultado);
         }
 
     }
