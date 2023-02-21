@@ -15,13 +15,13 @@ namespace GeekShopping.ProductAPI.Controllers
         {
             _logger = logger;
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
-            _logger.LogInformation("ProductController");
+            _logger.LogInformation("ProductAPI.ProductController");
         }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ProductVO>>> FindAll()
         {
-            _logger.LogInformation("ProductController.FindAll()");
+            _logger.LogInformation("ProductAPI.ProductController.FindAll()");
             var products = await _repository.FindAll();
             return Ok(products);
         }
@@ -29,7 +29,7 @@ namespace GeekShopping.ProductAPI.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<ProductVO>> FindById(long id)
         {
-            _logger.LogInformation("ProductController.FindById()");
+            _logger.LogInformation("ProductAPI.ProductController.FindById()");
             var product = await _repository.FindById(id);
             if (product.Id <= 0)
                 return NotFound();
@@ -37,9 +37,9 @@ namespace GeekShopping.ProductAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<ProductVO>> Create(ProductVO vo)
+        public async Task<ActionResult<ProductVO>> Create([FromBody] ProductVO vo)
         {
-            _logger.LogInformation("ProductController.Create()");
+            _logger.LogInformation("ProductAPI.ProductController.Create()");
             if (vo == null)
                 return BadRequest();
             var product = await _repository.Create(vo);
@@ -47,9 +47,9 @@ namespace GeekShopping.ProductAPI.Controllers
         }
 
         [HttpPut]
-        public async Task<ActionResult<ProductVO>> Update(ProductVO vo)
+        public async Task<ActionResult<ProductVO>> Update([FromBody] ProductVO vo)
         {
-            _logger.LogInformation("ProductController.Update()");
+            _logger.LogInformation("ProductAPI.ProductController.Update()");
             if (vo == null)
                 return BadRequest();
             var product = await _repository.Update(vo);
@@ -59,7 +59,7 @@ namespace GeekShopping.ProductAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<ProductVO>> Delete(long id)
         {
-            _logger.LogInformation("ProductController.Delete()");
+            _logger.LogInformation("ProductAPI.ProductController.Delete()");
             var status = await _repository.Delete(id);
             if (!status) 
                 return BadRequest();
