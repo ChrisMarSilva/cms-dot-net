@@ -24,7 +24,10 @@
                     <td> @((item.Price).ToString("c")) </td>
                     <td>
                         <a asp-action="ProductUpdate" class="btn btn-outline-success" asp-route-id="@item.Id"> <i class="fas fa-edit"></i> </a>
-                        <a asp-action="ProductDelete" class="btn btn-outline-danger" asp-route-id="@item.Id"> <i class="fas fa-trash"></i> </a>
+                        @if(User.IsInRole("Admin"))
+                        {
+                            <a asp-action="ProductDelete" class="btn btn-outline-danger" asp-route-id="@item.Id"> <i class="fas fa-trash"></i> </a>
+                        }
                     </td>
                 </tr>
             }
