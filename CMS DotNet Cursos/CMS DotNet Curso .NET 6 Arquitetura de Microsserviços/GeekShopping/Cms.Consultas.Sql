@@ -28,9 +28,9 @@ SELECT * FROM AspNetUserRoles;
 -- use geek_shopping_cart_api;
 -- SET SQL_SAFE_UPDATES = 0;
 
-SELECT * FROM product;
 SELECT * FROM cart_header;
 SELECT * FROM cart_detail;
+SELECT * FROM product;
 
 -- ----------------------------------------------------
 -- ----------------------------------------------------

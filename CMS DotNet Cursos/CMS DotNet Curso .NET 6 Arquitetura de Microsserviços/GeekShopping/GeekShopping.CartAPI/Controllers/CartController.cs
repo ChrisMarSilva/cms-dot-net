@@ -1,6 +1,6 @@
 ﻿using GeekShopping.CartAPI.Data.ValueObjects;
 using GeekShopping.CartAPI.Repository;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GeekShopping.CartAPI.Controllers
@@ -23,16 +23,18 @@ namespace GeekShopping.CartAPI.Controllers
         }
 
         [HttpGet("find-cart/{id}")]
-        public async Task<ActionResult<CartVO>> FindById(string userId)
+        [Authorize]
+        public async Task<ActionResult<CartVO>> FindById(string id)
         {
             _logger.LogInformation("CartAPI.CartController.FindAll()");
-            var cart = await _repository.FindCartByUserId(userId);
+            var cart = await _repository.FindCartByUserId(id);
             if (cart == null) 
                 return NotFound();
             return Ok(cart);
         }
 
-        [HttpPost("add-cart/{id}")]
+        [HttpPost("add-cart")]
+        [Authorize]
         public async Task<ActionResult<CartVO>> AddCart(CartVO vo)
         {
             _logger.LogInformation("CartAPI.CartController.AddCart()");
@@ -42,7 +44,8 @@ namespace GeekShopping.CartAPI.Controllers
             return Ok(cart);
         }
 
-        [HttpPut("update-cart/{id}")]
+        [HttpPut("update-cart")]
+        [Authorize]
         public async Task<ActionResult<CartVO>> UpdateCart(CartVO vo)
         {
             _logger.LogInformation("CartAPI.CartController.UpdateCart()");
@@ -53,6 +56,7 @@ namespace GeekShopping.CartAPI.Controllers
         }
 
         [HttpDelete("remove-cart/{id}")]
+        [Authorize]
         public async Task<ActionResult<CartVO>> RemoveCart(int id)
         {
             _logger.LogInformation("CartAPI.CartController.RemoveCart()");

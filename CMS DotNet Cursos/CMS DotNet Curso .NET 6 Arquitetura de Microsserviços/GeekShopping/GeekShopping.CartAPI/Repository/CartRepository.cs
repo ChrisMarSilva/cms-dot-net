@@ -123,8 +123,9 @@ namespace GeekShopping.CartAPI.Repository
 
             Cart cart = _mapper.Map<Cart>(vo); // converter CartVO para CartDataSet
 
-            var productId = vo.CartDetails.FirstOrDefault().ProductId;
-            var product = await _context.Products.FirstOrDefaultAsync(p => p.Id == productId);
+            var product = await _context
+                .Products
+                .FirstOrDefaultAsync(p => p.Id == vo.CartDetails.FirstOrDefault().ProductId);
 
             if (product == null)
             {
@@ -161,14 +162,14 @@ namespace GeekShopping.CartAPI.Repository
                     .CartDetails
                     .AsNoTracking()
                     .FirstOrDefaultAsync(p => 
-                        p.ProductId == productId && 
+                        p.ProductId == cart.CartDetails.FirstOrDefault().ProductId && 
                         p.CartHeaderId == cartHeader.Id);
 
                 if (cartDetail == null)
                 {
                     // Create CartDetails
 
-                    cart.CartDetails.FirstOrDefault().CartHeaderId = cart.CartHeader.Id;
+                    cart.CartDetails.FirstOrDefault().CartHeaderId = cartHeader.Id;
                     cart.CartDetails.FirstOrDefault().Product = null;
                     
                     await _context.CartDetails.AddAsync(cart.CartDetails.FirstOrDefault());
