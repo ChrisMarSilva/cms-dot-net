@@ -9,9 +9,9 @@ namespace GeekShopping.ProductAPI.Config
         public static MapperConfiguration RegisterMaps()
         { 
             var mappingConfig = new MapperConfiguration(config => {
-                // Product
-                config.CreateMap<ProductVO, Product>();
-                config.CreateMap<Product, ProductVO>();
+                //config.CreateMap<ProductVO, Product>();
+                //config.CreateMap<Product, ProductVO>();
+                config.CreateMap<ProductVO, Product>().ReverseMap();
             });
             return mappingConfig;
         }

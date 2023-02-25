@@ -1,7 +1,7 @@
 using AutoMapper;
-using GeekShopping.ProductAPI.Config;
-using GeekShopping.ProductAPI.Model.Context;
-using GeekShopping.ProductAPI.Repository;
+using GeekShopping.CartAPI.Config;
+using GeekShopping.CartAPI.Model.Context;
+using GeekShopping.CartAPI.Repository;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -10,14 +10,14 @@ using System.IO.Compression;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var connection = builder.Configuration["ConnectionStrings:GeekShoppingProductAPI"];
+var connection = builder.Configuration["ConnectionStrings:GeekShoppingCartAPI"];
 builder.Services.AddDbContext<MySQLContext>(options => options.UseMySql(connection, new MySqlServerVersion(new Version(5, 6, 0))));
 
 IMapper mapper = MappingConfig.RegisterMaps().CreateMapper();
 builder.Services.AddSingleton(mapper);
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<ICartRepository, CartRepository>();
 
 builder.Services.AddControllers();
 
@@ -41,7 +41,7 @@ builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "GeekShopping.ProductAPI", Version = "v1" });
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "GeekShopping.CartAPI", Version = "v1" });
     c.EnableAnnotations();
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {

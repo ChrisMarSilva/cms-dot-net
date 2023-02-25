@@ -18,12 +18,12 @@ namespace GeekShopping.ProductAPI.Repository
             _logger = logger;
             this._context = context;
             this._mapper = mapper;
-            _logger.LogInformation("ProductRepository");
+            _logger.LogInformation("ProductAPI.ProductRepository");
         }
 
         public async Task<IEnumerable<ProductVO>> FindAll()
         {
-            _logger.LogInformation("ProductRepository.FindAll()");
+            _logger.LogInformation("ProductAPI.ProductRepository.FindAll()");
             var products = await _context.Products.ToListAsync();
             var resultado = _mapper.Map<List<ProductVO>>(products);
             return resultado;
@@ -31,7 +31,7 @@ namespace GeekShopping.ProductAPI.Repository
 
         public async Task<ProductVO> FindById(long id)
         {
-            _logger.LogInformation("ProductRepository.FindById()");
+            _logger.LogInformation("ProductAPI.ProductRepository.FindById()");
             var product = await _context.Products.Where(p => p.Id == id).FirstOrDefaultAsync() ?? new Product();
             var resultado = _mapper.Map<ProductVO>(product);
             return resultado;
@@ -39,7 +39,7 @@ namespace GeekShopping.ProductAPI.Repository
 
         public async Task<ProductVO> Create(ProductVO vo)
         {
-            _logger.LogInformation("ProductRepository.Create()");
+            _logger.LogInformation("ProductAPI.ProductRepository.Create()");
             var product = _mapper.Map<Product>(vo);
             await _context.Products.AddAsync(product);
             await _context.SaveChangesAsync();
@@ -49,7 +49,7 @@ namespace GeekShopping.ProductAPI.Repository
 
         public async Task<ProductVO> Update(ProductVO vo)
         {
-            _logger.LogInformation("ProductRepository.Update()");
+            _logger.LogInformation("ProductAPI.ProductRepository.Update()");
             var product = _mapper.Map<Product>(vo);
             _context.Products.Update(product);
             await _context.SaveChangesAsync();
@@ -59,7 +59,7 @@ namespace GeekShopping.ProductAPI.Repository
 
         public async Task<bool> Delete(long id)
         {
-            _logger.LogInformation("ProductRepository.Delete()");
+            _logger.LogInformation("ProductAPI.ProductRepository.Delete()");
             try
             {
                 var product = await _context.Products.Where(p => p.Id == id).FirstOrDefaultAsync() ?? new Product();

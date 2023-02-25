@@ -14,20 +14,26 @@ SELECT * FROM PRODUCT;
 -- SET SQL_SAFE_UPDATES = 0;
 
 SELECT * FROM AspNetRoleClaims;
-SELECT * FROM AspNetRoles;
-SELECT * FROM AspNetUserClaims;
 SELECT * FROM AspNetUserLogins;
-SELECT * FROM AspNetUserRoles;
-SELECT * FROM AspNetUsers;
 SELECT * FROM AspNetUserTokens;
 
-
-
+SELECT * FROM AspNetRoles;
+SELECT * FROM AspNetUsers;
+SELECT * FROM AspNetUserClaims;
+SELECT * FROM AspNetUserRoles;
 
 -- ----------------------------------------------------
 -- ----------------------------------------------------
 
+-- use geek_shopping_cart_api;
+-- SET SQL_SAFE_UPDATES = 0;
 
+SELECT * FROM product;
+SELECT * FROM cart_header;
+SELECT * FROM cart_detail;
+
+-- ----------------------------------------------------
+-- ----------------------------------------------------
 
 
 
