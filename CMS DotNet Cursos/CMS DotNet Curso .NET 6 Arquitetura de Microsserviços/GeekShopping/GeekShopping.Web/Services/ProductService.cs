@@ -12,7 +12,10 @@ namespace GeekShopping.Web.Services
         private readonly HttpClient _client;
         public const string BasePath = "api/v1/product";
 
-        public ProductService(ILogger<ProductService> logger, HttpClient client)
+        public ProductService(
+            ILogger<ProductService> logger,
+            HttpClient client
+            )
         {
             _logger = logger;
             _client = client ?? throw new ArgumentNullException(nameof(client));

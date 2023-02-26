@@ -11,7 +11,10 @@ namespace GeekShopping.Web.Services
         private readonly HttpClient _client;
         public const string BasePath = "api/v1/cart";
 
-        public CartService(ILogger<CartService> logger, HttpClient client)
+        public CartService(
+            ILogger<CartService> logger, 
+            HttpClient client
+            )
         {
             _logger = logger;
             _client = client ?? throw new ArgumentNullException(nameof(client));
@@ -71,16 +74,32 @@ namespace GeekShopping.Web.Services
             return resultado;
         }
 
-        public async Task<bool> ApplyCoupon(CartViewModel cart, string couponCode, string token)
+        public async Task<bool> ApplyCoupon(CartViewModel model, string token)
         {
             _logger.LogInformation("Web.CartService.ApplyCoupon()");
-            throw new NotImplementedException();
+
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            var response = await _client.PostAsJson($"{BasePath}/apply-coupon", model);
+
+            if (!response.IsSuccessStatusCode)
+                throw new Exception("Something went wrong when calling API");
+
+            var resultado = await response.ReadContentAs<bool>();
+            return resultado;
         }
 
-        public async Task<CartViewModel> Checkout(CartHeaderViewModel cartHeader, string token)
+        public async Task<bool> RemoveCoupon(string userId, string token)
         {
-            _logger.LogInformation("Web.CartService.Checkout()");
-            throw new NotImplementedException();
+            _logger.LogInformation("Web.CartService.RemoveCoupon()");
+
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            var response = await _client.DeleteAsync($"{BasePath}/remove-coupon/{userId}");
+
+            if (!response.IsSuccessStatusCode)
+                throw new Exception("Something went wrong when calling API");
+
+            var resultado = await response.ReadContentAs<bool>();
+            return resultado;
         }
 
         public async Task<bool> ClearCart(string userId, string token)
@@ -89,9 +108,9 @@ namespace GeekShopping.Web.Services
             throw new NotImplementedException();
         }
 
-        public async Task<bool> RemoveCoupon(string userId, string token)
+        public async Task<CartViewModel> Checkout(CartHeaderViewModel cartHeader, string token)
         {
-            _logger.LogInformation("Web.CartService.RemoveCoupon()");
+            _logger.LogInformation("Web.CartService.Checkout()");
             throw new NotImplementedException();
         }
     }
