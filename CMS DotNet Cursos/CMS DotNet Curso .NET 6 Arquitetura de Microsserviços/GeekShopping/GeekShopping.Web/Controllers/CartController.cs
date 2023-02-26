@@ -36,14 +36,6 @@ namespace GeekShopping.Web.Controllers
             return View(response);
         }
 
-        [Authorize]
-        [HttpGet]
-        public async Task<IActionResult> Checkout()
-        {
-            var response = await this.FindUserCart();
-            return View(response);
-        }
-
         public async Task<IActionResult> Remove(int id)
         {
             _logger.LogInformation("Web.CartController.Remove()");
@@ -64,6 +56,8 @@ namespace GeekShopping.Web.Controllers
         [ActionName("ApplyCoupon")]
         public async Task<IActionResult> ApplyCoupon(CartViewModel model)
         {
+            _logger.LogInformation("Web.CartController.ApplyCoupon()");
+
             var token = await HttpContext.GetTokenAsync("access_token");
             var userId = User.Claims.Where(u => u.Type == "sub")?.FirstOrDefault()?.Value;
 
@@ -80,6 +74,8 @@ namespace GeekShopping.Web.Controllers
         [ActionName("RemoveCoupon")]
         public async Task<IActionResult> RemoveCoupon()
         {
+            _logger.LogInformation("Web.CartController.RemoveCoupon()");
+
             var token = await HttpContext.GetTokenAsync("access_token");
             var userId = User.Claims.Where(u => u.Type == "sub")?.FirstOrDefault()?.Value;
 
@@ -87,6 +83,39 @@ namespace GeekShopping.Web.Controllers
 
             if (response)
                 return RedirectToAction(nameof(CartIndex));
+
+            return View();
+        }
+
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> Checkout()
+        {
+            _logger.LogInformation("Web.CartController.Checkout()");
+
+            var response = await this.FindUserCart();
+            return View(response);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Checkout(CartViewModel model)
+        {
+            _logger.LogInformation("Web.CartController.Checkout()");
+
+            var token = await HttpContext.GetTokenAsync("access_token");
+
+            var response = await _cartService.Checkout(model.CartHeader, token);
+
+            if (response != null)
+                return RedirectToAction(nameof(Confirmation));
+
+            return View(model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Confirmation()
+        {
+            _logger.LogInformation("Web.CartController.Confirmation()");
 
             return View();
         }
