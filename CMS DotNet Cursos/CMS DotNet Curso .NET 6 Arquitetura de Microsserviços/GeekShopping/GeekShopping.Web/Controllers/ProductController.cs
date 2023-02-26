@@ -12,9 +12,11 @@ namespace GeekShopping.Web.Controllers
 
         private readonly ILogger<ProductController> _logger;
         private readonly IProductService _productService;
-        private readonly string _token;
 
-        public ProductController(ILogger<ProductController> logger, IProductService productService)
+        public ProductController(
+            ILogger<ProductController> logger, 
+            IProductService productService
+            )
         {
             _logger = logger;
             _productService = productService ?? throw new ArgumentNullException(nameof(productService));
