@@ -15,7 +15,8 @@ namespace GeekShopping.ProductAPI.Controllers
 
         public ProductController(
             ILogger<ProductController> logger, 
-            IProductRepository repository)
+            IProductRepository repository
+            )
         {
             _logger = logger;
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
