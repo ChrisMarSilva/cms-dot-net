@@ -102,7 +102,7 @@ namespace GeekShopping.Web.Services
             return resultado;
         }
 
-        public async Task<CartHeaderViewModel> Checkout(CartHeaderViewModel model, string token)
+        public async Task<object> Checkout(CartHeaderViewModel model, string token)
         {
             _logger.LogInformation("Web.CartService.Checkout()");
 
@@ -110,7 +110,11 @@ namespace GeekShopping.Web.Services
             var response = await _client.PostAsJson($"{BasePath}/checkout", model);
 
             if (!response.IsSuccessStatusCode)
+            {
+                if (response.StatusCode.ToString().Equals("PreconditionFailed"))
+                    return "Coupon Price has changed, please confirm!";
                 throw new Exception("Something went wrong when calling API");
+            }
 
             var resultado = await response.ReadContentAs<CartHeaderViewModel>();
             return resultado;

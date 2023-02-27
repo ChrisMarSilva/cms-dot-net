@@ -12,17 +12,20 @@ namespace GeekShopping.CartAPI.Controllers
     public class CartController : ControllerBase
     {
         private readonly ILogger<CartController> _logger;
-        private ICartRepository _repository;
+        private ICartRepository _cartRepository;
+        private ICouponRepository _couponRepository;
         private IRabbitMQMessageSender _rabbitMQMessageSender;
 
         public CartController(
             ILogger<CartController> logger,
-            ICartRepository repository,
+            ICartRepository cartRepository,
+            ICouponRepository couponRepository,
             IRabbitMQMessageSender rabbitMQMessageSender
             )
         {
             _logger = logger;
-            _repository = repository ?? throw new ArgumentNullException(nameof(repository));
+            _cartRepository = cartRepository ?? throw new ArgumentNullException(nameof(cartRepository));
+            _couponRepository = couponRepository ?? throw new ArgumentNullException(nameof(couponRepository));
             _rabbitMQMessageSender = rabbitMQMessageSender ?? throw new ArgumentNullException(nameof(rabbitMQMessageSender));
             _logger.LogInformation("CartAPI.CartController");
         }
@@ -33,7 +36,7 @@ namespace GeekShopping.CartAPI.Controllers
         {
             _logger.LogInformation("CartAPI.CartController.FindAll()");
 
-            var cart = await _repository.FindCartByUserId(id);
+            var cart = await _cartRepository.FindCartByUserId(id);
 
             if (cart == null) 
                 return NotFound();
@@ -47,7 +50,7 @@ namespace GeekShopping.CartAPI.Controllers
         {
             _logger.LogInformation("CartAPI.CartController.AddCart()");
 
-            var cart = await _repository.SaveOrUpdateCart(vo);
+            var cart = await _cartRepository.SaveOrUpdateCart(vo);
 
             if (cart == null) 
                 return NotFound();
@@ -61,7 +64,7 @@ namespace GeekShopping.CartAPI.Controllers
         {
             _logger.LogInformation("CartAPI.CartController.UpdateCart()");
 
-            var cart = await _repository.SaveOrUpdateCart(vo);
+            var cart = await _cartRepository.SaveOrUpdateCart(vo);
 
             if (cart == null) 
                 return NotFound();
@@ -75,7 +78,7 @@ namespace GeekShopping.CartAPI.Controllers
         {
             _logger.LogInformation("CartAPI.CartController.RemoveCart()");
 
-            var status = await _repository.RemoveFromCart(id);
+            var status = await _cartRepository.RemoveFromCart(id);
 
             if (!status) 
                 return BadRequest();
@@ -89,7 +92,7 @@ namespace GeekShopping.CartAPI.Controllers
         {
             _logger.LogInformation("CartAPI.CartController.ApplyCoupon()");
 
-            var status = await _repository.ApplyCoupon(vo.CartHeader.UserId, vo.CartHeader.CouponCode);
+            var status = await _cartRepository.ApplyCoupon(vo.CartHeader.UserId, vo.CartHeader.CouponCode);
 
             if (!status) 
                 return NotFound();
@@ -102,7 +105,7 @@ namespace GeekShopping.CartAPI.Controllers
         {
             _logger.LogInformation("CartAPI.CartController.ApplyCoupon()");
 
-            var status = await _repository.RemoveCoupon(userId);
+            var status = await _cartRepository.RemoveCoupon(userId);
 
             if (!status) 
                 return NotFound();
@@ -118,10 +121,19 @@ namespace GeekShopping.CartAPI.Controllers
             if (vo?.UserId == null)
                 return BadRequest();
 
-            var cart = await _repository.FindCartByUserId(vo.UserId);
+            var cart = await _cartRepository.FindCartByUserId(vo.UserId);
 
             if (cart == null) 
                 return NotFound();
+
+            if (!string.IsNullOrEmpty(vo.CouponCode))
+            {
+                string token = Request.Headers["Authorization"];
+                CouponVO coupon = await _couponRepository.GetCoupon(vo.CouponCode, token);
+                
+                if (vo.DiscountAmount != coupon.DiscountAmount)
+                    return StatusCode(412); // 412 Precondition Failed
+            }
 
             vo.CartDetails = cart.CartDetails;
             vo.DateTime = DateTime.Now;
