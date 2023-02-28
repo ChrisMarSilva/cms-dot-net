@@ -1,10 +1,10 @@
-﻿using GeekShopping.CartAPI.Messages;
-using GeekShopping.MessageBus;
+﻿using GeekShopping.MessageBus;
+using GeekShopping.OrderAPI.Messages;
 using RabbitMQ.Client;
 using System.Text;
 using System.Text.Json;
 
-namespace GeekShopping.CartAPI.RabbitMQSender
+namespace GeekShopping.OrderAPI.RabbitMQSender
 {
     public class RabbitMQMessageSender : IRabbitMQMessageSender
     {
@@ -17,15 +17,15 @@ namespace GeekShopping.CartAPI.RabbitMQSender
         public RabbitMQMessageSender(ILogger<RabbitMQMessageSender> logger)
         {
             _logger = logger;
-            _hostName = "localhost"; // localhost // 127.0.0.1
+            _hostName = "localhost";
             _password = "guest";
             _userName = "guest";
-            _logger.LogInformation("CartAPI.RabbitMQMessageSender");
+            _logger.LogInformation("OrderAPI.RabbitMQMessageSender");
         }
 
         public void SendMessage(BaseMessage message, string queueName)
         {
-            _logger.LogInformation("CartAPI.RabbitMQMessageSender.SendMessage()");
+            _logger.LogInformation("OrderAPI.RabbitMQMessageSender.SendMessage()");
 
             if (this.ConnectionExists())
             {
@@ -39,10 +39,10 @@ namespace GeekShopping.CartAPI.RabbitMQSender
 
         private byte[] GetMessageAsByteArray(BaseMessage message)
         {
-            _logger.LogInformation("CartAPI.RabbitMQMessageSender.GetMessageAsByteArray()");
-            
-            var options = new JsonSerializerOptions { WriteIndented = true };
-            var json = JsonSerializer.Serialize<CheckoutHeaderVO>((CheckoutHeaderVO)message, options);
+            _logger.LogInformation("OrderAPI.RabbitMQMessageSender.GetMessageAsByteArray()");
+
+            var options = new JsonSerializerOptions{ WriteIndented = true };
+            var json = JsonSerializer.Serialize<PaymentVO>((PaymentVO)message, options);
             var body = Encoding.UTF8.GetBytes(json);
             
             return body;
@@ -50,8 +50,8 @@ namespace GeekShopping.CartAPI.RabbitMQSender
 
         private bool ConnectionExists()
         {
-            _logger.LogInformation("CartAPI.RabbitMQMessageSender.ConnectionExists()");
-            
+            _logger.LogInformation("OrderAPI.RabbitMQMessageSender.ConnectionExists()");
+
             if (_connection != null)
                 return true;
 
@@ -61,7 +61,7 @@ namespace GeekShopping.CartAPI.RabbitMQSender
         }
         private void CreateConnection()
         {
-            _logger.LogInformation("CartAPI.RabbitMQMessageSender.CreateConnection()");
+            _logger.LogInformation("OrderAPI.RabbitMQMessageSender.CreateConnection()");
             try
             {
                 var factory = new ConnectionFactory { HostName = _hostName, UserName = _userName, Password = _password };

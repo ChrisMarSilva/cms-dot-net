@@ -1,5 +1,6 @@
 ﻿using GeekShopping.OrderAPI.Messages;
 using GeekShopping.OrderAPI.Model;
+using GeekShopping.OrderAPI.RabbitMQSender;
 using GeekShopping.OrderAPI.Repository;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
@@ -14,21 +15,19 @@ namespace GeekShopping.OrderAPI.MessageConsumer
         private readonly OrderRepository _repository;
         private IConnection _connection;
         private IModel _channel;
+        private IRabbitMQMessageSender _rabbitMQMessageSender;
 
         public RabbitMQCheckoutConsumer(
             ILogger<RabbitMQCheckoutConsumer> logger,
-            OrderRepository repository
+            OrderRepository repository,
+            IRabbitMQMessageSender rabbitMQMessageSender
             )
         {
             _logger = logger;
             _repository = repository;
+            _rabbitMQMessageSender = rabbitMQMessageSender;
 
-            var factory = new ConnectionFactory
-            {
-                HostName = "localhost",
-                UserName = "guest",
-                Password = "guest"
-            };
+            var factory = new ConnectionFactory { HostName = "localhost", UserName = "guest", Password = "guest" };
             _connection = factory.CreateConnection();
 
             _channel = _connection.CreateModel();
@@ -49,7 +48,7 @@ namespace GeekShopping.OrderAPI.MessageConsumer
                 var content = Encoding.UTF8.GetString(evt.Body.ToArray());
                 CheckoutHeaderVO vo = JsonSerializer.Deserialize<CheckoutHeaderVO>(content);
 
-                ProcessOrder(vo).GetAwaiter().GetResult();
+                this.ProcessOrder(vo).GetAwaiter().GetResult();
 
                 _channel.BasicAck(deliveryTag: evt.DeliveryTag, multiple: false);
             };
@@ -99,7 +98,35 @@ namespace GeekShopping.OrderAPI.MessageConsumer
                 }
             }
 
-            await _repository.AddOrder(order);
+            var addOrder = await _repository.AddOrder(order);
+
+            if (!addOrder)
+            {
+                var errorMessage = "Order Not Add";
+                _logger.LogError($"OrderAPI.RabbitMQCheckoutConsumer.ProcessOrder({errorMessage})");
+                throw new Exception(errorMessage);
+            }
+
+            PaymentVO payment = new()
+            {
+                Name = order.FirstName + " " + order.LastName,
+                CardNumber = order.CardNumber,
+                CVV = order.CVV,
+                ExpiryMonthYear = order.ExpiryMonthYear,
+                OrderId = order.Id,
+                PurchaseAmount = order.PurchaseAmount,
+                Email = order.Email,
+            };
+
+            try
+            {
+                _rabbitMQMessageSender.SendMessage(payment, "orderpaymentprocessqueue");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"OrderAPI.RabbitMQCheckoutConsumer.ProcessOrder({ex.Message})");
+                throw;
+            }
         }
     }
 }

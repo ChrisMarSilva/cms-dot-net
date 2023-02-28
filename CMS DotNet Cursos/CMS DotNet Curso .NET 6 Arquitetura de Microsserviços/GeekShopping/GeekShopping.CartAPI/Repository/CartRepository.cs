@@ -28,16 +28,12 @@ namespace GeekShopping.CartAPI.Repository
         {
             _logger.LogInformation("CartAPI.CartRepository.FindCartByUserId()");
 
-            //Cart cart = new()
-            //{
-            //    CartHeader = await _context.CartHeaders.FirstOrDefaultAsync(c => c.UserId == userId),
-            //};
-
+            //Cart cart = new() { CartHeader = await _context.CartHeaders.FirstOrDefaultAsync(c => c.UserId == userId) ?? new CartHeader() };
             Cart cart = new Cart();
 
             cart.CartHeader = await _context
                 .CartHeaders
-                .FirstOrDefaultAsync(c => c.UserId == userId);
+                .FirstOrDefaultAsync(c => c.UserId == userId) ?? new CartHeader();
 
             if (cart.CartHeader != null)
                 cart.CartDetails = _context
