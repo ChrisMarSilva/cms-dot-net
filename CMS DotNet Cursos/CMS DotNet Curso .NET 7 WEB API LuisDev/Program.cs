@@ -1,11 +1,14 @@
 using AwesomeDevEvents.API.Persistence;
+using AwesomeDevEvents.API.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// var connectionString = builder.Configuration.GetConnectionString("DevEventsCs");
-// builder.Services.AddDbContext<DevEventsDbContext>(o => o.UseSqlServer(connectionString));
-builder.Services.AddSingleton<DevEventsDbContext>();
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+builder.Services.AddDbContext<ApplicationDbContext>(o => o.UseSqlServer(connectionString));
+
+builder.Services.AddScoped<IDevEventRepository, DevEventRepository>();
+builder.Services.AddScoped<IDevEventSpeakerRepository, DevEventSpeakerRepository>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -25,6 +28,7 @@ app.MapControllers();
 
 app.Run();
 
+// dotnet tool install --global dotnet-ef
 // dotnet tool update --global dotnet-ef
 // dotnet build 
 

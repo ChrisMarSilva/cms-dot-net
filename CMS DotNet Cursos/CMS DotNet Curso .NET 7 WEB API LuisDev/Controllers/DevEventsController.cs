@@ -1,26 +1,32 @@
 ﻿using AwesomeDevEvents.API.Entities;
 using AwesomeDevEvents.API.Persistence;
+using AwesomeDevEvents.API.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 
 namespace AwesomeDevEvents.API.Controllers
 {
-    //[Route("api/[controller]")]
+    // [Route("api/[controller]")]
     [Route("api/v1/dev-events")]
     [ApiController]
     public class DevEventsController : ControllerBase
     {
         private readonly ILogger<DevEventsController> _logger;
-        private readonly DevEventsDbContext _context;
+        private readonly ApplicationDbContext _context;
+        private IDevEventRepository _eventRepository;
+        private IDevEventSpeakerRepository _speakerRepository;
 
         public DevEventsController(
-            ILogger<DevEventsController> logger, 
-            DevEventsDbContext context
+            ILogger<DevEventsController> logger,
+            ApplicationDbContext context,
+            IDevEventRepository eventRepository,
+            IDevEventSpeakerRepository speakerRepository
             )
         {
             _logger = logger;
-            _context = context;
+            _context = context;            
+            _eventRepository = eventRepository ?? throw new ArgumentNullException(nameof(DevEventRepository));
+            _speakerRepository = speakerRepository ?? throw new ArgumentNullException(nameof(DevEventSpeakerRepository));
             _logger.LogInformation("AwesomeDevEvents.API.DevEventsController");
         }
 
@@ -29,13 +35,10 @@ namespace AwesomeDevEvents.API.Controllers
         {
             _logger.LogInformation("AwesomeDevEvents.API.DevEventsController.GetAll()");
 
-            var devEvents = _context
-                .DevEvents.Where(d => !d.IsDeleted)
-                .ToList();
-
-            //var devEvents = await _context
-            //  .DevEvents.Where(d => !d.IsDeleted)
-            //  .ToListAsync();
+            var devEvents = await _context
+              .DevEvents.Where(d => !d.IsDeleted)
+              .ToListAsync();
+            // var devEvent = await _eventRepository.FindAll();
 
             return Ok(devEvents);
         }
@@ -45,33 +48,26 @@ namespace AwesomeDevEvents.API.Controllers
         {
             _logger.LogInformation("AwesomeDevEvents.API.DevEventsController.GetById()");
 
-            var devEvent = _context
+            var devEvent = await _context
                 .DevEvents
-                .SingleOrDefault(d => d.Id == id);
+                .AsNoTracking()
+                .Include(d => d.Speakers)
+                .SingleOrDefaultAsync(d => d.Id == id);
+            // var devEvent = await _eventRepository.FindById(id);
 
-            //var devEvent = await _context
-            //    .DevEvents
-            //    .AsNoTracking()
-            //    .Include(de => de.Speakers)
-            //    .SingleOrDefaultAsync(d => d.Id == id);
-
-            if (devEvent == null)
-                return NotFound();
-
-            return Ok(devEvent);
+            return devEvent?.Id == Guid.Empty ? NotFound() : Ok(devEvent);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post(DevEvent devEvent)
+        public async Task<IActionResult> Post(DevEvent input)
         {
             _logger.LogInformation("AwesomeDevEvents.API.DevEventsController.Post()");
 
-            _context.DevEvents.Add(devEvent);
+            // var result = await _eventRepository.Create(devEvent);
+            await _context.DevEvents.AddAsync(input);
+            await _context.SaveChangesAsync();
 
-            //await _context.DevEvents.AddAsync(devEvent);
-            //await _context.SaveChangesAsync();
-
-            return CreatedAtAction(nameof(GetById), new { id = devEvent.Id }, devEvent);
+            return CreatedAtAction(nameof(GetById), new { id = input.Id }, input);
         }
 
         [HttpPut("{id}")]
@@ -79,26 +75,18 @@ namespace AwesomeDevEvents.API.Controllers
         {
             _logger.LogInformation("AwesomeDevEvents.API.DevEventsController.Update()");
 
-            var devEvent = _context
+            var devEvent = await _context
                 .DevEvents
-                .SingleOrDefault(d => d.Id == id);
-
-            //var devEvent = await _context
-            //    .DevEvents
-            //    .SingleOrDefaultAsync(d => d.Id == id);
+                .SingleOrDefaultAsync(d => d.Id == id);
 
             if (devEvent == null)
                 return NotFound();
 
-            devEvent.Update(
-                title: input.Title, 
-                description: input.Description, 
-                startDate: input.StartDate, 
-                endDate: input.EndDate
-                );
+            devEvent.Update(title: input.Title, description: input.Description);
 
-            //_context.DevEvents.Update(devEvent);
-            //await _context.SaveChangesAsync();
+            // var result = await _eventRepository.Update(devEvent);
+            _context.DevEvents.Update(devEvent);
+            await _context.SaveChangesAsync();
 
             return NoContent();
         }
@@ -108,53 +96,36 @@ namespace AwesomeDevEvents.API.Controllers
         {
             _logger.LogInformation("AwesomeDevEvents.API.DevEventsController.Delete()");
 
-            var devEvent = _context
-                .DevEvents
-                .SingleOrDefault(d => d.Id == id);
-
-            //var devEvent = await _context
-            //    .DevEvents
-            //    .SingleOrDefaultAsync(d => d.Id == id);
+            var devEvent = await _context.DevEvents.SingleOrDefaultAsync(d => d.Id == id);
 
             if (devEvent == null)
                 return NotFound();
 
-            devEvent.Delete();
+            // var status = await _eventRepository.Delete(id);
+            //if (!status)
+            //    return BadRequest();
 
-            // await _context.SaveChangesAsync();
+            devEvent.Delete();
+            await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
         [HttpPost("{id}/speakers")]
-        public async Task<IActionResult> PostSpeaker(Guid id, DevEventSpeaker speaker)
+        public async Task<IActionResult> PostSpeaker(Guid id, DevEventSpeaker input)
         {
             _logger.LogInformation("AwesomeDevEvents.API.DevEventsController.PostSpeaker()");
 
-            var devEvent = _context
-               .DevEvents
-               .SingleOrDefault(d => d.Id == id);
+            var isExistDevEvent = await _context.DevEvents.AnyAsync(d => d.Id == id);
 
-            if (devEvent == null)
+            if (!isExistDevEvent)
                 return NotFound();
 
-            //var existDevEvent = _context
-            //    .DevEvents
-            //    .Any(d => d.Id == id);
+            input.DevEventId = id;
 
-            //var existDevEvent = await _context
-            //    .DevEvents
-            //    .AnyAsync(d => d.Id == id);
-
-            //if (!existDevEvent)
-            //    return NotFound();
-
-            speaker.DevEventId = id;
-            devEvent.Speakers.Add(speaker);
-
-            // speaker.DevEventId = id;
-            //await _context.DevEventSpeakers.AddAsync(speaker);
-            //await _context.SaveChangesAsync();
+            // var result = await _speakerRepository.Create(input);
+            await _context.DevEventSpeakers.AddAsync(input);
+            await _context.SaveChangesAsync();
 
             return NoContent();
         }

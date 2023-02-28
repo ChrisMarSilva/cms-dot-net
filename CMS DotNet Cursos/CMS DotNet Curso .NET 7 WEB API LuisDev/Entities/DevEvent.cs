@@ -2,31 +2,33 @@
 {
     public class DevEvent
     {
-        public DevEvent()
-        {
-            Speakers = new List<DevEventSpeaker>();
-            IsDeleted = false;
-        }
-
         public Guid Id { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
-        public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
-        public List<DevEventSpeaker> Speakers { get; set; }
+        public DateTime? StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
+        public IEnumerable<DevEventSpeaker> Speakers { get; set; } // List<DevEventSpeaker>
         public bool IsDeleted { get; set; }
 
-        public void Update(string title, string description, DateTime startDate, DateTime endDate)
+        public DevEvent()
         {
-            Title = title;
-            Description = description;
-            StartDate = startDate;
-            EndDate = endDate;
+            this.Id = Guid.NewGuid();
+            this.StartDate = DateTime.Now;
+            this.EndDate = null;
+            this.Speakers = new List<DevEventSpeaker>();
+            this.IsDeleted = false;
+        }
+
+        public void Update(string title, string description)
+        {
+            this.Title = title;
+            this.Description = description;
         }
 
         public void Delete()
         {
-            IsDeleted = true;
+            this.EndDate = DateTime.Now;
+            this.IsDeleted = true;
         }
     }
 }
