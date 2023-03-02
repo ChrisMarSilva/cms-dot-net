@@ -13,6 +13,10 @@ namespace GeekShopping.OrderAPI.MessageConsumer
         private readonly OrderRepository _repository;
         private IConnection _connection;
         private IModel _channel;
+        //private string _queueName = "";
+        //private const string ExchangeName = "FanoutPaymentUpdateExchange";
+        private const string ExchangeName = "DirectPaymentUpdateExchange";
+        private const string PaymentOrderUpdateQueueName = "PaymentOrderUpdateQueueName";
 
         public RabbitMQPaymentConsumer(
             ILogger<RabbitMQPaymentConsumer> logger,
@@ -26,7 +30,19 @@ namespace GeekShopping.OrderAPI.MessageConsumer
             _connection = factory.CreateConnection();
 
             _channel = _connection.CreateModel();
-            _channel.QueueDeclare(queue: "orderpaymentresultqueue", false, false, false, arguments: null);
+
+            // topic
+            //_channel.QueueDeclare(queue: "orderpaymentresultqueue", durable: false, exclusive: false, autoDelete: false, arguments: null);
+
+            //Fanout
+            //_channel.ExchangeDeclare(exchange: ExchangeName, type: ExchangeType.Fanout);
+            //_queueName = _channel.QueueDeclare().QueueName;
+            //_channel.QueueBind(queue: _queueName, exchange: ExchangeName, routingKey: "");
+
+            //Direct
+            _channel.ExchangeDeclare(exchange: ExchangeName, type: ExchangeType.Direct);
+            _channel.QueueDeclare(queue: PaymentOrderUpdateQueueName, durable: false, exclusive: false, autoDelete: false, arguments: null);
+            _channel.QueueBind(queue: PaymentOrderUpdateQueueName, exchange: ExchangeName, routingKey: "PaymentOrder");
 
             _logger.LogInformation("OrderAPI.RabbitMQPaymentConsumer");
         }
@@ -45,10 +61,12 @@ namespace GeekShopping.OrderAPI.MessageConsumer
                 
                 this.UpdatePaymentStatus(vo).GetAwaiter().GetResult();
                
-                _channel.BasicAck(evt.DeliveryTag, false);
+                _channel.BasicAck(deliveryTag: evt.DeliveryTag, multiple: false);
             };
 
-            _channel.BasicConsume("orderpaymentresultqueue", false, consumer);
+            //_channel.BasicConsume(queue: "orderpaymentresultqueue", autoAck: false, consumer: consumer);
+            //_channel.BasicConsume(queue: _queueName, autoAck: false, consumer: consumer);
+            _channel.BasicConsume(queue: PaymentOrderUpdateQueueName, autoAck: false, consumer: consumer);
 
             return Task.CompletedTask;
         }

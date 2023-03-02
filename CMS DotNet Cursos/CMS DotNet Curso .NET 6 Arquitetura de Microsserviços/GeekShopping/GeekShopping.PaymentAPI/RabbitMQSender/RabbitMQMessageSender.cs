@@ -14,6 +14,10 @@ namespace GeekShopping.PaymentAPI.RabbitMQSender
         private readonly string _password;
         private readonly string _userName;
         private IConnection _connection;
+        //private const string ExchangeName = "FanoutPaymentUpdateExchange";
+        private const string ExchangeName = "DirectPaymentUpdate_Exchange";
+        private const string PaymentEmailUpdateQueueName = "PaymentEmailUpdateQueueName";
+        private const string PaymentOrderUpdateQueueName = "PaymentOrderUpdateQueueName";
 
         public RabbitMQMessageSender(ILogger<RabbitMQMessageSender> logger)
         {
@@ -24,17 +28,35 @@ namespace GeekShopping.PaymentAPI.RabbitMQSender
             _logger.LogInformation("PaymentAPI.RabbitMQMessageSender");
         }
 
-        public void SendMessage(BaseMessage message, string queueName)
+        //public void SendMessage(BaseMessage message, string queueName)
+        public void SendMessage(BaseMessage message)
         {
             _logger.LogInformation("PaymentAPI.RabbitMQMessageSender.SendMessage()");
 
             if (this.ConnectionExists())
             {
                 using var channel = _connection.CreateModel();
-                channel.QueueDeclare(queue: queueName, durable: false, exclusive: false, autoDelete: false, arguments: null);
+
+                // topic
+                //channel.QueueDeclare(queue: queueName, durable: false, exclusive: false, autoDelete: false, arguments: null);
+
+                //Fanout
+                //channel.ExchangeDeclare(exchange: ExchangeName, type: ExchangeType.Fanout, durable: false);
+
+                //Direct
+                channel.ExchangeDeclare(exchange: ExchangeName, type: ExchangeType.Direct, durable: false);
+                channel.QueueDeclare(queue: PaymentEmailUpdateQueueName, durable: false, exclusive: false, autoDelete: false, arguments: null);
+                channel.QueueDeclare(queue: PaymentOrderUpdateQueueName, durable: false, exclusive: false, autoDelete: false, arguments: null);
+                
+                channel.QueueBind(queue: PaymentEmailUpdateQueueName, exchange: ExchangeName, routingKey: "PaymentEmail");
+                channel.QueueBind(queue: PaymentOrderUpdateQueueName, exchange: ExchangeName, routingKey: "PaymentOrder");
 
                 byte[] body = GetMessageAsByteArray(message);
-                channel.BasicPublish(exchange: "", routingKey: queueName, basicProperties: null, body: body);
+
+                //channel.BasicPublish(exchange: "", routingKey: queueName, basicProperties: null, body: body);
+                //channel.BasicPublish(exchange: ExchangeName, "", basicProperties: null, body: body);
+                channel.BasicPublish(exchange: ExchangeName, "PaymentEmail", basicProperties: null, body: body);
+                channel.BasicPublish(exchange: ExchangeName, "PaymentOrder", basicProperties: null, body: body);
             }
         }
 

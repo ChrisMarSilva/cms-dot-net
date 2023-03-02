@@ -30,7 +30,7 @@ namespace GeekShopping.PaymentAPI.MessageConsumer
             _connection = factory.CreateConnection();
             
             _channel = _connection.CreateModel();
-            _channel.QueueDeclare(queue: "orderpaymentprocessqueue", false, false, false, arguments: null);
+            _channel.QueueDeclare(queue: "orderpaymentprocessqueue", durable: false, exclusive: false, autoDelete: false, arguments: null);
 
             _logger.LogInformation("PaymentAPI.RabbitMQPaymentConsumer");
         }
@@ -50,10 +50,10 @@ namespace GeekShopping.PaymentAPI.MessageConsumer
                 
                 this.ProcessPayment(vo).GetAwaiter().GetResult();
                 
-                _channel.BasicAck(evt.DeliveryTag, false);
+                _channel.BasicAck(deliveryTag: evt.DeliveryTag, multiple: false);
             };
 
-            _channel.BasicConsume("orderpaymentprocessqueue", false, consumer);
+            _channel.BasicConsume(queue: "orderpaymentprocessqueue", autoAck: false, consumer: consumer);
 
             return Task.CompletedTask;
         }
@@ -73,7 +73,8 @@ namespace GeekShopping.PaymentAPI.MessageConsumer
 
             try
             {
-                _rabbitMQMessageSender.SendMessage(paymentResult, "orderpaymentresultqueue");
+                // _rabbitMQMessageSender.SendMessage(paymentResult, "orderpaymentresultqueue");
+                _rabbitMQMessageSender.SendMessage(paymentResult);
             }
             catch (Exception)
             {

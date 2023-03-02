@@ -38,8 +38,11 @@ SELECT * FROM AspNetUserRoles;
 -- SET SQL_SAFE_UPDATES = 0;
 
 SELECT * FROM cart_header;
+-- DELETE FROM cart_header;
 SELECT * FROM cart_detail;
+-- DELETE FROM cart_detail;
 SELECT * FROM product;
+-- DELETE FROM product;
 
 -- ----------------------------------------------------
 -- ----------------------------------------------------
@@ -58,7 +61,18 @@ SELECT * FROM coupon;
 -- SET SQL_SAFE_UPDATES = 0;
 
 SELECT * FROM order_header;
+-- DELETE FROM order_header;
 SELECT * FROM order_detail;
+-- DELETE FROM order_detail;
+
+-- ----------------------------------------------------
+-- ----------------------------------------------------
+
+-- use geek_shopping_email;
+-- SET SQL_SAFE_UPDATES = 0;
+
+SELECT * FROM email_logs;
+-- DELETE FROM email_logs;
 
 -- ----------------------------------------------------
 -- ----------------------------------------------------
