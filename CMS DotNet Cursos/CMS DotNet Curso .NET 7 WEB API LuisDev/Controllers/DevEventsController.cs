@@ -30,6 +30,7 @@ namespace AwesomeDevEvents.API.Controllers
             _logger.LogInformation("AwesomeDevEvents.API.DevEventsController");
         }
 
+
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
@@ -38,8 +39,9 @@ namespace AwesomeDevEvents.API.Controllers
             var devEvents = await _context
               .DevEvents
               .AsNoTracking()
-              .Include(d => d.Speakers)
+              //.Include(d => d.Speakers)
               .Where(d => !d.IsDeleted)
+              .OrderByDescending(d => d.StartDate)
               .ToListAsync();
             // var devEvent = await _eventRepository.FindAll();
 
@@ -55,7 +57,48 @@ namespace AwesomeDevEvents.API.Controllers
                 .DevEvents
                 .AsNoTracking()
                 .Include(d => d.Speakers)
-                .SingleOrDefaultAsync(d => d.Id == id); // FirstOrDefaultAsync
+                .SingleOrDefaultAsync(d => d.Id == id); 
+
+            //If your result set returns 0 records:
+            //SingleOrDefault returns the default value for the type(e.g. default for int is 0)
+            //FirstOrDefault returns the default value for the type
+
+            //If you result set returns 1 record:
+            //SingleOrDefault returns that record
+            //FirstOrDefault returns that record
+
+            //If your result set returns many records:
+            //SingleOrDefault throws an exception
+            //FirstOrDefault returns the first record
+
+            // var devEvent = await _eventRepository.FindById(id);
+
+            return devEvent?.Id == Guid.Empty ? NotFound() : Ok(devEvent);
+        }
+
+        // [ActionName("Details")]
+        [HttpGet("find/{id}")]
+        public async Task<IActionResult> Get2ById(Guid id)
+        {
+            _logger.LogInformation("AwesomeDevEvents.API.DevEventsController.Get2ById()");
+
+            var devEvent = await _context
+                .DevEvents
+                .AsNoTracking()
+                .Include(d => d.Speakers)
+                .FirstOrDefaultAsync(d => d.Id == id);
+
+            //If your result set returns 0 records:
+            //SingleOrDefault returns the default value for the type(e.g. default for int is 0)
+            //FirstOrDefault returns the default value for the type
+
+            //If you result set returns 1 record:
+            //SingleOrDefault returns that record
+            //FirstOrDefault returns that record
+
+            //If your result set returns many records:
+            //SingleOrDefault throws an exception
+            //FirstOrDefault returns the first record
 
             // var devEvent = await _eventRepository.FindById(id);
 

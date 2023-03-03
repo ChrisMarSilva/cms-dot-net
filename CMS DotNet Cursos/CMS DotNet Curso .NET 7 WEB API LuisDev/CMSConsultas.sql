@@ -13,8 +13,15 @@ DELETE FROM DevEvents;
 
 
 SELECT * FROM DevEvents WITH(NOLOCK);
+--  CREATE INDEX IDX_DevEvents_01 ON DevEvents (IsDeleted);
+--  CREATE INDEX IDX_DevEvents_02 ON DevEvents (Start_Date);
+--  CREATE INDEX IDX_DevEvents_03 ON DevEvents (Start_Date, IsDeleted);
 SELECT * FROM DevEventSpeakers WITH(NOLOCK);
 
+ SELECT [d].[Id], [d].[Description], [d].[End_Date], [d].[IsDeleted], [d].[Start_Date], [d].[Title]
+      FROM [DevEvents] AS [d]
+      WHERE [d].[IsDeleted] = CAST(0 AS bit)
+	  ORDER BY [d].[Start_Date]
 
 
 ----------------------------------------------------------------------------------------------------------------
