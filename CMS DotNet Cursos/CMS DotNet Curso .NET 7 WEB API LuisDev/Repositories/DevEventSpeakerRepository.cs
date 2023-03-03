@@ -56,25 +56,25 @@ namespace AwesomeDevEvents.API.Repositories
             }
         }
 
-        public async Task<DevEventSpeakerDTO> Create(DevEventSpeakerDTO input)
+        public async Task<DevEventSpeakerDTO> Create(DevEventSpeaker speaker)
         {
             _logger.LogInformation("AwesomeDevEvents.API.DevEventSpeakerRepository.Create()");
             try
             {
                 //var product = _mapper.Map<DevEventSpeaker>(vo);
-                var product = new DevEventSpeaker();
-                product.Id = input.id;
-                product.Name = input.name;
-                product.TalkTitle = input.talkTitle;
-                product.TalkDescription = input.talkDescription;
-                product.LinkedInProfile = input.linkedInProfile;
-                product.DevEventId = input.devEventId;
+                //var product = new DevEventSpeaker();
+                //product.Id = input.id;
+                //product.Name = input.name;
+                //product.TalkTitle = input.talkTitle;
+                //product.TalkDescription = input.talkDescription;
+                //product.LinkedInProfile = input.linkedInProfile;
+                //product.DevEventId = input.devEventId;
 
-                await _context.DevEventSpeakers.AddAsync(product);
+                await _context.DevEventSpeakers.AddAsync(speaker);
                 await _context.SaveChangesAsync();
 
                 //var result = _mapper.Map<DevEventSpeakerDTO>(product);
-                var result = new DevEventSpeakerDTO(product.Id, product.Name, product.TalkTitle, product.TalkDescription, product.LinkedInProfile, product.DevEventId);
+                var result = new DevEventSpeakerDTO(speaker.Id, speaker.Name, speaker.TalkTitle, speaker.TalkDescription, speaker.LinkedInProfile, speaker.DevEventId);
                 return result;
             }
             catch (Exception ex)

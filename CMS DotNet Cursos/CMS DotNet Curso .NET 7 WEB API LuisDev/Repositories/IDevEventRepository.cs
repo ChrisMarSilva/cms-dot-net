@@ -1,4 +1,5 @@
 ﻿using AwesomeDevEvents.API.DTOs;
+using AwesomeDevEvents.API.Entities;
 
 namespace AwesomeDevEvents.API.Repositories
 {
@@ -6,8 +7,10 @@ namespace AwesomeDevEvents.API.Repositories
     {
         Task<IEnumerable<DevEventDTO>> FindAll();
         Task<DevEventDTO> FindById(Guid id);
-        Task<DevEventDTO> Create(DevEventDTO vo);
-        Task<DevEventDTO> Update(DevEventDTO vo);
+        Task<DevEvent> FindByIdSimple(Guid id);
+        Task<bool> FindAny(Guid id);
+        Task<DevEventDTO> Create(DevEvent vo);
+        Task<DevEventDTO> Update(DevEvent vo);
         Task<bool> Delete(Guid id);
     }
 }

@@ -25,10 +25,18 @@ namespace AwesomeDevEvents.API.Repositories
             _logger.LogInformation("AwesomeDevEvents.API.DevEventRepository.FindAll()");
             try
             {
-                var products = await _context.DevEvents.ToListAsync();
+                var devEvents = await _context
+                  .DevEvents
+                  .AsNoTracking()
+                  //.Include(d => d.Speakers)
+                  .Where(d => !d.IsDeleted)
+                  .OrderByDescending(d => d.StartDate)
+                  .ToListAsync();
 
                 //var results = _mapper.Map<List<DevEventDTO>>(products);
-                var results = products.Select(c => new DevEventDTO(c.Id, c.Title, c.Description, c.StartDate, c.EndDate, c.Speakers, c.IsDeleted));
+                var results = devEvents
+                    .Select(c => new DevEventDTO(c.Id, c.Title, c.Description, c.StartDate, c.EndDate, c.Speakers, c.IsDeleted));
+
                 return results;
             }
             catch (Exception ex)
@@ -43,10 +51,37 @@ namespace AwesomeDevEvents.API.Repositories
             _logger.LogInformation("AwesomeDevEvents.API.DevEventRepository.FindById()");
             try
             {
-                var product = await _context.DevEvents.Where(p => p.Id == id).FirstOrDefaultAsync() ?? new DevEvent();
+                //var devEvent = await _context
+                //    .DevEvents
+                //    .Where(p => p.Id == id)
+                //    .FirstOrDefaultAsync() ?? new DevEvent();
+
+                //var devEvent = await _context
+                //    .DevEvents
+                //    .AsNoTracking()
+                //    .Include(d => d.Speakers)
+                //    .FirstOrDefaultAsync(d => d.Id == id);
+
+                var devEvent = await _context
+                    .DevEvents
+                    .AsNoTracking()
+                    .Include(d => d.Speakers)
+                    .SingleOrDefaultAsync(d => d.Id == id) ?? new DevEvent();
+
+                //If your result set returns 0 records:
+                //SingleOrDefault returns the default value for the type(e.g. default for int is 0)
+                //FirstOrDefault returns the default value for the type
+
+                //If you result set returns 1 record:
+                //SingleOrDefault returns that record
+                //FirstOrDefault returns that record
+
+                //If your result set returns many records:
+                //SingleOrDefault throws an exception
+                //FirstOrDefault returns the first record
 
                 //var result = _mapper.Map<DevEventDTO>(product);
-                var result = new DevEventDTO(product.Id, product.Title, product.Description, product.StartDate, product.EndDate, product.Speakers, product.IsDeleted);
+                var result = new DevEventDTO(devEvent.Id, devEvent.Title, devEvent.Description, devEvent.StartDate, devEvent.EndDate, devEvent.Speakers, devEvent.IsDeleted);
                 return result;
             }
             catch (Exception ex)
@@ -56,26 +91,62 @@ namespace AwesomeDevEvents.API.Repositories
             }
         }
 
-        public async Task<DevEventDTO> Create(DevEventDTO input)
+        public async Task<DevEvent> FindByIdSimple(Guid id)
+        {
+            _logger.LogInformation("AwesomeDevEvents.API.DevEventRepository.FindByIdSimple()");
+            try
+            {
+                var devEvent = await _context
+                    .DevEvents
+                    .SingleOrDefaultAsync(d => d.Id == id) ?? new DevEvent();
+
+                return devEvent;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"AwesomeDevEvents.API.DevEventRepository.FindById(Erro: {ex.Message})");
+                throw;
+            }
+        }
+
+        public async Task<bool> FindAny(Guid id)
+        {
+            _logger.LogInformation("AwesomeDevEvents.API.DevEventRepository.FindByIdSimple()");
+            try
+            {
+                var isExistDevEvent = await _context
+                    .DevEvents
+                    .AnyAsync(d => d.Id == id);
+
+                return isExistDevEvent;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"AwesomeDevEvents.API.DevEventRepository.FindById(Erro: {ex.Message})");
+                return false;
+            }
+        }
+
+        public async Task<DevEventDTO> Create(DevEvent devEvent)
         {
             _logger.LogInformation("AwesomeDevEvents.API.DevEventRepository.Create()");
             try
             {
-                //var product = _mapper.Map<DevEvent>(vo);
-                var product = new DevEvent();
-                product.Id = input.id;
-                product.Title = input.title;
-                product.Description = input.description;
-                product.StartDate = input.startDate;
-                product.EndDate = input.endDate;
-                product.Speakers = input.speakers;
-                product.IsDeleted = input.isDeleted;
+                //var devEvent = _mapper.Map<Product>(input);
+                //var devEvent = new DevEvent();
+                //devEvent.Id = input.id;
+                //devEvent.Title = input.title;
+                //devEvent.Description = input.description;
+                //devEvent.StartDate = input.startDate;
+                //devEvent.EndDate = input.endDate;
+                //devEvent.Speakers = input.speakers;
+                //devEvent.IsDeleted = input.isDeleted;
 
-                await _context.DevEvents.AddAsync(product);
+                await _context.DevEvents.AddAsync(devEvent);
                 await _context.SaveChangesAsync();
 
                 //var result = _mapper.Map<DevEventDTO>(product);
-                var result = new DevEventDTO(product.Id, product.Title, product.Description, product.StartDate, product.EndDate, product.Speakers, product.IsDeleted);
+                var result = new DevEventDTO(devEvent.Id, devEvent.Title, devEvent.Description, devEvent.StartDate, devEvent.EndDate, devEvent.Speakers, devEvent.IsDeleted);
                 return result;
             }
             catch (Exception ex)
@@ -85,26 +156,26 @@ namespace AwesomeDevEvents.API.Repositories
             }
         }
 
-        public async Task<DevEventDTO> Update(DevEventDTO input)
+        public async Task<DevEventDTO> Update(DevEvent devEvent)
         {
             _logger.LogInformation("AwesomeDevEvents.API.DevEventRepository.Update()");
             try
             {
-                //var product = _mapper.Map<Product>(input);
-                var product = new DevEvent();
-                product.Id = input.id;
-                product.Title = input.title;
-                product.Description = input.description;
-                product.StartDate = input.startDate;
-                product.EndDate = input.endDate;
-                product.Speakers = input.speakers;
-                product.IsDeleted = input.isDeleted;
+                //var devEvent = _mapper.Map<Product>(input);
+                //var devEvent = new DevEvent();
+                //devEvent.Id = input.id;
+                //devEvent.Title = input.title;
+                //devEvent.Description = input.description;
+                //devEvent.StartDate = input.startDate;
+                //devEvent.EndDate = input.endDate;
+                //devEvent.Speakers = input.speakers;
+                //devEvent.IsDeleted = input.isDeleted;
 
-                _context.DevEvents.Update(product);
+                _context.DevEvents.Update(devEvent);
                 await _context.SaveChangesAsync();
 
                 //var result = _mapper.Map<DevEventDTO>(product);
-                var result = new DevEventDTO(product.Id, product.Title, product.Description, product.StartDate, product.EndDate, product.Speakers, product.IsDeleted);
+                var result = new DevEventDTO(devEvent.Id, devEvent.Title, devEvent.Description, devEvent.StartDate, devEvent.EndDate, devEvent.Speakers, devEvent.IsDeleted);
                 return result;
             }
             catch (Exception ex)
@@ -119,16 +190,12 @@ namespace AwesomeDevEvents.API.Repositories
             _logger.LogInformation("AwesomeDevEvents.API.DevEventRepository.Delete()");
             try
             {
-                var product = await _context
-                    .DevEvents
-                    .Where(p => p.Id == id)
-                    .FirstOrDefaultAsync()
-                    ?? new DevEvent();
+                var devEvent = await this.FindByIdSimple(id);
 
-                if (product.Id == Guid.Empty)
+                if (devEvent == null || devEvent?.Id == Guid.Empty)
                     return false;
 
-                _context.DevEvents.Remove(product);
+                _context.DevEvents.Remove(devEvent);
                 await _context.SaveChangesAsync();
 
                 return true;
