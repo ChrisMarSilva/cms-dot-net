@@ -36,7 +36,10 @@ namespace AwesomeDevEvents.API.Controllers
             _logger.LogInformation("AwesomeDevEvents.API.DevEventsController.GetAll()");
 
             var devEvents = await _context
-              .DevEvents.Where(d => !d.IsDeleted)
+              .DevEvents
+              .AsNoTracking()
+              .Include(d => d.Speakers)
+              .Where(d => !d.IsDeleted)
               .ToListAsync();
             // var devEvent = await _eventRepository.FindAll();
 
@@ -52,7 +55,8 @@ namespace AwesomeDevEvents.API.Controllers
                 .DevEvents
                 .AsNoTracking()
                 .Include(d => d.Speakers)
-                .SingleOrDefaultAsync(d => d.Id == id);
+                .SingleOrDefaultAsync(d => d.Id == id); // FirstOrDefaultAsync
+
             // var devEvent = await _eventRepository.FindById(id);
 
             return devEvent?.Id == Guid.Empty ? NotFound() : Ok(devEvent);

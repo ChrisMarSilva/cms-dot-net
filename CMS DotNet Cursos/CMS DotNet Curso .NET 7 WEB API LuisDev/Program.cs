@@ -32,6 +32,6 @@ app.Run();
 // dotnet tool update --global dotnet-ef
 // dotnet build 
 
-// dotnet ef migrations add xxxxx
+// dotnet ef migrations add AddTablesInitOnDataTablesDb
 // dotnet ef database update
 // dotnet ef migrations remove

@@ -34,9 +34,9 @@ namespace AwesomeDevEvents.API.DTOs
         Guid id, 
         string title, 
         string description, 
-        DateTime startDate, 
-        DateTime endDate, 
-        List<DevEventSpeaker> speakers, 
+        DateTime? startDate, 
+        DateTime? endDate,
+        IEnumerable<DevEventSpeaker> speakers, 
         bool isDeleted
     );
 }
