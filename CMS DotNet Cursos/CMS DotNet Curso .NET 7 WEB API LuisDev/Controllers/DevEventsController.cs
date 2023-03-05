@@ -1,12 +1,15 @@
 ﻿using AwesomeDevEvents.API.Models.Dtos;
+using AwesomeDevEvents.API.Models.Entities;
 using AwesomeDevEvents.API.Services;
 using AwesomeDevEvents.API.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace AwesomeDevEvents.API.Controllers
 {
     [Route("api/v1/dev-events")] // [Route("api/[controller]")]
     [ApiController]
+    [EnableRateLimiting("fixed")]
     public class DevEventsController : ControllerBase
     {
         private readonly ILogger<DevEventsController> _logger;
@@ -19,13 +22,19 @@ namespace AwesomeDevEvents.API.Controllers
             _logger.LogInformation("AwesomeDevEvents.API.DevEventsController");
         }
 
+
+        [HttpGet("ping")]
+        [EnableRateLimiting("sliding")]
+        public IActionResult Ping() => Ok("pong");
+
+
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
             _logger.LogInformation("AwesomeDevEvents.API.DevEventsController.GetAll()");
 
             var devEvents = await _eventService.GetAllAsync();
-            return Ok(devEvents);
+            return devEvents is null ? NotFound("No records found") : Ok(devEvents);
         }
 
         [HttpGet("{id}")]
@@ -34,7 +43,7 @@ namespace AwesomeDevEvents.API.Controllers
             _logger.LogInformation("AwesomeDevEvents.API.DevEventsController.GetById()");
 
             var devEvent = await _eventService.GetByIdAsync(id);
-            return devEvent?.id == Guid.Empty ? NotFound() : Ok(devEvent);
+            return devEvent?.id == Guid.Empty ? NotFound("No records found") : Ok(devEvent);
         }
 
         [HttpPost]
@@ -42,7 +51,7 @@ namespace AwesomeDevEvents.API.Controllers
         {
             _logger.LogInformation("AwesomeDevEvents.API.DevEventsController.Post()");
 
-            var devEvent = await _eventService.PostAsync(input);
+            var devEvent = await _eventService.InsertAsync(input);
             return devEvent?.id == Guid.Empty ? BadRequest() : CreatedAtAction(nameof(GetById), new { id = devEvent.id }, devEvent);
         }
 

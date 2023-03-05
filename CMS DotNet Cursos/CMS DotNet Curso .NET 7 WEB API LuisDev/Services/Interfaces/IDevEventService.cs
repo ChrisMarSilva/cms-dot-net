@@ -6,7 +6,7 @@ namespace AwesomeDevEvents.API.Services.Interfaces
     {
         Task<IEnumerable<DevEventOutputDto>> GetAllAsync();
         Task<DevEventOutputDto> GetByIdAsync(Guid id);
-        Task<DevEventOutputDto> PostAsync(DevEventInputDto input);
+        Task<DevEventOutputDto> InsertAsync(DevEventInputDto input);
         Task<DevEventOutputDto> UpdateAsync(Guid id, DevEventInputDto input);
         Task<bool> DeleteAsync(Guid id);
     }

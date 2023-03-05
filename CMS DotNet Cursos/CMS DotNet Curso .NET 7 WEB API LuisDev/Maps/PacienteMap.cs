@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace AwesomeDevEvents.API.Maps
 {
-    public class PacienteMap : BaseMap<Paciente>
+    public class PacienteMap : BaseEntityMap<Paciente>
     {
         public PacienteMap() : base("tb_paciente") { }
 

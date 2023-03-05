@@ -15,6 +15,9 @@ namespace AwesomeDevEvents.API.Persistence
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+            // builder.ApplyConfiguration(new DevEventMap());
+            // builder.ApplyConfiguration(new DevEventSpeakerMap());
+            // builder.ApplyConfiguration(new PacienteMap());
             builder.Ignore<Notification>();
             builder.ApplyConfigurationsFromAssembly(GetType().Assembly);
         }

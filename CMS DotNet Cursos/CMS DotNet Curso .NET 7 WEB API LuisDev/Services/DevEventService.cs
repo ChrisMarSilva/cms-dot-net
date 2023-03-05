@@ -62,7 +62,7 @@ namespace AwesomeDevEvents.API.Services
             }
         }
 
-        public async Task<DevEventOutputDto> PostAsync(DevEventInputDto input)
+        public async Task<DevEventOutputDto> InsertAsync(DevEventInputDto input)
         {
             _logger.LogInformation("AwesomeDevEvents.API.DevEventService.Post()");
             try
@@ -97,7 +97,7 @@ namespace AwesomeDevEvents.API.Services
             _logger.LogInformation("AwesomeDevEvents.API.DevEventService.Update()");
             try
             {
-                var devEvent = await _eventRepo.FindByIdSimpleAsync(id);
+                var devEvent = await _eventRepo.FindByIdAsync(id);
                 if (devEvent == null || devEvent?.Id == Guid.Empty)
                     return null;
 
@@ -130,7 +130,7 @@ namespace AwesomeDevEvents.API.Services
             _logger.LogInformation("AwesomeDevEvents.API.DevEventService.Delete()");
             try
             {
-                var devEvent = await _eventRepo.FindByIdSimpleAsync(id);
+                var devEvent = await _eventRepo.FindByIdAsync(id);
                 if (devEvent == null || devEvent?.Id == Guid.Empty)
                     return false;
 

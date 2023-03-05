@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace AwesomeDevEvents.API.Maps
 {
-    public class DevEventSpeakerMap : BaseMap<DevEventSpeaker>
+    public class DevEventSpeakerMap : BaseEntityMap<DevEventSpeaker>
     {
         public DevEventSpeakerMap() : base("DevEventSpeakers") { }
 

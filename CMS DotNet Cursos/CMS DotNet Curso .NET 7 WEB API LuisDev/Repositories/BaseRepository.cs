@@ -1,34 +1,70 @@
-﻿using AwesomeDevEvents.API.Persistence;
+﻿using AwesomeDevEvents.API.Models.Entities;
+using AwesomeDevEvents.API.Persistence;
 using AwesomeDevEvents.API.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace AwesomeDevEvents.API.Repositories
 {
-    public class BaseRepository : IBaseRepository
+    public class BaseRepository<T> : IBaseRepository<T> where T : BaseEntity
     {
         private readonly ApplicationDbContext _context;
+        private DbSet<T> _entities;
 
         public BaseRepository(ApplicationDbContext context)
         {
             _context = context;
-        }
-        public void Add<T>(T entity) where T : class
-        {
-            _context.Add(entity);
+            _entities = context.Set<T>();
         }
 
-        public void Update<T>(T entity) where T : class
+        public IEnumerable<T> GetAll()
         {
-            _context.Update(entity);
+            return _entities.AsEnumerable();
         }
 
-        public void Delete<T>(T entity) where T : class
+        public T Get(Guid Id)
         {
-            _context.Remove(entity);
+            return _entities.SingleOrDefault(c => c.Id == Id);
         }
 
-        public async Task<bool> SaveChangesAsync()
+        public void Insert(T entity)
         {
-            return await _context.SaveChangesAsync() > 0;
+            if (entity == null)
+                throw new ArgumentNullException("entity");
+            _entities.Add(entity);
+            _context.SaveChanges();
+        }
+
+        public void Update(T entity)
+        {
+            if (entity == null)
+                throw new ArgumentNullException("entity");
+            _entities.Update(entity);
+            _context.SaveChanges();
+        }
+
+        public void Remove(T entity)
+        {
+            if (entity == null)
+                throw new ArgumentNullException("entity");
+            _entities.Remove(entity);
+        }
+
+        public void Delete(T entity)
+        {
+            if (entity == null)
+                throw new ArgumentNullException("entity");
+            _entities.Remove(entity);
+            _context.SaveChanges();
+        }
+
+        public bool SaveChanges()
+        {
+            return _context.SaveChanges() > 0;
+        }
+
+        public bool SaveChangesAsync()
+        {
+            return _context.SaveChanges() > 0;
         }
     }
 }

@@ -3,11 +3,11 @@ using AwesomeDevEvents.API.Repositories.Interfaces;
 
 namespace AwesomeDevEvents.API.Repositories
 {
-    public class PacienteRepository : BaseRepository, IPacienteRepository
+    public class PacienteRepository // : BaseRepository, IPacienteRepository
     {
         private readonly ApplicationDbContext _context;
 
-        public PacienteRepository(ApplicationDbContext context) : base(context)
+        public PacienteRepository(ApplicationDbContext context) // : base(context)
         {
             _context = context;
         }

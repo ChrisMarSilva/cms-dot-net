@@ -72,17 +72,6 @@ namespace AwesomeDevEvents.API.Repositories
             return devEvent;
         }
 
-        public async Task<DevEvent> FindByIdSimpleAsync(Guid id)
-        {
-            _logger.LogInformation("AwesomeDevEvents.API.DevEventRepository.FindByIdSimple()");
-
-            var devEvent = await _context
-                .DevEvents
-                .SingleOrDefaultAsync(d => d.Id == id) ?? new DevEvent();
-
-            return devEvent;
-        }
-
         public async Task<bool> FindAnyAsync(Guid id)
         {
             _logger.LogInformation("AwesomeDevEvents.API.DevEventRepository.FindByIdSimple()");

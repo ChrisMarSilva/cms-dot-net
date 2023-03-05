@@ -2,7 +2,7 @@
 
 namespace AwesomeDevEvents.API.Models.Entities
 {
-    public class DevEvent : Base
+    public class DevEvent : BaseEntity
     {
         public string Title { get; set; }
         public string Description { get; set; }

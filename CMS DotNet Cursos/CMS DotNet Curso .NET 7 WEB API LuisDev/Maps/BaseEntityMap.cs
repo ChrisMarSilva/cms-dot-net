@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AwesomeDevEvents.API.Maps
 {
-    public class BaseMap<T> : IEntityTypeConfiguration<T> where T : Base
+    public class BaseEntityMap<T> : IEntityTypeConfiguration<T> where T : BaseEntity
     {
         private readonly string _tableName;
 
-        public BaseMap(string tableName)
+        public BaseEntityMap(string tableName)
         {
             _tableName = tableName;
         }
@@ -16,8 +16,8 @@ namespace AwesomeDevEvents.API.Maps
         {
             if (!string.IsNullOrEmpty(_tableName)) builder.ToTable(_tableName);
 
-            builder.HasKey(x => x.Id);
-            builder.Property(x => x.Id).HasColumnName("id"); //.ValueGeneratedOnAdd();
+            builder.HasKey(x => x.Id); // .HasName("PK_CUSTOMER_ID");
+            builder.Property(x => x.Id).HasColumnName("id"); //.ValueGeneratedOnAdd();  .HasColumnType("INT");
         }
     }
 }
