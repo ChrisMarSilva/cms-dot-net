@@ -1,4 +1,4 @@
-﻿namespace AwesomeDevEvents.API.Entities
+﻿namespace AwesomeDevEvents.API.Models
 {
     public class DevEvent
     {
@@ -7,7 +7,7 @@
         public string Description { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
-        public IEnumerable<DevEventSpeaker> Speakers { get; set; } // List<DevEventSpeaker>
+        public IEnumerable<DevEventSpeaker> Speakers { get; set; }
         public bool IsDeleted { get; set; }
 
         public DevEvent()
@@ -17,6 +17,12 @@
             this.EndDate = null;
             this.Speakers = new List<DevEventSpeaker>();
             this.IsDeleted = false;
+        }
+
+        public DevEvent(string title, string description) : this()
+        {
+            this.Title = title;
+            this.Description = description;
         }
 
         public void Update(string title, string description)

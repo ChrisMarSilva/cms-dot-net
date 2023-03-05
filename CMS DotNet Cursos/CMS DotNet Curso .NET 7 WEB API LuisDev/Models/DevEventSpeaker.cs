@@ -1,4 +1,4 @@
-﻿namespace AwesomeDevEvents.API.Entities
+﻿namespace AwesomeDevEvents.API.Models
 {
     public class DevEventSpeaker
     {

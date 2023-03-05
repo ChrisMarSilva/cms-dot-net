@@ -1,26 +1,33 @@
-﻿using AwesomeDevEvents.API.DTOs;
-using AwesomeDevEvents.API.Entities;
+﻿using AutoMapper;
+using AwesomeDevEvents.API.Models;
 using AwesomeDevEvents.API.Persistence;
+using AwesomeDevEvents.API.Persistence.Interfaces;
+using AwesomeDevEvents.API.Repositories.Interfaces;
+using AwesomeDevEvents.API.ViewModels;
 using Microsoft.EntityFrameworkCore;
 
 namespace AwesomeDevEvents.API.Repositories
 {
-    public class DevEventRepository : IDevEventRepository
+    public class DevEventRepository : IDevEventRepository, IDisposable
     {
         private readonly ILogger<DevEventRepository> _logger;
         private readonly ApplicationDbContext _context;
+        private IMapper _mapper;
+        private bool _disposed = false;
 
         public DevEventRepository(
             ILogger<DevEventRepository> logger,
-            ApplicationDbContext context
+            ApplicationDbContext context,
+            IMapper mapper
             )
         {
             _logger = logger;
-            this._context = context;
+            _context = context;
+            _mapper = mapper;
             _logger.LogInformation("AwesomeDevEvents.API.DevEventRepository");
         }
 
-        public async Task<IEnumerable<DevEventDTO>> FindAll()
+        public async Task<IEnumerable<DevEventOutput>> FindAllAsync()
         {
             _logger.LogInformation("AwesomeDevEvents.API.DevEventRepository.FindAll()");
             try
@@ -30,13 +37,11 @@ namespace AwesomeDevEvents.API.Repositories
                   .AsNoTracking()
                   //.Include(d => d.Speakers)
                   .Where(d => !d.IsDeleted)
-                  .OrderByDescending(d => d.StartDate)
+                  .OrderBy(d => d.StartDate)
                   .ToListAsync();
 
-                //var results = _mapper.Map<List<DevEventDTO>>(products);
-                var results = devEvents
-                    .Select(c => new DevEventDTO(c.Id, c.Title, c.Description, c.StartDate, c.EndDate, c.Speakers, c.IsDeleted));
-
+                var results = _mapper.Map<List<DevEventOutput>>(devEvents);
+                //var results = devEvents.Select(c => new DevEventOutput(c.Id, c.Title, c.Description, c.Speakers));
                 return results;
             }
             catch (Exception ex)
@@ -46,7 +51,7 @@ namespace AwesomeDevEvents.API.Repositories
             }
         }
 
-        public async Task<DevEventDTO> FindById(Guid id)
+        public async Task<DevEventOutput> FindByIdAsync(Guid id)
         {
             _logger.LogInformation("AwesomeDevEvents.API.DevEventRepository.FindById()");
             try
@@ -80,8 +85,8 @@ namespace AwesomeDevEvents.API.Repositories
                 //SingleOrDefault throws an exception
                 //FirstOrDefault returns the first record
 
-                //var result = _mapper.Map<DevEventDTO>(product);
-                var result = new DevEventDTO(devEvent.Id, devEvent.Title, devEvent.Description, devEvent.StartDate, devEvent.EndDate, devEvent.Speakers, devEvent.IsDeleted);
+                var result = _mapper.Map<DevEventOutput>(devEvent);
+                //var result = new DevEventOutput(devEvent.Id, devEvent.Title, devEvent.Description, devEvent.Speakers);
                 return result;
             }
             catch (Exception ex)
@@ -91,7 +96,7 @@ namespace AwesomeDevEvents.API.Repositories
             }
         }
 
-        public async Task<DevEvent> FindByIdSimple(Guid id)
+        public async Task<DevEvent> FindByIdSimpleAsync(Guid id)
         {
             _logger.LogInformation("AwesomeDevEvents.API.DevEventRepository.FindByIdSimple()");
             try
@@ -109,7 +114,7 @@ namespace AwesomeDevEvents.API.Repositories
             }
         }
 
-        public async Task<bool> FindAny(Guid id)
+        public async Task<bool> FindAnyAsync(Guid id)
         {
             _logger.LogInformation("AwesomeDevEvents.API.DevEventRepository.FindByIdSimple()");
             try
@@ -127,26 +132,19 @@ namespace AwesomeDevEvents.API.Repositories
             }
         }
 
-        public async Task<DevEventDTO> Create(DevEvent devEvent)
+        public async Task<DevEventOutput> CreateAsync(DevEventInput input)
         {
             _logger.LogInformation("AwesomeDevEvents.API.DevEventRepository.Create()");
             try
             {
-                //var devEvent = _mapper.Map<Product>(input);
-                //var devEvent = new DevEvent();
-                //devEvent.Id = input.id;
-                //devEvent.Title = input.title;
-                //devEvent.Description = input.description;
-                //devEvent.StartDate = input.startDate;
-                //devEvent.EndDate = input.endDate;
-                //devEvent.Speakers = input.speakers;
-                //devEvent.IsDeleted = input.isDeleted;
+                var devEvent = _mapper.Map<DevEvent>(input);
+                //var devEvent = new DevEvent(input.title, input.description);
 
                 await _context.DevEvents.AddAsync(devEvent);
-                await _context.SaveChangesAsync();
+                // await _context.SaveChangesAsync();
 
-                //var result = _mapper.Map<DevEventDTO>(product);
-                var result = new DevEventDTO(devEvent.Id, devEvent.Title, devEvent.Description, devEvent.StartDate, devEvent.EndDate, devEvent.Speakers, devEvent.IsDeleted);
+                var result = _mapper.Map<DevEventOutput>(devEvent);
+                //var result = new DevEventOutput(devEvent.Id, devEvent.Title, devEvent.Description, devEvent.Speakers);
                 return result;
             }
             catch (Exception ex)
@@ -156,26 +154,16 @@ namespace AwesomeDevEvents.API.Repositories
             }
         }
 
-        public async Task<DevEventDTO> Update(DevEvent devEvent)
+        public async Task<DevEventOutput> UpdateAsync(DevEvent devEvent)
         {
             _logger.LogInformation("AwesomeDevEvents.API.DevEventRepository.Update()");
             try
             {
-                //var devEvent = _mapper.Map<Product>(input);
-                //var devEvent = new DevEvent();
-                //devEvent.Id = input.id;
-                //devEvent.Title = input.title;
-                //devEvent.Description = input.description;
-                //devEvent.StartDate = input.startDate;
-                //devEvent.EndDate = input.endDate;
-                //devEvent.Speakers = input.speakers;
-                //devEvent.IsDeleted = input.isDeleted;
-
                 _context.DevEvents.Update(devEvent);
-                await _context.SaveChangesAsync();
+                // await _context.SaveChangesAsync();
 
-                //var result = _mapper.Map<DevEventDTO>(product);
-                var result = new DevEventDTO(devEvent.Id, devEvent.Title, devEvent.Description, devEvent.StartDate, devEvent.EndDate, devEvent.Speakers, devEvent.IsDeleted);
+                var result = _mapper.Map<DevEventOutput>(devEvent);
+                //var result = new DevEventOutput(devEvent.Id, devEvent.Title, devEvent.Description, devEvent.Speakers);
                 return result;
             }
             catch (Exception ex)
@@ -185,18 +173,18 @@ namespace AwesomeDevEvents.API.Repositories
             }
         }
 
-        public async Task<bool> Delete(Guid id)
+        public async Task<bool> DeleteAsync(Guid id)
         {
             _logger.LogInformation("AwesomeDevEvents.API.DevEventRepository.Delete()");
             try
             {
-                var devEvent = await this.FindByIdSimple(id);
+                var devEvent = await this.FindByIdSimpleAsync(id);
 
                 if (devEvent == null || devEvent?.Id == Guid.Empty)
                     return false;
 
                 _context.DevEvents.Remove(devEvent);
-                await _context.SaveChangesAsync();
+                // await _context.SaveChangesAsync();
 
                 return true;
             }
@@ -206,5 +194,32 @@ namespace AwesomeDevEvents.API.Repositories
                 return false;
             }
         }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            //if (!this.disposed)
+            //{
+            //    if (disposing)
+            //    {
+            //        context.Dispose();
+            //    }
+            //}
+            if (!_disposed && disposing)
+                _context.Dispose();
+            _disposed = true;
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        //public void Dispose()
+        //{
+        //    if (_context != null)
+        //        _context.Dispose();
+        //    GC.SuppressFinalize(this);
+        //}
     }
 }

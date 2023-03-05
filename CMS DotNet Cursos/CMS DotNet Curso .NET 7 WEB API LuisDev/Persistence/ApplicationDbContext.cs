@@ -1,4 +1,4 @@
-﻿using AwesomeDevEvents.API.Entities;
+﻿using AwesomeDevEvents.API.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace AwesomeDevEvents.API.Persistence
@@ -13,6 +13,8 @@ namespace AwesomeDevEvents.API.Persistence
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            base.OnModelCreating(builder);
+
             // DevEvent
             builder.Entity<DevEvent>(e =>
             {

@@ -1,6 +1,8 @@
-﻿using AwesomeDevEvents.API.DTOs;
-using AwesomeDevEvents.API.Entities;
+﻿using AutoMapper;
+using AwesomeDevEvents.API.Models;
 using AwesomeDevEvents.API.Persistence;
+using AwesomeDevEvents.API.Repositories.Interfaces;
+using AwesomeDevEvents.API.ViewModels;
 using Microsoft.EntityFrameworkCore;
 
 namespace AwesomeDevEvents.API.Repositories
@@ -9,26 +11,30 @@ namespace AwesomeDevEvents.API.Repositories
     {
         private readonly ILogger<DevEventSpeakerRepository> _logger;
         private readonly ApplicationDbContext _context;
+        private IMapper _mapper;
+        private bool _disposed = false;
 
         public DevEventSpeakerRepository(
             ILogger<DevEventSpeakerRepository> logger,
-            ApplicationDbContext context
+            ApplicationDbContext context,
+            IMapper mapper
             )
         {
             _logger = logger;
             this._context = context;
+            _mapper = mapper;
             _logger.LogInformation("AwesomeDevEvents.API.DevEventSpeakerRepository");
         }
 
-        public async Task<IEnumerable<DevEventSpeakerDTO>> FindAll()
+        public async Task<IEnumerable<DevEventSpeakerOutput>> FindAllAsync()
         {
             _logger.LogInformation("AwesomeDevEvents.API.DevEventSpeakerRepository.FindAll()");
             try
             {
-                var products = await _context.DevEventSpeakers.ToListAsync();
+                var speakers = await _context.DevEventSpeakers.ToListAsync();
 
-                //var results = _mapper.Map<List<DevEventSpeakerDTO>>(products);
-                var results = products.Select(c => new DevEventSpeakerDTO(c.Id, c.Name, c.TalkTitle, c.TalkDescription, c.LinkedInProfile, c.DevEventId));
+                var results = _mapper.Map<List<DevEventSpeakerOutput>>(speakers);
+                //var results = speakers.Select(c => new DevEventSpeakerOutput(c.Id, c.Name, c.TalkTitle, c.TalkDescription, c.LinkedInProfile, c.DevEventId));
                 return results;
             }
             catch (Exception ex)
@@ -38,15 +44,15 @@ namespace AwesomeDevEvents.API.Repositories
             }
         }
 
-        public async Task<DevEventSpeakerDTO> FindById(Guid id)
+        public async Task<DevEventSpeakerOutput> FindByIdAsync(Guid id)
         {
             _logger.LogInformation("AwesomeDevEvents.API.DevEventSpeakerRepository.FindById()");
             try
             {
-                var product = await _context.DevEventSpeakers.Where(p => p.Id == id).FirstOrDefaultAsync() ?? new DevEventSpeaker();
+                var speaker = await _context.DevEventSpeakers.Where(p => p.Id == id).FirstOrDefaultAsync() ?? new DevEventSpeaker();
 
-                //var result = _mapper.Map<DevEventSpeakerDTO>(product);
-                var result = new DevEventSpeakerDTO(product.Id, product.Name, product.TalkTitle, product.TalkDescription, product.LinkedInProfile, product.DevEventId);
+                var result = _mapper.Map<DevEventSpeakerOutput>(speaker);
+                //var result = new DevEventSpeakerOutput(speaker.Id, speaker.Name, speaker.TalkTitle, speaker.TalkDescription, speaker.LinkedInProfile);
                 return result;
             }
             catch (Exception ex)
@@ -56,25 +62,19 @@ namespace AwesomeDevEvents.API.Repositories
             }
         }
 
-        public async Task<DevEventSpeakerDTO> Create(DevEventSpeaker speaker)
+        public async Task<DevEventSpeakerOutput> CreateAsync(DevEventSpeakerInput input)
         {
             _logger.LogInformation("AwesomeDevEvents.API.DevEventSpeakerRepository.Create()");
             try
             {
-                //var product = _mapper.Map<DevEventSpeaker>(vo);
-                //var product = new DevEventSpeaker();
-                //product.Id = input.id;
-                //product.Name = input.name;
-                //product.TalkTitle = input.talkTitle;
-                //product.TalkDescription = input.talkDescription;
-                //product.LinkedInProfile = input.linkedInProfile;
-                //product.DevEventId = input.devEventId;
+                var speaker = _mapper.Map<DevEventSpeaker>(input);
+                //var speaker = new DevEventSpeaker(input.name, input.talkTitle, input.talkDescription, input.linkedInProfile, input.DevEventId);
 
                 await _context.DevEventSpeakers.AddAsync(speaker);
                 await _context.SaveChangesAsync();
 
-                //var result = _mapper.Map<DevEventSpeakerDTO>(product);
-                var result = new DevEventSpeakerDTO(speaker.Id, speaker.Name, speaker.TalkTitle, speaker.TalkDescription, speaker.LinkedInProfile, speaker.DevEventId);
+                //var result = _mapper.Map<DevEventSpeakerOutput>(speaker);
+                var result = new DevEventSpeakerOutput(speaker.Id, speaker.Name, speaker.TalkTitle, speaker.TalkDescription, speaker.LinkedInProfile);
                 return result;
             }
             catch (Exception ex)
@@ -84,25 +84,19 @@ namespace AwesomeDevEvents.API.Repositories
             }
         }
 
-        public async Task<DevEventSpeakerDTO> Update(DevEventSpeakerDTO input)
+        public async Task<DevEventSpeakerOutput> UpdateAsync(DevEventSpeakerInput input)
         {
             _logger.LogInformation("AwesomeDevEvents.API.DevEventSpeakerRepository.Update()");
             try
             {
-                //var product = _mapper.Map<Product>(input);
-                var product = new DevEventSpeaker();
-                product.Id = input.id;
-                product.Name = input.name;
-                product.TalkTitle = input.talkTitle;
-                product.TalkDescription = input.talkDescription;
-                product.LinkedInProfile = input.linkedInProfile;
-                product.DevEventId = input.devEventId;
+                var speaker = _mapper.Map<DevEventSpeaker>(input);
+                //var speaker = new DevEventSpeaker(input.name, input.talkTitle, input.talkDescription, input.linkedInProfile);
 
-                _context.DevEventSpeakers.Update(product);
+                _context.DevEventSpeakers.Update(speaker);
                 await _context.SaveChangesAsync();
 
-                //var result = _mapper.Map<DevEventSpeakerDTO>(product);
-                var result = new DevEventSpeakerDTO(product.Id, product.Name, product.TalkTitle, product.TalkDescription, product.LinkedInProfile, product.DevEventId);
+                //var result = _mapper.Map<DevEventSpeakerOutput>(speaker);
+                var result = new DevEventSpeakerOutput(speaker.Id, speaker.Name, speaker.TalkTitle, speaker.TalkDescription, speaker.LinkedInProfile);
                 return result;
             }
             catch (Exception ex)
@@ -112,7 +106,7 @@ namespace AwesomeDevEvents.API.Repositories
             }
         }
 
-        public async Task<bool> Delete(Guid id)
+        public async Task<bool> DeleteAsync(Guid id)
         {
             _logger.LogInformation("AwesomeDevEvents.API.DevEventSpeakerRepository.Delete()");
             try
@@ -137,5 +131,32 @@ namespace AwesomeDevEvents.API.Repositories
                 return false;
             }
         }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            //if (!this.disposed)
+            //{
+            //    if (disposing)
+            //    {
+            //        context.Dispose();
+            //    }
+            //}
+            if (!_disposed && disposing)
+                _context.Dispose();
+            _disposed = true;
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        //public void Dispose()
+        //{
+        //    if (_context != null)
+        //        _context.Dispose();
+        //    GC.SuppressFinalize(this);
+        //}
     }
 }
