@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using AwesomeDevEvents.API.Models;
-using AwesomeDevEvents.API.ViewModels;
+using AwesomeDevEvents.API.Models.Dtos;
+using AwesomeDevEvents.API.Models.Entities;
 
 namespace AwesomeDevEvents.API.Config
 {
@@ -11,14 +11,14 @@ namespace AwesomeDevEvents.API.Config
             var mappingConfig = new MapperConfiguration(config =>
             {
                 //DevEvent
-                config.CreateMap<DevEventInput, DevEvent>();
-                config.CreateMap<DevEvent, DevEventOutput>();
+                config.CreateMap<DevEventInputDto, DevEvent>();
+                config.CreateMap<DevEvent, DevEventOutputDto>();
 
                 //DevEventSpeaker
-                config.CreateMap<DevEventSpeakerInput, DevEventSpeaker>();
-                config.CreateMap<DevEventSpeaker, DevEventSpeakerOutput>();
+                config.CreateMap<DevEventSpeakerInputDto, DevEventSpeaker>();
+                config.CreateMap<DevEventSpeaker, DevEventSpeakerOutputDto>();
 
-                // CreateMap<ProjectDTO, Project>().ReverseMap();
+                // CreateMap<Paciente, PacienteDetalhesDto>().ReverseMap();
             });
             return mappingConfig;
         }

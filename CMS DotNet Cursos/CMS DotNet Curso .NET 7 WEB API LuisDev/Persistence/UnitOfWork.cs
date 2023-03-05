@@ -12,9 +12,9 @@ namespace AwesomeDevEvents.API.Persistence
             _ctx = ctx;
         }
 
-        public async Task CommitAsync()
+        public async Task<bool> CommitAsync()
         {
-            await _ctx.SaveChangesAsync();
+            return await _ctx.SaveChangesAsync() > 0;
         }
 
         public Task RollbackAsync()

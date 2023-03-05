@@ -1,6 +1,6 @@
-﻿namespace AwesomeDevEvents.API.ViewModels
+﻿namespace AwesomeDevEvents.API.Models.Dtos
 {
-    public record DevEventSpeakerOutput(
+    public record DevEventSpeakerOutputDto(
        Guid id,
        string name,
        string talkTitle,

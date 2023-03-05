@@ -1,13 +1,13 @@
-﻿using AwesomeDevEvents.API.ViewModels;
+﻿using AwesomeDevEvents.API.Models.Dtos;
 
 namespace AwesomeDevEvents.API.Repositories.Interfaces
 {
     public interface IDevEventSpeakerRepository
     {
-        Task<IEnumerable<DevEventSpeakerOutput>> FindAllAsync();
-        Task<DevEventSpeakerOutput> FindByIdAsync(Guid id);
-        Task<DevEventSpeakerOutput> CreateAsync(DevEventSpeakerInput input);
-        Task<DevEventSpeakerOutput> UpdateAsync(DevEventSpeakerInput input);
+        Task<IEnumerable<DevEventSpeakerOutputDto>> FindAllAsync();
+        Task<DevEventSpeakerOutputDto> FindByIdAsync(Guid id);
+        Task<DevEventSpeakerOutputDto> CreateAsync(DevEventSpeakerInputDto input);
+        Task<DevEventSpeakerOutputDto> UpdateAsync(DevEventSpeakerInputDto input);
         Task<bool> DeleteAsync(Guid id);
     }
 }
