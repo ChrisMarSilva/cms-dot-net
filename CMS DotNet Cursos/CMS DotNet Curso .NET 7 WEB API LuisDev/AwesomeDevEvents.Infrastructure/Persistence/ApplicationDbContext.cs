@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AwesomeDevEvents.Infrastructure.Persistence
 {
-    public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : DbContext // AppDbContext 
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) {  }
 

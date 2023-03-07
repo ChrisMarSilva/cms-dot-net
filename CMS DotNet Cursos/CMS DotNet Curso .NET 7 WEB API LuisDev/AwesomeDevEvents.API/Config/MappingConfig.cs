@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using AwesomeDevEvents.API.Models.Dtos;
-using AwesomeDevEvents.API.Models.Entities;
+using AwesomeDevEvents.Domain.Dtos;
+using AwesomeDevEvents.Domain.Models;
 
 namespace AwesomeDevEvents.API.Config
 {

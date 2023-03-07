@@ -1,11 +1,11 @@
 using AutoMapper;
 using AwesomeDevEvents.API.Config;
-using AwesomeDevEvents.API.Persistence;
-using AwesomeDevEvents.API.Persistence.Interfaces;
-using AwesomeDevEvents.API.Repositories;
-using AwesomeDevEvents.API.Repositories.Interfaces;
-using AwesomeDevEvents.API.Services;
-using AwesomeDevEvents.API.Services.Interfaces;
+using AwesomeDevEvents.Infrastructure.Persistence;
+using AwesomeDevEvents.Infrastructure.Persistence.Interfaces;
+using AwesomeDevEvents.Infrastructure.Repositories;
+using AwesomeDevEvents.Infrastructure.Repositories.Interfaces;
+using AwesomeDevEvents.Service;
+using AwesomeDevEvents.Service.Interfaces;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.AspNetCore.ResponseCompression;
@@ -14,7 +14,6 @@ using Microsoft.EntityFrameworkCore;
 using Serilog;
 using Serilog.Sinks.MSSqlServer;
 using System.IO.Compression;
-using System.Net;
 using System.Threading.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);

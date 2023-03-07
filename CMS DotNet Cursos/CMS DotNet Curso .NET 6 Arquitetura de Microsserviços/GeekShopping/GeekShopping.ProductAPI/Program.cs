@@ -10,8 +10,10 @@ using System.IO.Compression;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var connection = builder.Configuration["ConnectionStrings:GeekShoppingProductAPI"];
-builder.Services.AddDbContext<MySQLContext>(options => options.UseMySql(connection, new MySqlServerVersion(new Version(5, 6, 0))));
+//var connectionStr = builder.Configuration["ConnectionStrings:GeekShoppingProductAPI"];
+var connectionStr = builder.Configuration.GetConnectionString("GeekShoppingProductAPI");
+//builder.Services.AddDbContext<MySQLContext>(options => options.UseMySql(connectionStr, new MySqlServerVersion(new Version(5, 6, 0))));
+builder.Services.AddDbContext<MySQLContext>(options => options.UseMySql(connectionStr, ServerVersion.AutoDetect(connectionStr)));
 
 IMapper mapper = MappingConfig.RegisterMaps().CreateMapper();
 builder.Services.AddSingleton(mapper);

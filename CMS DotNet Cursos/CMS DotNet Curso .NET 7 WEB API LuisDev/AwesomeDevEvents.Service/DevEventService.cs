@@ -1,13 +1,11 @@
 ﻿using AutoMapper;
 using AwesomeDevEvents.Domain.Dtos;
+using AwesomeDevEvents.Domain.Models;
 using AwesomeDevEvents.Infrastructure.Persistence.Interfaces;
 using AwesomeDevEvents.Infrastructure.Repositories;
 using AwesomeDevEvents.Infrastructure.Repositories.Interfaces;
 using AwesomeDevEvents.Service.Interfaces;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace AwesomeDevEvents.Service
 {

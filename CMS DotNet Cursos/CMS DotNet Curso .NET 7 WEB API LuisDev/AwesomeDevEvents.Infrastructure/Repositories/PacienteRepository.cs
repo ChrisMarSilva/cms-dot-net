@@ -1,5 +1,4 @@
-﻿using AwesomeDevEvents.API.Persistence;
-using AwesomeDevEvents.API.Repositories.Interfaces;
+﻿using AwesomeDevEvents.Infrastructure.Persistence;
 
 namespace AwesomeDevEvents.Infrastructure.Repositories
 {
@@ -27,4 +26,13 @@ namespace AwesomeDevEvents.Infrastructure.Repositories
         //                .Where(x => x.Id == id).FirstOrDefaultAsync();
         //}
     }
+
+    // ou
+
+    //public class PacienteRepository : BaseRepository<Paciente>, IPacienteRepository
+    //{
+    //    public PacienteRepository(AppDbContext appContext) : base(appContext)
+    //    {
+    //    }
+    //}
 }

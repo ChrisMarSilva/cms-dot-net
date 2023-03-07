@@ -3,10 +3,6 @@ using AwesomeDevEvents.Infrastructure.Persistence;
 using AwesomeDevEvents.Infrastructure.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace AwesomeDevEvents.Infrastructure.Repositories
 {

@@ -2,9 +2,6 @@
 using AwesomeDevEvents.Infrastructure.Persistence;
 using AwesomeDevEvents.Infrastructure.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace AwesomeDevEvents.Infrastructure.Repositories
 {
@@ -21,13 +18,26 @@ namespace AwesomeDevEvents.Infrastructure.Repositories
 
         public IEnumerable<T> GetAll()
         {
-            return _entities.AsEnumerable();
+            return _entities.AsNoTracking().AsEnumerable();
         }
+
+        //public async Task<IEnumerable<T>> Obter(Expression<Func<T, bool>> filter = null)
+        //{
+        //    var query = _DbSet.AsQueryable();
+        //    if (filter != null)
+        //        query = query.Where(filter).AsNoTracking();
+        //    return await query.ToListAsync();
+        //}
 
         public T Get(Guid Id)
         {
             return _entities.SingleOrDefault(c => c.Id == Id);
         }
+
+        //public async Task<T> ObterPorIdAsync(Guid id)
+        //{
+        //    return await _DbSet.FindAsync(id);
+        //}
 
         public void Insert(T entity)
         {
@@ -37,6 +47,12 @@ namespace AwesomeDevEvents.Infrastructure.Repositories
             _context.SaveChanges();
         }
 
+        //public async Task AddAsync(T entity)
+        //{
+        //    await _DbSet.AddAsync(entity);
+        //    await _AppDbContext.SaveChangesAsync();
+        //}
+
         public void Update(T entity)
         {
             if (entity == null)
@@ -45,12 +61,24 @@ namespace AwesomeDevEvents.Infrastructure.Repositories
             _context.SaveChanges();
         }
 
+        //public async Task Atualizar(T entity)
+        //{
+        //    _DbSet.Update(entity);
+        //    await _AppDbContext.SaveChangesAsync();
+        //}
+
         public void Remove(T entity)
         {
             if (entity == null)
                 throw new ArgumentNullException("entity");
             _entities.Remove(entity);
         }
+
+        //public async Task DeletarAsync(T entity)
+        //{
+        //    _DbSet.Remove(entity);
+        //    await _AppDbContext.SaveChangesAsync();
+        //}
 
         public void Delete(T entity)
         {

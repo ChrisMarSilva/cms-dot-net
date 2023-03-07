@@ -5,4 +5,10 @@
         //Task<IEnumerable<PacienteDto>> GetPacientesAsync();
         //Task<Paciente> GetPacientesByIdAsync(int id);
     }
+
+    // ou
+
+    //public interface IPacienteRepository : IBaseRepository<PacienteDto>
+    //{
+    //}
 }

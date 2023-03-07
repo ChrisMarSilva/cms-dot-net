@@ -1,6 +1,4 @@
 ﻿using Flunt.Validations;
-using System;
-using System.Collections.Generic;
 
 namespace AwesomeDevEvents.Domain.Models
 {
@@ -13,7 +11,7 @@ namespace AwesomeDevEvents.Domain.Models
         public IEnumerable<DevEventSpeaker> Speakers { get; set; }
         public bool IsDeleted { get; set; }
 
-        public DevEvent()
+        public DevEvent() : base()
         {
             StartDate = DateTime.Now;
             EndDate = null;
