@@ -13,11 +13,17 @@ namespace AwesomeDevEvents.API.Controllers
     {
         private readonly ILogger<DevEventsController> _logger;
         private IDevEventService _eventService;
+        // private readonly ICacheService _cacheService;
 
-        public DevEventsController(ILogger<DevEventsController> logger, IDevEventService eventService)
+        public DevEventsController(
+            ILogger<DevEventsController> logger, 
+            // ICacheService cacheService,
+            IDevEventService eventService
+            )
         {
             _logger = logger;
             _eventService = eventService ?? throw new ArgumentNullException(nameof(DevEventService));
+            // _cacheService = cacheService;
             _logger.LogInformation("AwesomeDevEvents.API.DevEventsController");
         }
 
@@ -32,6 +38,15 @@ namespace AwesomeDevEvents.API.Controllers
         {
             _logger.LogInformation("AwesomeDevEvents.API.DevEventsController.GetAll()");
 
+            //var cacheData = _cacheService.GetData<IEnumerable<Product>>("product");
+            //if (cacheData != null)
+            //{
+            //    return cacheData;
+            //}
+            //var expirationTime = DateTimeOffset.Now.AddMinutes(5.0);
+            // devEvents = await _eventService.GetAllAsync();
+            //_cacheService.SetData<IEnumerable<Product>>("product", cacheData, expirationTime);
+
             var devEvents = await _eventService.GetAllAsync();
             return devEvents is null ? NotFound("No records found") : Ok(devEvents);
         }
@@ -40,6 +55,15 @@ namespace AwesomeDevEvents.API.Controllers
         public async Task<IActionResult> GetById(Guid id)
         {
             _logger.LogInformation("AwesomeDevEvents.API.DevEventsController.GetById()");
+
+            //Product filteredData;
+            //var cacheData = _cacheService.GetData<IEnumerable<Product>>("product");
+            //if (cacheData != null)
+            //{
+            //    filteredData = cacheData.Where(x => x.ProductId == id).FirstOrDefault();
+            //    return filteredData;
+            //}
+            //filteredData = _dbContext.Products.Where(x => x.ProductId == id).FirstOrDefault();
 
             var devEvent = await _eventService.GetByIdAsync(id);
             return devEvent?.id == Guid.Empty ? NotFound("No records found") : Ok(devEvent);
@@ -50,6 +74,8 @@ namespace AwesomeDevEvents.API.Controllers
         {
             _logger.LogInformation("AwesomeDevEvents.API.DevEventsController.Post()");
 
+            // _cacheService.RemoveData("product");
+
             var devEvent = await _eventService.InsertAsync(input);
             return devEvent?.id == Guid.Empty ? BadRequest() : CreatedAtAction(nameof(GetById), new { id = devEvent.id }, devEvent);
         }
@@ -59,6 +85,8 @@ namespace AwesomeDevEvents.API.Controllers
         {
             _logger.LogInformation("AwesomeDevEvents.API.DevEventsController.Update()");
 
+            //  _cacheService.RemoveData("product");
+
             var devEvent = await _eventService.UpdateAsync(id, input);
             return devEvent?.id == Guid.Empty ? BadRequest() : NoContent();
         }
@@ -67,6 +95,8 @@ namespace AwesomeDevEvents.API.Controllers
         public async Task<IActionResult> Delete(Guid id)
         {
             _logger.LogInformation("AwesomeDevEvents.API.DevEventsController.Delete()");
+
+            //_cacheService.RemoveData("product");
 
             var status = await _eventService.DeleteAsync(id);
             return status ? NoContent() : BadRequest();

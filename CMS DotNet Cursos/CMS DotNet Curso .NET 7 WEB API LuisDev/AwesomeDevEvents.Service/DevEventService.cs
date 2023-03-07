@@ -2,9 +2,9 @@
 using AwesomeDevEvents.Domain.Dtos;
 using AwesomeDevEvents.Domain.Models;
 using AwesomeDevEvents.Infrastructure.Persistence.Interfaces;
-using AwesomeDevEvents.Infrastructure.Repositories;
 using AwesomeDevEvents.Infrastructure.Repositories.Interfaces;
 using AwesomeDevEvents.Service.Interfaces;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 
 namespace AwesomeDevEvents.Service
@@ -14,13 +14,23 @@ namespace AwesomeDevEvents.Service
 
         private readonly ILogger<DevEventService> _logger;
         private IDevEventRepository _eventRepo;
+        private readonly IMemoryCache _cache;
         private IMapper _mapper;
         private IUnitofWork _uow; // _unitOfWork
+        private static readonly SemaphoreSlim _semaphore = new SemaphoreSlim(1, 1);
 
-        public DevEventService(ILogger<DevEventService> logger, IDevEventRepository eventRepository, IMapper mapper, IUnitofWork uow)
+        public DevEventService(
+            ILogger<DevEventService> logger, 
+            IDevEventRepository eventRepository,
+            IMemoryCache cache,
+            IMapper mapper,
+            IUnitofWork uow
+            )
         {
             _logger = logger;
-            _eventRepo = eventRepository ?? throw new ArgumentNullException(nameof(DevEventRepository));
+            _eventRepo = eventRepository ?? throw new ArgumentNullException(nameof(eventRepository)); // DevEventRepository
+            _cache = cache ?? throw new ArgumentNullException(nameof(cache));
+            //_memoryCache = memoryCache;
             _mapper = mapper;
             _uow = uow;
 
@@ -32,7 +42,50 @@ namespace AwesomeDevEvents.Service
             _logger.LogInformation("AwesomeDevEvents.API.DevEventService.GetAll()");
             try
             {
-                var devEvents = await _eventRepo.FindAllAsync();
+                //  var devEvents = await _eventRepo.FindAllAsync();               
+
+                _logger.LogInformation("Trying to fetch the list of DevEvent from cache.");
+                
+                if (_cache.TryGetValue(CacheKeys.DevEvents, out IEnumerable<DevEvent> devEvents))
+                {
+                    _logger.Log(LogLevel.Information, "DevEvent list found in cache.");
+                }
+                else 
+                {
+                    try
+                    {
+                        await _semaphore.WaitAsync();
+
+                        _logger.LogInformation("Trying to fetch the list of DevEvent from cache - semaphore.WaitAsync().");
+
+                        if (_cache.TryGetValue(CacheKeys.DevEvents, out devEvents))
+                        {
+                            _logger.Log(LogLevel.Information, "DevEvent list found in cache - semaphore.WaitAsync().");
+                        }
+                        else
+                        {
+                            _logger.Log(LogLevel.Information, "DevEvent list not found in cache. Fetching from database.");
+
+                            devEvents = await _eventRepo.FindAllAsync();
+
+                            var cacheEntryOptions = new MemoryCacheEntryOptions {
+                                AbsoluteExpiration = DateTime.Now.AddMinutes(5),
+                                SlidingExpiration = TimeSpan.FromSeconds(60),
+                                Priority = CacheItemPriority.Normal,
+                                Size = 1024,
+                            };
+
+                            _cache.Set(CacheKeys.DevEvents, devEvents, cacheEntryOptions);
+                            // _cache.Remove(CacheKeys.DevEvents);
+                        }
+                    }
+                    finally
+                    {
+                        _semaphore.Release();
+                    }
+                }
+
+                // var devEvents = _cacheProvider.GetCachedResponse().Result;
 
                 var results = _mapper.Map<List<DevEventOutputDto>>(devEvents);
                 //var results = devEvents.Select(c => new DevEventOutputDto(c.Id, c.Title, c.Description, c.Speakers));
