@@ -32,6 +32,37 @@ namespace AwesomeDevEvents.API.Controllers
         [EnableRateLimiting("sliding")]
         public IActionResult Ping() => Ok("pong");
 
+        // https://github.com/nishanc/PerformanceAndBestPractices/blob/main/PerformanceDemos/RedisOnDotnet6Demo/RedisOnDotnet6Demo/Controllers/HomeController.cs
+        //public async Task<IActionResult> Index()
+        //{
+        //    List<User>? users;
+        //    string loadLocation;
+        //    string isCacheData;
+        //    string recordKey = $"Users_{DateTime.Now:yyyyMMdd_hhmm}";
+
+        //    users = await _cache.GetRecordAsync<List<User>>(recordKey);
+
+        //    if (users is null) // Data not available in the Cache
+        //    {
+        //        users = await _userRepository.GetUsersAsync();
+        //        loadLocation = $"Loaded from DB at {DateTime.Now}";
+        //        isCacheData = "text-danger";
+
+        //        await _cache.SetRecordAsync(recordKey, users);
+        //    }
+        //    else // Data available in the Cache
+        //    {
+        //        loadLocation = $"Loaded from Cache at {DateTime.Now}";
+        //        isCacheData = "text-success";
+        //    }
+
+        //    ViewData["Style"] = isCacheData;
+        //    ViewData["Location"] = loadLocation;
+
+        //    return View(users);
+        //}
+
+
 
         [HttpGet]
         public async Task<IActionResult> GetAll()
@@ -73,11 +104,17 @@ namespace AwesomeDevEvents.API.Controllers
         public async Task<IActionResult> Post(DevEventInputDto input)
         {
             _logger.LogInformation("AwesomeDevEvents.API.DevEventsController.Post()");
-
-            // _cacheService.RemoveData("product");
-
-            var devEvent = await _eventService.InsertAsync(input);
-            return devEvent?.id == Guid.Empty ? BadRequest() : CreatedAtAction(nameof(GetById), new { id = devEvent.id }, devEvent);
+            try
+            {
+                // _cacheService.RemoveData("product");
+                var devEvent = await _eventService.InsertAsync(input);
+                return devEvent?.id == Guid.Empty ? BadRequest() : CreatedAtAction(nameof(GetById), new { id = devEvent.id }, devEvent);
+            }
+            catch (System.Exception ex)
+            {
+                // Console.Write(ex.Message);
+                return StatusCode(500);
+            }
         }
 
         [HttpPut("{id}")]

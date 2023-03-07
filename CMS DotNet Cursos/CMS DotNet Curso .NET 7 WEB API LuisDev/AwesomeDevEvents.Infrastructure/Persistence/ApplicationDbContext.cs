@@ -1,4 +1,5 @@
-﻿using AwesomeDevEvents.Domain.Models;
+﻿using AwesomeDevEvents.Domain.Mappers;
+using AwesomeDevEvents.Domain.Models;
 using Flunt.Notifications;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,11 +16,14 @@ namespace AwesomeDevEvents.Infrastructure.Persistence
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-            // builder.ApplyConfiguration(new DevEventMap());
-            // builder.ApplyConfiguration(new DevEventSpeakerMap());
-            // builder.ApplyConfiguration(new PacienteMap());
             builder.Ignore<Notification>();
-            builder.ApplyConfigurationsFromAssembly(GetType().Assembly);
+            //builder.ApplyConfigurationsFromAssembly(GetType().Assembly);
+            builder.ApplyConfiguration(new DevEventMap());
+            builder.ApplyConfiguration(new DevEventSpeakerMap());
+            // builder.ApplyConfiguration(new PacienteMap());
+            //builder.Entity<DevEvent>(x => {
+            //    x.ToSqlQuery("SELECT * FROM VW_NAME_VIEW");
+            //});
         }
     }
 }

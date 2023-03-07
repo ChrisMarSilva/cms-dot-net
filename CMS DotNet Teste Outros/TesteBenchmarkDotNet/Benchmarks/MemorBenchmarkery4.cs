@@ -1,6 +1,6 @@
 ﻿using BenchmarkDotNet.Attributes;
 
-namespace TesteBenchmarkDotNet
+namespace TesteBenchmarkDotNet.Benchmarks
 {
 
     [MemoryDiagnoser]

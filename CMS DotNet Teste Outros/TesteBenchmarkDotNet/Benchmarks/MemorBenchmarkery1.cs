@@ -1,7 +1,7 @@
 ﻿using BenchmarkDotNet.Attributes;
 using System.Text;
 
-namespace TesteBenchmarkDotNet
+namespace TesteBenchmarkDotNet.Benchmarks
 {
     [MemoryDiagnoser]
     public class MemorBenchmarkery1

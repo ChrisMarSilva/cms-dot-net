@@ -23,8 +23,14 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 
 // builder.Services.AddDbContext<ApplicationDbContext>(o => o.UseSqlServer(connectionString));
 builder.Services.AddSqlServer<ApplicationDbContext>(connectionString);
-
 builder.Services.AddTransient<IUnitofWork, UnitOfWork>();
+
+//builder.Services.AddStackExchangeRedisCache(options => {
+//    options.Configuration = builder.Configuration.GetConnectionString("Redis");
+//    options.InstanceName = "RedisDemo_";
+//});
+//  <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="6.0.4" />
+// <PackageReference Include="StackExchange.Redis" Version="2.5.61" />
 
 builder.Services.AddScoped<IDevEventRepository, DevEventRepository>();
 builder.Services.AddScoped<IDevEventSpeakerRepository, DevEventSpeakerRepository>();
@@ -37,7 +43,11 @@ builder.Services.AddSingleton(mapper);
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 //builder.Services.AddAutoMapper(typeof(DevEventProfile));
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.ReferenceHandler = null;
+});
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 

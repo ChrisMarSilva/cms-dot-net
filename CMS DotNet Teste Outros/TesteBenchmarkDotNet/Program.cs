@@ -1,5 +1,5 @@
 ﻿using BenchmarkDotNet.Running;
-using TesteBenchmarkDotNet;
+using TesteBenchmarkDotNet.Benchmarks;
 
 Console.WriteLine("Inicio");
 
@@ -7,6 +7,11 @@ Console.WriteLine("Inicio");
 BenchmarkRunner.Run<MemorBenchmarkery2>();
 //BenchmarkRunner.Run<MemorBenchmarkery3>();
 //BenchmarkRunner.Run<MemorBenchmarkery4>();
+
+// BenchmarkRunner.Run<SelectWhereBenchmark>();
+// BenchmarkRunner.Run<OrderByWhereBenchmark>();
+// BenchmarkRunner.Run<MultipleIncludeBenchmark>();
+// BenchmarkRunner.Run<UnnecessaryJoinsBenchmark>();
 
 Console.ReadLine();
 

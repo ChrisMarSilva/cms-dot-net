@@ -15,6 +15,7 @@ namespace AwesomeDevEvents.Service
         private readonly ILogger<DevEventService> _logger;
         private IDevEventRepository _eventRepo;
         private readonly IMemoryCache _cache;
+        // private IDistributedCache _cache;
         private IMapper _mapper;
         private IUnitofWork _uow; // _unitOfWork
         private static readonly SemaphoreSlim _semaphore = new SemaphoreSlim(1, 1);
@@ -23,6 +24,7 @@ namespace AwesomeDevEvents.Service
             ILogger<DevEventService> logger, 
             IDevEventRepository eventRepository,
             IMemoryCache cache,
+            // IDistributedCache cache
             IMapper mapper,
             IUnitofWork uow
             )
