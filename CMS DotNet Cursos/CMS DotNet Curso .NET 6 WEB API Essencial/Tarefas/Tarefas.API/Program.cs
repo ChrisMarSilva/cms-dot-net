@@ -17,8 +17,11 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseMapTarefasEndpoints();
+
 app.UseMapOutrosEndpoints();
+app.UseMapTarefasV1Endpoints();
+app.UseMapTarefasV2Endpoints();
+app.UseMapTarefasV3Endpoints();
 
 app.Run();
 

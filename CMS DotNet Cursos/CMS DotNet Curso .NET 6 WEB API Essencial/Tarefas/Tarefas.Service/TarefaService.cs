@@ -11,7 +11,7 @@ public class TarefaService : ITarefaService
     private readonly ILogger<TarefaService> _logger;
     private ITarefaRepository _tarefaRepo;
     private IUnitofWork _uow;
-    private readonly string? _className;
+    private readonly string _className;
 
     public TarefaService(
         ILogger<TarefaService> logger,

@@ -4,6 +4,6 @@
 // https://k6.io/docs/using-k6/http-requests/
 
 export default function () {
-    const url = 'https://localhost:7176/api/v1/categorias';
+    const url = 'https://localhost:7075/api/v1/tarefas';
     const res = http.get(url);
 }

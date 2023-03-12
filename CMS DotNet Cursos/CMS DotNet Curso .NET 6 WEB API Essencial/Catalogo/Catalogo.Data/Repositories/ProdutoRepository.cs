@@ -35,7 +35,8 @@ public class ProdutoRepository : IProdutoRepository
         // if (pageSize == 0) pageSize = int.MaxValue;
 
         var results = await _ctx.Produtos
-            .AsNoTracking()
+            //.AsNoTracking()
+            .AsNoTrackingWithIdentityResolution()
             .Where(c => c.DataCadastro >= new DateTime(2000, 1, 1))
             .OrderBy(c => c.DataCadastro)
             .Skip((pageNumber - 1) * pageSize)

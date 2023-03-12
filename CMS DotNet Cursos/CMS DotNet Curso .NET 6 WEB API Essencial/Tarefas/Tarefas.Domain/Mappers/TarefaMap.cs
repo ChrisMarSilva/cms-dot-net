@@ -12,7 +12,7 @@ public class TarefaMap : BaseEntityMap<Tarefa>
     {
         base.Configure(builder);
 
-        builder.Property(x => x.Atividade).HasColumnName("atividade").HasColumnType("varchar(150)").IsRequired();
-        builder.Property(x => x.Status).HasColumnName("status").HasColumnType("varchar(50)").IsRequired();
+        builder.Property(x => x.Atividade).HasColumnName("atividade").HasColumnType("varchar(255)").IsRequired();
+        builder.Property(x => x.Status).HasColumnName("status").HasColumnType("varchar(100)").IsRequired();
     }
 }

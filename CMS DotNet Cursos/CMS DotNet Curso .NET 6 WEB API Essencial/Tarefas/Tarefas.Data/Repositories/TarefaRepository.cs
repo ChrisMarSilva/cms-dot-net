@@ -10,7 +10,7 @@ public class TarefaRepository : ITarefaRepository
 {
     private readonly ILogger<TarefaRepository> _logger;
     private readonly AppDbContext _ctx;
-    private readonly string? _className;
+    private readonly string _className;
 
     public TarefaRepository(
         ILogger<TarefaRepository> logger,
@@ -35,7 +35,8 @@ public class TarefaRepository : ITarefaRepository
         // if (pageSize == 0) pageSize = int.MaxValue;
 
         var results = await _ctx.Tarefas
-            .AsNoTracking()
+            //.AsNoTracking()
+            .AsNoTrackingWithIdentityResolution()
             .Where(c => c.DataCadastro >= new DateTime(2000, 1, 1))
             .OrderBy(c => c.DataCadastro)
             .Skip((pageNumber - 1) * pageSize)

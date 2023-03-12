@@ -12,8 +12,8 @@ export const options = {
 };
 
 export default function () {
-    const url = 'https://localhost:7176/api/v1/categorias';
-    const payload = JSON.stringify({ Nome: 'Categoria 0001', ImagemUrl: 'ImagemCategoria0001' });
+    const url = 'https://localhost:7075/api/v1/tarefas';
+    const payload = JSON.stringify({ Atividade: 'Tarefa 0001', Status: 'A' });
     const params = { headers: { 'Content-Type': 'application/json' } };
     http.post(url, payload, params);
 }

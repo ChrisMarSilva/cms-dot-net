@@ -1,7 +1,15 @@
-﻿namespace Tarefas.Domain.Models;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
-//[Table("Tarefas")]
-//public record Tarefa(int Id, string Atividade, string Status);
+namespace Tarefas.Domain.Models;
+
+[Table("Tarefas")]
+public record TarefaCon(
+    Guid Id, 
+    string Atividade, 
+    string Status, 
+    DateTime Data_Cadastro, 
+    DateTime? Data_Alteracao
+);
 
 public class Tarefa : BaseEntity
 {

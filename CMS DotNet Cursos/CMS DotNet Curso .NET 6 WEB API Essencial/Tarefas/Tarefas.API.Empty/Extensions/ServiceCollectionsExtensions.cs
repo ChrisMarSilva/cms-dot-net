@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Models;
 using System.Data.SqlClient;
 using System.IO.Compression;
 using Tarefas.Data.Persistence;
@@ -11,7 +10,7 @@ using Tarefas.Service;
 using Tarefas.Service.Interfaces;
 using static Tarefas.Data.Persistence.AppDbContextCon;
 
-namespace Tarefas.API.Extensions;
+namespace Tarefas.API.Empty.Extensions;
 
 public static class ServiceCollectionsExtensions
 {
@@ -49,13 +48,6 @@ public static class ServiceCollectionsExtensions
         });
         builder.Services.Configure<BrotliCompressionProviderOptions>(options => { options.Level = CompressionLevel.Fastest; });
         builder.Services.Configure<GzipCompressionProviderOptions>(options => { options.Level = CompressionLevel.SmallestSize; });
-
-        return builder;
-    }
-
-    public static WebApplicationBuilder AddSwagger(this WebApplicationBuilder builder)
-    {
-        builder.Services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new OpenApiInfo { Title = "Tarefas.API", Version = "v1" }); });
 
         return builder;
     }

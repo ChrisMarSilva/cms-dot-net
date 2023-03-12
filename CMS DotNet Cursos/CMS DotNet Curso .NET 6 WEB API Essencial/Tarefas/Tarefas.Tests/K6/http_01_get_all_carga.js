@@ -26,7 +26,7 @@ export const options = {
 };
 
 export default function () {
-    const url = 'https://localhost:7176/api/v1/categorias';
+    const url = 'https://localhost:7075/api/v1/tarefas';
     const res = http.get(url);
 }
 
