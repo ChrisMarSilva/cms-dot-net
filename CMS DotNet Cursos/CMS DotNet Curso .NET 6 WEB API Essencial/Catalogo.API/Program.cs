@@ -13,17 +13,21 @@ using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// ConnectionString
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 // var connectionString = builder.Configuration["ConnectionStrings:DefaultConnection"];
 // var connectionString = builder.Configuration.GetSection("ConnectionStrings").GetValue<string>("DefaultConnection");
 
+// DbContex
 // builder.Services.AddDbContext<AppDbContext>(options => options.UseMySql(connectionStr, new MySqlServerVersion(new Version(5, 6, 0))));
 builder.Services.AddDbContext<AppDbContext>(options => options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 builder.Services.AddTransient<IUnitofWork, UnitOfWork>();
 
+// Repository
 builder.Services.AddScoped<IProdutoRepository, ProdutoRepository>();
 builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
 
+// Service
 builder.Services.AddScoped<IProdutoService, ProdutoService>();
 builder.Services.AddScoped<ICategoriaService, CategoriaService>();
 
