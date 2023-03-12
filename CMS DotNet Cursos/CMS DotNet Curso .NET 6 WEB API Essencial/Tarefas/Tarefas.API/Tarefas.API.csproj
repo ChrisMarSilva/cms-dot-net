@@ -26,9 +26,4 @@
     <ProjectReference Include="..\Tarefas.Service\Tarefas.Service.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Endpoints\" />
-    <Folder Include="Extensions\" />
-  </ItemGroup>
-
 </Project>

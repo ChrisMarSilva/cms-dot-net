@@ -5,6 +5,11 @@ using Tarefas.Domain.Models;
 
 namespace Tarefas.Data.Persistence;
 
+// public class AppDbContext 
+// {
+// public delegate Task<IDbConnection> GetConnection();
+// }
+
 public class AppDbContext : DbContext
 {
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
@@ -21,12 +26,14 @@ public class AppDbContext : DbContext
         // builder.ApplyConfigurationsFromAssembly(typeof(IEntityTypeConfiguration).Assembly);
         builder.ApplyConfiguration(new TarefaMap());
 
-        // Tarefa
-        builder.Entity<Tarefa>().HasData(new Tarefa { Atividade = "Tarefa 01", Status = "Status 01" });
-        builder.Entity<Tarefa>().HasData(new Tarefa { Atividade = "Tarefa 02", Status = "Status 02" });
-        builder.Entity<Tarefa>().HasData(new Tarefa { Atividade = "Tarefa 03", Status = "Status 03" });
+        //// Tarefa
+        //builder.Entity<Tarefa>().HasData(new Tarefa { Atividade = "Tarefa 01", Status = "Status 01" });
+        //builder.Entity<Tarefa>().HasData(new Tarefa { Atividade = "Tarefa 02", Status = "Status 02" });
+        //builder.Entity<Tarefa>().HasData(new Tarefa { Atividade = "Tarefa 03", Status = "Status 03" });
 
         base.OnModelCreating(builder);
     }
 
 }
+
+

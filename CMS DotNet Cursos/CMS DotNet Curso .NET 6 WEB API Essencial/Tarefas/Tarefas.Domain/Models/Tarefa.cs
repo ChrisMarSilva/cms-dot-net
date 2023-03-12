@@ -1,5 +1,8 @@
 ﻿namespace Tarefas.Domain.Models;
 
+//[Table("Tarefas")]
+//public record Tarefa(int Id, string Atividade, string Status);
+
 public class Tarefa : BaseEntity
 {
     public string Atividade { get; set; }
