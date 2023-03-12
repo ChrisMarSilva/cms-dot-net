@@ -19,7 +19,6 @@ export const options = {
         // http errors should be less than 1%
         // erros de http devem ser menores que 1%
         http_req_failed: ['rate<0.01'],   
-
         // 90% of requests should be below 200ms
         // 90% das requisições devem ser abaixo de 200ms
         http_req_duration: ['p(90)<200'], 
@@ -27,10 +26,9 @@ export const options = {
 };
 
 export default function () {
-    const url = 'http://localhost:5207/api/v1/dev-events';
+    const url = 'https://localhost:7176/api/v1/categorias';
     const res = http.get(url);
 }
-
 
 // vus
 // Current number of active virtual users
