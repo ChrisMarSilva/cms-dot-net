@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Tarefas.Data\Tarefas.Data.csproj" />
+    <ProjectReference Include="..\Tarefas.Domain\Tarefas.Domain.csproj" />
+  </ItemGroup>
+
+</Project>
