@@ -14,11 +14,11 @@ public class CategoriasController : ControllerBase // : BaseController<Categoria
 
     public CategoriasController(
         ILogger<CategoriasController> logger,
-        ICategoriaService categoriaService
+        ICategoriaService categService
         )
     {
         _logger = logger;
-        _categService = categoriaService ?? throw new ArgumentNullException(nameof(categoriaService));
+        _categService = categService ?? throw new ArgumentNullException(nameof(categService));
         _className = GetType().FullName;
 
         _logger.LogInformation($"{_className}");
@@ -42,7 +42,8 @@ public class CategoriasController : ControllerBase // : BaseController<Categoria
         }
         catch (Exception ex)
         {
-            _logger.LogError($"{_className}.GetAll(Erro: {ex.Message})");
+            //_logger.LogError($"{_className}.GetAll(Erro: {ex.Message})");
+            _logger.LogError(ex, $"{_className}.GetAll(Erro: {ex.Message})");
             return StatusCode(StatusCodes.Status500InternalServerError, "Ocorreu um problema ao tratar a sua solicitação.");
         }
     }

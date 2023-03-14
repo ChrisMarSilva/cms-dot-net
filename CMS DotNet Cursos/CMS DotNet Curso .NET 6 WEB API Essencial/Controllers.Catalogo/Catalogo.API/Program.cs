@@ -34,10 +34,10 @@ builder.Services.AddScoped<ICategoriaService, CategoriaService>();
 builder.Services.AddControllers()
     .AddJsonOptions(options => {
         options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
-        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()); // serialize enums as strings in api responses (e.g. Role)
+        //options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()); // serialize enums as strings in api responses (e.g. Role)
+        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase, false));
         options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault; // ignore omitted parameters on models to enable optional params (e.g. User update)
         // options.JsonSerializerOptions.IgnoreNullValues = true;
-        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase, false));
         options.JsonSerializerOptions.PropertyNamingPolicy = null;
     });
 
