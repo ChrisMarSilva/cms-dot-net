@@ -5,6 +5,52 @@
 
 
 
+
+--------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------
+
+
+
+--------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------
+
+
+using System.Net;
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        // URL of the file to download
+        string url = "http://example.com/file.zip";
+
+        // Path to save the downloaded file
+        string filePath = @"C:\Downloads\file.zip";
+
+        using (WebClient client = new WebClient())
+        {
+            // Register the DownloadFileCompleted event
+            client.DownloadFileCompleted += (sender, e) =>
+            {
+                // Delete the downloaded file after it has finished downloading
+                System.IO.File.Delete(filePath);
+            };
+
+            // Download the file asynchronously
+            client.DownloadFileAsync(new Uri(url), filePath);
+
+            // Do other tasks while the file is being downloaded
+            // ...
+        }
+    }
+}
+
+
+--------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------
+
+
+
   public class AppDataContext : DbContext
     {
         public DbSet<Todo> Todos { get; set; }

@@ -6,7 +6,7 @@ namespace Catalogo.API.Controllers;
 
 [Route("api/v1/[controller]")]
 [ApiController]
-public class CategoriasController : ControllerBase
+public class CategoriasController : ControllerBase // : BaseController<CategoriasController>
 {
     private readonly ILogger<CategoriasController> _logger;
     private readonly ICategoriaService _categService;
