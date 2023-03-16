@@ -33,7 +33,6 @@ public class ProdutoService : IProdutoService
         try
         {
             var results = await _prodRepo.FindAllAsync();
-
             return results;
         }
         catch (Exception ex)
@@ -49,7 +48,6 @@ public class ProdutoService : IProdutoService
         try
         {
             var result = await _prodRepo.FindByIdAsync(id);
-
             return result;
         }
         catch (Exception ex)

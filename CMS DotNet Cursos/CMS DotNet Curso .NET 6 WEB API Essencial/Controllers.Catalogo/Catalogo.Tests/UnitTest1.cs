@@ -5,6 +5,7 @@ namespace Catalogo.Tests
         [SetUp]
         public void Setup()
         {
+
         }
 
         [Test]

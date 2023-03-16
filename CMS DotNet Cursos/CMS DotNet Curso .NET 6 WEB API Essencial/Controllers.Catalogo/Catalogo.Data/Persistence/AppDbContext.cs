@@ -2,12 +2,26 @@
 using Catalogo.Domain.Models;
 using Flunt.Notifications;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace Catalogo.Data.Persistence;
 
 public class AppDbContext : DbContext
 {
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
+
+    // dotnet tool install --global dotnet-ef
+    // dotnet tool update --global dotnet-ef
+    // dotnet build 
+
+    // dotnet ef 
+    // dotnet ef migrations add AddTablesInitOnDataTablesDb
+    // dotnet ef migrations add AddDadosTables01
+    // dotnet ef migrations add PopulaCategorias
+    // dotnet ef migrations add PopulaCategorias02
+    // dotnet ef migrations add PopulaProdutos
+    // dotnet ef database update
+    // dotnet ef migrations remove
 
     public DbSet<Categoria> Categorias { get; set; }
     public DbSet<Produto> Produtos { get; set; }
@@ -16,6 +30,16 @@ public class AppDbContext : DbContext
     //{
     //    options.EnableSensitiveDataLogging();
     //    options.EnableServiceProviderCaching();
+    //    options.LogTo(Console.WriteLine, LogLevel.Information);
+    //    if (!options.IsConfigured)
+    //    {
+    //        IConfigurationRoot configuration = new ConfigurationBuilder()
+    //           .SetBasePath(Directory.GetCurrentDirectory())
+    //           .AddJsonFile("appsettings.json")
+    //           .Build();
+    //        var connectionString = configuration. GetConnectionString("DefaultConnection");
+    //        options.UseMySql(connectionString);
+    //    }
     //    base.OnConfiguring(options);
     //}
 

@@ -1,104 +1,29 @@
 
-
 --------------------------------------------------------------------------------------
 --------------------------------------------------------------------------------------
 
+add cursos ao linkedin
+	
+Pendentes
+	MongoDB para Desenvolvedores .NET - Udemy
+	Apis Robustas com C#, MediatR, DDD, Entity Framework - Udemy
+	Testes unitários em C# com NUnit e Moq - Udemy
+	Crie uma Web API com .NET 6 + EF Core + Docker - Udemy
+	Design Patterns com C# - Entendendo Padrões de Projetos - Udemy
+	C# - Aplicando Princípios SOLID na prática - Udemy
 
+  
+NET 6, CLEAN ARCH, SOLID E CLEAN CODE - Udemy
 
-
---------------------------------------------------------------------------------------
---------------------------------------------------------------------------------------
-
-
-
---------------------------------------------------------------------------------------
---------------------------------------------------------------------------------------
-
-
-using System.Net;
-
-class Program
-{
-    static void Main(string[] args)
-    {
-        // URL of the file to download
-        string url = "http://example.com/file.zip";
-
-        // Path to save the downloaded file
-        string filePath = @"C:\Downloads\file.zip";
-
-        using (WebClient client = new WebClient())
-        {
-            // Register the DownloadFileCompleted event
-            client.DownloadFileCompleted += (sender, e) =>
-            {
-                // Delete the downloaded file after it has finished downloading
-                System.IO.File.Delete(filePath);
-            };
-
-            // Download the file asynchronously
-            client.DownloadFileAsync(new Uri(url), filePath);
-
-            // Do other tasks while the file is being downloaded
-            // ...
-        }
-    }
-}
+ string workingDirectory = Environment.CurrentDirectory;
+string path = Path.Combine(Directory.GetParent(workingDirectory).Parent.Parent.FullName, @"script.sql");
+string script = File.ReadAllText(path);
 
 
 --------------------------------------------------------------------------------------
 --------------------------------------------------------------------------------------
 
-
-
-  public class AppDataContext : DbContext
-    {
-        public DbSet<Todo> Todos { get; set; }
-        
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)  => optionsBuilder.UseSqlite(connectionString: "DataSource=app.db;Cache=Shared");
-    }
-	
-	
-	  if (!ModelState.IsValid)
-                return BadRequest();
-			
-	
-	 try
-            {
-                await context.Todos.AddAsync(todo);
-                await context.SaveChangesAsync();
-                return Created($"v1/todos/{todo.Id}", todo);
-            }
-            catch (Exception e)
-            {
-                return BadRequest();
-            }
-	
-	
-	builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("BloggingDatabase")));
-	
-	namespace MvpConfDemos.MvcCore.Database
-{
-    public class MvpConfContext : DbContext
-    {
-        public MvpConfContext(DbContextOptions<MvpConfContext> options) : base(options)
-        {
-
-        }
-
-        public DbSet<Cliente> Cliente { get; set; }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.EnableSensitiveDataLogging();
-            optionsBuilder.LogTo(Console.WriteLine, LogLevel.Information);
-        }
-    }
-}
-
-	
-	
-	using System;
+using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Diagnostics;
@@ -243,41 +168,6 @@ CREATE INDEX IDX_Nome ON Moradores(UF) INCLUDE(Id, Nome, Telefone) WITH(DROP_EXI
 GO
 
 
--------------------------------------------------------------------------
-
-
---------------------------------------------------------------------------------------
---------------------------------------------------------------------------------------
-
-  services.AddContexts(Configuration);
-            services.AddRepositories();
-			
-			
-Extensions/DataExtensions.cs 
-mespace UnitOfWorkExample.Data.Extensions
-{
-    public static class DataExtensions
-    {
-        public static IServiceCollection AddContexts(this IServiceCollection services, IConfiguration configuration)
-        {
-            services.AddDbContext<EventoContext>(options => {
-                options.UseSqlServer(configuration.GetConnectionString("EventoDb"));
-            });
-
-            return services;
-        }
-
-        public static IServiceCollection AddRepositories(this IServiceCollection services)
-        {
-            services.AddScoped<IEventoRepository, EventoRepository>();
-            services.AddScoped<IPessoaRepository, PessoaRepository>();
-
-            return services;
-        }
-    }
-}
-
-
 --------------------------------------------------------------------------------------
 --------------------------------------------------------------------------------------
 
@@ -328,366 +218,6 @@ namespace Order.Infra.DataConnector
     }
 }
 
-
-using Dapper;
-using Order.Domain.Interfaces.Repositories;
-using Order.Domain.Interfaces.Repositories.DataConnector;
-using Order.Domain.Models;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace Order.Infra.Repositories
-{
-    public class UserRepository : IUserRepository
-    {
-        private readonly IDbConnector _dbConnector;
-        public UserRepository(IDbConnector dbConnector)
-        {
-            _dbConnector = dbConnector;
-        }
-
-        const string baseSql = @"SELECT [Id]
-                                      ,[Name]
-                                      ,[Login]
-                                      ,[PasswordHash]
-                                      ,[CreatedAt]
-                                  FROM [dbo].[User]
-                                  WHERE 1 = 1 ";
-
-        public async Task CreateAsync(UserModel user)
-        {
-            string sql = @"INSERT INTO [dbo].[User]
-                                ([Id]
-                                ,[Name]
-                                ,[Login]
-                                ,[PasswordHash]
-                                ,[CreatedAt])
-                          VALUES
-                                (@Id
-                                ,@Name
-                                ,@Login
-                                ,@PasswordHash
-                                ,@CreatedAt)";
-
-            await _dbConnector.dbConnection.ExecuteAsync(sql, new
-            {
-                Id = user.Id,
-                Name = user.Name,
-                Login = user.Login,
-                PasswordHash = user.PasswordHash,
-                CreatedAt = user.CreatedAt
-            }, _dbConnector.dbTransaction);
-        }
-        public async Task UpdateAsync(UserModel user)
-        {
-            string sql = @"UPDATE [dbo].[User]
-                             SET [Name] = @Name
-                                ,[Login] = @Login
-                                ,[PasswordHash] = @PasswordHash
-                           WHERE id = @Id ";
-
-            await _dbConnector.dbConnection.ExecuteAsync(sql, new
-            {
-                Id = user.Id,
-                Name = user.Name,
-                Login = user.Login,
-                PasswordHash = user.PasswordHash
-            }, _dbConnector.dbTransaction);
-        }
-        public async Task DeleteAsync(string userId)
-        {
-            string sql = $"DELETE FROM [dbo].[User] WHERE id = @id";
-
-            await _dbConnector.dbConnection.ExecuteAsync(sql, new { Id = userId }, _dbConnector.dbTransaction);
-        }
-        public async Task<bool> ExistsByIdAsync(string userId)
-        {
-            string sql = $"SELECT 1 FROM User WHERE Id = @Id ";
-
-            var users = await _dbConnector.dbConnection.QueryAsync<bool>(sql, new { Id = userId }, _dbConnector.dbTransaction);
-
-            return users.FirstOrDefault();
-        }
-        public async Task<bool> ExistsByLoginAsync(string login)
-        {
-            string sql = $"SELECT 1 FROM [User] WHERE Login = @Login ";
-                
-            var users = await _dbConnector.dbConnection.QueryAsync<bool>(sql, new { Login = login }, _dbConnector.dbTransaction);
-
-            return users.FirstOrDefault();
-        }
-        public async Task<UserModel> GetByIdAsync(string userId)
-        {
-            string sql = $"{baseSql} AND Id = @Id";
-
-            var users = await _dbConnector.dbConnection.QueryAsync<UserModel>(sql, new { Id = userId }, _dbConnector.dbTransaction);
-
-            return users.FirstOrDefault();
-        }
-        public async Task<List<UserModel>> ListByFilterAsync(string login = null, string name = null)
-        {
-            string sql = $"{baseSql} ";
-
-            if (!string.IsNullOrWhiteSpace(login))
-                sql += "AND login = @Login";
-
-            if (!string.IsNullOrWhiteSpace(name))
-                sql += "AND Name like @Name";
-
-            var users = await _dbConnector.dbConnection.QueryAsync<UserModel>(sql, new { Login = login, Name = "%" + name + "%" }, _dbConnector.dbTransaction);
-
-            return users.ToList();
-        }
-
-        public async Task<UserModel> GetByLoginAsync(string login)
-        {
-            string sql = $"{baseSql} AND Login = @Login";
-
-            var users = await _dbConnector.dbConnection.QueryAsync<UserModel>(sql, new { Login = login }, _dbConnector.dbTransaction);
-
-            return users.FirstOrDefault();
-        }
-    }
-}
-
-
-
-using Order.Domain.Interfaces.Repositories;
-using Order.Domain.Interfaces.Repositories.DataConnector;
-
-namespace Order.Infra.Repositories
-{
-    public class UnitOfWork : IUnitOfWork
-    {
-        private IClientRepository _clientRepository;
-        private IProductRepository _productRepository;
-        private IOrderRepository _orderRepository;
-        private IUserRepository _userRepository;
-
-        public UnitOfWork(IDbConnector dbConnector)
-        {
-            this.dbConnector = dbConnector;
-        }
-
-        public IClientRepository ClientRepository => _clientRepository ?? (_clientRepository = new ClientRepository(dbConnector));
-
-        public IOrderRepository OrderRepository => _orderRepository ?? (_orderRepository = new OrderRepository(dbConnector));
-
-        public IProductRepository ProductRepository => _productRepository ?? (_productRepository = new ProductRepository(dbConnector));
-
-        public IUserRepository UserRepository => _userRepository ?? (_userRepository = new UserRepository(dbConnector));
-
-        public IDbConnector dbConnector { get; }
-
-        public void BeginTransaction()
-        {
-            dbConnector.BeginTransaction(System.Data.IsolationLevel.ReadUncommitted);
-        }
-
-        public void CommitTransaction()
-        {
-            if (dbConnector.dbConnection.State == System.Data.ConnectionState.Open)
-            {
-                dbConnector.dbTransaction.Commit();
-            }
-        }
-
-        public void RollbackTransaction()
-        {
-            if (dbConnector.dbConnection.State == System.Data.ConnectionState.Open)
-            {
-                dbConnector.dbTransaction.Rollback();
-            }
-        }
-    }
-}
-
-
-    <PackageReference Include="FluentValidation" Version="9.2.2" />
-    <PackageReference Include="System.Threading.Tasks" Version="4.3.0" />
-
-
-using FluentValidation;
-using Order.Domain.Models;
-
-namespace Order.Domain.Validations
-{
-    public class UserValidation : AbstractValidator<UserModel>
-    {
-        public UserValidation()
-        {
-            ValidatorOptions.Global.CascadeMode = CascadeMode.Stop;
-
-            RuleFor(x => x.Name)
-                .NotNull()
-                .NotEmpty()
-                .Length(3, 30);
-
-            RuleFor(x => x.Login)
-                .NotNull()
-                .NotEmpty();
-
-            RuleFor(x => x.PasswordHash)
-                .NotNull()
-                .NotEmpty()
-                .MinimumLength(6);
-        }
-    }
-}
-
-
-using Order.Domain.Common;
-using Order.Domain.Interfaces.Repositories;
-using Order.Domain.Interfaces.Services;
-using Order.Domain.Models;
-using Order.Domain.Validations;
-using Order.Domain.Validations.Base;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-
-namespace Order.Domain.Services
-{
-    public class UserService : IUserService
-    {
-        private readonly IUserRepository _UserRepository;
-        private readonly ITimeProvider _timeProvider;
-        private readonly IGenerators _generators;
-        private readonly ISecurityService _securityService;
-
-        public UserService(IUserRepository UserRepository,
-                           ITimeProvider timeProvider,
-                           IGenerators generators, 
-                           ISecurityService securityService)
-        {
-            _UserRepository = UserRepository;
-            _timeProvider = timeProvider;
-            _generators = generators;
-            _securityService = securityService;
-        }
-
-        public async Task<Response<bool>> AutheticationAsync(string password, UserModel user)
-        {
-            return await _securityService.VerifyPassword(password, user);
-        }
-
-        public async Task<Response> CreateAsync(UserModel user)
-        {
-            var response = new Response();
-
-            var validation = new UserValidation();
-            var errors = validation.Validate(user).GetErrors();
-
-            if (errors.Report.Count > 0)
-                return errors;
-
-            user.Id = _generators.Generate();
-            user.CreatedAt = _timeProvider.utcDateTime();
-
-            await _UserRepository.CreateAsync(user);
-
-            return response;
-        }
-
-        public async Task<Response> DeleteAsync(string userId)
-        {
-            var response = new Response();
-
-            var exists = await _UserRepository.ExistsByIdAsync(userId);
-
-            if (!exists)
-            {
-                response.Report.Add(Report.Create($"User {userId} not exists!"));
-                return response;
-            }
-
-            await _UserRepository.DeleteAsync(userId);
-
-            return response;
-        }
-
-        public async Task<Response<UserModel>> GetByIdAsync(string userId)
-        {
-            var response = new Response<UserModel>();
-
-            var exists = await _UserRepository.ExistsByIdAsync(userId);
-
-            if (!exists)
-            {
-                response.Report.Add(Report.Create($"User {userId} not exists!"));
-                return response;
-            }
-
-            var data = await _UserRepository.GetByIdAsync(userId);
-            response.Data = data;
-            return response;
-        }
-
-        public async Task<Response<UserModel>> GetByLoginAsync(string login)
-        {
-            var response = new Response<UserModel>();
-
-            var exists = await _UserRepository.ExistsByLoginAsync(login);
-
-            if (!exists)
-            {
-                response.Report.Add(Report.Create($"User {login} not exists!"));
-                return response;
-            }
-
-            var data = await _UserRepository.GetByLoginAsync(login);
-            response.Data = data;
-            return response;
-        }
-
-        public async Task<Response<List<UserModel>>> ListByFilterAsync(string userId = null, string name = null)
-        {
-            var response = new Response<List<UserModel>>();
-
-            if (!string.IsNullOrWhiteSpace(userId))
-            {
-                var exists = await _UserRepository.ExistsByIdAsync(userId);
-
-                if (!exists)
-                {
-                    response.Report.Add(Report.Create($"User {userId} not exists!"));
-                    return response;
-                }
-            }
-
-            var data = await _UserRepository.ListByFilterAsync(userId, name);
-            response.Data = data;
-
-            return response;
-        }
-
-        public async Task<Response> UpdateAsync(UserModel user)
-        {
-            var response = new Response();
-
-            var validation = new UserValidation();
-            var errors = validation.Validate(user).GetErrors();
-
-            if (errors.Report.Count > 0)
-                return errors;
-
-            var exists = await _UserRepository.ExistsByIdAsync(user.Id);
-
-            if (!exists)
-            {
-                response.Report.Add(Report.Create($"User {user.Id} not exists!"));
-                return response;
-            }
-
-            await _UserRepository.UpdateAsync(user);
-
-            return response;
-        }
-    }
-}
-
-
 namespace Order.Domain.Models
 {
     public class UserModel : EntityBase
@@ -697,9 +227,6 @@ namespace Order.Domain.Models
         public string PasswordHash { get; set; }
     }
 }
-
-using System;
-
 namespace Order.Domain.Models
 {
     public abstract class EntityBase
@@ -708,13 +235,6 @@ namespace Order.Domain.Models
         public DateTime CreatedAt { get; set; }
     }
 }
-
-
-
-using Order.Domain.Models;
-using Order.Domain.Validations.Base;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace Order.Domain.Interfaces.Services
 {
@@ -729,11 +249,6 @@ namespace Order.Domain.Interfaces.Services
         Task<Response<List<UserModel>>> ListByFilterAsync(string userId = null, string name = null);
     }
 }
-
-using Order.Domain.Models;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-
 namespace Order.Domain.Interfaces.Repositories
 {
     public interface IUserRepository
@@ -748,111 +263,29 @@ namespace Order.Domain.Interfaces.Repositories
         Task<bool> ExistsByLoginAsync(string login);
     }
 }
-
-
-using Order.Domain.Interfaces.Repositories.DataConnector;
-
 namespace Order.Domain.Interfaces.Repositories
 {
     public interface IUnitOfWork
     {
+        IDbConnector dbConnector { get;}
         IClientRepository ClientRepository { get; }
         IOrderRepository OrderRepository { get; }
         IProductRepository ProductRepository { get; }
         IUserRepository UserRepository { get; }
-
-        IDbConnector dbConnector { get;}
-
         void BeginTransaction();
         void CommitTransaction();
         void RollbackTransaction();
     }
 }
-
-
-using System;
-using System.Data;
-
 namespace Order.Domain.Interfaces.Repositories.DataConnector
 {
     public interface IDbConnector : IDisposable
     {
         IDbConnection dbConnection { get;  }
         IDbTransaction dbTransaction { get; set; }
-
         IDbTransaction BeginTransaction(IsolationLevel isolation);
     }
 }
-
-
-public class Generators : IGenerators
-    {
-        public string Generate() => Guid.NewGuid().ToString("N");
-    }
-
-
-    <PackageReference Include="AutoMapper" Version="10.1.1" />
-
-using AutoMapper;
-using Order.Application.DataContract.Request.Client;
-using Order.Application.DataContract.Request.Order;
-using Order.Application.DataContract.Request.Product;
-using Order.Application.DataContract.Request.User;
-using Order.Application.DataContract.Response.Client;
-using Order.Application.DataContract.Response.Product;
-using Order.Domain.Models;
-
-namespace Order.Application.Mapper
-{
-    public class Core : Profile
-    {
-        public Core()
-        {
-            ClientMap();
-        }
-
-        private void ClientMap()
-        {
-            CreateMap<CreateClientRequest, ClientModel>();
-            CreateMap<UpdateClientRequest, ClientModel>();
-
-            CreateMap<ClientModel, ClientResponse>();
-
-            CreateMap<CreateUserRequest, UserModel>()
-                .ForMember(target => target.PasswordHash, opt => opt.MapFrom(source => source.Password));
-            CreateMap<UserModel, UserResponse>();
-
-            CreateMap<CreateOrderRequest, OrderModel>()
-                .ForPath(target => target.Client.Id, opt => opt.MapFrom(source => source.ClientId))
-                .ForPath(target => target.User.Id, opt => opt.MapFrom(source => source.UserId));
-
-            CreateMap<OrderModel, OrderResponse>()
-                .ForMember(target => target.ClientId, opt => opt.MapFrom(source => source.Client.Id))
-                .ForMember(target => target.UserId, opt => opt.MapFrom(source => source.User.Id));
-
-            CreateMap<CreateOrderItemRequest, OrderItemModel>()
-                .ForPath(target => target.Product.Id, opt => opt.MapFrom(source => source.ProductId));
-
-            CreateMap<OrderItemModel, OrderItemResponse>()
-                .ForMember(target => target.ProductId, opt => opt.MapFrom(source => source.Product.Id));
-
-
-
-            CreateMap<CreateProductRequest, ProductModel>();
-            CreateMap<ProductModel, ProductResponse>();
-
-        }
-    }
-}
-
-
-using Order.Application.DataContract.Request.User;
-using Order.Application.DataContract.Response.Client;
-using Order.Application.DataContract.Response.User;
-using Order.Domain.Validations.Base;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-
 namespace Order.Application.Interfacds
 {
     public interface IUserApplication
@@ -863,7 +296,6 @@ namespace Order.Application.Interfacds
     }
 }
 
-
 namespace Order.Application.DataContract.Response.Client
 {
     public sealed class UserResponse
@@ -873,8 +305,6 @@ namespace Order.Application.DataContract.Response.Client
         public string Login { get; set; }
     }
 }
-
-
 namespace Order.Application.DataContract.Request.User
 {
     public class CreateUserRequest
@@ -884,8 +314,7 @@ namespace Order.Application.DataContract.Request.User
         public string Password { get; set; }
         public string ConfirmPassword { get; set; }
     }
-
-
+}
 namespace Order.Application.DataContract.Request.User
 {
     public class AuthRequest
@@ -895,20 +324,207 @@ namespace Order.Application.DataContract.Request.User
     }
 }
 
+namespace Order.Infra.Repositories
+{
+    public class UnitOfWork : IUnitOfWork
+    {
+        private IClientRepository _clientRepository;
+        private IProductRepository _productRepository;
+        private IOrderRepository _orderRepository;
+        private IUserRepository _userRepository;
+        public UnitOfWork(IDbConnector dbConnector)
+        {
+            this.dbConnector = dbConnector;
+        }
+        public IClientRepository ClientRepository => _clientRepository ?? (_clientRepository = new ClientRepository(dbConnector));
+        public IOrderRepository OrderRepository => _orderRepository ?? (_orderRepository = new OrderRepository(dbConnector));
+        public IProductRepository ProductRepository => _productRepository ?? (_productRepository = new ProductRepository(dbConnector));
+        public IUserRepository UserRepository => _userRepository ?? (_userRepository = new UserRepository(dbConnector));
+        public IDbConnector dbConnector { get; }
+        public void BeginTransaction()
+        {
+            dbConnector.BeginTransaction(System.Data.IsolationLevel.ReadUncommitted);
+        }
+        public void CommitTransaction()
+        {
+            if (dbConnector.dbConnection.State == System.Data.ConnectionState.Open)
+            {
+                dbConnector.dbTransaction.Commit();
+            }
+        }
+        public void RollbackTransaction()
+        {
+            if (dbConnector.dbConnection.State == System.Data.ConnectionState.Open)
+            {
+                dbConnector.dbTransaction.Rollback();
+            }
+        }
+    }
+}
 
-using AutoMapper;
-using Order.Application.DataContract.Request.User;
-using Order.Application.DataContract.Response.Client;
-using Order.Application.DataContract.Response.User;
-using Order.Application.Interfacds;
-using Order.Application.Interfacds.Security;
-using Order.Domain.Interfaces.Services;
-using Order.Domain.Models;
-using Order.Domain.Validations.Base;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+namespace Order.Infra.Repositories
+{
+    public class UserRepository : IUserRepository
+    {
+        private readonly IDbConnector _dbConnector;
+        public UserRepository(IDbConnector dbConnector)
+        {
+            _dbConnector = dbConnector;
+        }
+        const string baseSql = @"SELECT [Id] ,[Name] ,[Login] ,[PasswordHash] ,[CreatedAt] FROM [dbo].[User] WHERE 1 = 1 ";
+        public async Task CreateAsync(UserModel user)
+        {
+            string sql = @"INSERT INTO [dbo].[User]([Id] ,[Name] ,[Login] ,[PasswordHash] ,[CreatedAt]) VALUES (@Id ,@Name ,@Login ,@PasswordHash ,@CreatedAt)";
+            await _dbConnector.dbConnection.ExecuteAsync(sql, new { Id = user.Id, Name = user.Name, Login = user.Login, PasswordHash = user.PasswordHash, CreatedAt = user.CreatedAt }, _dbConnector.dbTransaction);
+        }
+        public async Task UpdateAsync(UserModel user)
+        {
+            string sql = @"UPDATE [dbo].[User] SET [Name] = @Name ,[Login] = @Login ,[PasswordHash] = @PasswordHash WHERE id = @Id ";
+            await _dbConnector.dbConnection.ExecuteAsync(sql, new { Id = user.Id, Name = user.Name, Login = user.Login, PasswordHash = user.PasswordHash }, _dbConnector.dbTransaction);
+        }
+        public async Task DeleteAsync(string userId)
+        {
+            string sql = $"DELETE FROM [dbo].[User] WHERE id = @id";
+            await _dbConnector.dbConnection.ExecuteAsync(sql, new { Id = userId }, _dbConnector.dbTransaction);
+        }
+        public async Task<bool> ExistsByIdAsync(string userId)
+        {
+            string sql = $"SELECT 1 FROM User WHERE Id = @Id ";
+            var users = await _dbConnector.dbConnection.QueryAsync<bool>(sql, new { Id = userId }, _dbConnector.dbTransaction);
+            return users.FirstOrDefault();
+        }
+        public async Task<bool> ExistsByLoginAsync(string login)
+        {
+            string sql = $"SELECT 1 FROM [User] WHERE Login = @Login ";
+            var users = await _dbConnector.dbConnection.QueryAsync<bool>(sql, new { Login = login }, _dbConnector.dbTransaction);
+            return users.FirstOrDefault();
+        }
+        public async Task<UserModel> GetByIdAsync(string userId)
+        {
+            string sql = $"{baseSql} AND Id = @Id";
+            var users = await _dbConnector.dbConnection.QueryAsync<UserModel>(sql, new { Id = userId }, _dbConnector.dbTransaction);
+            return users.FirstOrDefault();
+        }
+        public async Task<List<UserModel>> ListByFilterAsync(string login = null, string name = null)
+        {
+            string sql = $"{baseSql} ";
+            if (!string.IsNullOrWhiteSpace(login)) sql += "AND login = @Login";
+            if (!string.IsNullOrWhiteSpace(name)) sql += "AND Name like @Name";
+            var users = await _dbConnector.dbConnection.QueryAsync<UserModel>(sql, new { Login = login, Name = "%" + name + "%" }, _dbConnector.dbTransaction);
+            return users.ToList();
+        }
+        public async Task<UserModel> GetByLoginAsync(string login)
+        {
+            string sql = $"{baseSql} AND Login = @Login";
+            var users = await _dbConnector.dbConnection.QueryAsync<UserModel>(sql, new { Login = login }, _dbConnector.dbTransaction);
+            return users.FirstOrDefault();
+        }
+    }
+}
+
+namespace Order.Domain.Services
+{
+    public class UserService : IUserService
+    {
+        private readonly IUserRepository _UserRepository;
+        private readonly ITimeProvider _timeProvider;
+        private readonly IGenerators _generators;
+        private readonly ISecurityService _securityService;
+        public UserService(IUserRepository UserRepository, ITimeProvider timeProvider, IGenerators generators,  ISecurityService securityService)
+        {
+            _UserRepository = UserRepository;
+            _timeProvider = timeProvider;
+            _generators = generators;
+            _securityService = securityService;
+        }
+        public async Task<Response<bool>> AutheticationAsync(string password, UserModel user)
+        {
+            return await _securityService.VerifyPassword(password, user);
+        }
+        public async Task<Response> CreateAsync(UserModel user)
+        {
+            var response = new Response();
+            var validation = new UserValidation();
+            var errors = validation.Validate(user).GetErrors();
+            if (errors.Report.Count > 0)
+                return errors;
+            user.Id = _generators.Generate();
+            user.CreatedAt = _timeProvider.utcDateTime();
+            await _UserRepository.CreateAsync(user);
+            return response;
+        }
+        public async Task<Response> DeleteAsync(string userId)
+        {
+            var response = new Response();
+            var exists = await _UserRepository.ExistsByIdAsync(userId);
+            if (!exists)
+            {
+                response.Report.Add(Report.Create($"User {userId} not exists!"));
+                return response;
+            }
+            await _UserRepository.DeleteAsync(userId);
+            return response;
+        }
+        public async Task<Response<UserModel>> GetByIdAsync(string userId)
+        {
+            var response = new Response<UserModel>();
+            var exists = await _UserRepository.ExistsByIdAsync(userId);
+            if (!exists)
+            {
+                response.Report.Add(Report.Create($"User {userId} not exists!"));
+                return response;
+            }
+            var data = await _UserRepository.GetByIdAsync(userId);
+            response.Data = data;
+            return response;
+        }
+        public async Task<Response<UserModel>> GetByLoginAsync(string login)
+        {
+            var response = new Response<UserModel>();
+            var exists = await _UserRepository.ExistsByLoginAsync(login);
+            if (!exists)
+            {
+                response.Report.Add(Report.Create($"User {login} not exists!"));
+                return response;
+            }
+            var data = await _UserRepository.GetByLoginAsync(login);
+            response.Data = data;
+            return response;
+        }
+        public async Task<Response<List<UserModel>>> ListByFilterAsync(string userId = null, string name = null)
+        {
+            var response = new Response<List<UserModel>>();
+            if (!string.IsNullOrWhiteSpace(userId))
+            {
+                var exists = await _UserRepository.ExistsByIdAsync(userId);
+                if (!exists)
+                {
+                    response.Report.Add(Report.Create($"User {userId} not exists!"));
+                    return response;
+                }
+            }
+            var data = await _UserRepository.ListByFilterAsync(userId, name);
+            response.Data = data;
+            return response;
+        }
+        public async Task<Response> UpdateAsync(UserModel user)
+        {
+            var response = new Response();
+            var validation = new UserValidation();
+            var errors = validation.Validate(user).GetErrors();
+            if (errors.Report.Count > 0)
+                return errors;
+            var exists = await _UserRepository.ExistsByIdAsync(user.Id);
+            if (!exists)
+            {
+                response.Report.Add(Report.Create($"User {user.Id} not exists!"));
+                return response;
+            }
+            await _UserRepository.UpdateAsync(user);
+            return response;
+        }
+    }
+}
 
 namespace Order.Application.Applications
 {
@@ -918,7 +534,6 @@ namespace Order.Application.Applications
         private readonly IMapper _mapper;
         private readonly ISecurityService _securityService;
         private readonly ITokenManager _tokenManager;
-
         public UserApplication(IUserService UserService, IMapper mapper, ISecurityService securityService, ITokenManager tokenManager)
         {
             _UserService = UserService;
@@ -926,206 +541,94 @@ namespace Order.Application.Applications
             _securityService = securityService;
             _tokenManager = tokenManager;
         }
-
         public async Task<Response<AuthResponse>> AuthAsync(AuthRequest auth)
         {
             var user = await _UserService.GetByLoginAsync(auth.Login);
 
             if (user.Report.Any())
                 return Response.Unprocessable<AuthResponse>(user.Report);
-
             var isAuthenticated = await _UserService.AutheticationAsync(auth.Password, user.Data);
-
             if (!isAuthenticated.Data)
                 return Response.Unprocessable<AuthResponse>(new List<Report>() { Report.Create("Invalid password or login") });
-
             var token = await _tokenManager.GenerateTokenAsync(user.Data);
-
             return new Response<AuthResponse>(token);
         }
-
         public async Task<Response> CreateAsync(CreateUserRequest User)
         {
             try
             {
                 var isEquals = await _securityService.ComparePassword(User.Password, User.ConfirmPassword);
-
                 if (!isEquals.Data)
                     return Response.Unprocessable(Report.Create("Passwords do not match"));
-
                 var passwordEncripted = await _securityService.EncryptPassword(User.Password);
-
                 User.Password = passwordEncripted.Data;
-
                 var UserModel = _mapper.Map<UserModel>(User);
-
                 return await _UserService.CreateAsync(UserModel);
             }
             catch (Exception ex)
             {
                 var response = Report.Create(ex.Message);
-
                 return Response.Unprocessable(response);
             }
         }
-
         public async Task<Response<List<UserResponse>>> ListByFilterAsync(string userId = null, string name = null)
         {
             try
             {
                 Response<List<UserModel>> user = await _UserService.ListByFilterAsync(userId, name);
-
                 if (user.Report.Any())
                     return Response.Unprocessable<List<UserResponse>>(user.Report);
-
                 var response = _mapper.Map<List<UserResponse>>(user.Data);
-
                 return Response.OK(response);
             }
             catch (Exception ex)
             {
                 var response = Report.Create(ex.Message);
-
                 return Response.Unprocessable<List<UserResponse>>(new List<Report>() { response });
             }
         }
     }
 }
 
-
+namespace Order.Api.Controllers
 {
-  "ConnectionStrings": {
-    "default": "Server=.\\sqlexpress;Database=PVC;Trusted_Connection=True;"
-  },
-  "Logging": {
-    "LogLevel": {
-      "Default": "Information",
-      "Microsoft": "Warning",
-      "Microsoft.Hosting.Lifetime": "Information"
-    }
-  },
-  "AllowedHosts": "*"
-}
-
-
-using AutoMapper;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.IdentityModel.Tokens;
-using Order.Api.Extensions;
-using Order.Application.Mapper;
-using Order.Application.Models;
-using Order.Domain.Interfaces.Repositories.DataConnector;
-using Order.Infra.DataConnector;
-using System.Linq;
-using System.Text;
-
-namespace Order
-{
-    public class Startup
+    public class UserController : ControllerBase
     {
-        public Startup(IConfiguration configuration)
+        private readonly IUserApplication _UserApplication;
+
+        public UserController(IUserApplication UserApplication)
         {
-            Configuration = configuration;
+            _UserApplication = UserApplication;
         }
-
-        public IConfiguration Configuration { get; }
-
-        // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
+        public async Task<ActionResult> Get([FromQuery] string userId, [FromQuery] string name)
         {
-            services.AddAutoMapper(typeof(Core));
-            services.AddControllers();
-
-            var authSettingsSection = Configuration.GetSection("AuthSettings");
-            services.Configure<AuthSettings>(authSettingsSection);
-
-            var authSettings = authSettingsSection.Get<AuthSettings>();
-            SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authSettings.Secret));
-
-            services.AddAuthentication(x =>
-            {
-                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            }).AddPolicyScheme("programevc", "Authorization Bearer or AccessToken", options =>
-                    {
-                        options.ForwardDefaultSelector = context =>
-                        {
-                            if (context.Request.Headers["Access-Token"].Any())
-                            {
-                                return "Access-Token";
-                            }
-
-                            return JwtBearerDefaults.AuthenticationScheme;
-                        };
-                    }).AddJwtBearer(x =>
-                    {
-                        x.TokenValidationParameters = new TokenValidationParameters()
-                        {
-                            ValidateIssuer = true,
-                            ValidIssuer = "programevc",
-
-                            ValidateAudience = false,
-
-                            ValidateIssuerSigningKey = true,
-                            IssuerSigningKey = key,
-
-                            // Verify if token is valid
-                            ValidateLifetime = true,
-                            RequireExpirationTime = true,
-
-                        };
-
-                    });
-
-
-            string connectionString = Configuration.GetConnectionString("default");
-            services.AddScoped<IDbConnector>(db => new SqlConnector(connectionString));
-
-            services.RegisterIoC();
-
-            services.SwaggerConfiguration();
-
+            var response = await _UserApplication.ListByFilterAsync(userId, name);
+            if (response.Report.Any())
+                return UnprocessableEntity(response.Report);
+            return Ok(response);
         }
-
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public string Get(int id)
         {
-            app.UseSwagger();
-            app.UseSwaggerUI(setup =>
-            {
-                setup.RoutePrefix = "swagger";
-                setup.SwaggerEndpoint("/swagger/v1/swagger.json", "Api Documentation");
-            });
-
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-
-            app.UseHttpsRedirection();
-
-            app.UseRouting();
-
-            app.UseAuthentication();
-            app.UseAuthorization();
-
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+            return "value";
+        }
+        public async Task<ActionResult> Post([FromBody] CreateUserRequest request)
+        {
+            var response = await _UserApplication.CreateAsync(request);
+            if (response.Report.Any())
+                return UnprocessableEntity(response.Report);
+            return Ok(response);
+        }
+        public async Task<ActionResult> Auth([FromBody] AuthRequest request)
+        {
+            var response = await _UserApplication.AuthAsync(request);
+            if (response.Report.Any())
+                return UnprocessableEntity(response.Report);
+            return Ok(response);
         }
     }
 }
 
-
-
-
-#See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
+Dockerfile
 
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.1-buster-slim AS base
 WORKDIR /app
@@ -1147,183 +650,6 @@ FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "Order.dll"]
-
-
-
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.OpenApi.Models;
-using Swashbuckle.AspNetCore.Filters;
-using System;
-using System.IO;
-
-namespace Order.Api.Extensions
-{
-    public static class SwaggerExtensions
-    {
-        public static void SwaggerConfiguration(this IServiceCollection services)
-        {
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo
-                {
-                    Version = "v1",
-                    Title = "ProgrameVC",
-                    Description = "API order",
-                    TermsOfService = new Uri("https://example.com/terms")
-                });
-
-                c.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme()
-                {
-                    Description = "Beared token",
-                    In = ParameterLocation.Header,
-                    Name = "Authorization",
-                    Type = SecuritySchemeType.ApiKey
-                });
-
-                c.OperationFilter<SecurityRequirementsOperationFilter>();
-
-                var xmlApiPath = Path.Combine(AppContext.BaseDirectory, $"{typeof(Startup).Assembly.GetName().Name}.xml");
-
-                c.IncludeXmlComments(xmlApiPath);
-            });
-        }
-    }
-}
-
-
-
-using Microsoft.Extensions.DependencyInjection;
-using Order.Application.Applications;
-using Order.Application.Interfacds;
-using Order.Application.Interfacds.Security;
-using Order.Application.Security;
-using Order.Domain.Common;
-using Order.Domain.Interfaces.Repositories;
-using Order.Domain.Interfaces.Services;
-using Order.Domain.Services;
-using Order.Infra.Repositories;
-
-namespace Order.Api.Extensions
-{
-    public static class RegisterIoCExtensions
-    {
-        public static void RegisterIoC(this IServiceCollection services)
-        {
-            services.AddScoped<IUnitOfWork, UnitOfWork>();
-            services.AddScoped<ITimeProvider, TimeProvider>();
-            services.AddScoped<IGenerators, Generators>();
-
-            services.AddScoped<IClientApplication, ClientApplication>();
-            services.AddScoped<IClientService, ClientService>();
-            services.AddScoped<IClientRepository, ClientRepository>();
-
-            services.AddScoped<IOrderApplication, OrderApplication>();
-            services.AddScoped<IOrderService, OrderService>();
-            services.AddScoped<IOrderRepository, OrderRepository>();
-
-            services.AddScoped<IUserApplication, UserApplication>();
-            services.AddScoped<IUserService, UserService>();
-            services.AddScoped<IUserRepository, UserRepository>();
-
-            services.AddScoped<IProductApplication, ProductApplication>();
-            services.AddScoped<IProductService, ProductService>();
-            services.AddScoped<IProductRepository, ProductRepository>();
-
-            services.AddScoped<ISecurityService, SecurityService>();
-            services.AddScoped<ITokenManager, TokenManager>();
-            services.AddScoped<ITokenManager, TokenManager>();
-        }
-    }
-}
-
-
-
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Order.Application.DataContract.Request.User;
-using Order.Application.Interfacds;
-
-namespace Order.Api.Controllers
-{
-    [Route("api/user")]
-    [ApiController]
-    [Authorize]
-    public class UserController : ControllerBase
-    {
-        private readonly IUserApplication _UserApplication;
-
-        public UserController(IUserApplication UserApplication)
-        {
-            _UserApplication = UserApplication;
-        }
-
-        [HttpGet]
-        public async Task<ActionResult> Get([FromQuery] string userId, [FromQuery] string name)
-        {
-            var response = await _UserApplication.ListByFilterAsync(userId, name);
-
-            if (response.Report.Any())
-                return UnprocessableEntity(response.Report);
-
-            return Ok(response);
-        }
-
-        // GET api/<UserController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
-
-        // POST api/<UserController>
-        [HttpPost]
-        [AllowAnonymous]
-        public async Task<ActionResult> Post([FromBody] CreateUserRequest request)
-        {
-            var response = await _UserApplication.CreateAsync(request);
-
-            if (response.Report.Any())
-                return UnprocessableEntity(response.Report);
-
-            return Ok(response);
-        }
-
-        // PUT api/<UserController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE api/<UserController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
-
-        // DELETE api/<UserController>/5
-        [HttpPost("auth")]
-        [AllowAnonymous]
-        public async Task<ActionResult> Auth([FromBody] AuthRequest request)
-        {
-            var response = await _UserApplication.AuthAsync(request);
-
-            if (response.Report.Any())
-                return UnprocessableEntity(response.Report);
-
-            return Ok(response);
-        }
-    }
-}
-
-
---------------------------------------------------------------------------------------
---------------------------------------------------------------------------------------
-
-
 
 --------------------------------------------------------------------------------------
 --------------------------------------------------------------------------------------
