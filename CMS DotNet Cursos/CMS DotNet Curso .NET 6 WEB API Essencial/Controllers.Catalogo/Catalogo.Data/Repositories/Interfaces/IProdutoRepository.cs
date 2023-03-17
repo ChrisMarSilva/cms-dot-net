@@ -2,11 +2,12 @@
 
 namespace Catalogo.Data.Repositories.Interfaces;
 
-public interface IProdutoRepository
+public interface IProdutoRepository : IBaseRepository<Produto>
 {
+    IEnumerable<Produto> GetProdutosPorPreco();
     Task<IEnumerable<Produto>> FindAllAsync();
-    Task<Produto> FindByIdAsync(Guid id);
-    Task<Produto> CreateAsync(Produto input);
-    Produto Update(Produto input);
-    bool Delete(Produto input);
+    //Task<Produto> GetByIdAsync(Guid id);
+    //Task<Produto> AddAsync(Produto input);
+    //Produto Update(Produto input);
+    //bool Remove(Produto input);
 }

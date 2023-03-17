@@ -1,5 +1,5 @@
-﻿using Catalogo.Data.Persistence.Interfaces;
-using Catalogo.Data.Repositories.Interfaces;
+﻿using AutoMapper;
+using Catalogo.Data.Persistence.Interfaces;
 using Catalogo.Domain.Models;
 using Catalogo.Service.Interfaces;
 using Microsoft.Extensions.Logging;
@@ -9,19 +9,22 @@ namespace Catalogo.Service;
 public class ProdutoService : IProdutoService
 {
     private readonly ILogger<ProdutoService> _logger;
-    private IProdutoRepository _prodRepo;
-    private IUnitofWork _uow;
+    // private readonly IProdutoRepository _prodRepo;
+    private IUnitOfWork _uow;
+    private readonly IMapper _mapper;
     private readonly string? _className;
 
     public ProdutoService(
         ILogger<ProdutoService> logger,
-        IProdutoRepository produtoRepo,
-        IUnitofWork uow
+        //IProdutoRepository produtoRepo,
+        IUnitOfWork uow,
+        IMapper mapper
         )
     {
         _logger = logger;
-        _prodRepo = produtoRepo ?? throw new ArgumentNullException(nameof(produtoRepo));
+        //_prodRepo = produtoRepo ?? throw new ArgumentNullException(nameof(IProdutoRepository));
         _uow = uow;
+        _mapper = mapper;
         _className = GetType().FullName;
 
         _logger.LogInformation($"{_className}");
@@ -32,7 +35,8 @@ public class ProdutoService : IProdutoService
         _logger.LogInformation($"{_className}.GetAllAsync()");
         try
         {
-            var results = await _prodRepo.FindAllAsync();
+            // var results = await _prodRepo.FindAllAsync();
+            var results = await _uow.Produtos.FindAllAsync();
             return results;
         }
         catch (Exception ex)
@@ -47,7 +51,8 @@ public class ProdutoService : IProdutoService
         _logger.LogInformation($"{_className}.GetByIdAsync()");
         try
         {
-            var result = await _prodRepo.FindByIdAsync(id);
+            // var result = await _prodRepo.GetByIdAsync(id);
+            var result = await _uow.Produtos.GetByIdNoTrackingAsync(p => p.Id == id);
             return result;
         }
         catch (Exception ex)
@@ -62,7 +67,8 @@ public class ProdutoService : IProdutoService
         _logger.LogInformation($"{_className}.InsertAsync()");
         try
         {
-            var result = await _prodRepo.CreateAsync(input);
+            //var result = await _prodRepo.CreateAsync(input);
+            var result = await _uow.Produtos.AddAsync(input);
 
             if (result is null || result?.Id == Guid.Empty)
                 return new Produto();
@@ -86,7 +92,8 @@ public class ProdutoService : IProdutoService
         _logger.LogInformation($"{_className}.UpdateAsync()");
         try
         {
-            var result = await _prodRepo.FindByIdAsync(id);
+            // var result = await _prodRepo.GetByIdAsync(id);
+            var result = await _uow.Produtos.GetByIdAsync(p => p.Id == id);
 
             if (result == null || result?.Id == Guid.Empty)
                 return new Produto();
@@ -100,7 +107,8 @@ public class ProdutoService : IProdutoService
                 imagemUrl: input.ImagemUrl
             );
 
-            result = _prodRepo.Update(result);
+            //result = _prodRepo.Update(result);
+            result = _uow.Produtos.Update(result);
 
             if (result is null || result?.Id == Guid.Empty)
                 return new Produto();
@@ -124,12 +132,14 @@ public class ProdutoService : IProdutoService
         _logger.LogInformation($"{_className}.DeleteAsync()");
         try
         {
-            var result = await _prodRepo.FindByIdAsync(id);
+            //var result = await _prodRepo.GetByIdAsync(id);
+            var result = await _uow.Produtos.GetByIdAsync(p => p.Id == id);
 
             if (result is null || result?.Id == Guid.Empty)
                 return false;
 
-            var status = _prodRepo.Delete(result);
+            //var status = _prodRepo.Delete(result);
+            var status = _uow.Produtos.Remove(result);
 
             if (!status)
                 return false;

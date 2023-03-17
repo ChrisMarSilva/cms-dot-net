@@ -18,7 +18,7 @@ public class ProdutosController : ControllerBase
         )
     {
         _logger = logger;
-        _prodService = prodService ?? throw new ArgumentNullException(nameof(prodService));
+        _prodService = prodService ?? throw new ArgumentNullException(nameof(ProdutosController));
         _className = GetType().FullName;
 
         _logger.LogInformation($"{_className}");

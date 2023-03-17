@@ -2,13 +2,12 @@
 using Catalogo.Domain.Models;
 using Flunt.Notifications;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 
 namespace Catalogo.Data.Persistence;
 
 public class AppDbContext : DbContext
 {
-    public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
+    public AppDbContext(DbContextOptions<AppDbContext> opt) : base(opt) { }
 
     // dotnet tool install --global dotnet-ef
     // dotnet tool update --global dotnet-ef
@@ -26,21 +25,21 @@ public class AppDbContext : DbContext
     public DbSet<Categoria> Categorias { get; set; }
     public DbSet<Produto> Produtos { get; set; }
 
-    //protected override void OnConfiguring(DbContextOptionsBuilder options)
+    //protected override void OnConfiguring(DbContextOptionsBuilder opt)
     //{
-    //    options.EnableSensitiveDataLogging();
-    //    options.EnableServiceProviderCaching();
-    //    options.LogTo(Console.WriteLine, LogLevel.Information);
-    //    if (!options.IsConfigured)
+    //    opt.EnableSensitiveDataLogging();
+    //    opt.EnableServiceProviderCaching();
+    //    opt.LogTo(Console.WriteLine, LogLevel.Information);
+    //    if (!opt.IsConfigured)
     //    {
     //        IConfigurationRoot configuration = new ConfigurationBuilder()
     //           .SetBasePath(Directory.GetCurrentDirectory())
     //           .AddJsonFile("appsettings.json")
     //           .Build();
     //        var connectionString = configuration. GetConnectionString("DefaultConnection");
-    //        options.UseMySql(connectionString);
+    //        opt.UseMySql(connectionString);
     //    }
-    //    base.OnConfiguring(options);
+    //    base.OnConfiguring(opt);
     //}
 
     protected override void OnModelCreating(ModelBuilder builder)

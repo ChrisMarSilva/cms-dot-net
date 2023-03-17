@@ -18,7 +18,7 @@ public class CategoriasController : ControllerBase // : BaseController<Categoria
         )
     {
         _logger = logger;
-        _categService = categService ?? throw new ArgumentNullException(nameof(categService));
+        _categService = categService ?? throw new ArgumentNullException(nameof(ICategoriaService));
         _className = GetType().FullName;
 
         _logger.LogInformation($"{_className}");

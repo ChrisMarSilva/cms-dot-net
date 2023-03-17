@@ -1,9 +1,11 @@
-﻿using Catalogo.API.Filters;
+﻿using AutoMapper;
+using Catalogo.API.Filters;
 using Catalogo.API.Logging;
 using Catalogo.Data.Persistence;
 using Catalogo.Data.Persistence.Interfaces;
 using Catalogo.Data.Repositories;
 using Catalogo.Data.Repositories.Interfaces;
+using Catalogo.Domain.Dtos.Mappings;
 using Catalogo.Service;
 using Catalogo.Service.Interfaces;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
@@ -34,17 +36,24 @@ public static class Configure
     public static IServiceCollection AddContexts(this IServiceCollection services, IConfiguration configuration)
     {
         var connectionString = configuration.GetConnectionString("DefaultConnection");
-        services.AddDbContext<AppDbContext>(options => options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
-        // buservicesices.AddDbContext<AppDbContext>(options => options.UseSqlServer(connectionString));
-        // bserviceses.AddDbContext<AppDbContext>(options => options.UseSqlite("DataSource=app.db;Cache=Shared"));
-        services.AddTransient<IUnitofWork, UnitOfWork>(); // VariasVezes - registra um serviço que é criado cada vez que é solicitado
+        services.AddDbContext<AppDbContext>(opt => opt.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+        // buservicesices.AddDbContext<AppDbContext>(opt => opt.UseSqlServer(connectionString));
+        // bserviceses.AddDbContext<AppDbContext>(opt => opt.UseSqlite("DataSource=app.db;Cache=Shared"));
+        services.AddScoped<IUnitOfWork, UnitOfWork>();// AddScoped = UmVezQdoFazRequisicao - registra um serviço que é criado uma vez por solicitação.
 
         return services;
     }
 
     public static IServiceCollection AddMappers(this IServiceCollection services)
     {
-       
+        var mappingConfig = new MapperConfiguration(mc => { mc.AddProfile(new MappingProfile()); });
+        IMapper mapper = mappingConfig.CreateMapper();
+        services.AddSingleton(mapper);
+
+        //IMapper mapper = MappingConfig.RegisterMaps().CreateMapper();
+        //builder.Services.AddSingleton(mapper);
+        //builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
         return services;
     }
 
@@ -89,15 +98,15 @@ public static class Configure
     public static IServiceCollection AddControllersWithJson(this IServiceCollection services)
     {
         services.AddControllers()
-             .AddJsonOptions(options => {
-                 options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+             .AddJsonOptions(opt => {
+                 opt.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
                  //options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()); // serialize enums as strings in api responses (e.g. Role)
-                 options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase, false));
-                 options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault; // ignore omitted parameters on models to enable optional params (e.g. User update)
+                 opt.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase, false));
+                 opt.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull; // JsonIgnoreCondition.WhenWritingDefault; // ignore omitted parameters on models to enable optional params (e.g. User update)
                  // options.JsonSerializerOptions.IgnoreNullValues = true;
-                 options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase; // null
-                 options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
-                 options.JsonSerializerOptions.DictionaryKeyPolicy = JsonNamingPolicy.CamelCase; // null
+                 opt.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase; // null
+                 opt.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
+                 opt.JsonSerializerOptions.DictionaryKeyPolicy = JsonNamingPolicy.CamelCase; // null
                  //options.JsonSerializerOptions.WriteIndented = true;
              });
 

@@ -1,7 +1,12 @@
-﻿namespace Catalogo.Data.Persistence.Interfaces;
+﻿using Catalogo.Data.Repositories.Interfaces;
 
-public interface IUnitofWork
+namespace Catalogo.Data.Persistence.Interfaces;
+
+public interface IUnitOfWork
 {
+    IProdutoRepository Produtos { get; }
+    ICategoriaRepository Categorias { get; }
+    void Commit();
     Task<bool> CommitAsync();
     Task RollbackAsync();
 }

@@ -1,5 +1,5 @@
-﻿using Catalogo.Data.Persistence.Interfaces;
-using Catalogo.Data.Repositories.Interfaces;
+﻿using AutoMapper;
+using Catalogo.Data.Persistence.Interfaces;
 using Catalogo.Domain.Models;
 using Catalogo.Service.Interfaces;
 using Microsoft.Extensions.Logging;
@@ -9,19 +9,22 @@ namespace Catalogo.Service;
 public class CategoriaService : ICategoriaService
 {
     private readonly ILogger<CategoriaService> _logger;
-    private ICategoriaRepository _categRepo;
-    private IUnitofWork _uow;
+    // private readonly ICategoriaRepository _categRepo;
+    private IUnitOfWork _uow;
+    private readonly IMapper _mapper;
     private readonly string? _className;
 
     public CategoriaService(
         ILogger<CategoriaService> logger,
-        ICategoriaRepository categRepo,
-        IUnitofWork uow
+        //ICategoriaRepository categRepo,
+        IUnitOfWork uow, 
+        IMapper mapper
         )
     {
         _logger = logger;
-        _categRepo = categRepo ?? throw new ArgumentNullException(nameof(categRepo));
+        // _categRepo = categRepo ?? throw new ArgumentNullException(nameof(ICategoriaRepository));
         _uow = uow;
+        _mapper = mapper;
         _className = GetType().FullName;
 
         _logger.LogInformation($"{_className}");
@@ -32,7 +35,8 @@ public class CategoriaService : ICategoriaService
         _logger.LogInformation($"{_className}.GetAllAsync()");
         try
         {
-            var results = await _categRepo.FindAllAsync();
+            //var results = await _categRepo.FindAllAsync();
+            var results = await _uow.Categorias.FindAllAsync();
 
             return results;
         }
@@ -48,7 +52,8 @@ public class CategoriaService : ICategoriaService
         _logger.LogInformation($"{_className}.GetByIdAsync()");
         try
         {
-            var result = await _categRepo.FindByIdAsync(id);
+            // var result = await _categRepo.GetByIdAsync(id);
+            var result = await _uow.Categorias.GetByIdNoTrackingAsync(c => c.Id == id);
 
             return result;
         }
@@ -64,7 +69,8 @@ public class CategoriaService : ICategoriaService
         _logger.LogInformation($"{_className}.InsertAsync()");
         try
         {
-            var result = await _categRepo.CreateAsync(input);
+            //var result = await _categRepo.CreateAsync(input);
+            var result = await _uow.Categorias.AddAsync(input);
 
             if (result is null || result?.Id == Guid.Empty)
                 return new Categoria();
@@ -88,7 +94,8 @@ public class CategoriaService : ICategoriaService
         _logger.LogInformation($"{_className}.UpdateAsync()");
         try
         {
-            var result = await _categRepo.FindByIdAsync(id);
+            //var result = await _categRepo.GetByIdAsync(id);
+            var result = await _uow.Categorias.GetByIdAsync(c => c.Id == id);
 
             if (result == null || result?.Id == Guid.Empty)
                 return new Categoria();
@@ -98,7 +105,8 @@ public class CategoriaService : ICategoriaService
                 imagemUrl: input.ImagemUrl
             );
 
-            result = _categRepo.Update(result);
+            //result = _categRepo.Update(result);
+            result = _uow.Categorias.Update(result);
 
             if (result is null || result?.Id == Guid.Empty)
                 return new Categoria();
@@ -122,12 +130,14 @@ public class CategoriaService : ICategoriaService
         _logger.LogInformation($"{_className}.DeleteAsync()");
         try
         {
-            var result = await _categRepo.FindByIdAsync(id);
+            //var result = await _categRepo.GetByIdAsync(id);
+            var result = await _uow.Categorias.GetByIdAsync(c => c.Id == id);
 
             if (result is null || result?.Id == Guid.Empty)
                 return false;
 
-            var status = _categRepo.Delete(result);
+            // var status = _categRepo.Delete(result);
+            var status = _uow.Categorias.Remove(result);
 
             if (!status)
                 return false;

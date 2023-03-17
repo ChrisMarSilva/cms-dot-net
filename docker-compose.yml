@@ -1,0 +1,129 @@
+version: '3.4' 
+services:     
+  mssql:
+     image: "mcr.microsoft.com/mssql/server"
+     ports:
+       - "1433:1433"
+     environment:
+        SA_PASSWORD: "Your_password123"
+        ACCEPT_EULA: "Y"      
+
+  redis:
+    image: redis
+    command: redis-server --requirepass Redis2019!
+    ports:
+      - "6379:6379"
+      
+  keydb:
+    image: eqalpha/keydb:x86_64_v5.3.3
+    container_name: keydb
+    # command: keydb-server /etc/keydb/redis.conf --server-threads 2 --active-replica yes --replicaof 192.168.1.1 6379
+    # command: keydb-server /etc/keydb/redis.conf --server-threads 2 --active-replica yes --replicaof 192.168.1.2 6379
+    command: keydb-server /etc/keydb/redis.conf --server-threads 2
+    volumes:
+      - ./redis.conf:/etc/keydb/redis.conf
+      - data:/data
+    ports:
+      - 6379:6379
+    restart: unless-stopped      
+      
+  rabbitmq:
+    image: rabbitmq:3-management
+    hostname: rabbit
+    environment: 
+      RABBITMQ_DEFAULT_USER: "rabbitmq"
+      RABBITMQ_DEFAULT_PASS: "rabbitmq"
+    ports: 
+      - 15672:15672
+      - 5672:5672      
+      - 25676:25676  
+      
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    ports: 
+      - 5775:5775/udp
+      - 6831:6831/udp
+      - 6832:6832/udp
+      - 5778:5778
+      - 16686:16686
+      - 14268:14268
+      - 14250:14250
+      - 4317:4317
+      - 4318:4318
+    environment:
+      - SPAN_STORAGE_TYPE=elasticsearch
+      - ES_SERVER_URLS=http://elasticsearch:9200
+      - ES_TAGS_AS_FIELDS_ALL=true
+      - COLLECTOR_OTLP_ENABLED=true
+    links:
+      - elasticsearch
+      
+  elasticsearch:
+   image: docker.elastic.co/elasticsearch/elasticsearch:7.10.2
+   volumes:
+     - ./esdata:/usr/share/elasticsearch/data   
+   container_name: elasticsearch
+   ports:
+     - "9200:9200"
+   environment:
+     - bootstrap.memory_lock=true
+     - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+     - discovery.type=single-node
+         
+  kibana:
+   image: docker.elastic.co/kibana/kibana:7.10.2
+   container_name: kibana
+   ports:
+    - "5601:5601"
+   depends_on:
+    - elasticsearch      
+    
+  prometheus:
+    image: prom/prometheus
+    restart: always
+    ports:
+      - 9090:9090
+    
+  grafana:
+   image: grafana/grafana
+   ports:
+    - 3000:3000
+   links:
+    - prometheus   
+
+  minio:
+    image: minio/minio
+    command: server --console-address ":9001" /data
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      MINIO_ROOT_USER: "minioadmin"
+      MINIO_ROOT_PASSWORD: "minioadmin"
+    volumes:
+      - minio_storage:/data 
+
+  mqseries:
+    image: ibmcom/mq:latest
+    ports:
+      - "9443:9443"    
+      - "1414:1414"      
+    environment:
+      - LICENSE=accept
+      - MQ_QMGR_NAME=QM1
+    volumes:
+      - qmdata:/mnt/mqm
+    stdin_open: true
+    tty: true
+    restart: always
+
+volumes:
+  esdata:
+  data:
+  postgres-data:
+  qmdata:
+  minio_storage: 
+
+networks: 
+  postgres-network:
+    driver: bridge    

@@ -6,22 +6,24 @@ using Microsoft.Extensions.Logging;
 
 namespace Catalogo.Data.Repositories;
 
-public class ProdutoRepository : IProdutoRepository
+public class ProdutoRepository : BaseRepository<Produto>, IProdutoRepository
 {
     private readonly ILogger<ProdutoRepository> _logger;
-    private readonly AppDbContext _ctx;
-    private readonly string? _className;
+    //private readonly AppDbContext _ctx;
+    private readonly string _className;
 
-    public ProdutoRepository(
-        ILogger<ProdutoRepository> logger,
-        AppDbContext context
-        )
+    public ProdutoRepository(ILogger<ProdutoRepository> logger, AppDbContext ctx) : base(logger, ctx)
     {
         _logger = logger;
-        _ctx = context;
+        //_ctx = ctx;
         _className = GetType().FullName;
 
         _logger.LogInformation($"{_className}");
+    }
+
+    public IEnumerable<Produto> GetProdutosPorPreco()
+    {
+        return GetAll().OrderBy(c => c.Preco).ToList();
     }
 
     public async Task<IEnumerable<Produto>> FindAllAsync()
@@ -47,50 +49,50 @@ public class ProdutoRepository : IProdutoRepository
         return results;
     }
 
-    public async Task<Produto> FindByIdAsync(Guid id)
-    {
-        _logger.LogInformation($"{_className}.FindById()");
+    //public async Task<Produto> GetByIdAsync(Guid id)
+    //{
+    //    _logger.LogInformation($"{_className}.GetByIdAsync()");
+    //
+    //    //If your result set returns 0 records:
+    //    //SingleOrDefault returns the default value for the type(e.g. default for int is 0)
+    //    //FirstOrDefault returns the default value for the type
+    //
+    //    //If you result set returns 1 record:
+    //    //SingleOrDefault returns that record
+    //    //FirstOrDefault returns that record
+    //
+    //    //If your result set returns many records:
+    //    //SingleOrDefault throws an exception
+    //    //FirstOrDefault returns the first record
+    //
+    //    var result = await _ctx.Produtos
+    //        .Include(d => d.Categoria)
+    //        .FirstOrDefaultAsync(d => d.Id == id) // FirstOrDefaultAsync // SingleOrDefaultAsync
+    //        ?? new Produto();
+    //    return result;
+    //}
 
-        //If your result set returns 0 records:
-        //SingleOrDefault returns the default value for the type(e.g. default for int is 0)
-        //FirstOrDefault returns the default value for the type
+    //public async Task<Produto> Add(Produto input)
+    //{
+    //    _logger.LogInformation($"{_className}.Add()");
+    //
+    //    await _ctx.Produtos.AddAsync(input);
+    //    return input;
+    //}
 
-        //If you result set returns 1 record:
-        //SingleOrDefault returns that record
-        //FirstOrDefault returns that record
+    //public Produto Update(Produto input)
+    //{
+    //    _logger.LogInformation($"{_className}.Update()");
+    //
+    //    _ctx.Produtos.Update(input);
+    //    return input;
+    //}
 
-        //If your result set returns many records:
-        //SingleOrDefault throws an exception
-        //FirstOrDefault returns the first record
-
-        var result = await _ctx.Produtos
-            .Include(d => d.Categoria)
-            .FirstOrDefaultAsync(d => d.Id == id) // FirstOrDefaultAsync // SingleOrDefaultAsync
-            ?? new Produto();
-        return result;
-    }
-
-    public async Task<Produto> CreateAsync(Produto input)
-    {
-        _logger.LogInformation($"{_className}.Create()");
-
-        await _ctx.Produtos.AddAsync(input);
-        return input;
-    }
-
-    public Produto Update(Produto input)
-    {
-        _logger.LogInformation($"{_className}.Update()");
-
-        _ctx.Produtos.Update(input);
-        return input;
-    }
-
-    public bool Delete(Produto input)
-    {
-        _logger.LogInformation($"{_className}.Delete()");
-
-        _ctx.Produtos.Remove(input);
-        return true;
-    }
+    //public bool Remove(Produto input)
+    //{
+    //    _logger.LogInformation($"{_className}.Remove()");
+    //
+    //    _ctx.Produtos.Remove(input);
+    //    return true;
+    //}
 }

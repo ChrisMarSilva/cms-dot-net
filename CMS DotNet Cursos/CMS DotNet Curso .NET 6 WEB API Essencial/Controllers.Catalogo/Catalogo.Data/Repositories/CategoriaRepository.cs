@@ -6,22 +6,27 @@ using Microsoft.Extensions.Logging;
 
 namespace Catalogo.Data.Repositories;
 
-public class CategoriaRepository : ICategoriaRepository
+public class CategoriaRepository : BaseRepository<Categoria>, ICategoriaRepository
 {
     private readonly ILogger<CategoriaRepository> _logger;
-    private readonly AppDbContext _ctx;
-    private readonly string? _className;
+    //private readonly AppDbContext _ctx;
+    private readonly string _className;
 
-    public CategoriaRepository(
-        ILogger<CategoriaRepository> logger,
-        AppDbContext context
-        )
+    private const int DefaultPage = 1;
+    private const int DefaultPageSize = 10;
+
+    public CategoriaRepository(ILogger<CategoriaRepository> logger, AppDbContext ctx) : base(logger, ctx)
     {
         _logger = logger;
-        _ctx = context;
+        //_ctx = ctx;
         _className = GetType().FullName;
 
         _logger.LogInformation($"{_className}");
+    }
+
+    public IEnumerable<Categoria> GetCategoriasProdutos()
+    {
+        return GetAll().Include(x => x.Produtos);
     }
 
     public async Task<IEnumerable<Categoria>> FindAllAsync()
@@ -30,6 +35,11 @@ public class CategoriaRepository : ICategoriaRepository
 
         var pageNumber = 1;
         var pageSize = 100;
+
+        //page ??= DefaultPage;
+        //pageSize ??= DefaultPageSize;
+        //if (page <= 0) throw new ArgumentOutOfRangeException(nameof(page));
+        //if (pageSize <= 0) throw new ArgumentOutOfRangeException(nameof(pageSize));
 
         // if (pageNumber == 0) pageNumber = 1;
         // if (pageSize == 0) pageSize = int.MaxValue;
@@ -47,50 +57,50 @@ public class CategoriaRepository : ICategoriaRepository
         return results;
     }
 
-    public async Task<Categoria> FindByIdAsync(Guid id)
-    {
-        _logger.LogInformation($"{_className}.FindById()");
+    //public async Task<Categoria> GetByIdAsync(Guid id)
+    //{
+    //    _logger.LogInformation($"{_className}.GetByIdAsync()");
+    //
+    //    //If your result set returns 0 records:
+    //    //SingleOrDefault returns the default value for the type(e.g. default for int is 0)
+    //    //FirstOrDefault returns the default value for the type
+    //
+    //    //If you result set returns 1 record:
+    //    //SingleOrDefault returns that record
+    //    //FirstOrDefault returns that record
+    //
+    //    //If your result set returns many records:
+    //    //SingleOrDefault throws an exception
+    //    //FirstOrDefault returns the first record
+    //
+    //    var result = await _ctx.Categorias
+    //        .Include(d => d.Produtos)
+    //        .FirstOrDefaultAsync(d => d.Id == id) // FirstOrDefaultAsync // SingleOrDefaultAsync
+    //        ?? new Categoria(); 
+    //    return result;
+    //}
 
-        //If your result set returns 0 records:
-        //SingleOrDefault returns the default value for the type(e.g. default for int is 0)
-        //FirstOrDefault returns the default value for the type
+    //public async Task<Categoria> AddAsync(Categoria input)
+    //{
+    //    _logger.LogInformation($"{_className}.Add()");
+    //
+    //    await _ctx.Categorias.AddAsync(input);
+    //    return input;
+    //}
 
-        //If you result set returns 1 record:
-        //SingleOrDefault returns that record
-        //FirstOrDefault returns that record
+    //public Categoria Update(Categoria input)
+    //{
+    //    _logger.LogInformation($"{_className}.Update()");
+    //
+    //    _ctx.Categorias.Update(input);
+    //    return input;
+    //}
 
-        //If your result set returns many records:
-        //SingleOrDefault throws an exception
-        //FirstOrDefault returns the first record
-
-        var result = await _ctx.Categorias
-            .Include(d => d.Produtos)
-            .FirstOrDefaultAsync(d => d.Id == id) // FirstOrDefaultAsync // SingleOrDefaultAsync
-            ?? new Categoria(); 
-        return result;
-    }
-
-    public async Task<Categoria> CreateAsync(Categoria input)
-    {
-        _logger.LogInformation($"{_className}.Create()");
-
-        await _ctx.Categorias.AddAsync(input);
-        return input;
-    }
-
-    public Categoria Update(Categoria input)
-    {
-        _logger.LogInformation($"{_className}.Update()");
-
-        _ctx.Categorias.Update(input);
-        return input;
-    }
-
-    public bool Delete(Categoria input)
-    {
-        _logger.LogInformation($"{_className}.Delete()");
-
-        _ctx.Categorias.Remove(input);
-        return true;
-    }
+    //public bool Remove(Categoria input)
+    //{
+    //    _logger.LogInformation($"{_className}.Remove()");
+    //
+    //    _ctx.Categorias.Remove(input);
+    //    return true;
+    //}
 }
