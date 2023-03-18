@@ -31,7 +31,9 @@ public class CategoriaRepository : BaseRepository<Categoria>, ICategoriaReposito
         //    .ToListAsync();
 
         var categorias = base.GetAll().OrderBy(on => on.Nome);
-        return await PagedList<Categoria>.ToPagedListAsync(categorias, categParams.PageNumber, categParams.PageSize);
+
+        return await PagedList<Categoria>
+            .ToPagedListAsync(categorias, categParams.PageNumber, categParams.PageSize);
     }
 
     public async Task<IEnumerable<Categoria>> GetAllAsync()

@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Catalogo.Data.Pagination;
 
@@ -31,6 +32,10 @@ public class PagedList<T> : List<T>
             .Take(pageSize)
             .ToListAsync()
             .ConfigureAwait(false);
+
+        // count.Wait();
+        // await Task.WhenAll(count);
+        // (int)count.Result
 
         return new PagedList<T>(items, count, pageNumber, pageSize);
     }

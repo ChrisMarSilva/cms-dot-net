@@ -33,7 +33,9 @@ public class ProdutoRepository : BaseRepository<Produto>, IProdutoRepository
         //    .ToListAsync();
 
         var produtos = base.GetAll().OrderBy(on => on.Id);
-        return await PagedList<Produto>.ToPagedListAsync(produtos, prodParams.PageNumber, prodParams.PageSize);
+
+        return await PagedList<Produto>.
+            ToPagedListAsync(produtos, prodParams.PageNumber, prodParams.PageSize);
     }
 
     public async Task<IEnumerable<Produto>> GetAllAsync()
