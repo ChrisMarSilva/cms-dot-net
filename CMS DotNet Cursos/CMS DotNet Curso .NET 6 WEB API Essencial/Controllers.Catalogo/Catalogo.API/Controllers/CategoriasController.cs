@@ -1,4 +1,4 @@
-﻿using Catalogo.Domain.Models;
+﻿using Catalogo.Domain.Dtos;
 using Catalogo.Service.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,10 +12,7 @@ public class CategoriasController : ControllerBase // : BaseController<Categoria
     private readonly ICategoriaService _categService;
     private readonly string? _className;
 
-    public CategoriasController(
-        ILogger<CategoriasController> logger,
-        ICategoriaService categService
-        )
+    public CategoriasController(ILogger<CategoriasController> logger, ICategoriaService categService)
     {
         _logger = logger;
         _categService = categService ?? throw new ArgumentNullException(nameof(ICategoriaService));
@@ -25,15 +22,15 @@ public class CategoriasController : ControllerBase // : BaseController<Categoria
     }
 
     [HttpGet]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<Categoria>))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<CategoriaResponseDTO>))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> GetAll() // Task<ActionResult<IEnumerable<Categoria>>>
+    public async Task<IActionResult> GetAll() // Task<ActionResult<IEnumerable<CategoriaRequestDTO>>>
     {
         _logger.LogInformation($"{_className}.GetAll()");
         try
         {
-            var results = await _categService.GetAllAsync();
+            var results = await _categService.GetAllAsync(); 
 
             if (results is null || !results.Any())
                 return NotFound("No records found");
@@ -49,10 +46,10 @@ public class CategoriasController : ControllerBase // : BaseController<Categoria
     }
 
     [HttpGet("{id:Guid}")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Categoria))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(CategoriaResponseDTO))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> GetById(Guid id) // Task<ActionResult<Categoria>>
+    public async Task<IActionResult> GetById(Guid id) // Task<ActionResult<CategoriaRequestDTO>>
     {
         _logger.LogInformation($"{_className}.GetById()"); 
         try
@@ -72,10 +69,10 @@ public class CategoriasController : ControllerBase // : BaseController<Categoria
     }
 
     [HttpPost]
-    [ProducesResponseType(typeof(Categoria), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(CategoriaResponseDTO), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> Post(Categoria input)
+    public async Task<IActionResult> Post(CategoriaRequestDTO input)
     {
         _logger.LogInformation($"{_className}.Post()");
         try
@@ -98,7 +95,7 @@ public class CategoriasController : ControllerBase // : BaseController<Categoria
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> Update(Guid id, Categoria input)
+    public async Task<IActionResult> Update(Guid id, CategoriaRequestDTO input)
     {
         _logger.LogInformation($"{_className}.Update()");
         try

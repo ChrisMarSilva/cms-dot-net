@@ -4,8 +4,7 @@ namespace Catalogo.Data.Repositories.Interfaces;
 
 public interface ICategoriaRepository : IBaseRepository<Categoria>
 {
-    IEnumerable<Categoria> GetCategoriasProdutos();
-    Task<IEnumerable<Categoria>> FindAllAsync();
+    Task<IEnumerable<Categoria>> GetAllAsync();
     //Task<Categoria> GetByIdAsync(Guid id);
     //Task<Categoria> AddAsync(Categoria input);
     //Categoria Update(Categoria input);

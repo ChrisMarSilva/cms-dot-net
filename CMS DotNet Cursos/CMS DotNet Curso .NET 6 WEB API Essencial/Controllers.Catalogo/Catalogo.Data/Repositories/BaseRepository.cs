@@ -23,15 +23,21 @@ public class BaseRepository<T> : IBaseRepository<T> where T : class
         _logger.LogInformation($"{_className}");
     }
 
-    //------------------------------ TESTADO --------------------------
-
-    public IQueryable<T> GetAll()  //  async Task<IEnumerable<T>> GetAll()
+    public IQueryable<T> GetAll() //public async Task<IEnumerable<T>> GetAllAsync()
     {
-        _logger.LogInformation($"{_className}.Get()");
-        return _dbSet.AsNoTracking(); //  // await
+        _logger.LogInformation($"{_className}.GetAll()");
+
+        //return await _dbSet
+        //    // .AsNoTracking()
+        //    .AsNoTrackingWithIdentityResolution()
+        //    .ToListAsync()
+        //    .ConfigureAwait(false);
+
+        // return _dbSet.AsNoTracking();
+        return _dbSet.AsNoTrackingWithIdentityResolution();
     }
 
-    public async Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> expression)
+    public async Task<IEnumerable<T>> GetByWhereAsync(Expression<Func<T, bool>> expression)
     {
         _logger.LogInformation($"{_className}.FindAsync()");
 

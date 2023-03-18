@@ -4,9 +4,8 @@ namespace Catalogo.Data.Repositories.Interfaces;
 
 public interface IBaseRepository<T>
 {
-    IQueryable<T> GetAll(); //Task<IEnumerable<T>> GetAll();
-    //------------------------------ TESTADO --------------------------
-    Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> expression);
+    IQueryable<T> GetAll(); // Task<IEnumerable<T>>
+    Task<IEnumerable<T>> GetByWhereAsync(Expression<Func<T, bool>> expression);
     Task<T> GetByIdAsync(Expression<Func<T, bool>> expression); // Guid id
     Task<T> GetByIdNoTrackingAsync(Expression<Func<T, bool>> expression); // Guid id
     Task<T> AddAsync(T entity);

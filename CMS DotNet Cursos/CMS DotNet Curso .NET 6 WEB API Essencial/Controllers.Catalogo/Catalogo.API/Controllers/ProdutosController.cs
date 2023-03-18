@@ -1,4 +1,4 @@
-﻿using Catalogo.Domain.Models;
+﻿using Catalogo.Domain.Dtos;
 using Catalogo.Service.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,12 +10,9 @@ public class ProdutosController : ControllerBase
 {
     private readonly ILogger<ProdutosController> _logger;
     private readonly IProdutoService _prodService;
-    private readonly string? _className;
+    private readonly string _className;
 
-    public ProdutosController(
-        ILogger<ProdutosController> logger,
-        IProdutoService prodService
-        )
+    public ProdutosController(ILogger<ProdutosController> logger, IProdutoService prodService)
     {
         _logger = logger;
         _prodService = prodService ?? throw new ArgumentNullException(nameof(ProdutosController));
@@ -25,10 +22,10 @@ public class ProdutosController : ControllerBase
     }
 
     [HttpGet]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<Produto>))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<ProdutoResponseDTO>))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> GetAll() // Task<ActionResult<IEnumerable<Produto>>>
+    public async Task<IActionResult> GetAll() // Task<ActionResult<IEnumerable<ProdutoRequestDTO>>>
     {
         _logger.LogInformation($"{_className}.GetAll()");
         try
@@ -48,10 +45,10 @@ public class ProdutosController : ControllerBase
     }
 
     [HttpGet("{id:Guid}")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Produto))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ProdutoResponseDTO))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> GetById(Guid id) // Task<ActionResult<Produto>>
+    public async Task<IActionResult> GetById(Guid id) // Task<ActionResult<ProdutoRequestDTO>>
     {
         _logger.LogInformation($"{_className}.GetById()");
         try
@@ -71,10 +68,10 @@ public class ProdutosController : ControllerBase
     }
 
     [HttpPost]
-    [ProducesResponseType(typeof(Produto), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(ProdutoResponseDTO), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> Post(Produto input)
+    public async Task<IActionResult> Post(ProdutoRequestDTO input)
     {
         _logger.LogInformation($"{_className}.Post()");
         try
@@ -97,7 +94,7 @@ public class ProdutosController : ControllerBase
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> Update(Guid id, Produto input)
+    public async Task<IActionResult> Update(Guid id, ProdutoRequestDTO input)
     {
         _logger.LogInformation($"{_className}.Update()");
         try

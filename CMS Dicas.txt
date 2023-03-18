@@ -23,6 +23,25 @@ string script = File.ReadAllText(path);
 --------------------------------------------------------------------------------------
 --------------------------------------------------------------------------------------
 
+private CommandResult ExecuteInternal()
+{
+	var commandResult = new CommandResult(); // rlt
+	try
+	{
+		// result.CommandResult() = CommandResult.Success; // Cancel // Failure
+		commandResult.AddResult(resultValue); // commandResult.ResultValue = resultValue;
+	}
+	catch (Exception e)
+	{
+		commandResult.AddError(e); // commandResult.exception = e; //commandResult.output = ReadStream(ms); // commandResult.LastError = e;
+	}
+	return commandResult;	
+}
+
+
+--------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------
+
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;

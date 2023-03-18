@@ -7,6 +7,7 @@ public interface IUnitOfWork
     IProdutoRepository Produtos { get; }
     ICategoriaRepository Categorias { get; }
     void Commit();
+    void Rollback();
     Task<bool> CommitAsync();
-    Task RollbackAsync();
+    Task<bool> RollbackAsync();
 }

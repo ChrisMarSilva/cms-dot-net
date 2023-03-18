@@ -1,12 +1,12 @@
-﻿using Catalogo.Domain.Models;
+﻿using Catalogo.Domain.Dtos;
 
 namespace Catalogo.Service.Interfaces;
 
 public interface IProdutoService
 {
-    Task<IEnumerable<Produto>> GetAllAsync();
-    Task<Produto> GetByIdAsync(Guid id);
-    Task<Produto> InsertAsync(Produto input);
-    Task<Produto> UpdateAsync(Guid id, Produto input);
+    Task<IEnumerable<ProdutoResponseDTO>> GetAllAsync();
+    Task<ProdutoResponseDTO> GetByIdAsync(Guid id);
+    Task<ProdutoResponseDTO> InsertAsync(ProdutoRequestDTO input);
+    Task<ProdutoResponseDTO> UpdateAsync(Guid id, ProdutoRequestDTO input);
     Task<bool> DeleteAsync(Guid id);
 }
