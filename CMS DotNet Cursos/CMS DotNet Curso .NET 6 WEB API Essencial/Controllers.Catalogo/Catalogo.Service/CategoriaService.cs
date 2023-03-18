@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Catalogo.Data.Pagination;
 using Catalogo.Data.Persistence.Interfaces;
 using Catalogo.Domain.Dtos;
 using Catalogo.Domain.Models;
@@ -31,15 +32,18 @@ public class CategoriaService : ICategoriaService
         _logger.LogInformation($"{_className}");
     }
 
-    public async Task<IEnumerable<CategoriaResponseDTO>> GetAllAsync()
+    // public async Task<IEnumerable<CategoriaResponseDTO>> GetAllAsync()
+    public async Task<(dynamic, IEnumerable<CategoriaResponseDTO>)> GetAllAsync(CategoriasParameters? categParams)
     {
         _logger.LogInformation($"{_className}.GetAllAsync()");
         try
         {
             //var results = await _categRepo.FindAllAsync();
-            var results = await _uow.Categorias.GetAllAsync();
+            // var results = await _uow.Categorias.GetAllAsync();
+            var results = await _uow.Categorias.GetCategoriasAsync(categParams);
+            var metadata = new { results.TotalCount, results.PageSize, results.CurrentPage, results.TotalPages, results.HasNext, results.HasPrevious };
 
-            return results.Select(c => new CategoriaResponseDTO{ Id = c.Id, Nome = c.Nome, ImagemUrl = c.ImagemUrl });
+            return (metadata, results.Select(c => new CategoriaResponseDTO { Id = c.Id, Nome = c.Nome, ImagemUrl = c.ImagemUrl }).ToList());
             // return _mapper.Map<List<CategoriaResponseDTO>>(results);
             // return results;
         }

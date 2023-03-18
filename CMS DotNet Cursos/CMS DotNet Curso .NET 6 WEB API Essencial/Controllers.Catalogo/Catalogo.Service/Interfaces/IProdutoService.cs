@@ -1,10 +1,12 @@
-﻿using Catalogo.Domain.Dtos;
+﻿using Catalogo.Data.Pagination;
+using Catalogo.Domain.Dtos;
 
 namespace Catalogo.Service.Interfaces;
 
 public interface IProdutoService
 {
-    Task<IEnumerable<ProdutoResponseDTO>> GetAllAsync();
+    //Task<IEnumerable<ProdutoResponseDTO>> GetAllAsync();
+    Task<(dynamic, IEnumerable<ProdutoResponseDTO>)> GetAllAsync(ProdutosParameters prodParams);
     Task<ProdutoResponseDTO> GetByIdAsync(Guid id);
     Task<ProdutoResponseDTO> InsertAsync(ProdutoRequestDTO input);
     Task<ProdutoResponseDTO> UpdateAsync(Guid id, ProdutoRequestDTO input);

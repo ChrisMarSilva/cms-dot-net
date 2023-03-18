@@ -1,6 +1,8 @@
-﻿using Catalogo.Domain.Dtos;
+﻿using Catalogo.Data.Pagination;
+using Catalogo.Domain.Dtos;
 using Catalogo.Service.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
 
 namespace Catalogo.API.Controllers;
 
@@ -25,15 +27,19 @@ public class ProdutosController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<ProdutoResponseDTO>))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> GetAll() // Task<ActionResult<IEnumerable<ProdutoRequestDTO>>>
+    public async Task<IActionResult> GetAll([FromQuery] ProdutosParameters prodParams) // Task<ActionResult<IEnumerable<ProdutoRequestDTO>>>
     {
         _logger.LogInformation($"{_className}.GetAll()");
         try
         {
-            var results = await _prodService.GetAllAsync();
+            var (metadata, results) = await _prodService.GetAllAsync(prodParams);
 
             if (results is null || !results.Any())
                 return NotFound("No records found");
+
+            //var metadata = new { results.TotalCount, results.PageSize, results.CurrentPage, results.TotalPages, results.HasNext, results.HasPrevious };
+            // Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
+            Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(metadata));
 
             return Ok(results);
         }

@@ -1,4 +1,5 @@
-﻿using Catalogo.Data.Persistence;
+﻿using Catalogo.Data.Pagination;
+using Catalogo.Data.Persistence;
 using Catalogo.Data.Repositories.Interfaces;
 using Catalogo.Domain.Models;
 using Microsoft.EntityFrameworkCore;
@@ -23,27 +24,25 @@ public class ProdutoRepository : BaseRepository<Produto>, IProdutoRepository
         _logger.LogInformation($"{_className}");
     }
 
+    public async Task<PagedList<Produto>> GetProdutosAsync(ProdutosParameters prodParams)
+    {
+        //return await base.GetAll()
+        //    .OrderBy(on => on.Id)
+        //    .Skip((prodParams.PageNumber - 1) * prodParams.PageSize)
+        //    .Take(prodParams.PageSize)
+        //    .ToListAsync();
+
+        var produtos = base.GetAll().OrderBy(on => on.Id);
+        return await PagedList<Produto>.ToPagedListAsync(produtos, prodParams.PageNumber, prodParams.PageSize);
+    }
+
     public async Task<IEnumerable<Produto>> GetAllAsync()
     {
         _logger.LogInformation($"{_className}.GetAllAsync()");
 
-        var pageNumber = 1;
-        var pageSize = 100;
-
-        // page ??= DefaultPage;
-        // pageSize ??= DefaultPageSize;
-        // if (page <= 0) throw new ArgumentOutOfRangeException(nameof(page));
-        // if (pageSize <= 0) throw new ArgumentOutOfRangeException(nameof(pageSize));
-        // if (pageNumber == 0) pageNumber = 1;
-        // if (pageSize == 0) pageSize = int.MaxValue;
-
-        // return base.GetAll().Include(x => x.Gategorias);
-
         return await base.GetAll()
             .Where(c => c.DataCadastro >= new DateTime(2000, 1, 1))
             .OrderBy(c => c.DataCadastro)
-            .Skip((pageNumber - 1) * pageSize)
-            .Take(pageSize)
             .ToListAsync()
             .ConfigureAwait(false);
     }

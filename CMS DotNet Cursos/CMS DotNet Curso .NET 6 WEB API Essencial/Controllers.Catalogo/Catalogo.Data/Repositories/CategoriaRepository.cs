@@ -1,4 +1,5 @@
-﻿using Catalogo.Data.Persistence;
+﻿using Catalogo.Data.Pagination;
+using Catalogo.Data.Persistence;
 using Catalogo.Data.Repositories.Interfaces;
 using Catalogo.Domain.Models;
 using Microsoft.EntityFrameworkCore;
@@ -11,8 +12,6 @@ public class CategoriaRepository : BaseRepository<Categoria>, ICategoriaReposito
     private readonly ILogger<CategoriaRepository> _logger;
     //private readonly AppDbContext _ctx;
     private readonly string _className;
-    //private const int DefaultPage = 1;
-    //private const int DefaultPageSize = 10;
 
     public CategoriaRepository(ILogger<CategoriaRepository> logger, AppDbContext ctx) : base(logger, ctx)
     {
@@ -23,27 +22,27 @@ public class CategoriaRepository : BaseRepository<Categoria>, ICategoriaReposito
         _logger.LogInformation($"{_className}");
     }
 
+    public async Task<PagedList<Categoria>> GetCategoriasAsync(CategoriasParameters categParams)
+    {
+        //return await base.GetAll()
+        //    .OrderBy(on => on.Nome)
+        //    .Skip((prodParams.PageNumber - 1) * prodParams.PageSize)
+        //    .Take(prodParams.PageSize)
+        //    .ToListAsync();
+
+        var categorias = base.GetAll().OrderBy(on => on.Nome);
+        return await PagedList<Categoria>.ToPagedListAsync(categorias, categParams.PageNumber, categParams.PageSize);
+    }
+
     public async Task<IEnumerable<Categoria>> GetAllAsync()
     {
         _logger.LogInformation($"{_className}.GetAllAsync()");
-
-        var pageNumber = 1;
-        var pageSize = 100;
-
-        // page ??= DefaultPage;
-        // pageSize ??= DefaultPageSize;
-        // if (page <= 0) throw new ArgumentOutOfRangeException(nameof(page));
-        // if (pageSize <= 0) throw new ArgumentOutOfRangeException(nameof(pageSize));
-        // if (pageNumber == 0) pageNumber = 1;
-        // if (pageSize == 0) pageSize = int.MaxValue;
 
         // return base.GetAll().Include(x => x.Produtos);
 
         return await base.GetAll()
             .Where(c => c.DataCadastro >= new DateTime(2000, 1, 1))
             .OrderBy(c => c.DataCadastro)
-            .Skip((pageNumber - 1) * pageSize)
-            .Take(pageSize)
             .ToListAsync()
             .ConfigureAwait(false);
     }

@@ -2,6 +2,7 @@
 using Catalogo.Data.Persistence.Interfaces;
 using Catalogo.Domain.Dtos;
 using Catalogo.Domain.Models;
+using Catalogo.Data.Pagination;
 using Catalogo.Service.Interfaces;
 using Microsoft.Extensions.Logging;
 
@@ -13,7 +14,7 @@ public class ProdutoService : IProdutoService
     // private readonly IProdutoRepository _prodRepo;
     private IUnitOfWork _uow;
     private readonly IMapper _mapper;
-    private readonly string? _className;
+    private readonly string _className;
 
     public ProdutoService(
         ILogger<ProdutoService> logger,
@@ -31,15 +32,18 @@ public class ProdutoService : IProdutoService
         _logger.LogInformation($"{_className}");
     }
 
-    public async Task<IEnumerable<ProdutoResponseDTO>> GetAllAsync()
+    //public async Task<IEnumerable<ProdutoResponseDTO>> GetAllAsync()
+    public async Task<(dynamic, IEnumerable<ProdutoResponseDTO>)> GetAllAsync(ProdutosParameters? prodParams)
     {
         _logger.LogInformation($"{_className}.GetAllAsync()");
         try
         {
             // var results = await _prodRepo.FindAllAsync();
-            var results = await _uow.Produtos.GetAllAsync();
+            // var results = await _uow.Produtos.GetAllAsync();
+            var results = await _uow.Produtos.GetProdutosAsync(prodParams);
+            var metadata = new { results.TotalCount, results.PageSize, results.CurrentPage, results.TotalPages, results.HasNext, results.HasPrevious };
 
-            return _mapper.Map<List<ProdutoResponseDTO>>(results);
+            return (metadata, _mapper.Map<List<ProdutoResponseDTO>>(results));
             // return results;
         }
         catch (Exception ex)

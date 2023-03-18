@@ -25,4 +25,11 @@
     <Folder Include="K6\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Catalogo.API\Catalogo.API.csproj" />
+    <ProjectReference Include="..\Catalogo.Data\Catalogo.Data.csproj" />
+    <ProjectReference Include="..\Catalogo.Domain\Catalogo.Domain.csproj" />
+    <ProjectReference Include="..\Catalogo.Service\Catalogo.Service.csproj" />
+  </ItemGroup>
+
 </Project>

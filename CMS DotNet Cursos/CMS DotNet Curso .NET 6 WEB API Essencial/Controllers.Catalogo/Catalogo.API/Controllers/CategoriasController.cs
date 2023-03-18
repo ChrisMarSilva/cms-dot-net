@@ -1,6 +1,8 @@
-﻿using Catalogo.Domain.Dtos;
+﻿using Catalogo.Data.Pagination;
+using Catalogo.Domain.Dtos;
 using Catalogo.Service.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
 
 namespace Catalogo.API.Controllers;
 
@@ -10,7 +12,7 @@ public class CategoriasController : ControllerBase // : BaseController<Categoria
 {
     private readonly ILogger<CategoriasController> _logger;
     private readonly ICategoriaService _categService;
-    private readonly string? _className;
+    private readonly string _className;
 
     public CategoriasController(ILogger<CategoriasController> logger, ICategoriaService categService)
     {
@@ -25,15 +27,20 @@ public class CategoriasController : ControllerBase // : BaseController<Categoria
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<CategoriaResponseDTO>))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> GetAll() // Task<ActionResult<IEnumerable<CategoriaRequestDTO>>>
+    public async Task<IActionResult> GetAll([FromQuery] CategoriasParameters categParams) // Task<ActionResult<IEnumerable<CategoriaRequestDTO>>>
     {
         _logger.LogInformation($"{_className}.GetAll()");
         try
         {
-            var results = await _categService.GetAllAsync(); 
+            var (metadata, results) = await _categService.GetAllAsync(categParams); 
 
             if (results is null || !results.Any())
                 return NotFound("No records found");
+
+            //var metadata = new { results.TotalCount, results.PageSize, results.CurrentPage, results.TotalPages, results.HasNext, results.HasPrevious };
+            //Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
+            Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(metadata));
+
 
             return Ok(results);
         }

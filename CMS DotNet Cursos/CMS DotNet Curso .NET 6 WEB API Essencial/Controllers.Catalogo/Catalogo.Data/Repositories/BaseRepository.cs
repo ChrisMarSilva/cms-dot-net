@@ -60,14 +60,26 @@ public class BaseRepository<T> : IBaseRepository<T> where T : class
         //SingleOrDefault throws an exception
         //FirstOrDefault returns the first record
 
-        return await _dbSet.FirstOrDefaultAsync(expression); //?? new T(); // FirstOrDefaultAsync // SingleOrDefaultAsync
+        return await _dbSet.SingleOrDefaultAsync(expression); //?? new T(); // FirstOrDefaultAsync // SingleOrDefaultAsync
     }
 
     public async Task<T> GetByIdNoTrackingAsync(Expression<Func<T, bool>> expression) // Guid id
     {
         _logger.LogInformation($"{_className}.GetByIdNoTrackingAsync()");
 
-        return await _dbSet.AsNoTracking().FirstOrDefaultAsync(expression); //?? new T(); // FirstOrDefaultAsync // SingleOrDefaultAsync
+        //If your result set returns 0 records:
+        //SingleOrDefault returns the default value for the type(e.g. default for int is 0)
+        //FirstOrDefault returns the default value for the type
+
+        //If you result set returns 1 record:
+        //SingleOrDefault returns that record
+        //FirstOrDefault returns that record
+
+        //If your result set returns many records:
+        //SingleOrDefault throws an exception
+        //FirstOrDefault returns the first record
+
+        return await _dbSet.AsNoTracking().SingleOrDefaultAsync(expression); //?? new T(); // FirstOrDefaultAsync // SingleOrDefaultAsync
     }
 
     public async Task<T> AddAsync(T entity)
