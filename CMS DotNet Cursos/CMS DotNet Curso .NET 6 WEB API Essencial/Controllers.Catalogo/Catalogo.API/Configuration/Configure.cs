@@ -48,10 +48,10 @@ public static class Configure
     {
         var mappingConfig = new MapperConfiguration(mc => { mc.AddProfile(new MappingProfile()); });
         IMapper mapper = mappingConfig.CreateMapper();
-        services.AddSingleton(mapper);
+        services.AddSingleton(mapper); // AddSingleton = UmVezQdoSobeAPI - registra um serviço que é criado uma única vez durante todo o ciclo de vida do aplicativo
 
         //IMapper mapper = MappingConfig.RegisterMaps().CreateMapper();
-        //builder.Services.AddSingleton(mapper);
+        //builder.Services.AddSingleton(mapper); // AddSingleton = UmVezQdoSobeAPI - registra um serviço que é criado uma única vez durante todo o ciclo de vida do aplicativo
         //builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
         return services;
