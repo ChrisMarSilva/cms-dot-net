@@ -89,7 +89,7 @@ public class CategoriaService : ICategoriaService
             var resultCommit = await _uow.CommitAsync();
 
             if (!resultCommit)
-                return null; // new Categoria();
+                throw new Exception("Erro ao commitar inclusção"); // return null; // new Categoria();
 
             return new CategoriaResponseDTO { Id = result.Id, Nome = result.Nome, ImagemUrl = result.ImagemUrl };
             // return _mapper.Map<CategoriaResponseDTO>(result);
@@ -130,7 +130,7 @@ public class CategoriaService : ICategoriaService
             var resultCommit = await _uow.CommitAsync();
 
             if (!resultCommit)
-                return null; // new Categoria();
+                throw new Exception("Erro ao commitar alteração"); // return null; // new Categoria();
 
 
             return new CategoriaResponseDTO { Id = result.Id, Nome = result.Nome, ImagemUrl = result.ImagemUrl };
@@ -164,7 +164,7 @@ public class CategoriaService : ICategoriaService
             var resultCommit = await _uow.CommitAsync();
 
             if (!resultCommit)
-                return false;
+                throw new Exception("Erro ao commitar exclusão"); // return false;
 
             return true;
         }

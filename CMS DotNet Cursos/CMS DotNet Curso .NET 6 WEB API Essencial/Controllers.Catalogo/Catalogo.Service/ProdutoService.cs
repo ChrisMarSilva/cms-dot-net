@@ -86,7 +86,7 @@ public class ProdutoService : IProdutoService
             var resultCommit = await _uow.CommitAsync();
 
             if (!resultCommit)
-                return null; // new Produto();
+                throw new Exception("Erro ao commitar inclusção"); // return null; // new Produto();
 
 
             return _mapper.Map<ProdutoResponseDTO>(result);
@@ -131,7 +131,7 @@ public class ProdutoService : IProdutoService
             var resultCommit = await _uow.CommitAsync();
 
             if (!resultCommit)
-                return null; // new Produto();
+                throw new Exception("Erro ao commitar alteração"); // return null; // new Produto();
 
 
             return _mapper.Map<ProdutoResponseDTO>(result);
@@ -164,7 +164,7 @@ public class ProdutoService : IProdutoService
             var resultCommit = await _uow.CommitAsync();
 
             if (!resultCommit)
-                return false;
+                throw new Exception("Erro ao commitar exclusão"); // return false;
 
             return true;
         }
