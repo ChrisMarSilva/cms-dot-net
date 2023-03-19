@@ -32,16 +32,16 @@ public class ProdutosController : ControllerBase
         _logger.LogInformation($"{_className}.GetAll()");
         try
         {
-            var (metadata, results) = await _prodService.GetAllAsync(prodParams);
+            var (metadata, response) = await _prodService.GetAllAsync(prodParams);
 
-            if (results is null || !results.Any())
+            if (response is null || !response.Any())
                 return NotFound("No records found");
 
             //var metadata = new { results.TotalCount, results.PageSize, results.CurrentPage, results.TotalPages, results.HasNext, results.HasPrevious };
             // Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
             Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(metadata));
 
-            return Ok(results);
+            return Ok(response);
         }
         catch (Exception ex)
         {
@@ -59,12 +59,12 @@ public class ProdutosController : ControllerBase
         _logger.LogInformation($"{_className}.GetById()");
         try
         {
-            var result = await _prodService.GetByIdAsync(id);
+            var response = await _prodService.GetByIdAsync(id);
 
-            if (result is null || result?.Id == Guid.Empty)
+            if (response is null || response?.Id == Guid.Empty)
                 return NotFound("No record found");
 
-            return Ok(result);
+            return Ok(response);
         }
         catch (Exception ex)
         {
@@ -77,17 +77,17 @@ public class ProdutosController : ControllerBase
     [ProducesResponseType(typeof(ProdutoResponseDTO), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> Post(ProdutoRequestDTO input)
+    public async Task<IActionResult> Post(ProdutoRequestDTO request)
     {
         _logger.LogInformation($"{_className}.Post()");
         try
         {
-            var result = await _prodService.InsertAsync(input);
+            var response = await _prodService.InsertAsync(request);
 
-            if (result is null || result?.Id == Guid.Empty)
+            if (response is null || response?.Id == Guid.Empty)
                 return BadRequest();
 
-            return CreatedAtAction(nameof(GetById), new { id = result?.Id }, result);
+            return CreatedAtAction(nameof(GetById), new { id = response?.Id }, response);
         }
         catch (Exception ex)
         {
@@ -100,14 +100,14 @@ public class ProdutosController : ControllerBase
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> Update(Guid id, ProdutoRequestDTO input)
+    public async Task<IActionResult> Update(Guid id, ProdutoRequestDTO request)
     {
         _logger.LogInformation($"{_className}.Update()");
         try
         {
-            var result = await _prodService.UpdateAsync(id, input);
+            var response = await _prodService.UpdateAsync(id, request);
 
-            if (result is null || result?.Id == Guid.Empty)
+            if (response is null || response?.Id == Guid.Empty)
                 return NotFound("No records found");
 
             return NoContent();
@@ -128,9 +128,9 @@ public class ProdutosController : ControllerBase
         _logger.LogInformation($"{_className}.Delete()");
         try
         {
-            var result = await _prodService.DeleteAsync(id);
+            var response = await _prodService.DeleteAsync(id);
 
-            if (!result)
+            if (!response)
                 return NotFound("No records found");
 
             return NoContent();

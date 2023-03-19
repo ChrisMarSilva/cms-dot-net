@@ -37,14 +37,14 @@ public class BaseRepository<T> : IBaseRepository<T> where T : class
         return _dbSet.AsNoTrackingWithIdentityResolution();
     }
 
-    public async Task<IEnumerable<T>> GetByWhereAsync(Expression<Func<T, bool>> expression)
+    public async Task<IEnumerable<T>> GetByWhereAsync(Expression<Func<T, bool>> expression, CancellationToken cancellationToken = default)
     {
-        _logger.LogInformation($"{_className}.FindAsync()");
+        _logger.LogInformation($"{_className}.GetByWhereAsync()");
 
-        return await _dbSet.Where(expression).ToListAsync();
+        return await _dbSet.Where(expression).ToListAsync(cancellationToken);
     }
 
-    public async Task<T> GetByIdAsync(Expression<Func<T, bool>> expression) // Guid id
+    public async Task<T> GetByIdAsync(Expression<Func<T, bool>> expression, CancellationToken cancellationToken = default) // Guid id
     {
         _logger.LogInformation($"{_className}.GetByIdAsync()");
 
@@ -60,10 +60,10 @@ public class BaseRepository<T> : IBaseRepository<T> where T : class
         //SingleOrDefault throws an exception
         //FirstOrDefault returns the first record
 
-        return await _dbSet.SingleOrDefaultAsync(expression); //?? new T(); // FirstOrDefaultAsync // SingleOrDefaultAsync
+        return await _dbSet.SingleOrDefaultAsync(expression, cancellationToken); //?? new T(); // FirstOrDefaultAsync // SingleOrDefaultAsync
     }
 
-    public async Task<T> GetByIdNoTrackingAsync(Expression<Func<T, bool>> expression) // Guid id
+    public async Task<T> GetByIdNoTrackingAsync(Expression<Func<T, bool>> expression, CancellationToken cancellationToken = default) // Guid id
     {
         _logger.LogInformation($"{_className}.GetByIdNoTrackingAsync()");
 
@@ -79,22 +79,29 @@ public class BaseRepository<T> : IBaseRepository<T> where T : class
         //SingleOrDefault throws an exception
         //FirstOrDefault returns the first record
 
-        return await _dbSet.AsNoTracking().SingleOrDefaultAsync(expression); //?? new T(); // FirstOrDefaultAsync // SingleOrDefaultAsync
+        return await _dbSet.AsNoTracking().SingleOrDefaultAsync(expression, cancellationToken); //?? new T(); // FirstOrDefaultAsync // SingleOrDefaultAsync
     }
 
-    public async Task<T> AddAsync(T entity)
+    public async Task<bool> IsUniqueAsync(Expression<Func<T, bool>> expression, CancellationToken cancellationToken = default)
+    {
+        _logger.LogInformation($"{_className}.IsUniqueAsync()");
+
+        return await _dbSet.Where(expression).AnyAsync(cancellationToken);
+    }
+
+    public async Task<T> AddAsync(T entity, CancellationToken cancellationToken = default)
     {
         _logger.LogInformation($"{_className}.AddAsync()");
 
-        await _dbSet.AddAsync(entity);
+        await _dbSet.AddAsync(entity, cancellationToken);
         return entity;
     }
 
-    public async Task<IEnumerable<T>> AddRangeAsync(IEnumerable<T> entities)
+    public async Task<IEnumerable<T>> AddRangeAsync(IEnumerable<T> entities, CancellationToken cancellationToken = default)
     {
         _logger.LogInformation($"{_className}.AddRangeAsync()");
 
-        await _dbSet.AddRangeAsync(entities);
+        await _dbSet.AddRangeAsync(entities, cancellationToken);
         return entities;
     }
 

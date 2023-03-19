@@ -20,8 +20,40 @@ string path = Path.Combine(Directory.GetParent(workingDirectory).Parent.Parent.F
 string script = File.ReadAllText(path);
 
 
+
 --------------------------------------------------------------------------------------
 --------------------------------------------------------------------------------------
+
+scripts
+  MSSQL
+src
+ 01 - Presentation  
+    Api
+ 01 - Worker Service
+   Worker
+ 02 - Infrastructure
+   Bootstrap
+   Data
+ 03 - Application
+   App.Api - Services
+   App.Worker - Services
+   Contracts
+ 04 - Domain
+   Domain - Models - Repository
+ 05 - Core
+   Core - Handlers
+   Core.ServiceBus - Consumers
+ 99 - Shared
+   Shared - Commands,Extensions,Querys
+tests
+  TestsAPI
+  TestsWorker
+
+--------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------
+
+
+
 
 private CommandResult ExecuteInternal()
 {
@@ -38,6 +70,150 @@ private CommandResult ExecuteInternal()
 	return commandResult;	
 }
 
+
+
+--------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------
+
+https://www.youtube.com/watch?v=i_3I6XLAOt0
+Extremely FAST Caching Repository With Decorator Pattern in ASP.NET Core
+
+https://www.youtube.com/watch?v=tKEF6xaeoig
+Structuring Dependency Injection In ASP.NET Core The Right Way
+
+https://www.youtube.com/watch?v=enpblqLhzzo
+EF Core Performance | How to Optimize Database Updates?
+
+https://www.youtube.com/watch?v=VYitXAc_htI
+EF Core 7 Performance Improvements With The New ExecuteUpdate & ExecuteDelete
+
+https://www.youtube.com/watch?v=GY7QwSFeVBQ
+One Trick To Improve EF Core Performance Using Query Splitting
+
+https://www.youtube.com/watch?v=jSiGyPHqnpY
+EF Core Performance Optimization Challenge | 233x FASTER
+
+https://www.youtube.com/watch?v=neH0_7bti_I
+Write Faster SQL Queries With Dapper In .NET | Clean Architecture
+
+https://www.youtube.com/watch?v=jgESld7U5Bw
+Performance Tips [5 of 5] | Entity Framework Core for Beginners
+
+--------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------
+
+
+https://www.youtube.com/watch?v=bN57EDYD6M0
+
+
+builder.Services.AddDbContext<OrderingContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration["ConnectionString"],
+        sqlServerOptionsAction: sqlOptions =>
+        {
+            sqlOptions.EnableRetryOnFailure(
+            maxRetryCount: 5,
+            maxRetryDelay: TimeSpan.FromSeconds(30),
+            errorNumbersToAdd: null);
+        }
+    );
+});
+
+--------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------
+
+
+var strategy = _catalogContext.Database.CreateExecutionStrategy();
+await strategy.ExecuteAsync(async () =>
+{
+  // Achieving atomicity between original Catalog database operation and the
+  // IntegrationEventLog thanks to a local transaction
+  using (var transaction = _catalogContext.Database.BeginTransaction())
+  {
+    _catalogContext.CatalogItems.Update(catalogItem);
+    await _catalogContext.SaveChangesAsync();
+
+    // Save to EventLog only if product price changed
+    if (raiseProductPriceChangedEvent)
+    {
+      await _integrationEventLogService.SaveEventAsync(priceChangedEvent);
+      transaction.Commit();
+    }
+  }
+});
+
+
+--------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------
+
+
+"ConnectionStrings": {
+        "Sqlite" : "Data Source=vehicles.db",
+        "Postgres" : "User ID=postgres;Password=Pass123!;Server=localhost;Port=5432;Database=vehicles;"
+ }
+
+
+var config = builder.Configuration;
+builder.Services.AddDbContext<VehiclesContext>(options =>
+{
+    var provider = config.GetValue("provider", Sqlite.Name);
+    if (provider == Sqlite.Name)
+    {
+        options.UseSqlite(
+            config.GetConnectionString(Sqlite.Name)!,
+            x => x.MigrationsAssembly(Sqlite.Assembly)
+        );
+    }
+    if (provider == Postgres.Name) {
+        options.UseNpgsql(
+            config.GetConnectionString(Postgres.Name)!,
+            x => x.MigrationsAssembly(Postgres.Assembly)
+        );
+    }
+});
+
+
+public record Provider(string Name, string Assembly) 
+{
+    public static Provider Sqlite = new (nameof(Sqlite), typeof(Sqlite.Marker).Assembly.GetName().Name!);
+    public static Provider Postgres = new (nameof(Postgres), typeof(Postgres.Marker).Assembly.GetName().Name!);
+}
+
+var provider = config.GetValue("provider", Sqlite.Name);
+
+
+using BoxedSoftware.Models;
+using Microsoft.EntityFrameworkCore;
+using static BoxedSoftware.Provider;
+var builder = WebApplication.CreateBuilder(args);
+var config = builder.Configuration;
+builder.Services.AddDbContext<VehiclesContext>(options =>
+{
+    var provider = config.GetValue("provider", Sqlite.Name);
+    if (provider == Sqlite.Name)
+    {
+        options.UseSqlite(
+            config.GetConnectionString(Sqlite.Name)!,
+            x => x.MigrationsAssembly(Sqlite.Assembly)
+        );
+    }
+    if (provider == Postgres.Name) {
+        options.UseNpgsql(
+            config.GetConnectionString(Postgres.Name)!,
+            x => x.MigrationsAssembly(Postgres.Assembly)
+        );
+    }
+});
+var app = builder.Build();
+// initialize database
+using (var scope = app.Services.CreateScope()) {
+    var db = scope.ServiceProvider.GetRequiredService<VehiclesContext>();
+    await VehiclesContext.InitializeAsync(db);
+}
+app.MapGet("/", (VehiclesContext db) => 
+    db.Vehicles.OrderBy(x => x.Id).Take(10).ToList()
+);
+app.Run();
 
 --------------------------------------------------------------------------------------
 --------------------------------------------------------------------------------------

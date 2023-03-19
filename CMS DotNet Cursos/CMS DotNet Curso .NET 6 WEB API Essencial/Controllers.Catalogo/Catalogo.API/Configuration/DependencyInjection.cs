@@ -29,14 +29,14 @@ namespace Catalogo.API.Configuration;
 // AddScoped    = UmVezQdoFazRequisicao - registra um serviço que é criado uma vez por solicitação.
 // AddSingleton = UmVezQdoSobeAPI       - registra um serviço que é criado uma única vez durante todo o ciclo de vida do aplicativo
 
-public static class Configure
+public static class DependencyInjection // Configure
 {
 
     // AddContexts // AddPersistence
     public static IServiceCollection AddContexts(this IServiceCollection services, IConfiguration configuration)
     {
         var connectionString = configuration.GetConnectionString("DefaultConnection");
-        services.AddDbContext<AppDbContext>(opt => opt.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+        services.AddDbContextPool<AppDbContext>(opt => opt.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
         // buservicesices.AddDbContext<AppDbContext>(opt => opt.UseSqlServer(connectionString));
         // bserviceses.AddDbContext<AppDbContext>(opt => opt.UseSqlite("DataSource=app.db;Cache=Shared"));
         services.AddScoped<IUnitOfWork, UnitOfWork>();// AddScoped = UmVezQdoFazRequisicao - registra um serviço que é criado uma vez por solicitação.
