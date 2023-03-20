@@ -11,7 +11,7 @@ public class MeuController : ControllerBase
     private readonly ILogger<MeuController> _logger;
     private readonly IConfiguration _config;
     private readonly IMeuServico _meuService;
-    private readonly string? _className;
+    private readonly string _className;
 
     public MeuController(
         ILogger<MeuController> logger,

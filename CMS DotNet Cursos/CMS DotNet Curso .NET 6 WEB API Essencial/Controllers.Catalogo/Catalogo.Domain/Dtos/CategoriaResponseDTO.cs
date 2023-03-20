@@ -1,9 +1,9 @@
 ﻿namespace Catalogo.Domain.Dtos;
 
-public class CategoriaDTO
+public class CategoriaResponseDTO
 {
-    public int CategoriaId { get; set; }
+    public Guid Id { get; set; }
     public string Nome { get; set; } = string.Empty;
     public string ImagemUrl { get; set; } = string.Empty;
-    public ICollection<ProdutoDTO> Produtos { get; set; }
+    //public ICollection<ProdutoDTO> Produtos { get; set; }
 }

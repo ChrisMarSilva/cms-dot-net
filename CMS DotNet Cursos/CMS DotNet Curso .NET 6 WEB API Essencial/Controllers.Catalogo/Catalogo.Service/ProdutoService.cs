@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using Catalogo.Data.Persistence.Interfaces;
+using Catalogo.Domain.Dtos;
 using Catalogo.Domain.Models;
+using Catalogo.Data.Pagination;
 using Catalogo.Service.Interfaces;
 using Microsoft.Extensions.Logging;
 
@@ -12,7 +14,7 @@ public class ProdutoService : IProdutoService
     // private readonly IProdutoRepository _prodRepo;
     private IUnitOfWork _uow;
     private readonly IMapper _mapper;
-    private readonly string? _className;
+    private readonly string _className;
 
     public ProdutoService(
         ILogger<ProdutoService> logger,
@@ -30,14 +32,19 @@ public class ProdutoService : IProdutoService
         _logger.LogInformation($"{_className}");
     }
 
-    public async Task<IEnumerable<Produto>> GetAllAsync()
+    //public async Task<IEnumerable<ProdutoResponseDTO>> GetAllAsync()
+    public async Task<(dynamic, IEnumerable<ProdutoResponseDTO>)> GetAllAsync(ProdutosParameters? prodParams)
     {
         _logger.LogInformation($"{_className}.GetAllAsync()");
         try
         {
             // var results = await _prodRepo.FindAllAsync();
-            var results = await _uow.Produtos.FindAllAsync();
-            return results;
+            // var results = await _uow.Produtos.GetAllAsync();
+            var results = await _uow.Produtos.GetProdutosAsync(prodParams);
+            var metadata = new { results.TotalCount, results.PageSize, results.CurrentPage, results.TotalPages, results.HasNext, results.HasPrevious };
+
+            return (metadata, _mapper.Map<List<ProdutoResponseDTO>>(results));
+            // return results;
         }
         catch (Exception ex)
         {
@@ -46,14 +53,19 @@ public class ProdutoService : IProdutoService
         }
     }
 
-    public async Task<Produto> GetByIdAsync(Guid id)
+    public async Task<ProdutoResponseDTO> GetByIdAsync(Guid id)
     {
         _logger.LogInformation($"{_className}.GetByIdAsync()");
         try
         {
             // var result = await _prodRepo.GetByIdAsync(id);
             var result = await _uow.Produtos.GetByIdNoTrackingAsync(p => p.Id == id);
-            return result;
+
+            if (result == null)
+                return null;
+
+            return _mapper.Map<ProdutoResponseDTO>(result);
+            //return result;
         }
         catch (Exception ex)
         {
@@ -62,23 +74,27 @@ public class ProdutoService : IProdutoService
         }
     }
 
-    public async Task<Produto> InsertAsync(Produto input)
+    public async Task<ProdutoResponseDTO> InsertAsync(ProdutoRequestDTO input)
     {
         _logger.LogInformation($"{_className}.InsertAsync()");
         try
         {
-            //var result = await _prodRepo.CreateAsync(input);
-            var result = await _uow.Produtos.AddAsync(input);
+            var prod = _mapper.Map<Produto>(input);
+
+            //var result = await _prodRepo.CreateAsync(prod);
+            var result = await _uow.Produtos.AddAsync(prod);
 
             if (result is null || result?.Id == Guid.Empty)
-                return new Produto();
+                return null; // new Produto();
 
             var resultCommit = await _uow.CommitAsync();
 
             if (!resultCommit)
-                return new Produto();
+                throw new Exception("Erro ao commitar inclusção"); // return null; // new Produto();
 
-            return result;
+
+            return _mapper.Map<ProdutoResponseDTO>(result);
+            // return result;
         }
         catch (Exception ex)
         {
@@ -87,18 +103,21 @@ public class ProdutoService : IProdutoService
         }
     }
 
-    public async Task<Produto> UpdateAsync(Guid id, Produto input)
+    public async Task<ProdutoResponseDTO> UpdateAsync(Guid id, ProdutoRequestDTO input)
     {
         _logger.LogInformation($"{_className}.UpdateAsync()");
         try
         {
-            // var result = await _prodRepo.GetByIdAsync(id);
-            var result = await _uow.Produtos.GetByIdAsync(p => p.Id == id);
+            //if (id != input.Id)
+            //    return null; // new Produto();
 
-            if (result == null || result?.Id == Guid.Empty)
-                return new Produto();
+            // var Prod = await _prodRepo.GetByIdAsync(id);
+            var Prod = await _uow.Produtos.GetByIdAsync(p => p.Id == id);
 
-            result.Update(
+            if (Prod == null || Prod?.Id == Guid.Empty)
+                return null; // new Produto();
+
+            Prod.Update(
                 nome: input.Nome,
                 preco: input.Preco,
                 estoque: input.Estoque,
@@ -107,18 +126,20 @@ public class ProdutoService : IProdutoService
                 imagemUrl: input.ImagemUrl
             );
 
-            //result = _prodRepo.Update(result);
-            result = _uow.Produtos.Update(result);
+            //var result = _prodRepo.Update(Prod);
+            var result = _uow.Produtos.Update(Prod);
 
             if (result is null || result?.Id == Guid.Empty)
-                return new Produto();
+                return null; // new Produto();
 
             var resultCommit = await _uow.CommitAsync();
 
             if (!resultCommit)
-                return new Produto();
+                throw new Exception("Erro ao commitar alteração"); // return null; // new Produto();
 
-            return result;
+
+            return _mapper.Map<ProdutoResponseDTO>(result);
+            // return result;
         }
         catch (Exception ex)
         {
@@ -147,7 +168,7 @@ public class ProdutoService : IProdutoService
             var resultCommit = await _uow.CommitAsync();
 
             if (!resultCommit)
-                return false;
+                throw new Exception("Erro ao commitar exclusão"); // return false;
 
             return true;
         }

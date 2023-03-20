@@ -1,5 +1,4 @@
 ﻿using Catalogo.Data.Persistence.Interfaces;
-using Catalogo.Data.Repositories;
 using Catalogo.Data.Repositories.Interfaces;
 using Microsoft.Extensions.Logging;
 
@@ -15,7 +14,7 @@ public class UnitOfWork : IUnitOfWork, IDisposable
     public ICategoriaRepository Categorias { get; private set; }
 
     public UnitOfWork(
-        ILogger<UnitOfWork> logger, 
+        ILogger<UnitOfWork> logger,
         AppDbContext ctx,
         IProdutoRepository prodRepo,
         ICategoriaRepository categRepo
@@ -31,30 +30,13 @@ public class UnitOfWork : IUnitOfWork, IDisposable
     // public IProdutoRepository Produtos { get { return _produtoRepo = _produtoRepo ?? new ProdutoRepository(_ctx); } }
     // public ICategoriaRepository Categorias { get { return _categoriaRepo = _categoriaRepo ?? new CategoriaRepository(_ctx); } }
 
-    public void Commit()
-    {
-        _ctx.SaveChanges();
-    }
-
-    public async Task<bool> CommitAsync()
-    {
-        return await _ctx.SaveChangesAsync() > 0;
-    }
-
-    public Task RollbackAsync()
-    {
-        return null;
-    }
+    public void Commit() => _ctx.SaveChanges();
+    public void Rollback() { }
+    public async Task<bool> CommitAsync() => await _ctx.SaveChangesAsync() > 0;
+    public async Task<bool> RollbackAsync() => true;
 
     protected virtual void Dispose(bool disposing)
     {
-        //if (!this.disposed)
-        //{
-        //    if (disposing)
-        //    {
-        //        _context.Dispose();
-        //    }
-        //}
         if (!_disposed && disposing)
             _ctx.Dispose();
         _disposed = true;

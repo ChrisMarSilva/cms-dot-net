@@ -1,4 +1,5 @@
-﻿using Catalogo.Data.Persistence;
+﻿using Catalogo.Data.Pagination;
+using Catalogo.Data.Persistence;
 using Catalogo.Data.Repositories.Interfaces;
 using Catalogo.Domain.Models;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +12,8 @@ public class ProdutoRepository : BaseRepository<Produto>, IProdutoRepository
     private readonly ILogger<ProdutoRepository> _logger;
     //private readonly AppDbContext _ctx;
     private readonly string _className;
+    //private const int DefaultPage = 1;
+    //private const int DefaultPageSize = 10;
 
     public ProdutoRepository(ILogger<ProdutoRepository> logger, AppDbContext ctx) : base(logger, ctx)
     {
@@ -21,32 +24,29 @@ public class ProdutoRepository : BaseRepository<Produto>, IProdutoRepository
         _logger.LogInformation($"{_className}");
     }
 
-    public IEnumerable<Produto> GetProdutosPorPreco()
+    public async Task<PagedList<Produto>> GetProdutosAsync(ProdutosParameters prodParams)
     {
-        return GetAll().OrderBy(c => c.Preco).ToList();
+        //return await base.GetAll()
+        //    .OrderBy(on => on.Id)
+        //    .Skip((prodParams.PageNumber - 1) * prodParams.PageSize)
+        //    .Take(prodParams.PageSize)
+        //    .ToListAsync();
+
+        var produtos = base.GetAll().OrderBy(on => on.Id);
+
+        return await PagedList<Produto>.
+            ToPagedListAsync(produtos, prodParams.PageNumber, prodParams.PageSize);
     }
 
-    public async Task<IEnumerable<Produto>> FindAllAsync()
+    public async Task<IEnumerable<Produto>> GetAllAsync()
     {
-        _logger.LogInformation($"{_className}.FindAllAsync()");
+        _logger.LogInformation($"{_className}.GetAllAsync()");
 
-        var pageNumber = 1;
-        var pageSize = 100;
-
-        // if (pageNumber == 0) pageNumber = 1;
-        // if (pageSize == 0) pageSize = int.MaxValue;
-
-        var results = await _ctx.Produtos
-            //.AsNoTracking()
-            .AsNoTrackingWithIdentityResolution()
+        return await base.GetAll()
             .Where(c => c.DataCadastro >= new DateTime(2000, 1, 1))
             .OrderBy(c => c.DataCadastro)
-            .Skip((pageNumber - 1) * pageSize)
-            .Take(pageSize)
             .ToListAsync()
             .ConfigureAwait(false);
-
-        return results;
     }
 
     //public async Task<Produto> GetByIdAsync(Guid id)

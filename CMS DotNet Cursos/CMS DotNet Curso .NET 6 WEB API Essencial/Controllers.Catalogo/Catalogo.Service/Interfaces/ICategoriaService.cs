@@ -1,12 +1,14 @@
-﻿using Catalogo.Domain.Models;
+﻿using Catalogo.Data.Pagination;
+using Catalogo.Domain.Dtos;
 
 namespace Catalogo.Service.Interfaces;
 
 public interface ICategoriaService
 {
-    Task<IEnumerable<Categoria>> GetAllAsync();
-    Task<Categoria> GetByIdAsync(Guid id);
-    Task<Categoria> InsertAsync(Categoria input);
-    Task<Categoria> UpdateAsync(Guid id, Categoria input);
+    //Task<IEnumerable<CategoriaResponseDTO>> GetAllAsync();
+    Task<(dynamic, IEnumerable<CategoriaResponseDTO>)> GetAllAsync(CategoriasParameters categParams);
+    Task<CategoriaResponseDTO> GetByIdAsync(Guid id);
+    Task<CategoriaResponseDTO> InsertAsync(CategoriaRequestDTO input);
+    Task<CategoriaResponseDTO> UpdateAsync(Guid id, CategoriaRequestDTO input);
     Task<bool> DeleteAsync(Guid id);
 }

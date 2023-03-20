@@ -4,9 +4,9 @@ namespace Catalogo.Domain.Models;
 
 public class Categoria : BaseEntity
 {
-    public string? Nome { get; set; }
-    public string? ImagemUrl { get; set; }
-    public ICollection<Produto>? Produtos { get; set; } // IEnumerable // ICollection 
+    public string Nome { get; set; } = string.Empty;
+    public string ImagemUrl { get; set; } = string.Empty;
+    public ICollection<Produto> Produtos { get; set; } // IEnumerable // ICollection 
 
     public Categoria() : base()
     {
