@@ -1,6 +1,8 @@
 ﻿using Catalogo.Data.Pagination;
 using Catalogo.Domain.Dtos;
 using Catalogo.Service.Interfaces;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 
@@ -8,6 +10,7 @@ namespace Catalogo.API.Controllers;
 
 [Route("api/v1/[controller]")]
 [ApiController]
+[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 public class CategoriasController : ControllerBase // : BaseController<CategoriasController>
 {
     private readonly ILogger<CategoriasController> _logger;
@@ -32,7 +35,7 @@ public class CategoriasController : ControllerBase // : BaseController<Categoria
         _logger.LogInformation($"{_className}.GetAll()");
         try
         {
-            var (metadata, response) = await _categService.GetAllAsync(categParams); 
+            var (metadata, response) = await _categService.GetAllAsync(categParams);
 
             if (response is null || !response.Any())
                 return NotFound("No records found");
@@ -58,7 +61,7 @@ public class CategoriasController : ControllerBase // : BaseController<Categoria
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetById(Guid id) // Task<ActionResult<CategoriaRequestDTO>>
     {
-        _logger.LogInformation($"{_className}.GetById()"); 
+        _logger.LogInformation($"{_className}.GetById()");
         try
         {
             var response = await _categService.GetByIdAsync(id);
@@ -88,7 +91,7 @@ public class CategoriasController : ControllerBase // : BaseController<Categoria
 
             if (response is null || response?.Id == Guid.Empty)
                 return BadRequest();
-            
+
             return CreatedAtAction(nameof(GetById), new { id = response?.Id }, response);
         }
         catch (Exception ex)

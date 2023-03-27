@@ -8,18 +8,22 @@ using Catalogo.Data.Repositories.Interfaces;
 using Catalogo.Domain.Dtos.Mappings;
 using Catalogo.Service;
 using Catalogo.Service.Interfaces;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System.IO.Compression;
 using System.Net.Mime;
+using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -69,6 +73,7 @@ public static class DependencyInjection // Configure
     {
         services.AddScoped<IProdutoService, ProdutoService>(); // UmVezQdoFazRequisicao - registra um serviço que é criado uma vez por solicitação.
         services.AddScoped<ICategoriaService, CategoriaService>(); // UmVezQdoFazRequisicao - registra um serviço que é criado uma vez por solicitação.
+        services.AddScoped<IAutorizaService, AutorizaService>(); // UmVezQdoFazRequisicao - registra um serviço que é criado uma vez por solicitação.
         services.AddTransient<IMeuServico, MeuServico>(); // VariasVezes - registra um serviço que é criado cada vez que é solicitado
 
         return services;
@@ -118,18 +123,24 @@ public static class DependencyInjection // Configure
         // services.AddSwagger();
         services.AddSwaggerGen(c => { 
             c.SwaggerDoc("v1", new OpenApiInfo { Title = "Catalogo.API", Version = "v1" });
-            
             // c.SwaggerDoc("v1", new OpenApiInfo { Title = "Catalogo.API", Version = "v1", Description = "Catalogo.API", TermsOfService = new Uri("https://www.google.com.br/"), Contact = new OpenApiContact() { Name = "CMS", Email = "cms@gmail.com", Url = new Uri("https://www.google.com.br/"), }, });
-            
-            // c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme() {
-            //    Name = "Authorization",
-            //    Type = SecuritySchemeType.ApiKey,
-            //    Scheme = "Bearer",
-            //    BearerFormat = "JWT",
-            //    In = ParameterLocation.Header,
-            //    Description = @"JWT Authorization header using the Bearer scheme. Enter 'Bearer'[space].Example: \'Bearer 12345abcdef\'",
-            // });
-
+            // c.EnableAnnotations();
+            c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+            {
+                Description = @"Enter 'Bearer' [space] and your token!",  // Description = @"JWT Authorization header using the Bearer scheme. Enter 'Bearer'[space].Example: \'Bearer 12345abcdef\'",
+                Name = "Authorization",
+                BearerFormat = "JWT",
+                In = ParameterLocation.Header,
+                Type = SecuritySchemeType.ApiKey,
+                Scheme = "Bearer"
+            });
+            c.AddSecurityRequirement(new OpenApiSecurityRequirement{
+                {
+                    new OpenApiSecurityScheme{ Reference = new OpenApiReference{Type = ReferenceType.SecurityScheme, Id = "Bearer"}, Scheme = "oauth2", Name = "Bearer", In= ParameterLocation.Header},
+                    new List<string> ()
+                }
+             });
+           
             //c.AddSecurityRequirement(new OpenApiSecurityRequirement {
             //    {
             //        new OpenApiSecurityScheme { Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "Bearer" } },
@@ -208,6 +219,66 @@ public static class DependencyInjection // Configure
         return app;
     }
 
+    public static IServiceCollection AddAuth(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddIdentity<IdentityUser, IdentityRole>(options => {
+            options.Password.RequireNonAlphanumeric = false;
+            options.Password.RequireDigit = false;
+            options.Password.RequireUppercase = false;
+            options.Password.RequireLowercase = false;
+            options.Password.RequiredLength = 3;
+        })
+            .AddEntityFrameworkStores<AppDbContext>()
+            .AddDefaultTokenProviders();
+
+        services.AddAuthentication(x => {
+            x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        })
+            .AddJwtBearer(opt => {
+                opt.TokenValidationParameters = new TokenValidationParameters {
+                    ValidateActor = true,
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ClockSkew = TimeSpan.Zero,
+                    ValidAudience = configuration["TokenConfiguration:Audience"],
+                    ValidIssuer = configuration["TokenConfiguration:Issuer"],
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:key"]))
+                };
+            });
+
+        //services.AddAuthentication("Bearer")
+        //    .AddJwtBearer("Bearer", options =>
+        //    {
+        //        options.Authority = "https://localhost:4435/";
+        //        options.TokenValidationParameters = new TokenValidationParameters { ValidateAudience = false };
+        //    });
+
+        //services.AddAuthorization(options =>
+        //{
+        //    options.AddPolicy("ApiScope", policy =>
+        //    {
+        //        policy.RequireAuthenticatedUser();
+        //        policy.RequireClaim("scope", "geek_shopping");
+        //    });
+        //});
+
+        //services.AddAuthorization(options =>
+        //{
+        //    options.FallbackPolicy = new AuthorizationPolicyBuilder()
+        //      .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
+        //      .RequireAuthenticatedUser()
+        //      .Build();
+        //    options.AddPolicy("EmployeePolicy", p => p.RequireAuthenticatedUser().RequireClaim("EmployeeCode"));
+        //    options.AddPolicy("Employee005Policy", p => p.RequireAuthenticatedUser().RequireClaim("EmployeeCode", "005"));
+        //    options.AddPolicy("CpfPolicy", p => p.RequireAuthenticatedUser().RequireClaim("Cpf"));
+        //});
+
+        return services;
+    }
+    
     public static IServiceCollection AddCorsLocal(this IServiceCollection services)
     {
         services.AddCors()
@@ -215,22 +286,21 @@ public static class DependencyInjection // Configure
             .AddSingleton<IHttpContextAccessor, HttpContextAccessor>()
             .AddScoped<IUrlHelper>(x => x.GetRequiredService<IUrlHelperFactory>().GetUrlHelper(x.GetRequiredService<IActionContextAccessor>().ActionContext))
             .AddMvcCore()
-            .AddMvcOptions(options => { 
-                options.Filters.Add<ValidateModelFilter>(-9999); 
-                options.Filters.Add(new CacheControlFilter()); 
+            .AddMvcOptions(opt => {
+                opt.Filters.Add<ValidateModelFilter>(-9999);
+                opt.Filters.Add(new CacheControlFilter());
             })
             //.AddAuthorization()
             .AddApiExplorer()
-            .AddJsonOptions(options =>
-            {
-                options.JsonSerializerOptions.PropertyNamingPolicy = null;// JsonNamingPolicy.CamelCase //  null; // new CustomPropertyNamingPolicy();
-                options.JsonSerializerOptions.IgnoreNullValues = true;
-                options.JsonSerializerOptions.WriteIndented = false;
-                options.JsonSerializerOptions.AllowTrailingCommas = false;
-                options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
-                options.JsonSerializerOptions.IgnoreReadOnlyProperties = true;
+            .AddJsonOptions(opt => {
+                opt.JsonSerializerOptions.PropertyNamingPolicy = null;// JsonNamingPolicy.CamelCase //  null; // new CustomPropertyNamingPolicy();
+                //opt.JsonSerializerOptions.IgnoreNullValues = true;
+                opt.JsonSerializerOptions.WriteIndented = false;
+                opt.JsonSerializerOptions.AllowTrailingCommas = false;
+                opt.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                opt.JsonSerializerOptions.IgnoreReadOnlyProperties = true;
             })
-            .AddDataAnnotations(); 
+            .AddDataAnnotations();
 
         return services;
     }
@@ -253,13 +323,10 @@ public static class DependencyInjection // Configure
     {
         app.UseHealthChecks("/status", new HealthCheckOptions()
         {
-            ResponseWriter = async (context, report) =>
-            {
-                var result = JsonConvert.SerializeObject(new
-                {
+            ResponseWriter = async (context, report) => {
+                var result = JsonConvert.SerializeObject(new {
                     statusApplication = report.Status.ToString(),
-                    healthChecks = report.Entries.Select(e => new
-                    {
+                    healthChecks = report.Entries.Select(e => new {
                         check = e.Key,
                         status = Enum.GetName(typeof(HealthStatus), e.Value.Status),
                         description = e.Value.Description,
@@ -267,8 +334,7 @@ public static class DependencyInjection // Configure
                     })
                 },
                 Formatting.None,
-                new JsonSerializerSettings()
-                {
+                new JsonSerializerSettings() {
                     NullValueHandling = NullValueHandling.Ignore,
                     DefaultValueHandling = DefaultValueHandling.Include,
                     ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
@@ -285,7 +351,8 @@ public static class DependencyInjection // Configure
 
     public static ILoggingBuilder AddCustomLogger(this ILoggingBuilder logging)
     {
-        logging.AddProvider(new CustomLoggerProvider(new CustomLoggerProviderConfiguration { LogLevel = LogLevel.Information }));
+        logging.AddProvider(new 
+            CustomLoggerProvider(new CustomLoggerProviderConfiguration { LogLevel = LogLevel.Information }));
 
         return logging;
     }

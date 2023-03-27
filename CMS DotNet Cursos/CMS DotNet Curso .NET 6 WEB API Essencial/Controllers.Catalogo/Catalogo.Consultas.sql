@@ -5,6 +5,15 @@
 USE catalogo_api;
 -- SET SQL_SAFE_UPDATES = 0;
 
+SELECT * FROM AspNetRoleClaims;
+SELECT * FROM AspNetRoles;
+SELECT * FROM AspNetUserClaims;
+SELECT * FROM AspNetUserLogins;
+SELECT * FROM AspNetUserRoles;
+SELECT * FROM AspNetUsers;
+SELECT * FROM AspNetUserTokens;
+
+
  select uuid();
  select now();
  
@@ -14,6 +23,15 @@ SELECT * FROM Categoria;
 SELECT * FROM Produto;
 -- DELETE FROM Produto;
 
+ SELECT COUNT(*) FROM Categoria
+   
+   
+SELECT c.id, c.data_alteracao, c.data_cadastro, c.imagem_url, c.nome
+FROM Categoria AS c
+ORDER BY c.nome
+LIMIT 2 OFFSET 1
+
+      
 
 ----------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------

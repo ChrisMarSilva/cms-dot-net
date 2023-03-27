@@ -121,7 +121,7 @@ public class CategoriaService : ICategoriaService
                 return null; // new Categoria();
 
             categ.Update(
-                nome: input.Nome, 
+                nome: input.Nome,
                 imagemUrl: input.ImagemUrl
             );
 

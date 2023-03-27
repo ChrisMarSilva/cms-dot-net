@@ -1,10 +1,16 @@
 ﻿using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace Catalogo.Domain.Models;
 
 public class Categoria : BaseEntity
 {
+    [Required(ErrorMessage = "O nome é obrigatório")]
+    [StringLength(80, ErrorMessage = "O nome deve ter no máximo {1} e no mínimo {2} caracteres", MinimumLength = 5)]
     public string Nome { get; set; } = string.Empty;
+
+    [Required]
+    [StringLength(300, MinimumLength = 10)]
     public string ImagemUrl { get; set; } = string.Empty;
     public ICollection<Produto> Produtos { get; set; } // IEnumerable // ICollection 
 
@@ -13,13 +19,13 @@ public class Categoria : BaseEntity
         this.Produtos = new Collection<Produto>(); // List // Collection
     }
 
-    public Categoria(string nome, string? imagemUrl) : this()
+    public Categoria(string nome, string imagemUrl) : this()
     {
         Nome = nome;
         ImagemUrl = imagemUrl;
     }
 
-    public void Update(string nome, string? imagemUrl)
+    public void Update(string nome, string imagemUrl)
     {
         base.Update();
 

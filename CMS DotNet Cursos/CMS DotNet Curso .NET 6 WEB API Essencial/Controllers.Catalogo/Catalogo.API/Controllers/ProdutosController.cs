@@ -1,6 +1,8 @@
 ﻿using Catalogo.Data.Pagination;
 using Catalogo.Domain.Dtos;
 using Catalogo.Service.Interfaces;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 
@@ -8,6 +10,7 @@ namespace Catalogo.API.Controllers;
 
 [Route("api/v1/[controller]")]
 [ApiController]
+[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 public class ProdutosController : ControllerBase
 {
     private readonly ILogger<ProdutosController> _logger;
@@ -17,7 +20,7 @@ public class ProdutosController : ControllerBase
     public ProdutosController(ILogger<ProdutosController> logger, IProdutoService prodService)
     {
         _logger = logger;
-        _prodService = prodService ?? throw new ArgumentNullException(nameof(ProdutosController));
+        _prodService = prodService ?? throw new ArgumentNullException(nameof(IProdutoService));
         _className = GetType().FullName;
 
         _logger.LogInformation($"{_className}");

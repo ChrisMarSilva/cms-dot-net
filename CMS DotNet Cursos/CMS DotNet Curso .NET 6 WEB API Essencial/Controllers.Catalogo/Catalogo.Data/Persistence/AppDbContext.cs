@@ -1,12 +1,21 @@
 ﻿using Catalogo.Domain.Mappers;
 using Catalogo.Domain.Models;
 using Flunt.Notifications;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace Catalogo.Data.Persistence;
 
-public class AppDbContext : DbContext
+public class AppDbContext : IdentityDbContext // DbContext
 {
+    //private readonly IConfiguration _configuration;
+
+    public AppDbContext() // IConfiguration configuration
+    {
+        //_configuration = configuration;
+    }
+
     public AppDbContext(DbContextOptions<AppDbContext> opt) : base(opt) { }
 
     // dotnet tool install --global dotnet-ef
@@ -19,28 +28,34 @@ public class AppDbContext : DbContext
     // dotnet ef migrations add PopulaCategorias
     // dotnet ef migrations add PopulaCategorias02
     // dotnet ef migrations add PopulaProdutos
+    // dotnet ef migrations add AddIdentity
     // dotnet ef database update
     // dotnet ef migrations remove
 
     public DbSet<Categoria> Categorias { get; set; }
     public DbSet<Produto> Produtos { get; set; }
 
-    //protected override void OnConfiguring(DbContextOptionsBuilder opt)
-    //{
-    //    opt.EnableSensitiveDataLogging();
-    //    opt.EnableServiceProviderCaching();
-    //    opt.LogTo(Console.WriteLine, LogLevel.Information);
-    //    if (!opt.IsConfigured)
-    //    {
-    //        IConfigurationRoot configuration = new ConfigurationBuilder()
-    //           .SetBasePath(Directory.GetCurrentDirectory())
-    //           .AddJsonFile("appsettings.json")
-    //           .Build();
-    //        var connectionString = configuration. GetConnectionString("DefaultConnection");
-    //        opt.UseMySql(connectionString);
-    //    }
-    //    base.OnConfiguring(opt);
-    //}
+    protected override void OnConfiguring(DbContextOptionsBuilder opt)
+    {
+        //opt.EnableSensitiveDataLogging();
+        //opt.EnableServiceProviderCaching();
+        //opt.LogTo(Console.WriteLine, LogLevel.Information);
+        if (!opt.IsConfigured)
+        {
+            //IConfigurationRoot configuration = new ConfigurationBuilder()
+            //   .SetBasePath(Directory.GetCurrentDirectory())
+            //   .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
+            //   .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+            //   .Build();'
+            //var connectionString = configuration.GetConnectionString("DefaultConnection");
+            var connectionString = "Server=localhost;Port=3306;Database=catalogo_api;Uid=root;Pwd=Chrs8723;Persist Security Info=False;Connect Timeout=300;Connection Reset=False;Max Pool Size=300;";
+            //var connectionString = _configuration.GetConnectionString("DefaultConnection");
+            //var connectionString = Configuration.GetConnectionString("DefaultConnection")
+            opt.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
+        }
+
+        base.OnConfiguring(opt);
+    }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

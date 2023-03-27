@@ -4,7 +4,7 @@ namespace Catalogo.API.Controllers;
 
 public class BaseController<T> : ControllerBase where T : BaseController<T>
 {
-    private ILogger<T>? _logger;
+    private ILogger<T> _logger;
     // private IMapper? _mapper;
     // private IMediator? _mediator;
 

@@ -4,19 +4,19 @@ using Catalogo.Data.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// builder.Logging.AddCustomLogger();
 builder.Services.AddContexts(builder.Configuration);
 builder.Services.AddMappers();
 builder.Services.AddRepositories();
 builder.Services.AddServices();
 builder.Services.AddFilters();
 builder.Services.AddCompression();
-// builder.Services.AddCorsLocal();
 builder.Services.AddControllersWithJson();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddRouting(opt => opt.LowercaseUrls = true);
 builder.Services.AddSwagger();
-
-// builder.Logging.AddCustomLogger();
+builder.Services.AddAuth(builder.Configuration);
+builder.Services.AddCorsLocal();
 
 var app = builder.Build();
 
@@ -31,10 +31,10 @@ app.UseSwaggerMiddleware(app.Environment);
 app.UseCorsMiddleware();
 app.UseHttpsRedirection();
 app.UseResponseCompression();
-// app.UseRouting(); 
+app.UseRouting(); 
+app.UseAuthentication();
 app.UseAuthorization();
+app.UseCors(opt => opt.AllowAnyOrigin());
 app.MapControllers();
 
 app.Run();
-// await app.RunAsync();
-

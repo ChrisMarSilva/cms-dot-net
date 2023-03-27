@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
+using Catalogo.Data.Pagination;
 using Catalogo.Data.Persistence.Interfaces;
 using Catalogo.Domain.Dtos;
 using Catalogo.Domain.Models;
-using Catalogo.Data.Pagination;
 using Catalogo.Service.Interfaces;
 using Microsoft.Extensions.Logging;
 
