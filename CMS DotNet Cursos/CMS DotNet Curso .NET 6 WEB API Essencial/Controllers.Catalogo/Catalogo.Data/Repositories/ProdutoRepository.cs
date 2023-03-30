@@ -15,6 +15,12 @@ public class ProdutoRepository : BaseRepository<Produto>, IProdutoRepository
     //private const int DefaultPage = 1;
     //private const int DefaultPageSize = 10;
 
+    public ProdutoRepository(AppDbContext ctx) : base(ctx)
+    {
+        //_ctx = ctx;
+        _className = GetType().FullName;
+    }
+
     public ProdutoRepository(ILogger<ProdutoRepository> logger, AppDbContext ctx) : base(logger, ctx)
     {
         _logger = logger;
@@ -26,6 +32,8 @@ public class ProdutoRepository : BaseRepository<Produto>, IProdutoRepository
 
     public async Task<PagedList<Produto>> GetProdutosAsync(ProdutosParameters prodParams)
     {
+        // _logger.LogInformation($"{_className}.GetProdutosAsync()");
+
         //return await base.GetAll()
         //    .OrderBy(on => on.Id)
         //    .Skip((prodParams.PageNumber - 1) * prodParams.PageSize)
@@ -40,7 +48,7 @@ public class ProdutoRepository : BaseRepository<Produto>, IProdutoRepository
 
     public async Task<IEnumerable<Produto>> GetAllAsync()
     {
-        _logger.LogInformation($"{_className}.GetAllAsync()");
+        // _logger.LogInformation($"{_className}.GetAllAsync()");
 
         return await base.GetAll()
             .Where(c => c.DataCadastro >= new DateTime(2000, 1, 1))

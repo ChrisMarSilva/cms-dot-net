@@ -19,9 +19,17 @@ public class CategoriasController : ControllerBase // : BaseController<Categoria
     private readonly ICategoriaService _categService;
     private readonly string _className;
 
-    public CategoriasController(ILogger<CategoriasController> logger, ICategoriaService categService)
+    public CategoriasController(ICategoriaService categService)
     {
-        _logger = logger;
+        _categService = categService ?? throw new ArgumentNullException(nameof(ICategoriaService));
+        _className = GetType().FullName;
+    }
+
+    public CategoriasController(
+        ILogger<CategoriasController> logger, 
+        ICategoriaService categService)
+    {
+        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _categService = categService ?? throw new ArgumentNullException(nameof(ICategoriaService));
         _className = GetType().FullName;
 
@@ -34,7 +42,7 @@ public class CategoriasController : ControllerBase // : BaseController<Categoria
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetAll([FromQuery] CategoriasParameters categParams) // Task<ActionResult<IEnumerable<CategoriaRequestDTO>>>
     {
-        _logger.LogInformation($"{_className}.GetAll()");
+        // _logger.LogInformation($"{_className}.GetAll()");
         try
         {
             var (metadata, response) = await _categService.GetAllAsync(categParams);
@@ -52,7 +60,7 @@ public class CategoriasController : ControllerBase // : BaseController<Categoria
         catch (Exception ex)
         {
             //_logger.LogError($"{_className}.GetAll(Erro: {ex.Message})");
-            _logger.LogError(ex, $"{_className}.GetAll(Erro: {ex.Message})");
+            // _logger.LogError(ex, $"{_className}.GetAll(Erro: {ex.Message})");
             return StatusCode(StatusCodes.Status500InternalServerError, "Ocorreu um problema ao tratar a sua solicitação.");
         }
     }
@@ -68,7 +76,7 @@ public class CategoriasController : ControllerBase // : BaseController<Categoria
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetById(Guid id) // Task<ActionResult<CategoriaRequestDTO>>
     {
-        _logger.LogInformation($"{_className}.GetById()");
+        // _logger.LogInformation($"{_className}.GetById()");
         try
         {
             var response = await _categService.GetByIdAsync(id);
@@ -80,7 +88,7 @@ public class CategoriasController : ControllerBase // : BaseController<Categoria
         }
         catch (Exception ex)
         {
-            _logger.LogError($"{_className}.GetById(Erro: {ex.Message})");
+            // _logger.LogError($"{_className}.GetById(Erro: {ex.Message})");
             return StatusCode(StatusCodes.Status500InternalServerError, "Ocorreu um problema ao tratar a sua solicitação.");
         }
     }
@@ -107,7 +115,7 @@ public class CategoriasController : ControllerBase // : BaseController<Categoria
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> Post(CategoriaRequestDTO request)
     {
-        _logger.LogInformation($"{_className}.Post()");
+        // _logger.LogInformation($"{_className}.Post()");
         try
         {
             var response = await _categService.InsertAsync(request);
@@ -119,7 +127,7 @@ public class CategoriasController : ControllerBase // : BaseController<Categoria
         }
         catch (Exception ex)
         {
-            _logger.LogError($"{_className}.Post(Erro: {ex.Message})");
+            // _logger.LogError($"{_className}.Post(Erro: {ex.Message})");
             return StatusCode(StatusCodes.Status500InternalServerError, "Ocorreu um problema ao tratar a sua solicitação.");
         }
     }
@@ -131,7 +139,7 @@ public class CategoriasController : ControllerBase // : BaseController<Categoria
     //[ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Put))]
     public async Task<IActionResult> Update(Guid id, CategoriaRequestDTO request)
     {
-        _logger.LogInformation($"{_className}.Update()");
+        // _logger.LogInformation($"{_className}.Update()");
         try
         {
             var response = await _categService.UpdateAsync(id, request);
@@ -143,7 +151,7 @@ public class CategoriasController : ControllerBase // : BaseController<Categoria
         }
         catch (Exception ex)
         {
-            _logger.LogError($"{_className}.Update(Erro: {ex.Message})");
+            // _logger.LogError($"{_className}.Update(Erro: {ex.Message})");
             return StatusCode(StatusCodes.Status500InternalServerError, "Ocorreu um problema ao tratar a sua solicitação.");
         }
     }
@@ -154,7 +162,7 @@ public class CategoriasController : ControllerBase // : BaseController<Categoria
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> Delete(Guid id)
     {
-        _logger.LogInformation($"{_className}.Delete()");
+        // _logger.LogInformation($"{_className}.Delete()");
         try
         {
             var response = await _categService.DeleteAsync(id);
@@ -166,7 +174,7 @@ public class CategoriasController : ControllerBase // : BaseController<Categoria
         }
         catch (Exception ex)
         {
-            _logger.LogError($"{_className}.Delete(Erro: {ex.Message})");
+            // _logger.LogError($"{_className}.Delete(Erro: {ex.Message})");
             return StatusCode(StatusCodes.Status500InternalServerError, "Ocorreu um problema ao tratar a sua solicitação.");
         }
     }

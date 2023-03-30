@@ -14,6 +14,17 @@ public class UnitOfWork : IUnitOfWork, IDisposable
     public ICategoriaRepository Categorias { get; private set; }
 
     public UnitOfWork(
+        AppDbContext ctx,
+        IProdutoRepository prodRepo,
+        ICategoriaRepository categRepo
+        )
+    {
+        _ctx = ctx;
+        Produtos = prodRepo ?? throw new ArgumentNullException(nameof(IProdutoRepository));
+        Categorias = categRepo ?? throw new ArgumentNullException(nameof(ICategoriaRepository));
+    }
+
+    public UnitOfWork(
         ILogger<UnitOfWork> logger,
         AppDbContext ctx,
         IProdutoRepository prodRepo,

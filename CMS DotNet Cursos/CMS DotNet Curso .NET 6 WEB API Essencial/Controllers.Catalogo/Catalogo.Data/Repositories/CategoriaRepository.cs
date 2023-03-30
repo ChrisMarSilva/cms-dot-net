@@ -13,6 +13,12 @@ public class CategoriaRepository : BaseRepository<Categoria>, ICategoriaReposito
     //private readonly AppDbContext _ctx;
     private readonly string _className;
 
+    public CategoriaRepository(AppDbContext ctx) : base(ctx)
+    {
+        //_ctx = ctx;
+        _className = GetType().FullName;
+    }
+
     public CategoriaRepository(ILogger<CategoriaRepository> logger, AppDbContext ctx) : base(logger, ctx)
     {
         _logger = logger;
@@ -24,6 +30,8 @@ public class CategoriaRepository : BaseRepository<Categoria>, ICategoriaReposito
 
     public async Task<PagedList<Categoria>> GetCategoriasAsync(CategoriasParameters categParams)
     {
+        // _logger.LogInformation($"{_className}.GetCategoriasAsync()");
+
         //return await base.GetAll()
         //    .OrderBy(on => on.Nome)
         //    .Skip((prodParams.PageNumber - 1) * prodParams.PageSize)
@@ -38,7 +46,7 @@ public class CategoriaRepository : BaseRepository<Categoria>, ICategoriaReposito
 
     public async Task<IEnumerable<Categoria>> GetAllAsync()
     {
-        _logger.LogInformation($"{_className}.GetAllAsync()");
+        // _logger.LogInformation($"{_className}.GetAllAsync()");
 
         // return base.GetAll().Include(x => x.Produtos);
 
@@ -51,7 +59,7 @@ public class CategoriaRepository : BaseRepository<Categoria>, ICategoriaReposito
 
     //public async Task<Categoria> GetByIdAsync(Guid id)
     //{
-    //    _logger.LogInformation($"{_className}.GetByIdAsync()");
+    //    // _logger.LogInformation($"{_className}.GetByIdAsync()");
     //
     //    //If your result set returns 0 records:
     //    //SingleOrDefault returns the default value for the type(e.g. default for int is 0)
@@ -74,7 +82,7 @@ public class CategoriaRepository : BaseRepository<Categoria>, ICategoriaReposito
 
     //public async Task<Categoria> AddAsync(Categoria input)
     //{
-    //    _logger.LogInformation($"{_className}.Add()");
+    //    // _logger.LogInformation($"{_className}.Add()");
     //
     //    await _ctx.Categorias.AddAsync(input);
     //    return input;
@@ -82,7 +90,7 @@ public class CategoriaRepository : BaseRepository<Categoria>, ICategoriaReposito
 
     //public Categoria Update(Categoria input)
     //{
-    //    _logger.LogInformation($"{_className}.Update()");
+    //    // _logger.LogInformation($"{_className}.Update()");
     //
     //    _ctx.Categorias.Update(input);
     //    return input;
@@ -90,7 +98,7 @@ public class CategoriaRepository : BaseRepository<Categoria>, ICategoriaReposito
 
     //public bool Remove(Categoria input)
     //{
-    //    _logger.LogInformation($"{_className}.Remove()");
+    //    // _logger.LogInformation($"{_className}.Remove()");
     //
     //    _ctx.Categorias.Remove(input);
     //    return true;

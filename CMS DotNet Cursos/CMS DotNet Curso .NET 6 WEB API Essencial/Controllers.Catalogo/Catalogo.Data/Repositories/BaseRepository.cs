@@ -13,6 +13,15 @@ public class BaseRepository<T> : IBaseRepository<T> where T : class
     protected readonly DbSet<T> _dbSet;
     private readonly string _className;
 
+
+    public BaseRepository(AppDbContext ctx)
+    {
+        _ctx = ctx;
+        _dbSet = _ctx.Set<T>();
+        _className = GetType().FullName;
+    }
+
+
     public BaseRepository(ILogger<BaseRepository<T>> logger, AppDbContext ctx)
     {
         _logger = logger;
@@ -25,7 +34,7 @@ public class BaseRepository<T> : IBaseRepository<T> where T : class
 
     public IQueryable<T> GetAll() //public async Task<IEnumerable<T>> GetAllAsync()
     {
-        _logger.LogInformation($"{_className}.GetAll()");
+        // _logger.LogInformation($"{_className}.GetAll()");
 
         //return await _dbSet
         //    // .AsNoTracking()
@@ -39,14 +48,14 @@ public class BaseRepository<T> : IBaseRepository<T> where T : class
 
     public async Task<IEnumerable<T>> GetByWhereAsync(Expression<Func<T, bool>> expression, CancellationToken cancellationToken = default)
     {
-        _logger.LogInformation($"{_className}.GetByWhereAsync()");
+        // _logger.LogInformation($"{_className}.GetByWhereAsync()");
 
         return await _dbSet.Where(expression).ToListAsync(cancellationToken);
     }
 
     public async Task<T> GetByIdAsync(Expression<Func<T, bool>> expression, CancellationToken cancellationToken = default) // Guid id
     {
-        _logger.LogInformation($"{_className}.GetByIdAsync()");
+        // _logger.LogInformation($"{_className}.GetByIdAsync()");
 
         //If your result set returns 0 records:
         //SingleOrDefault returns the default value for the type(e.g. default for int is 0)
@@ -65,7 +74,7 @@ public class BaseRepository<T> : IBaseRepository<T> where T : class
 
     public async Task<T> GetByIdNoTrackingAsync(Expression<Func<T, bool>> expression, CancellationToken cancellationToken = default) // Guid id
     {
-        _logger.LogInformation($"{_className}.GetByIdNoTrackingAsync()");
+        // _logger.LogInformation($"{_className}.GetByIdNoTrackingAsync()");
 
         //If your result set returns 0 records:
         //SingleOrDefault returns the default value for the type(e.g. default for int is 0)
@@ -84,14 +93,14 @@ public class BaseRepository<T> : IBaseRepository<T> where T : class
 
     public async Task<bool> IsUniqueAsync(Expression<Func<T, bool>> expression, CancellationToken cancellationToken = default)
     {
-        _logger.LogInformation($"{_className}.IsUniqueAsync()");
+        // _logger.LogInformation($"{_className}.IsUniqueAsync()");
 
         return await _dbSet.Where(expression).AnyAsync(cancellationToken);
     }
 
     public async Task<T> AddAsync(T entity, CancellationToken cancellationToken = default)
     {
-        _logger.LogInformation($"{_className}.AddAsync()");
+        // _logger.LogInformation($"{_className}.AddAsync()");
 
         await _dbSet.AddAsync(entity, cancellationToken);
         return entity;
@@ -99,7 +108,7 @@ public class BaseRepository<T> : IBaseRepository<T> where T : class
 
     public async Task<IEnumerable<T>> AddRangeAsync(IEnumerable<T> entities, CancellationToken cancellationToken = default)
     {
-        _logger.LogInformation($"{_className}.AddRangeAsync()");
+        // _logger.LogInformation($"{_className}.AddRangeAsync()");
 
         await _dbSet.AddRangeAsync(entities, cancellationToken);
         return entities;
@@ -107,7 +116,7 @@ public class BaseRepository<T> : IBaseRepository<T> where T : class
 
     public T Update(T entity)
     {
-        _logger.LogInformation($"{_className}.UpdateBase()");
+        // _logger.LogInformation($"{_className}.UpdateBase()");
 
         // _ctx.Entry(entity).State = EntityState.Modified;
         _dbSet.Update(entity);
@@ -116,7 +125,7 @@ public class BaseRepository<T> : IBaseRepository<T> where T : class
 
     public bool Remove(T entity)
     {
-        _logger.LogInformation($"{_className}.Remove()");
+        // _logger.LogInformation($"{_className}.Remove()");
 
         _dbSet.Remove(entity);
         return true;
@@ -124,7 +133,7 @@ public class BaseRepository<T> : IBaseRepository<T> where T : class
 
     public bool RemoveRange(IEnumerable<T> entities)
     {
-        _logger.LogInformation($"{_className}.RemoveRange()");
+        // _logger.LogInformation($"{_className}.RemoveRange()");
 
         _dbSet.RemoveRange(entities);
         return true;

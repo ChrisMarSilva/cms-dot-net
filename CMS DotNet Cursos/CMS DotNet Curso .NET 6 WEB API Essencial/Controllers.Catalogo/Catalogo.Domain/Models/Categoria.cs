@@ -25,6 +25,17 @@ public class Categoria : BaseEntity
         ImagemUrl = imagemUrl;
     }
 
+    public Categoria(Guid id) : base(id)
+    {
+        this.Produtos = new Collection<Produto>(); // List // Collection
+    }
+
+    public Categoria(Guid id, string nome, string imagemUrl) : this(id)
+    {
+        Nome = nome;
+        ImagemUrl = imagemUrl;
+    }
+
     public void Update(string nome, string imagemUrl)
     {
         base.Update();

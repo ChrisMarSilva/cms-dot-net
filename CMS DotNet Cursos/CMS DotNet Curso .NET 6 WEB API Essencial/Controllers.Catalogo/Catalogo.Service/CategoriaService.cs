@@ -17,6 +17,18 @@ public class CategoriaService : ICategoriaService
     private readonly string _className;
 
     public CategoriaService(
+        //ICategoriaRepository categRepo,
+        IUnitOfWork uow,
+        IMapper mapper
+        )
+    {
+        // _categRepo = categRepo ?? throw new ArgumentNullException(nameof(ICategoriaRepository));
+        _uow = uow;
+        _mapper = mapper;
+        _className = GetType().FullName;
+    }
+
+    public CategoriaService(
         ILogger<CategoriaService> logger,
         //ICategoriaRepository categRepo,
         IUnitOfWork uow,
@@ -35,7 +47,7 @@ public class CategoriaService : ICategoriaService
     // public async Task<IEnumerable<CategoriaResponseDTO>> GetAllAsync()
     public async Task<(dynamic, IEnumerable<CategoriaResponseDTO>)> GetAllAsync(CategoriasParameters? categParams)
     {
-        _logger.LogInformation($"{_className}.GetAllAsync()");
+        // _logger.LogInformation($"{_className}.GetAllAsync()");
         try
         {
             //var results = await _categRepo.FindAllAsync();
@@ -49,14 +61,14 @@ public class CategoriaService : ICategoriaService
         }
         catch (Exception ex)
         {
-            _logger.LogError($"{_className}.GetAllAsync(Erro: {ex.Message})");
+            // _logger.LogError($"{_className}.GetAllAsync(Erro: {ex.Message})");
             throw;
         }
     }
 
     public async Task<CategoriaResponseDTO> GetByIdAsync(Guid id)
     {
-        _logger.LogInformation($"{_className}.GetByIdAsync()");
+        // _logger.LogInformation($"{_className}.GetByIdAsync()");
         try
         {
             // var result = await _categRepo.GetByIdAsync(id);
@@ -71,14 +83,14 @@ public class CategoriaService : ICategoriaService
         }
         catch (Exception ex)
         {
-            _logger.LogError($"{_className}.GetByIdAsync(Erro: {ex.Message})");
+            // _logger.LogError($"{_className}.GetByIdAsync(Erro: {ex.Message})");
             throw;
         }
     }
 
     public async Task<CategoriaResponseDTO> InsertAsync(CategoriaRequestDTO input)
     {
-        _logger.LogInformation($"{_className}.InsertAsync()");
+        // _logger.LogInformation($"{_className}.InsertAsync()");
         try
         {
             //var categ = _mapper.Map<Categoria>(input);
@@ -101,14 +113,14 @@ public class CategoriaService : ICategoriaService
         }
         catch (Exception ex)
         {
-            _logger.LogError($"{_className}.InsertAsync(Erro: {ex.Message})");
+            // _logger.LogError($"{_className}.InsertAsync(Erro: {ex.Message})");
             throw;
         }
     }
 
     public async Task<CategoriaResponseDTO> UpdateAsync(Guid id, CategoriaRequestDTO input)
     {
-        _logger.LogInformation($"{_className}.UpdateAsync()");
+        // _logger.LogInformation($"{_className}.UpdateAsync()");
         try
         {
             //if (id != input.Id)
@@ -143,14 +155,14 @@ public class CategoriaService : ICategoriaService
         }
         catch (Exception ex)
         {
-            _logger.LogError($"{_className}.UpdateAsync(Erro: {ex.Message})");
+            // _logger.LogError($"{_className}.UpdateAsync(Erro: {ex.Message})");
             throw;
         }
     }
 
     public async Task<bool> DeleteAsync(Guid id)
     {
-        _logger.LogInformation($"{_className}.DeleteAsync()");
+        // _logger.LogInformation($"{_className}.DeleteAsync()");
         try
         {
             //var result = await _categRepo.GetByIdAsync(id);
@@ -174,7 +186,7 @@ public class CategoriaService : ICategoriaService
         }
         catch (Exception ex)
         {
-            _logger.LogError($"{_className}.DeleteAsync(Erro: {ex.Message})");
+            // _logger.LogError($"{_className}.DeleteAsync(Erro: {ex.Message})");
             throw; // return false;
         }
     }

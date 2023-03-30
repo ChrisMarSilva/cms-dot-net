@@ -20,7 +20,7 @@ public class ProdutosController : ControllerBase
 
     public ProdutosController(ILogger<ProdutosController> logger, IProdutoService prodService)
     {
-        _logger = logger;
+        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _prodService = prodService ?? throw new ArgumentNullException(nameof(IProdutoService));
         _className = GetType().FullName;
 
