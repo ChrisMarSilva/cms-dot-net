@@ -6,65 +6,72 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 
-namespace Catalogo.API.Controllers;
+namespace Catalogo.API.Controllers.v1;
 
+[Produces("application/json")]
 [Route("api/v1/[controller]")]
 [ApiController]
 [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-public class CategoriasController : ControllerBase // : BaseController<CategoriasController>
+public class ProdutosController : ControllerBase
 {
-    private readonly ILogger<CategoriasController> _logger;
-    private readonly ICategoriaService _categService;
+    private readonly ILogger<ProdutosController> _logger;
+    private readonly IProdutoService _prodService;
     private readonly string _className;
 
-    public CategoriasController(ILogger<CategoriasController> logger, ICategoriaService categService)
+    public ProdutosController(ILogger<ProdutosController> logger, IProdutoService prodService)
     {
         _logger = logger;
-        _categService = categService ?? throw new ArgumentNullException(nameof(ICategoriaService));
+        _prodService = prodService ?? throw new ArgumentNullException(nameof(IProdutoService));
         _className = GetType().FullName;
 
         _logger.LogInformation($"{_className}");
     }
 
+    /// <summary>
+    /// Exibe uma relação dos produtos
+    /// </summary>
+    /// <returns>Retorna uma lista de objetos Produto</returns>
     [HttpGet]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<CategoriaResponseDTO>))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<ProdutoResponseDTO>))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> GetAll([FromQuery] CategoriasParameters categParams) // Task<ActionResult<IEnumerable<CategoriaRequestDTO>>>
+    public async Task<IActionResult> GetAll([FromQuery] ProdutosParameters prodParams) // Task<ActionResult<IEnumerable<ProdutoRequestDTO>>>
     {
         _logger.LogInformation($"{_className}.GetAll()");
         try
         {
-            var (metadata, response) = await _categService.GetAllAsync(categParams);
+            var (metadata, response) = await _prodService.GetAllAsync(prodParams);
 
             if (response is null || !response.Any())
                 return NotFound("No records found");
 
             //var metadata = new { results.TotalCount, results.PageSize, results.CurrentPage, results.TotalPages, results.HasNext, results.HasPrevious };
-            //Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
+            // Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
             Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(metadata));
-
 
             return Ok(response);
         }
         catch (Exception ex)
         {
-            //_logger.LogError($"{_className}.GetAll(Erro: {ex.Message})");
-            _logger.LogError(ex, $"{_className}.GetAll(Erro: {ex.Message})");
+            _logger.LogError($"{_className}.GetAll(Erro: {ex.Message})");
             return StatusCode(StatusCodes.Status500InternalServerError, "Ocorreu um problema ao tratar a sua solicitação.");
         }
     }
-
+    /// <summary>
+    /// Obtem um produto pelo seu identificador produtoId
+    /// </summary>
+    /// <param name="id">Código do produto</param>
+    /// <returns>Um objeto Produto</returns>
     [HttpGet("{id:Guid}")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(CategoriaResponseDTO))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ProdutoResponseDTO))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> GetById(Guid id) // Task<ActionResult<CategoriaRequestDTO>>
+    public async Task<IActionResult> GetById(Guid id) // Task<ActionResult<ProdutoRequestDTO>>
     {
         _logger.LogInformation($"{_className}.GetById()");
         try
         {
-            var response = await _categService.GetByIdAsync(id);
+            var response = await _prodService.GetByIdAsync(id);
 
             if (response is null || response?.Id == Guid.Empty)
                 return NotFound("No record found");
@@ -79,15 +86,15 @@ public class CategoriasController : ControllerBase // : BaseController<Categoria
     }
 
     [HttpPost]
-    [ProducesResponseType(typeof(CategoriaResponseDTO), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(ProdutoResponseDTO), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> Post(CategoriaRequestDTO request)
+    public async Task<IActionResult> Post(ProdutoRequestDTO request)
     {
         _logger.LogInformation($"{_className}.Post()");
         try
         {
-            var response = await _categService.InsertAsync(request);
+            var response = await _prodService.InsertAsync(request);
 
             if (response is null || response?.Id == Guid.Empty)
                 return BadRequest();
@@ -100,17 +107,22 @@ public class CategoriasController : ControllerBase // : BaseController<Categoria
             return StatusCode(StatusCodes.Status500InternalServerError, "Ocorreu um problema ao tratar a sua solicitação.");
         }
     }
-
+    /// <summary>
+    /// Atualiza um produto pelo id
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="request"></param>
+    /// <returns></returns>
     [HttpPut("{id:Guid}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> Update(Guid id, CategoriaRequestDTO request)
+    public async Task<IActionResult> Update(Guid id, ProdutoRequestDTO request)
     {
         _logger.LogInformation($"{_className}.Update()");
         try
         {
-            var response = await _categService.UpdateAsync(id, request);
+            var response = await _prodService.UpdateAsync(id, request);
 
             if (response is null || response?.Id == Guid.Empty)
                 return NotFound("No records found");
@@ -133,7 +145,7 @@ public class CategoriasController : ControllerBase // : BaseController<Categoria
         _logger.LogInformation($"{_className}.Delete()");
         try
         {
-            var response = await _categService.DeleteAsync(id);
+            var response = await _prodService.DeleteAsync(id);
 
             if (!response)
                 return NotFound("No records found");

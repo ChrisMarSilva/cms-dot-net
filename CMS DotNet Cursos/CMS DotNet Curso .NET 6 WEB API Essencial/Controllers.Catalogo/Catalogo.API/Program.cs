@@ -12,11 +12,12 @@ builder.Services.AddServices();
 builder.Services.AddFilters();
 builder.Services.AddCompression();
 builder.Services.AddControllersWithJson();
+builder.Services.AddVersioning();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddRouting(opt => opt.LowercaseUrls = true);
 builder.Services.AddSwagger();
 builder.Services.AddAuth(builder.Configuration);
 builder.Services.AddCorsLocal();
+builder.Services.AddRouting(opt => opt.LowercaseUrls = true);
 
 var app = builder.Build();
 

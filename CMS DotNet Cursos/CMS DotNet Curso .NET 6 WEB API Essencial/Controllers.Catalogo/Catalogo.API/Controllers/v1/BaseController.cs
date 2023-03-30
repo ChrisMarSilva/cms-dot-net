@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace Catalogo.API.Controllers;
+namespace Catalogo.API.Controllers.v1;
 
 public class BaseController<T> : ControllerBase where T : BaseController<T>
 {

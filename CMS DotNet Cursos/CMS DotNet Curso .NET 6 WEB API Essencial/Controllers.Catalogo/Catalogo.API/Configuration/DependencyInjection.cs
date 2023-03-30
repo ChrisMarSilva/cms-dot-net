@@ -12,8 +12,10 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
+using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
@@ -23,9 +25,11 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System.IO.Compression;
 using System.Net.Mime;
+using System.Reflection;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Threading.Tasks;
 
 namespace Catalogo.API.Configuration;
 
@@ -35,10 +39,10 @@ namespace Catalogo.API.Configuration;
 
 public static class DependencyInjection // Configure
 {
-
-    // AddContexts // AddPersistence
     public static IServiceCollection AddContexts(this IServiceCollection services, IConfiguration configuration)
     {
+        // AddContexts // AddPersistence
+
         var connectionString = configuration.GetConnectionString("DefaultConnection");
         services.AddDbContextPool<AppDbContext>(opt => opt.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
         // buservicesices.AddDbContext<AppDbContext>(opt => opt.UseSqlServer(connectionString));
@@ -121,11 +125,23 @@ public static class DependencyInjection // Configure
     public static IServiceCollection AddSwagger(this IServiceCollection services)
     {
         // services.AddSwagger();
-        services.AddSwaggerGen(c => { 
-            c.SwaggerDoc("v1", new OpenApiInfo { Title = "Catalogo.API", Version = "v1" });
-            // c.SwaggerDoc("v1", new OpenApiInfo { Title = "Catalogo.API", Version = "v1", Description = "Catalogo.API", TermsOfService = new Uri("https://www.google.com.br/"), Contact = new OpenApiContact() { Name = "CMS", Email = "cms@gmail.com", Url = new Uri("https://www.google.com.br/"), }, });
+
+        services.AddSwaggerGen(opt => {
+
+            opt.SwaggerDoc("v1", new OpenApiInfo { Title = "Catalogo.API", Version = "v1", Description = "Catalogo.API", TermsOfService = new Uri("https://www.google.com.br/"), Contact = new OpenApiContact() { Name = "CMS", Email = "cms@gmail.com", Url = new Uri("https://www.google.com.br/"), }, });
+            opt.SwaggerDoc("v2", new OpenApiInfo { Title = "Catalogo.API", Version = "v2" });
+
             // c.EnableAnnotations();
-            c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+
+            var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+            var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile); 
+            opt.IncludeXmlComments(xmlPath);
+
+            // opt.OperationFilter<SecurityRequirementsOperationFilter>();
+            // var xmlApiPath = Path.Combine(AppContext.BaseDirectory, $"{typeof(Program).Assembly.GetName().Name}.xml");
+            // opt.IncludeXmlComments(xmlApiPath);
+
+            opt.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
             {
                 Description = @"Enter 'Bearer' [space] and your token!",  // Description = @"JWT Authorization header using the Bearer scheme. Enter 'Bearer'[space].Example: \'Bearer 12345abcdef\'",
                 Name = "Authorization",
@@ -134,89 +150,15 @@ public static class DependencyInjection // Configure
                 Type = SecuritySchemeType.ApiKey,
                 Scheme = "Bearer"
             });
-            c.AddSecurityRequirement(new OpenApiSecurityRequirement{
-                {
+            
+            opt.AddSecurityRequirement(new OpenApiSecurityRequirement { {
                     new OpenApiSecurityScheme{ Reference = new OpenApiReference{Type = ReferenceType.SecurityScheme, Id = "Bearer"}, Scheme = "oauth2", Name = "Bearer", In= ParameterLocation.Header},
                     new List<string> ()
                 }
-             });
-           
-            //c.AddSecurityRequirement(new OpenApiSecurityRequirement {
-            //    {
-            //        new OpenApiSecurityScheme { Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "Bearer" } },
-            //        new string[] {}
-            //    }
-            //});
-
-            //        var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-            //        var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-            //        c.IncludeXmlComments(xmlPath);
-
-            //c.OperationFilter<SecurityRequirementsOperationFilter>();
-            //var xmlApiPath = Path.Combine(AppContext.BaseDirectory, $"{typeof(Startup).Assembly.GetName().Name}.xml");
-            //c.IncludeXmlComments(xmlApiPath);
+            });
         });
 
         return services;
-    }
-
-    public static IApplicationBuilder UseExceptionHandling(this IApplicationBuilder app, IWebHostEnvironment environment)
-    {
-        if (environment.IsDevelopment())
-            app.UseDeveloperExceptionPage();
-
-        return app;
-    }
-
-    public static IApplicationBuilder UseSwaggerMiddleware(this IApplicationBuilder app, IWebHostEnvironment environment)
-    {
-        if (environment.IsDevelopment())
-        {
-            app.UseSwagger();
-            //app.UseSwagger(c => { c.RouteTemplate = "swagger/{documentName}/swagger.json"; });
-            //app.UseSwagger(c => {
-            //    c.PreSerializeFilters.Add((document, request) =>
-            //    {
-            //        var paths = document.Paths.ToDictionary(item => item.Key.ToLowerInvariant(), item => item.Value);
-            //        document.Paths.Clear();
-            //        foreach (var pathItem in paths)
-            //        {
-            //            document.Paths.Add(pathItem.Key, pathItem.Value);
-            //        }
-            //    });
-            //});
-
-            app.UseSwaggerUI(c => { });
-            //app.UseSwaggerUI(c =>
-            //{
-            //    string swaggerJsonBasePath = string.IsNullOrWhiteSpace(c.RoutePrefix) ? "." : "..";
-            //    c.SwaggerEndpoint($"{swaggerJsonBasePath}/swagger/v1/swagger.json", "JD SPB PI API - V1");
-            //    c.RoutePrefix = string.Empty; // COMETAR ESSA LINHA EM DEBUG
-            //    c.SupportedSubmitMethods(new Swashbuckle.AspNetCore.SwaggerUI.SubmitMethod[] { }); // para retirar os teste dos metodos
-            //});
-
-            //app.UseReDoc(c => {
-            //    c.RoutePrefix = "docs";
-            //    string swaggerJsonBasePath = string.IsNullOrWhiteSpace(c.RoutePrefix) ? "." : "..";
-            //    c.SpecUrl($"{swaggerJsonBasePath}/swagger/v1/swagger.json");
-            //    c.DocumentTitle = "JD SPB PI API - V1";
-            //    c.EnableUntrustedSpec();//Se ativada, a especificação é considerada não confiável e todo o HTML / remarcação é higienizado para impedir o XSS. Desabilitado por padrão por motivos de desempenho.Ative esta opção se você trabalha com dados de usuários não confiáveis!
-            //    c.ScrollYOffset(10); //Se definido, especifica um deslocamento de rolagem vertical            
-            //    c.HideHostname(); //Se definido, o protocolo e o nome do host não são mostrados na definição da operação.
-            //    c.HideDownloadButton(); //Não mostre o botão de especificação "Download". Isso não torna sua especificação privada , apenas oculta o botão.
-            //    c.ExpandResponses("200,201"); //especifique quais respostas expandir por padrão por códigos de resposta.
-            //    c.RequiredPropsFirst(); // mostra as propriedades necessárias primeiro ordenadas na mesma ordem que na requiredmatriz.
-            //    c.NoAutoAuth(); //não injete a seção Autenticação automaticamente.
-            //    c.PathInMiddlePanel(); //mostre o link do caminho e o verbo HTTP no painel do meio em vez do correto.
-            //    c.HideLoading(); //não mostra carregando animação. Útil para documentos pequenos.
-            //    c.NativeScrollbars(); // use a barra de rolagem nativa para sidemenu em vez da rolagem perfeita (otimização do desempenho da rolagem para grandes especificações).
-            //    c.DisableSearch();// desabilite a indexação e a caixa de pesquisa.
-            //      //c.OnlyRequiredInSamples(); //mostra apenas os campos obrigatórios nas amostras de solicitação.
-            //    c.SortPropsAlphabetically(); // classifique as propriedades em ordem alfabética.
-            //});
-        }
-
-        return app;
     }
 
     public static IServiceCollection AddAuth(this IServiceCollection services, IConfiguration configuration)
@@ -305,8 +247,84 @@ public static class DependencyInjection // Configure
         return services;
     }
 
-    // --------------------
-    // --------------------
+    public static IServiceCollection AddVersioning(this IServiceCollection services)
+    {
+        services.AddApiVersioning(opt => {
+            opt.AssumeDefaultVersionWhenUnspecified = true;
+            opt.DefaultApiVersion = new ApiVersion(1, 0);
+            opt.ReportApiVersions = true;
+            // opt.ApiVersionReader = new HeaderApiVersionReader("x-api-version");
+            opt.ApiVersionReader = ApiVersionReader.Combine(
+                new UrlSegmentApiVersionReader(), 
+                new HeaderApiVersionReader("x-api-version"), 
+                new MediaTypeApiVersionReader("x-api-version"));
+        });
+
+        services.AddVersionedApiExplorer(opt => {
+            opt.GroupNameFormat = "'v'VVV"; // "VVV"
+            opt.SubstituteApiVersionInUrl = true;
+        });
+
+        return services;
+    }
+
+    public static IApplicationBuilder UseExceptionHandling(this IApplicationBuilder app, IWebHostEnvironment environment)
+    {
+        if (environment.IsDevelopment())
+            app.UseDeveloperExceptionPage();
+
+        return app;
+    }
+
+    public static IApplicationBuilder UseSwaggerMiddleware(this IApplicationBuilder app, IWebHostEnvironment environment)
+    {
+        if (environment.IsDevelopment())
+        {
+            app.UseSwagger();
+
+            //app.UseSwagger(c => { c.RouteTemplate = "swagger/{documentName}/swagger.json"; });
+            
+            //app.UseSwagger(c => {
+            //    c.PreSerializeFilters.Add((document, request) => {
+            //        var paths = document.Paths.ToDictionary(item => item.Key.ToLowerInvariant(), item => item.Value);
+            //        document.Paths.Clear();
+            //        foreach (var pathItem in paths) {
+            //            document.Paths.Add(pathItem.Key, pathItem.Value);
+            //        }
+            //    });
+            //});
+
+            app.UseSwaggerUI(opt => {
+                string swaggerJsonBasePath = string.IsNullOrWhiteSpace(opt.RoutePrefix) ? "." : "..";
+                opt.SwaggerEndpoint($"{swaggerJsonBasePath}/swagger/v1/swagger.json", "Catalogo.API - V1");
+                opt.SwaggerEndpoint($"{swaggerJsonBasePath}/swagger/v2/swagger.json", "Catalogo.API - V2");
+                // opt.RoutePrefix = string.Empty; // COMETAR ESSA LINHA EM DEBUG
+                // c.SupportedSubmitMethods(new Swashbuckle.AspNetCore.SwaggerUI.SubmitMethod[] { }); // para retirar os teste dos metodos
+            });
+
+            //app.UseReDoc(c => {
+            //    c.RoutePrefix = "docs";
+            //    string swaggerJsonBasePath = string.IsNullOrWhiteSpace(c.RoutePrefix) ? "." : "..";
+            //    c.SpecUrl($"{swaggerJsonBasePath}/swagger/v1/swagger.json");
+            //    c.DocumentTitle = "Catalogo.API - V1";
+            //    c.EnableUntrustedSpec();//Se ativada, a especificação é considerada não confiável e todo o HTML / remarcação é higienizado para impedir o XSS. Desabilitado por padrão por motivos de desempenho.Ative esta opção se você trabalha com dados de usuários não confiáveis!
+            //    c.ScrollYOffset(10); //Se definido, especifica um deslocamento de rolagem vertical            
+            //    c.HideHostname(); //Se definido, o protocolo e o nome do host não são mostrados na definição da operação.
+            //    c.HideDownloadButton(); //Não mostre o botão de especificação "Download". Isso não torna sua especificação privada , apenas oculta o botão.
+            //    c.ExpandResponses("200,201"); //especifique quais respostas expandir por padrão por códigos de resposta.
+            //    c.RequiredPropsFirst(); // mostra as propriedades necessárias primeiro ordenadas na mesma ordem que na requiredmatriz.
+            //    c.NoAutoAuth(); //não injete a seção Autenticação automaticamente.
+            //    c.PathInMiddlePanel(); //mostre o link do caminho e o verbo HTTP no painel do meio em vez do correto.
+            //    c.HideLoading(); //não mostra carregando animação. Útil para documentos pequenos.
+            //    c.NativeScrollbars(); // use a barra de rolagem nativa para sidemenu em vez da rolagem perfeita (otimização do desempenho da rolagem para grandes especificações).
+            //    c.DisableSearch();// desabilite a indexação e a caixa de pesquisa.
+            //      //c.OnlyRequiredInSamples(); //mostra apenas os campos obrigatórios nas amostras de solicitação.
+            //    c.SortPropsAlphabetically(); // classifique as propriedades em ordem alfabética.
+            //});
+        }
+
+        return app;
+    }
 
     public static IApplicationBuilder UseCorsMiddleware(this IApplicationBuilder app)
     {
@@ -345,7 +363,6 @@ public static class DependencyInjection // Configure
                 await context.Response.WriteAsync(result);
             }
         });
-
         return app;
     }
 

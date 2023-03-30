@@ -2,8 +2,9 @@
 using Catalogo.Service.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Catalogo.API.Controllers;
+namespace Catalogo.API.Controllers.v1;
 
+[Produces("application/json")]
 [Route("api/v1/[controller]")]
 [ApiController]
 public class MeuController : ControllerBase
