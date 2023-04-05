@@ -10,7 +10,7 @@ public class BaseEntity
     public DateTime DataCadastro { get; private set; } // CreatedAt // CreateDate // DataCadastro
     public DateTime? DataAlteracao { get; private set; } // UpdatedAt // ModifiedDate // DataAlteracao
     
-    //public bool IsActive { get; set; }
+    // public bool IsActive { get; set; }
 
     public BaseEntity()
     {

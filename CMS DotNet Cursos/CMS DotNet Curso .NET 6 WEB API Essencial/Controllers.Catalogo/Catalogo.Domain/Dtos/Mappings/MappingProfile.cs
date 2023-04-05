@@ -1,4 +1,8 @@
-﻿using AutoMapper;
+﻿// <copyright file="MappingProfile.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
+using AutoMapper;
 using Catalogo.Domain.Models;
 
 namespace Catalogo.Domain.Dtos.Mappings;
@@ -7,20 +11,20 @@ public class MappingProfile : Profile
 {
     public MappingProfile()
     {
-        //Produto
+        // Produto
         CreateMap<ProdutoRequestDTO, Produto>();
         CreateMap<Produto, ProdutoResponseDTO>();
-        //CreateMap<Produto, ProdutoResponseDTO>().ReverseMap();
+        // CreateMap<Produto, ProdutoResponseDTO>().ReverseMap();
 
-        //Categoria
+        // Categoria
         CreateMap<CategoriaRequestDTO, Categoria>();
         CreateMap<Categoria, CategoriaResponseDTO>();
-        //CreateMap<Categoria, CategoriaResponseDTO>().ReverseMap();
+        // CreateMap<Categoria, CategoriaResponseDTO>().ReverseMap();
     }
 }
 
-//public class MappingProfile
-//{
+// public class MappingProfile
+// {
 //    public static MapperConfiguration RegisterMaps()
 //    {
 //        var mappingConfig = new MapperConfiguration(config => {
@@ -29,4 +33,4 @@ public class MappingProfile : Profile
 //        });
 //        return mappingConfig;
 //    }
-//}
+// }

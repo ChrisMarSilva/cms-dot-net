@@ -14,9 +14,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Catalogo.API", "Catalogo.API\Catalogo.API.csproj", "{82806596-D9CE-4683-9504-BB23A673C8BB}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{DBE28D98-65CC-42AF-91E7-6FA828364767}"
-	ProjectSection(SolutionItems) = preProject
-		.editorconfig = .editorconfig
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catalogo.Tests.xUnit", "Catalogo.Tests.xUnit\Catalogo.Tests.xUnit.csproj", "{2F51BFC8-3140-4BBF-BA59-B1B9005AF292}"
 EndProject

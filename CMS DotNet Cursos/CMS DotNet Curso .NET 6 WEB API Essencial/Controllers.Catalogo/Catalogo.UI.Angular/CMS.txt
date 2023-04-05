@@ -1,0 +1,49 @@
+
+Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
+
+npm install -g npm@9.6.3
+npm install -g npm@latest
+
+instalar angular cli
+npm uninstall -g @angular/cli@7.0.5
+npm cache verify
+npm cache clean --force
+npm install -g @angular/cli@7.0.5
+npm install -g @angular/cli
+npm install -g @angular/cli@latest
+npm update @angular/cli -g
+ng version
+
+criar projeto angular
+ng new crudcat
+ng new Catalogo.UI.Angular
+
+executar projeto ( entrar na pasta)
+cd "Catalogo.UI.Angular"
+ng serve --watch
+ng serve --open
+ng serve --verbose
+
+criar componente ( estar na pasta do projeto)
+ng generate component <nome-componente>
+ng generate component xyz
+ng g c <nome-componente> --spec false --dry-run
+ng g c categorias --spec false --dry-run
+ng g c categorias --dry-run
+ng g c categorias
+ng g c categoria-detalhe
+ng g c categoria-nova
+ng g c categoria-editar
+ng g c login
+ng g c logout
+
+ng add @angular/material
+ng add @angular/cdk
+
+ng generate @angular/material:material-nav menu
+
+cd src
+ng generate service services/api
+ng generate service services/auth-guard
+
+npm install -g tslint

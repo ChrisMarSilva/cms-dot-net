@@ -1,4 +1,5 @@
-﻿namespace Catalogo.Domain.Dtos;
+﻿
+namespace Catalogo.Domain.Dtos;
 
 public class LoginRequestDTO
 {

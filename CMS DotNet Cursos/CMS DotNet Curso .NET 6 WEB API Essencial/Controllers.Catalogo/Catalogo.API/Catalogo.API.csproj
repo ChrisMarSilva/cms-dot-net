@@ -7,7 +7,12 @@
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <DocumentationFile>Catalogo.API.xml</DocumentationFile>
 	<NoWarn>$(NoWarn);1591</NoWarn>
-  </PropertyGroup>
+    <AnalysisLevel>latest</AnalysisLevel>
+    <AnalysisMode>all</AnalysisMode>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <CodeAnalysisTreatWarningsAsErrors>false</CodeAnalysisTreatWarningsAsErrors>
+    <EnforceCodeStyleInBuild>false</EnforceCodeStyleInBuild>
+</PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <NoWarn>1701;1702;1591</NoWarn>
@@ -27,6 +32,14 @@
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.4" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="SonarAnalyzer.CSharp" Version="8.55.0.65544">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.4">
       <PrivateAssets>all</PrivateAssets>
@@ -34,7 +47,7 @@
     </PackageReference>
 	<PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="7.0.0" />
 	<PackageReference Include="Flunt" Version="2.0.5" />
-	<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.27.0" />
+	<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.28.1" />
 	<PackageReference Include="System.Text.Json" Version="7.0.2" />
   </ItemGroup>
 

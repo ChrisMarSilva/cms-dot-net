@@ -19,11 +19,11 @@ public class CategoriasController : ControllerBase // : BaseController<Categoria
     private readonly ICategoriaService _categService;
     private readonly string _className;
 
-    public CategoriasController(ICategoriaService categService)
-    {
-        _categService = categService ?? throw new ArgumentNullException(nameof(ICategoriaService));
-        _className = GetType().FullName;
-    }
+    //public CategoriasController(ICategoriaService categService)
+    //{
+    //    _categService = categService ?? throw new ArgumentNullException(nameof(ICategoriaService));
+    //    _className = GetType().FullName;
+    //}
 
     public CategoriasController(
         ILogger<CategoriasController> logger, 
@@ -35,6 +35,13 @@ public class CategoriasController : ControllerBase // : BaseController<Categoria
 
         _logger.LogInformation($"{_className}");
     }
+
+    //[AllowAnonymous]
+    //[HttpGet("teste")]
+    //public string GeTeste()
+    //{
+    //    return $"CategoriasController - {DateTime.Now.ToLongDateString().ToString()}";
+    //}
 
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<CategoriaResponseDTO>))]

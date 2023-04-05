@@ -19,6 +19,7 @@ using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
@@ -220,23 +221,21 @@ public static class DependencyInjection // Configure
 
         return services;
     }
-    
+
     public static IServiceCollection AddCorsLocal(this IServiceCollection services)
     {
-        services.AddCors()
+        services.AddCors(policyBuilder => policyBuilder.AddPolicy("AllowAllOrigins", builder => { builder.AllowAnyOrigin(); builder.AllowAnyHeader(); builder.AllowAnyMethod(); }) )
             .AddSingleton<IActionContextAccessor, ActionContextAccessor>()
             .AddSingleton<IHttpContextAccessor, HttpContextAccessor>()
             .AddScoped<IUrlHelper>(x => x.GetRequiredService<IUrlHelperFactory>().GetUrlHelper(x.GetRequiredService<IActionContextAccessor>().ActionContext))
             .AddMvcCore()
-            .AddMvcOptions(opt => {
-                opt.Filters.Add<ValidateModelFilter>(-9999);
-                opt.Filters.Add(new CacheControlFilter());
-            })
+            .AddMvcOptions(opt => { opt.Filters.Add<ValidateModelFilter>(-9999); opt.Filters.Add(new CacheControlFilter()); })
             //.AddAuthorization()
             .AddApiExplorer()
-            .AddJsonOptions(opt => {
-                opt.JsonSerializerOptions.PropertyNamingPolicy = null;// JsonNamingPolicy.CamelCase //  null; // new CustomPropertyNamingPolicy();
-                //opt.JsonSerializerOptions.IgnoreNullValues = true;
+            .AddJsonOptions(opt =>
+            {
+                opt.JsonSerializerOptions.PropertyNamingPolicy = null; // JsonNamingPolicy.CamelCase //  null; // new CustomPropertyNamingPolicy();
+                // opt.JsonSerializerOptions.IgnoreNullValues = true;
                 opt.JsonSerializerOptions.WriteIndented = false;
                 opt.JsonSerializerOptions.AllowTrailingCommas = false;
                 opt.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
@@ -328,11 +327,15 @@ public static class DependencyInjection // Configure
 
     public static IApplicationBuilder UseCorsMiddleware(this IApplicationBuilder app)
     {
-        app.UseCors(p => {
-            p.AllowAnyOrigin();
-            p.WithMethods("GET");
-            p.AllowAnyHeader();
-        });
+        //app.UseCors(opt => {
+        //    //opt.AllowAnyOrigin();
+        //    opt.WithOrigins("*");
+        //    opt.AllowAnyMethod();
+        //    opt.AllowAnyHeader();
+        //    // opt.AllowCredentials(); 
+        //});
+
+        app.UseCors("AllowAllOrigins");
 
         return app;
     }
