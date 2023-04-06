@@ -20,9 +20,18 @@ version: '3.4'
 # sc.exe create "JD.SFN.Router.Worker" binpath="D:\ST_Git\SFN\SFN\src\01 - Workers\03 - Router\JD.SFN.Router.Worker\bin\Debug\net7.0\JD.SFN.Router.Worker.exe"
 # sc.exe create "JD.SFN.Persister.Worker" binpath="D:\ST_Git\SFN\SFN\src\01 - Workers\04 - Persister\JD.SFN.Persister.Worker\bin\Debug\net7.0\JD.SFN.Persister.Worker.exe"
 # sc.exe create "JD.NPC.Sfn.Simulador" binpath="D:\ST_Git\JDNPC\NPC\POC\JD.NPC.Sfn.Simulador\bin\Debug\net7.0\JD.NPC.Sfn.Simulador.exe"
+# sc.exe create "JD.NPC.Recebedora.Titulo.Worker" binpath="D:\ST_Git\JDNPC\NPC\Recebedora.Titulo\src\01 - Worker Service\JD.NPC.Recebedora.Titulo.Worker\bin\Debug\net7.0\JD.NPC.Recebedora.Titulo.Worker.exe"
+# sc.exe create "JD.NPC.Destinatario.Titulo.Worker" binpath="D:\ST_Git\JDNPC\NPC\Destinatario.Titulo\Destinatario.Titulo\src\01 - Worker Service\JD.NPC.Destinatario.Titulo.Worker\bin\Debug\net7.0\JD.NPC.Destinatario.Titulo.Worker.exe"
 # sc.exe start "JD.SFN.Send.Worker"
 # sc.exe stop "JD.SFN.Send.Worker"
 # sc.exe delete "JD.SFN.Send.Worker"
+
+# "Redis": "localhost:6379,password=Redis2019!"
+# "Redis": "10.10.20.36:6379,password=Redis2019!"
+
+# "Host": "10.10.20.36", // localhost
+# "VirtualHost": "chris_npc",
+# "Password": "jdpi",
 
 #volumes:
   #qmdata:
