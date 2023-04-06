@@ -61,7 +61,7 @@ public class XUnitTestCategoriasController
         // var _categService = new Mock<ICategoriaService>();
         // _categService.Setup(_ => _.GetAllAsync()).ReturnsAsync(TodoMockData.GetTodos());
 
-        _categController = new CategoriasController(_categService);
+        _categController = new CategoriasController(null, _categService);
         // _categController = new CategoriasController(_categLogger.Object, _categService.Object);
     }
 

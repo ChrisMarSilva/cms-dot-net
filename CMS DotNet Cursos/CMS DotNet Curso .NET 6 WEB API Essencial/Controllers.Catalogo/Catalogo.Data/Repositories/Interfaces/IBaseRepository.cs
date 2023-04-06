@@ -9,6 +9,8 @@ public interface IBaseRepository<T>
     Task<T> GetByIdAsync(Expression<Func<T, bool>> expression, CancellationToken cancellationToken = default); // Guid id
     Task<T> GetByIdNoTrackingAsync(Expression<Func<T, bool>> expression, CancellationToken cancellationToken = default); // Guid id
     Task<bool> IsUniqueAsync(Expression<Func<T, bool>> expression, CancellationToken cancellationToken = default);
+    Task<List<T>> LocalizaPaginaAsync(int pagina, int tamanhoPagina);
+    Task<int> GetTotalRegistrosAsync();
     Task<T> AddAsync(T entity, CancellationToken cancellationToken = default);
     Task<IEnumerable<T>> AddRangeAsync(IEnumerable<T> entities, CancellationToken cancellationToken = default);
     T Update(T entity);

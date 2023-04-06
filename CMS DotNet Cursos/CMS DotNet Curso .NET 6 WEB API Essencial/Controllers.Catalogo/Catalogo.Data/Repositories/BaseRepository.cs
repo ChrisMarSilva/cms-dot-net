@@ -13,14 +13,12 @@ public class BaseRepository<T> : IBaseRepository<T> where T : class
     protected readonly DbSet<T> _dbSet;
     private readonly string _className;
 
-
     public BaseRepository(AppDbContext ctx)
     {
         _ctx = ctx;
         _dbSet = _ctx.Set<T>();
         _className = GetType().FullName;
     }
-
 
     public BaseRepository(ILogger<BaseRepository<T>> logger, AppDbContext ctx)
     {
@@ -96,6 +94,16 @@ public class BaseRepository<T> : IBaseRepository<T> where T : class
         // _logger.LogInformation($"{_className}.IsUniqueAsync()");
 
         return await _dbSet.Where(expression).AnyAsync(cancellationToken);
+    }
+
+    public async Task<List<T>> LocalizaPaginaAsync(int numeroPagina, int quantidadeRegistros)
+    {
+        return await _dbSet.Skip(quantidadeRegistros * (numeroPagina - 1)).Take(quantidadeRegistros).ToListAsync();
+    }
+
+    public async Task<int> GetTotalRegistrosAsync()
+    {
+        return await _dbSet.AsNoTracking().CountAsync();
     }
 
     public async Task<T> AddAsync(T entity, CancellationToken cancellationToken = default)

@@ -4,6 +4,7 @@ using Catalogo.Data.Persistence.Interfaces;
 using Catalogo.Domain.Dtos;
 using Catalogo.Domain.Models;
 using Catalogo.Service.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace Catalogo.Service;
@@ -62,6 +63,32 @@ public class CategoriaService : ICategoriaService
         catch (Exception ex)
         {
             // _logger.LogError($"{_className}.GetAllAsync(Erro: {ex.Message})");
+            throw;
+        }
+    }
+
+    // public async Task<IEnumerable<CategoriaResponseDTO>> GetPaginacaoAsync(int pag, int reg)
+    public async Task<(int, int, IEnumerable<CategoriaResponseDTO>)> GetPaginacaoAsync(int pag, int reg)
+    {
+        // _logger.LogInformation($"{_className}.GetPaginacaoAsync()");
+        try
+        {
+            if (reg > 99) reg = 5;
+
+            // var results = await _categRepo.FindAllAsync();
+            // var results = await _uow.Categorias.LocalizaPaginaAsync(pag, reg);
+            var results = await _uow.Categorias.LocalizaPaginaAsync(pag, reg);
+
+            var totalDeRegistros = await _uow.Categorias.GetTotalRegistrosAsync();
+            var numeroPaginas = ((int)Math.Ceiling((double)totalDeRegistros / reg));
+
+            return (totalDeRegistros, numeroPaginas, results.Select(c => new CategoriaResponseDTO { Id = c.Id, Nome = c.Nome, ImagemUrl = c.ImagemUrl }).ToList());
+            // return _mapper.Map<List<CategoriaResponseDTO>>(results);
+            // return results;
+        }
+        catch (Exception ex)
+        {
+            // _logger.LogError($"{_className}.GetPaginacaoAsync(Erro: {ex.Message})");
             throw;
         }
     }

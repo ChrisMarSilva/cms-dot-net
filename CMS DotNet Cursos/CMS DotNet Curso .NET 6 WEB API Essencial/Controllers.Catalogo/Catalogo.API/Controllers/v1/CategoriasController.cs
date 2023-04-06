@@ -72,6 +72,33 @@ public class CategoriasController : ControllerBase // : BaseController<Categoria
         }
     }
 
+    [HttpGet("paginacao")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<CategoriaResponseDTO>))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> GetPaginacao(int pag = 1, int reg = 5) 
+    {
+        // _logger.LogInformation($"{_className}.GetAll()");
+        try
+        {
+            var (totalDeRegistros, numeroPaginas, response) = await _categService.GetPaginacaoAsync(pag, reg);
+
+            if (response is null || !response.Any())
+                return NotFound("No records found");
+
+            Response.Headers["X-Total-Registros"] = totalDeRegistros.ToString();
+            Response.Headers["X-Numero-Paginas"] = numeroPaginas.ToString();
+
+            return Ok(response);
+        }
+        catch (Exception ex)
+        {
+            //_logger.LogError($"{_className}.GetAll(Erro: {ex.Message})");
+            // _logger.LogError(ex, $"{_className}.GetAll(Erro: {ex.Message})");
+            return StatusCode(StatusCodes.Status500InternalServerError, "Ocorreu um problema ao tratar a sua solicitação.");
+        }
+    }
+
     /// <summary>
     /// Obtem uma Categoria pelo seu Id
     /// </summary>
