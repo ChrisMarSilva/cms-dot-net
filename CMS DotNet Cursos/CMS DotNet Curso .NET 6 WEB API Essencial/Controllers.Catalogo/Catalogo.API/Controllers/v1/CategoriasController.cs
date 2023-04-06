@@ -4,11 +4,13 @@ using Catalogo.Service.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OData.Query;
 using System.Text.Json;
 
 namespace Catalogo.API.Controllers.v1;
 
 //[ApiConventionType(typeof(DefaultApiConventions))]
+[EnableQuery]
 [Produces("application/json")]
 [Route("api/v1/[controller]")]
 [ApiController]

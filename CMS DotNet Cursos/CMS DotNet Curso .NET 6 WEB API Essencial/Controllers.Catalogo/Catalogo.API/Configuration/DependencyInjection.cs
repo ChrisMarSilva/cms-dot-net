@@ -12,14 +12,13 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Mvc.Versioning;
+using Microsoft.AspNetCore.OData;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
@@ -30,7 +29,6 @@ using System.Reflection;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 
 namespace Catalogo.API.Configuration;
 
@@ -118,7 +116,8 @@ public static class DependencyInjection // Configure
                  opt.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
                  opt.JsonSerializerOptions.DictionaryKeyPolicy = JsonNamingPolicy.CamelCase; // null
                  //options.JsonSerializerOptions.WriteIndented = true;
-             });
+             })
+             .AddOData(opt => opt.Expand().Select().Count().OrderBy().Filter());
 
         return services;
     }
@@ -254,8 +253,8 @@ public static class DependencyInjection // Configure
             opt.ReportApiVersions = true;
             // opt.ApiVersionReader = new HeaderApiVersionReader("x-api-version");
             opt.ApiVersionReader = ApiVersionReader.Combine(
-                new UrlSegmentApiVersionReader(), 
-                new HeaderApiVersionReader("x-api-version"), 
+                new UrlSegmentApiVersionReader(),
+                new HeaderApiVersionReader("x-api-version"),
                 new MediaTypeApiVersionReader("x-api-version"));
         });
 

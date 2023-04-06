@@ -4,10 +4,13 @@ using Catalogo.Service.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OData.Query;
 using System.Text.Json;
 
 namespace Catalogo.API.Controllers.v1;
 
+// https://localhost:7176/api/v1/produtos?$select=nome,preco&$orderby=preco,nome&$filter=preco%20lt%207
+[EnableQuery]
 [Produces("application/json")]
 [Route("api/v1/[controller]")]
 [ApiController]
