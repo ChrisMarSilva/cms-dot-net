@@ -1,5 +1,6 @@
 using Catalogo.API.Configuration;
 using Catalogo.API.Extensions;
+using Catalogo.API.GraphQL;
 using Catalogo.Data.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -36,6 +37,7 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseCors(opt => opt.AllowAnyOrigin());
+// app.UseMiddleware<TesteGraphQLMiddleware>();
 app.MapControllers();
 
 app.Run();
