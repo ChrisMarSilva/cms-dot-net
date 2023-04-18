@@ -209,29 +209,47 @@ public static class JdCripto
         return key;
     }
 
+    public static string CriptoAes256(string chave, string texto)
+    {
+        using var aes = Aes.Create();
+
+        //aes.Key = Convert.FromBase64String(chave);
+        aes.Key = DeriveKeyFromPassword(chave);
+
+        // aes.IV = new byte[16];
+        aes.IV = IV;
+
+        ICryptoTransform encryptor = aes.CreateEncryptor(aes.Key, aes.IV);
+        using var ms = new MemoryStream();
+        using var cs = new CryptoStream(ms, encryptor, CryptoStreamMode.Write);
+        using var sw = new StreamWriter(cs, Encoding.UTF8);
+        sw.Write(texto);
+        return Encoding.ASCII.GetString(ms.ToArray());
+    }
+
+
     public static string DescriptoAes256(string chave, string texto)
     {
-        byte[] iv = new byte[16];
-        //byte[] buffer = Encoding.UTF8.GetBytes(texto);
-        byte[] buffer = Convert.FromBase64String(texto);
-        //byte[] buffer = DeriveKeyFromPassword(texto);
+        // byte[] buffer = Encoding.UTF8.GetBytes(texto);
+        // byte[] buffer = DeriveKeyFromPassword(texto);
         // texto = Convert.ToBase64String(buffer);
+        byte[] buffer = Convert.FromBase64String(texto);
 
         using var aes = Aes.Create();
 
-        //aes.Mode = CipherMode.CBC;
-        aes.Padding = PaddingMode.PKCS7; // None // Zeros // PKCS7;
-        //aes.BlockSize = 128;
-        //aes.KeySize = 128;
+        // aes.BlockSize = 128;
+        // aes.KeySize = 128;
+        aes.Mode = CipherMode.CBC; //Electronic Codebook(ECB) //Cipher Block Chaining(CBC) //Output Feedback(OFB) //Cipher Text Stealing(CTS) //Counter Mode(CTR) //Cipher Feedback(CFB) //Galois / Counter Mode(GCM) //Counter with Cipher Block Chaining Message Authentication Code(CCM)
+        aes.Padding = PaddingMode.None; // None // Zeros // PKCS7;
 
         // aes.Key = Convert.FromBase64String(chave);
         // aes.Key =  Encoding.UTF8.GetBytes(chave);
         // aes.Key = Convert.FromBase64String(Hash256(chave));
+        // aes.Key = Hash256InBytes(chave);
         aes.Key = DeriveKeyFromPassword(chave);
-        //aes.Key = Hash256InBytes(chave);
 
-        //aes.IV = null;
-        //aes.IV = iv; 
+        // aes.IV = null;
+        // aes.IV = new byte[16];
         aes.IV = IV;
 
         ICryptoTransform decryptor = aes.CreateDecryptor(aes.Key, aes.IV);

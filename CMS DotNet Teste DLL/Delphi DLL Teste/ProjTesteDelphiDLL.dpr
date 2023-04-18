@@ -19,7 +19,7 @@ uses
 {$R *.res}
 
 exports
-  EnviaMensagem;
+  EnviaMensagemURL;
 
 begin
   IsMultiThread := True;
