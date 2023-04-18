@@ -10,10 +10,13 @@ using System.Text.Json;
 namespace Catalogo.API.Controllers.v1;
 
 //[ApiConventionType(typeof(DefaultApiConventions))]
-[EnableQuery]
-[Produces("application/json")]
-[Route("api/v1/[controller]")]
+
 [ApiController]
+[ApiVersion("1")]
+[EnableQuery]
+[Route("api/v{version:apiVersion}/[controller]")]
+[Produces("application/json")]
+[Consumes("application/json")]
 [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 public class CategoriasController : ControllerBase // : BaseController<CategoriasController>
 {

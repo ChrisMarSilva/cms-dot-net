@@ -1,12 +1,19 @@
 ﻿using Catalogo.API.Filters;
 using Catalogo.Service.Interfaces;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OData.Query;
 
 namespace Catalogo.API.Controllers.v1;
 
-[Produces("application/json")]
-[Route("api/v1/[controller]")]
 [ApiController]
+[ApiVersion("1")]
+[EnableQuery]
+[Route("api/v{version:apiVersion}/[controller]")]
+[Produces("application/json")]
+[Consumes("application/json")]
+[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 public class MeuController : ControllerBase
 {
     private readonly ILogger<MeuController> _logger;

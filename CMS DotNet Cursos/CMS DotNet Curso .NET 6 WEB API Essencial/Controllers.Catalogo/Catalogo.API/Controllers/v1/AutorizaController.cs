@@ -1,12 +1,19 @@
 ﻿using Catalogo.Domain.Dtos;
 using Catalogo.Service.Interfaces;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OData.Query;
 
 namespace Catalogo.API.Controllers.v1;
 
-[Produces("application/json")]
-[Route("api/[controller]")]
 [ApiController]
+[ApiVersion("1")]
+[EnableQuery]
+[Route("api/v{version:apiVersion}/[controller]")]
+[Produces("application/json")]
+[Consumes("application/json")]
+[AllowAnonymous]
 public class AutorizaController : ControllerBase
 {
     private readonly ILogger<AutorizaController> _logger;
@@ -39,6 +46,7 @@ public class AutorizaController : ControllerBase
             return StatusCode(StatusCodes.Status500InternalServerError, "Ocorreu um problema ao tratar a sua solicitação.");
         }
     }
+
     /// <summary>
     /// Registra um novo usuário
     /// </summary>
@@ -94,6 +102,29 @@ public class AutorizaController : ControllerBase
         {
             //_logger.LogError($"{_className}.Login(Erro: {ex.Message})");
             _logger.LogError(ex, $"{_className}.Login(Erro: {ex.Message})");
+            return StatusCode(StatusCodes.Status500InternalServerError, "Ocorreu um problema ao tratar a sua solicitação.");
+        }
+    }
+
+    /// <summary>
+    /// Realiza logout de um usuário
+    /// </summary>
+    /// <returns>Status 200</returns>
+    /// <remarks>retorna o Status 200</remarks>
+    [HttpPost("logout")]
+    public async Task<ActionResult> Logout()
+    {
+        _logger.LogInformation($"{_className}.Logout()");
+        try
+        {
+            await _authService.LogoutAsync();
+
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            //_logger.LogError($"{_className}.Logout(Erro: {ex.Message})");
+            _logger.LogError(ex, $"{_className}.Logout(Erro: {ex.Message})");
             return StatusCode(StatusCodes.Status500InternalServerError, "Ocorreu um problema ao tratar a sua solicitação.");
         }
     }

@@ -45,6 +45,13 @@
             <returns>Status 200 e o token para o cliente</returns>
             <remarks>retorna o Status 200 e o token para  novo</remarks>
         </member>
+        <member name="M:Catalogo.API.Controllers.v1.AutorizaController.Logout">
+            <summary>
+            Realiza logout de um usuário
+            </summary>
+            <returns>Status 200</returns>
+            <remarks>retorna o Status 200</remarks>
+        </member>
         <member name="M:Catalogo.API.Controllers.v1.CategoriasController.GetById(System.Guid)">
             <summary>
             Obtem uma Categoria pelo seu Id

@@ -1,9 +1,11 @@
-﻿namespace Catalogo.Domain.Dtos;
+﻿using System.Text.Json.Serialization;
+
+namespace Catalogo.Domain.Dtos;
 
 public class AlunoResponseDTO
 {
-    public Guid Id { get; set; }
-    public string Nome { get; set; } = string.Empty;
-    public string Email { get; set; } = string.Empty;
-    public int Idade { get; set; }
+    [property: JsonPropertyName("id")] public Guid Id { get; set; }
+    [property: JsonPropertyName("nome")] public string Nome { get; set; } = string.Empty;
+    [property: JsonPropertyName("email")] public string Email { get; set; } = string.Empty;
+    [property: JsonPropertyName("idade")] public int Idade { get; set; }
 }

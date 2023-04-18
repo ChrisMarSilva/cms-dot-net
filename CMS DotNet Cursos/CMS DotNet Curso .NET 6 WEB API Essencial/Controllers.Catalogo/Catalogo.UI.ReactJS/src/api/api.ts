@@ -9,7 +9,6 @@ async function getUsers(): Promise<Aluno[]> {
 }
 async function updateUserName(userId: string, name: string): Promise<Aluno> {
     const response = await axios.put<Aluno>(`${URL}users/${userId}`, { name });
-
     return response.data;
 }
 

@@ -1,12 +1,14 @@
 ﻿
+using System.Text.Json.Serialization;
+
 namespace Catalogo.Domain.Dtos;
 
 public class UsuarioResponseDTO
 {
-    public bool Authenticated { get; set; }
-    public DateTime Expiration { get; set; }
-    public string Token { get; set; } = string.Empty;
-    public string Message { get; set; } = string.Empty;
-    //public string RefreshToken { get; set; }
-    //public DateTime RefreshTokenExpiration { get; set; }
+    [property: JsonPropertyName("authenticated")] public bool Authenticated { get; set; }
+    [property: JsonPropertyName("expiration")] public DateTime Expiration { get; set; }
+    [property: JsonPropertyName("token")] public string Token { get; set; } = string.Empty;
+    [property: JsonPropertyName("message")] public string Message { get; set; } = string.Empty;
+    //[property: JsonPropertyName("refreshtoken")] public string RefreshToken { get; set; }
+    //[property: JsonPropertyName("refreshtokenexpiration")] public DateTime RefreshTokenExpiration { get; set; }
 }

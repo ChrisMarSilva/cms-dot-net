@@ -1,19 +1,20 @@
 
-npm install -g npm@9.6.3
-npm install -g npm@latest
+npm i -g npm@9.6.3
+npm i -g npm@latest
 
-npx create-react-app nome-do-seu-projeto
+npx create-react-app NomeProjeto
 
+npm i -g react-devtools
 npm i bootstrap reactstrap axios
-npm install react-query
-npm install react-query-devtools --save
-npm install styled-components
-
-npm install react-bootstrap bootstrap - biblioteca para desenvolvimento de componentes de interface
-npm install react-router-dom - biblioteca que facilita na hora de fazer as rotas da aplicação
-npm install -g react-devtools
-
-npm cache clean --force
+npm i react-query
+npm i react-query-devtools --save
+npm i styled-components
+npm i react-bootstrap bootstrap
+npm i react-router-dom
+npm i react-icons
 
 npm start
 npm run build
+npm cache clean --force
+npm audit fix --force
+

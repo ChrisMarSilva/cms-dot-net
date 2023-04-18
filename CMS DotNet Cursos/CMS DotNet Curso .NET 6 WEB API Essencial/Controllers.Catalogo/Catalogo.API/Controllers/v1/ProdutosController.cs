@@ -10,11 +10,14 @@ using System.Text.Json;
 namespace Catalogo.API.Controllers.v1;
 
 // https://localhost:7176/api/v1/produtos?$select=nome,preco&$orderby=preco,nome&$filter=preco%20lt%207
-[EnableQuery]
-[Produces("application/json")]
-[Route("api/v1/[controller]")]
+
 [ApiController]
-//[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+[ApiVersion("1")]
+[EnableQuery]
+[Route("api/v{version:apiVersion}/[controller]")]
+[Produces("application/json")]
+[Consumes("application/json")]
+[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 public class ProdutosController : ControllerBase
 {
     private readonly ILogger<ProdutosController> _logger;

@@ -19,6 +19,7 @@ using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.AspNetCore.OData;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -94,14 +95,14 @@ public static class DependencyInjection // Configure
 
     public static IServiceCollection AddCompression(this IServiceCollection services)
     {
-        services.AddResponseCompression(opt => {
+        services.AddResponseCompression(opt =>
+        {
             opt.EnableForHttps = true;
             opt.Providers.Add<BrotliCompressionProvider>();
             opt.Providers.Add<GzipCompressionProvider>();
         });
         services.Configure<BrotliCompressionProviderOptions>(opt => { opt.Level = CompressionLevel.Fastest; });
-        services.Configure<GzipCompressionProviderOptions>(opt => { opt.Level = CompressionLevel.SmallestSize; });
-        //services.AddResponseCompression(opt => { opt.Providers.Add(new GzipCompressionProvider(new GzipCompressionProviderOptions { Level = CompressionLevel.Fastest })); });
+        services.Configure<GzipCompressionProviderOptions>(opt => { opt.Level = CompressionLevel.Fastest; }); // SmallestSize
 
         return services;
     }
@@ -111,14 +112,11 @@ public static class DependencyInjection // Configure
         services.AddControllers()
              .AddJsonOptions(opt => {
                  opt.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
-                 //options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()); // serialize enums as strings in api responses (e.g. Role)
                  opt.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase, false));
-                 opt.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull; // JsonIgnoreCondition.WhenWritingDefault; // ignore omitted parameters on models to enable optional params (e.g. User update)
-                 // options.JsonSerializerOptions.IgnoreNullValues = true;
-                 opt.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase; // null
+                 opt.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull; 
+                 opt.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase; 
                  opt.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
-                 opt.JsonSerializerOptions.DictionaryKeyPolicy = JsonNamingPolicy.CamelCase; // null
-                 //options.JsonSerializerOptions.WriteIndented = true;
+                 opt.JsonSerializerOptions.DictionaryKeyPolicy = JsonNamingPolicy.CamelCase; 
              })
              .AddOData(opt => opt.Expand().Select().Count().OrderBy().Filter());
 

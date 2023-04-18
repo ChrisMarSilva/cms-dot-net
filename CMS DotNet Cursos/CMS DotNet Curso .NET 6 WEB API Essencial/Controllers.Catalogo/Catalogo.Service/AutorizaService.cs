@@ -127,13 +127,13 @@ public class AutorizaService : IAutorizaService
         {
             var claims = new List<Claim> // new[]
             {
-                new Claim(JwtRegisteredClaimNames.UniqueName, email),
+                new Claim("meuValor", "oque voce quiser"),
                 new Claim("meuPet", "pipoca"),
                 new Claim("email", email),
-                //new Claim(ClaimTypes.Email, userInfo.Email),
-                //new Claim(ClaimTypes.Role, "Gerente"),
-                new Claim("meuValor", "oque voce quiser"),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+                new Claim(JwtRegisteredClaimNames.UniqueName, email),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                // new Claim(ClaimTypes.Email, userInfo.Email),
+                // new Claim(ClaimTypes.Role, "Gerente"),
             };
 
             var key = new SymmetricSecurityKey(key: Encoding.UTF8.GetBytes(_configuration["Jwt:key"]));
@@ -153,8 +153,8 @@ public class AutorizaService : IAutorizaService
                 Token = new JwtSecurityTokenHandler().WriteToken(tokenHandler),
                 Expiration = expiration,
                 Message = "Token JWT OK"
-                //RefreshToken = GenerateRefreshToken(),
-                //RefreshTokenExpiration = DateTime.Now.AddDays(7)
+                // RefreshToken = GenerateRefreshToken(),
+                // RefreshTokenExpiration = DateTime.Now.AddDays(7)
             };
 
             return response;
