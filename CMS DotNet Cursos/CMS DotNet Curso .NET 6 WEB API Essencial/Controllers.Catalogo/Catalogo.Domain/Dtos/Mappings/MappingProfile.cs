@@ -20,6 +20,11 @@ public class MappingProfile : Profile
         CreateMap<CategoriaRequestDTO, Categoria>();
         CreateMap<Categoria, CategoriaResponseDTO>();
         // CreateMap<Categoria, CategoriaResponseDTO>().ReverseMap();
+
+
+        // Aluno
+        CreateMap<AlunoRequestDTO, Aluno>();
+        CreateMap<Aluno, AlunoResponseDTO>();
     }
 }
 

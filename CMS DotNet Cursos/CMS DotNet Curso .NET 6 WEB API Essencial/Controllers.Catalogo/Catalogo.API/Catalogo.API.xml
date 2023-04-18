@@ -4,6 +4,32 @@
         <name>Catalogo.API</name>
     </assembly>
     <members>
+        <member name="M:Catalogo.API.Controllers.v1.AlunosController.GetById(System.Guid)">
+            <summary>
+            Obtem um Aluno pelo seu Id
+            </summary>
+            <param name="id">codigo do aluno</param>
+            <returns>Objeto Aluno</returns>
+        </member>
+        <member name="M:Catalogo.API.Controllers.v1.AlunosController.Post(Catalogo.Domain.Dtos.AlunoRequestDTO)">
+             <summary>
+             Inclui um novo aluno
+             </summary>
+             <remarks>
+             Exemplo de request:
+            
+                 POST api/alunos
+                 {
+                    "id": 1,
+                    "nome": "aluno1",
+                    "email": "aluno@gamil.com",
+                    "idade": 10
+                 }
+             </remarks>
+             <param name="request">objeto Aluno</param>
+             <returns>O objeto Aluno incluido</returns>
+             <remarks>Retorna um objeto Aluno incluído</remarks>
+        </member>
         <member name="M:Catalogo.API.Controllers.v1.AutorizaController.Register(Catalogo.Domain.Dtos.UsuarioRequestDTO)">
             <summary>
             Registra um novo usuário

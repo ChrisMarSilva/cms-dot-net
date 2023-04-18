@@ -97,5 +97,4 @@ public class AutorizaController : ControllerBase
             return StatusCode(StatusCodes.Status500InternalServerError, "Ocorreu um problema ao tratar a sua solicitação.");
         }
     }
-
 }

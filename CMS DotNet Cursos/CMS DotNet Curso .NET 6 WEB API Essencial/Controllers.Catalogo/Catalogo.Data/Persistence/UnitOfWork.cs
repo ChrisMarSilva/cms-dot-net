@@ -12,6 +12,7 @@ public class UnitOfWork : IUnitOfWork, IDisposable
 
     public IProdutoRepository Produtos { get; private set; }
     public ICategoriaRepository Categorias { get; private set; }
+    public IAlunoRepository Alunos { get; private set; }
 
     public UnitOfWork(
         AppDbContext ctx,
@@ -22,24 +23,28 @@ public class UnitOfWork : IUnitOfWork, IDisposable
         _ctx = ctx;
         Produtos = prodRepo ?? throw new ArgumentNullException(nameof(IProdutoRepository));
         Categorias = categRepo ?? throw new ArgumentNullException(nameof(ICategoriaRepository));
+        //Alunos = alunoRepo ?? throw new ArgumentNullException(nameof(IAlunoRepository));
     }
 
     public UnitOfWork(
         ILogger<UnitOfWork> logger,
         AppDbContext ctx,
         IProdutoRepository prodRepo,
-        ICategoriaRepository categRepo
+        ICategoriaRepository categRepo,
+        IAlunoRepository alunoRepo
         )
     {
         _logger = logger;
         _ctx = ctx;
         Produtos = prodRepo ?? throw new ArgumentNullException(nameof(IProdutoRepository));
         Categorias = categRepo ?? throw new ArgumentNullException(nameof(ICategoriaRepository));
+        Alunos = alunoRepo ?? throw new ArgumentNullException(nameof(IAlunoRepository));
     }
 
     // public DbContext Context => _ctx;
     // public IProdutoRepository Produtos { get { return _produtoRepo = _produtoRepo ?? new ProdutoRepository(_ctx); } }
     // public ICategoriaRepository Categorias { get { return _categoriaRepo = _categoriaRepo ?? new CategoriaRepository(_ctx); } }
+    // public IAlunoRepository Alunos { get { return _alunoRepo = _alunoRepo ?? new AlunoRepository(_ctx); } }
 
     public void Commit() => _ctx.SaveChanges();
     public void Rollback() { }

@@ -6,6 +6,7 @@ using Catalogo.Data.Persistence.Interfaces;
 using Catalogo.Data.Repositories;
 using Catalogo.Data.Repositories.Interfaces;
 using Catalogo.Domain.Dtos.Mappings;
+using Catalogo.Domain.Models;
 using Catalogo.Service;
 using Catalogo.Service.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -68,15 +69,17 @@ public static class DependencyInjection // Configure
     {
         services.AddScoped<IProdutoRepository, ProdutoRepository>(); // UmVezQdoFazRequisicao - registra um serviço que é criado uma vez por solicitação.
         services.AddScoped<ICategoriaRepository, CategoriaRepository>(); // UmVezQdoFazRequisicao - registra um serviço que é criado uma vez por solicitação.
+        services.AddScoped<IAlunoRepository, AlunoRepository>(); // UmVezQdoFazRequisicao - registra um serviço que é criado uma vez por solicitação.
 
         return services;
     }
 
     public static IServiceCollection AddServices(this IServiceCollection services)
     {
+        services.AddScoped<IAutorizaService, AutorizaService>(); // UmVezQdoFazRequisicao - registra um serviço que é criado uma vez por solicitação.
         services.AddScoped<IProdutoService, ProdutoService>(); // UmVezQdoFazRequisicao - registra um serviço que é criado uma vez por solicitação.
         services.AddScoped<ICategoriaService, CategoriaService>(); // UmVezQdoFazRequisicao - registra um serviço que é criado uma vez por solicitação.
-        services.AddScoped<IAutorizaService, AutorizaService>(); // UmVezQdoFazRequisicao - registra um serviço que é criado uma vez por solicitação.
+        services.AddScoped<IAlunoService, AlunoService>(); // UmVezQdoFazRequisicao - registra um serviço que é criado uma vez por solicitação.
         services.AddTransient<IMeuServico, MeuServico>(); // VariasVezes - registra um serviço que é criado cada vez que é solicitado
 
         return services;
@@ -163,7 +166,7 @@ public static class DependencyInjection // Configure
 
     public static IServiceCollection AddAuth(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddIdentity<IdentityUser, IdentityRole>(options => {
+        services.AddIdentity<ApplicationUser, IdentityRole>(options => {
             options.Password.RequireNonAlphanumeric = false;
             options.Password.RequireDigit = false;
             options.Password.RequireUppercase = false;

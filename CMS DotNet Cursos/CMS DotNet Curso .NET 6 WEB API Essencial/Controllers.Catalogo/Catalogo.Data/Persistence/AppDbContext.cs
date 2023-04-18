@@ -7,7 +7,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace Catalogo.Data.Persistence;
 
-public class AppDbContext : IdentityDbContext // DbContext
+public class AppDbContext : IdentityDbContext<ApplicationUser> // IdentityDbContext // DbContext
 {
     //private readonly IConfiguration _configuration;
 
@@ -34,6 +34,7 @@ public class AppDbContext : IdentityDbContext // DbContext
 
     public DbSet<Categoria> Categorias { get; set; }
     public DbSet<Produto> Produtos { get; set; }
+    public virtual DbSet<Aluno> Alunos { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder opt)
     {
@@ -66,6 +67,7 @@ public class AppDbContext : IdentityDbContext // DbContext
         // builder.ApplyConfigurationsFromAssembly(typeof(IEntityTypeConfiguration).Assembly);
         builder.ApplyConfiguration(new CategoriaMap());
         builder.ApplyConfiguration(new ProdutoMap());
+        builder.ApplyConfiguration(new AlunoMap());
 
         // // Categoria
 
@@ -86,6 +88,11 @@ public class AppDbContext : IdentityDbContext // DbContext
         //builder.Entity<Produto>().HasData(Prod1);
         //builder.Entity<Produto>().HasData(Prod2);
         //builder.Entity<Produto>().HasData(Prod3);
+
+        //    builder.Entity<Aluno>().HasData(
+        //        new Aluno { Id = 1, Nome = "Maria da Penha", Email = "mariapenha@yahoo.com", Idade = 23 },
+        //        new Aluno { Id = 2, Nome = "Manuel Bueno", Email = "manuelbueno@yahoo.com", Idade = 22 }
+        //    );
 
         base.OnModelCreating(builder);
     }

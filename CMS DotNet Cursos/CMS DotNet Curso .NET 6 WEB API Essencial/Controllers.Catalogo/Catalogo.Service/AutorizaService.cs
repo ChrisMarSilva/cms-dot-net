@@ -1,12 +1,16 @@
 ﻿using Catalogo.Domain.Dtos;
+using Catalogo.Domain.Models;
 using Catalogo.Service.Interfaces;
+using GraphQLParser;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Catalogo.Service;
 
@@ -14,15 +18,15 @@ public class AutorizaService : IAutorizaService
 {
 
     private readonly ILogger<ProdutoService> _logger;
-    private readonly UserManager<IdentityUser> _userManager;
-    private readonly SignInManager<IdentityUser> _signInManager;
+    private readonly UserManager<ApplicationUser> _userManager;
+    private readonly SignInManager<ApplicationUser> _signInManager;
     private readonly IConfiguration _configuration;
     private readonly string _className;
 
     public AutorizaService(
         ILogger<ProdutoService> logger,
-        UserManager<IdentityUser> userManager,
-        SignInManager<IdentityUser> signInManager,
+        UserManager<ApplicationUser> userManager,
+        SignInManager<ApplicationUser> signInManager,
         IConfiguration configuration)
     {
         _logger = logger;
@@ -88,7 +92,7 @@ public class AutorizaService : IAutorizaService
         _logger.LogInformation($"{_className}.RegisterAsync()");
         try
         {
-            var user = new IdentityUser { UserName = request.Email, Email = request.Email, EmailConfirmed = true };
+            var user = new ApplicationUser { UserName = request.Email, Email = request.Email, EmailConfirmed = true };
 
             var result = await _userManager.CreateAsync(user, request.Password);
 
@@ -99,7 +103,7 @@ public class AutorizaService : IAutorizaService
             // if (!claimsResult.Succeeded)
             // return null;
 
-            await _signInManager.SignInAsync(user, false);
+            await _signInManager.SignInAsync(user, isPersistent: false);
 
             var response = this.GeraToken(request.Email);
             return response;
@@ -111,6 +115,11 @@ public class AutorizaService : IAutorizaService
         }
     }
 
+    public async Task LogoutAsync()
+    {
+        await _signInManager.SignOutAsync();
+    }
+
     private UsuarioResponseDTO GeraToken(string email)
     {
         _logger.LogInformation($"{_className}.GeraToken()");
@@ -120,13 +129,16 @@ public class AutorizaService : IAutorizaService
             {
                 new Claim(JwtRegisteredClaimNames.UniqueName, email),
                 new Claim("meuPet", "pipoca"),
+                new Claim("email", email),
+                //new Claim(ClaimTypes.Email, userInfo.Email),
+                //new Claim(ClaimTypes.Role, "Gerente"),
+                new Claim("meuValor", "oque voce quiser"),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
 
             var key = new SymmetricSecurityKey(key: Encoding.UTF8.GetBytes(_configuration["Jwt:key"]));
             var credenciais = new SigningCredentials(key: key, algorithm: SecurityAlgorithms.HmacSha256);
-            var expiracao = _configuration["TokenConfiguration:ExpireHours"];
-            var expiration = DateTime.UtcNow.AddHours(double.Parse(expiracao));
+            var expiration = DateTime.UtcNow.AddHours(double.Parse(_configuration["TokenConfiguration:ExpireHours"]));
 
             JwtSecurityToken tokenHandler = new JwtSecurityToken(
               issuer: _configuration["TokenConfiguration:Issuer"],
@@ -135,14 +147,14 @@ public class AutorizaService : IAutorizaService
               expires: expiration,
               signingCredentials: credenciais);
 
-            string token = new JwtSecurityTokenHandler().WriteToken(tokenHandler);
-
             var response = new UsuarioResponseDTO()
             {
                 Authenticated = true,
-                Token = token,
+                Token = new JwtSecurityTokenHandler().WriteToken(tokenHandler),
                 Expiration = expiration,
                 Message = "Token JWT OK"
+                //RefreshToken = GenerateRefreshToken(),
+                //RefreshTokenExpiration = DateTime.Now.AddDays(7)
             };
 
             return response;
@@ -151,6 +163,16 @@ public class AutorizaService : IAutorizaService
         {
             _logger.LogError($"{_className}.GeraToken(Erro: {ex.Message})");
             throw;
+        }
+    }
+
+    private string GenerateRefreshToken()
+    {
+        var randomNumber = new byte[32];
+        using (var rng = RandomNumberGenerator.Create())
+        {
+            rng.GetBytes(randomNumber);
+            return Convert.ToBase64String(randomNumber);
         }
     }
 }
