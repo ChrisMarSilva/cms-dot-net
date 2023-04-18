@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
+import { QueryClient, QueryClientProvider } from "react-query";
+import { ReactQueryDevtools } from "react-query/devtools";
 
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -116,96 +118,101 @@ function App() {
     }
   }, [updateData])
 
+  const queryClient = new QueryClient();
+
   return (
+    <QueryClientProvider client={queryClient}>
 
-    <div className="aluno-container">
-      <br />
-      <h3>Cadastro de Alunos</h3>
+      <div className="aluno-container">
+        <br />
+        <h3>Cadastro de Alunos</h3>
 
-      <header>
-        <img src={logoCadastro} alt='Cadastro' />
-        <button className="btn btn-success" onClick={() => abrirFecharModalIncluir()}>Incluir Novo Aluno</button>
-      </header>
+        <header>
+          <img src={logoCadastro} alt='Cadastro' />
+          <button className="btn btn-success" onClick={() => abrirFecharModalIncluir()}>Incluir Novo Aluno</button>
+        </header>
 
-      <table className="table table-bordered">
-        <thead>
-          <tr>
-            <th>Id</th>
-            <th>Nome</th>
-            <th>Email</th>
-            <th>Idade</th>
-            <th>Operação</th>
-          </tr>
-        </thead>
-        <tbody>
-          {data.map(aluno => (
-            <tr key={aluno.Id}>
-              <td>{aluno.Id}</td>
-              <td>{aluno.Nome}</td>
-              <td>{aluno.Email}</td>
-              <td>{aluno.Idade}</td>
-              <td>
-                <button className="btn btn-primary" onClick={() => selecionarAluno(aluno, "Editar")}>Editar</button> {"  "}
-                <button className="btn btn-danger" onClick={() => selecionarAluno(aluno, "Excluir")}>Excluir</button>
-              </td>
+        <table className="table table-bordered">
+          <thead>
+            <tr>
+              <th>Id</th>
+              <th>Nome</th>
+              <th>Email</th>
+              <th>Idade</th>
+              <th>Operação</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {data.map(aluno => (
+              <tr key={aluno.Id}>
+                <td>{aluno.Id}</td>
+                <td>{aluno.Nome}</td>
+                <td>{aluno.Email}</td>
+                <td>{aluno.Idade}</td>
+                <td>
+                  <button className="btn btn-primary" onClick={() => selecionarAluno(aluno, "Editar")}>Editar</button> {"  "}
+                  <button className="btn btn-danger" onClick={() => selecionarAluno(aluno, "Excluir")}>Excluir</button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
 
-      <Footer />
+        <Footer />
 
-      <Modal isOpen={modalIncluir}>
-        <ModalHeader>Incluir Alunos</ModalHeader>
-        <ModalBody>
-          <div className="form-group">
-            <label>Nome: </label> <br />
-            <input type="text" className="form-control" name="Nome" onChange={handleChange} /> <br />
-            <label>Email: </label> <br />
-            <input type="text" className="form-control" name="Email" onChange={handleChange} /> <br />
-            <label>Idade: </label> <br />
-            <input type="text" className="form-control" name="Idade" onChange={handleChange} /> <br />
-          </div>
-        </ModalBody>
-        <ModalFooter>
-          <button className="btn btn-primary" onClick={() => pedidoPost()}>Incluir</button>{"   "}
-          <button className="btn btn-danger" onClick={() => abrirFecharModalIncluir()} >Cancelar</button>
-        </ModalFooter>
-      </Modal>
+        <Modal isOpen={modalIncluir}>
+          <ModalHeader>Incluir Alunos</ModalHeader>
+          <ModalBody>
+            <div className="form-group">
+              <label>Nome: </label> <br />
+              <input type="text" className="form-control" name="Nome" onChange={handleChange} /> <br />
+              <label>Email: </label> <br />
+              <input type="text" className="form-control" name="Email" onChange={handleChange} /> <br />
+              <label>Idade: </label> <br />
+              <input type="text" className="form-control" name="Idade" onChange={handleChange} /> <br />
+            </div>
+          </ModalBody>
+          <ModalFooter>
+            <button className="btn btn-primary" onClick={() => pedidoPost()}>Incluir</button>{"   "}
+            <button className="btn btn-danger" onClick={() => abrirFecharModalIncluir()} >Cancelar</button>
+          </ModalFooter>
+        </Modal>
 
-      <Modal isOpen={modalEditar}>
-        <ModalHeader>Editar Aluno</ModalHeader>
-        <ModalBody>
-          <div className="form-group">
-            <label>ID: </label>
-            <input type="text" className="form-control" readOnly value={alunoSelecionado && alunoSelecionado.Id} />
-            <br />
-            <label>Nome: </label><br />
-            <input type="text" className="form-control" name="Nome" onChange={handleChange} value={alunoSelecionado && alunoSelecionado.Nome} /><br />
-            <label>Email: </label><br />
-            <input type="text" className="form-control" name="Email" onChange={handleChange} value={alunoSelecionado && alunoSelecionado.Email} /><br />
-            <label>Idade: </label><br />
-            <input type="text" className="form-control" name="Idade" onChange={handleChange} value={alunoSelecionado && alunoSelecionado.Idade} /><br />
-          </div>
-        </ModalBody>
-        <ModalFooter>
-          <button className="btn btn-primary" onClick={() => pedidoPut()}>Editar</button>{"  "}
-          <button className="btn btn-danger" onClick={() => abrirFecharModalEditar()} >Cancelar</button>
-        </ModalFooter>
-      </Modal>
+        <Modal isOpen={modalEditar}>
+          <ModalHeader>Editar Aluno</ModalHeader>
+          <ModalBody>
+            <div className="form-group">
+              <label>ID: </label>
+              <input type="text" className="form-control" readOnly value={alunoSelecionado && alunoSelecionado.Id} />
+              <br />
+              <label>Nome: </label><br />
+              <input type="text" className="form-control" name="Nome" onChange={handleChange} value={alunoSelecionado && alunoSelecionado.Nome} /><br />
+              <label>Email: </label><br />
+              <input type="text" className="form-control" name="Email" onChange={handleChange} value={alunoSelecionado && alunoSelecionado.Email} /><br />
+              <label>Idade: </label><br />
+              <input type="text" className="form-control" name="Idade" onChange={handleChange} value={alunoSelecionado && alunoSelecionado.Idade} /><br />
+            </div>
+          </ModalBody>
+          <ModalFooter>
+            <button className="btn btn-primary" onClick={() => pedidoPut()}>Editar</button>{"  "}
+            <button className="btn btn-danger" onClick={() => abrirFecharModalEditar()} >Cancelar</button>
+          </ModalFooter>
+        </Modal>
 
-      <Modal isOpen={modalExcluir}>
-        <ModalBody>
-          Confirma a exclusão deste(a) aluno(a) : {alunoSelecionado && alunoSelecionado.nome} ?
-        </ModalBody>
-        <ModalFooter>
-          <button className="btn btn-danger" onClick={() => pedidoDelete()} > Sim </button>
-          <button className="btn btn-secondary" onClick={() => abrirFecharModalExcluir()}> Não </button>
-        </ModalFooter>
-      </Modal>
+        <Modal isOpen={modalExcluir}>
+          <ModalBody>
+            Confirma a exclusão deste(a) aluno(a) : {alunoSelecionado && alunoSelecionado.nome} ?
+          </ModalBody>
+          <ModalFooter>
+            <button className="btn btn-danger" onClick={() => pedidoDelete()} > Sim </button>
+            <button className="btn btn-secondary" onClick={() => abrirFecharModalExcluir()}> Não </button>
+          </ModalFooter>
+        </Modal>
 
-    </div>
+      </div>
 
+      <ReactQueryDevtools initialIsOpen={false} />
+    </QueryClientProvider>
   );
 }
 

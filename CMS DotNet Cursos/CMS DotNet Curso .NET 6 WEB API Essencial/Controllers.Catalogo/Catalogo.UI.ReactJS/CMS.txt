@@ -5,9 +5,15 @@ npm install -g npm@latest
 npx create-react-app nome-do-seu-projeto
 
 npm i bootstrap reactstrap axios
+npm install react-query
+npm install react-query-devtools --save
+npm install styled-components
+
 npm install react-bootstrap bootstrap - biblioteca para desenvolvimento de componentes de interface
 npm install react-router-dom - biblioteca que facilita na hora de fazer as rotas da aplicação
 npm install -g react-devtools
+
+npm cache clean --force
 
 npm start
 npm run build
