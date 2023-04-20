@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Catalogo.Domain.Models;
 
-public class Categoria : BaseEntity
+public sealed class Categoria : BaseEntity
 {
     [Required(ErrorMessage = "O nome é obrigatório")]
     [StringLength(80, ErrorMessage = "O nome deve ter no máximo {1} e no mínimo {2} caracteres", MinimumLength = 5)]

@@ -1,4 +1,4 @@
-﻿using Catalogo.Data.Persistence.Interfaces;
+﻿using Catalogo.Infrastructure.Context.Interfaces;
 using GraphQL;
 using GraphQL.Types;
 // using GraphQL.Http;

@@ -1,5 +1,5 @@
-﻿using Catalogo.Data.Persistence;
-using Catalogo.Domain.Models;
+﻿using Catalogo.Domain.Models;
+using Catalogo.Infrastructure.Context;
 
 namespace Catalogo.Tests.xUnit;
 

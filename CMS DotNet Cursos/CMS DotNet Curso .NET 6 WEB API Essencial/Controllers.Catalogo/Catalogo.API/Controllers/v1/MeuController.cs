@@ -1,5 +1,5 @@
 ﻿using Catalogo.API.Filters;
-using Catalogo.Service.Interfaces;
+using Catalogo.Application.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

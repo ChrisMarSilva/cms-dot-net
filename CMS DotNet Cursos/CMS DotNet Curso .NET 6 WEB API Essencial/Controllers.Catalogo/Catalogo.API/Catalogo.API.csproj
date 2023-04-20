@@ -64,8 +64,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Catalogo.Data\Catalogo.Data.csproj" />
-    <ProjectReference Include="..\Catalogo.Service\Catalogo.Service.csproj" />
+    <ProjectReference Include="..\Catalogo.Bootstrap\Catalogo.Bootstrap.csproj" />
   </ItemGroup>
 
 </Project>

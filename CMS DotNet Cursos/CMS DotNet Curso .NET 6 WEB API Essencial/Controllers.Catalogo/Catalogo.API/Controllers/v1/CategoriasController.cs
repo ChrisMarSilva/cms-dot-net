@@ -1,6 +1,6 @@
-﻿using Catalogo.Data.Pagination;
-using Catalogo.Domain.Dtos;
-using Catalogo.Service.Interfaces;
+﻿using Catalogo.Application.Dtos;
+using Catalogo.Application.Interfaces;
+using Catalogo.Domain.Pagination;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

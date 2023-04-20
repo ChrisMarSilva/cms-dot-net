@@ -1,6 +1,5 @@
-﻿using Catalogo.Domain.Dtos;
-using Catalogo.Service.Interfaces;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Catalogo.Application.Dtos;
+using Catalogo.Application.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;

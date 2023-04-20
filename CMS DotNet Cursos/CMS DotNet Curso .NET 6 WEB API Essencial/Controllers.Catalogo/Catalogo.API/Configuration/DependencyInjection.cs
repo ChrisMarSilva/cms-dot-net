@@ -1,34 +1,19 @@
-﻿using AutoMapper;
-using Catalogo.API.Filters;
+﻿using Catalogo.API.Filters;
 using Catalogo.API.Logging;
-using Catalogo.Data.Persistence;
-using Catalogo.Data.Persistence.Interfaces;
-using Catalogo.Data.Repositories;
-using Catalogo.Data.Repositories.Interfaces;
-using Catalogo.Domain.Dtos.Mappings;
-using Catalogo.Domain.Models;
-using Catalogo.Service;
-using Catalogo.Service.Interfaces;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.AspNetCore.OData;
 using Microsoft.AspNetCore.ResponseCompression;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System.IO.Compression;
 using System.Net.Mime;
 using System.Reflection;
-using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -40,51 +25,49 @@ namespace Catalogo.API.Configuration;
 
 public static class DependencyInjection // Configure
 {
-    public static IServiceCollection AddContexts(this IServiceCollection services, IConfiguration configuration)
-    {
-        // AddContexts // AddPersistence
+    //public static IServiceCollection AddContexts(this IServiceCollection services, IConfiguration configuration)
+    //{
+    //    // AddContexts // AddPersistence
+    //    var connectionString = configuration.GetConnectionString("DefaultConnection");
+    //    services.AddDbContextPool<AppDbContext>(opt => opt.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+    //    // buservicesices.AddDbContext<AppDbContext>(opt => opt.UseSqlServer(connectionString));
+    //    // bserviceses.AddDbContext<AppDbContext>(opt => opt.UseSqlite("DataSource=app.db;Cache=Shared"));
+    //    services.AddScoped<IUnitOfWork, UnitOfWork>();// AddScoped = UmVezQdoFazRequisicao - registra um serviço que é criado uma vez por solicitação.
+    //    return services;
+    //}
 
-        var connectionString = configuration.GetConnectionString("DefaultConnection");
-        services.AddDbContextPool<AppDbContext>(opt => opt.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
-        // buservicesices.AddDbContext<AppDbContext>(opt => opt.UseSqlServer(connectionString));
-        // bserviceses.AddDbContext<AppDbContext>(opt => opt.UseSqlite("DataSource=app.db;Cache=Shared"));
-        services.AddScoped<IUnitOfWork, UnitOfWork>();// AddScoped = UmVezQdoFazRequisicao - registra um serviço que é criado uma vez por solicitação.
+    //public static IServiceCollection AddMappers(this IServiceCollection services)
+    //{
+    //    var mappingConfig = new MapperConfiguration(mc => { mc.AddProfile(new MappingProfile()); });
+    //    IMapper mapper = mappingConfig.CreateMapper();
+    //    services.AddSingleton(mapper); // AddSingleton = UmVezQdoSobeAPI - registra um serviço que é criado uma única vez durante todo o ciclo de vida do aplicativo
 
-        return services;
-    }
+    //    //IMapper mapper = MappingConfig.RegisterMaps().CreateMapper();
+    //    //builder.Services.AddSingleton(mapper); // AddSingleton = UmVezQdoSobeAPI - registra um serviço que é criado uma única vez durante todo o ciclo de vida do aplicativo
+    //    //builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-    public static IServiceCollection AddMappers(this IServiceCollection services)
-    {
-        var mappingConfig = new MapperConfiguration(mc => { mc.AddProfile(new MappingProfile()); });
-        IMapper mapper = mappingConfig.CreateMapper();
-        services.AddSingleton(mapper); // AddSingleton = UmVezQdoSobeAPI - registra um serviço que é criado uma única vez durante todo o ciclo de vida do aplicativo
+    //    return services;
+    //}
 
-        //IMapper mapper = MappingConfig.RegisterMaps().CreateMapper();
-        //builder.Services.AddSingleton(mapper); // AddSingleton = UmVezQdoSobeAPI - registra um serviço que é criado uma única vez durante todo o ciclo de vida do aplicativo
-        //builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+    //public static IServiceCollection AddRepositories(this IServiceCollection services)
+    //{
+    //    services.AddScoped<IProdutoRepository, ProdutoRepository>(); // UmVezQdoFazRequisicao - registra um serviço que é criado uma vez por solicitação.
+    //    services.AddScoped<ICategoriaRepository, CategoriaRepository>(); // UmVezQdoFazRequisicao - registra um serviço que é criado uma vez por solicitação.
+    //    services.AddScoped<IAlunoRepository, AlunoRepository>(); // UmVezQdoFazRequisicao - registra um serviço que é criado uma vez por solicitação.
 
-        return services;
-    }
+    //    return services;
+    //}
 
-    public static IServiceCollection AddRepositories(this IServiceCollection services)
-    {
-        services.AddScoped<IProdutoRepository, ProdutoRepository>(); // UmVezQdoFazRequisicao - registra um serviço que é criado uma vez por solicitação.
-        services.AddScoped<ICategoriaRepository, CategoriaRepository>(); // UmVezQdoFazRequisicao - registra um serviço que é criado uma vez por solicitação.
-        services.AddScoped<IAlunoRepository, AlunoRepository>(); // UmVezQdoFazRequisicao - registra um serviço que é criado uma vez por solicitação.
+    //public static IServiceCollection AddServices(this IServiceCollection services)
+    //{
+    //    services.AddScoped<IAutorizaService, AutorizaService>(); // UmVezQdoFazRequisicao - registra um serviço que é criado uma vez por solicitação.
+    //    services.AddScoped<IProdutoService, ProdutoService>(); // UmVezQdoFazRequisicao - registra um serviço que é criado uma vez por solicitação.
+    //    services.AddScoped<ICategoriaService, CategoriaService>(); // UmVezQdoFazRequisicao - registra um serviço que é criado uma vez por solicitação.
+    //    services.AddScoped<IAlunoService, AlunoService>(); // UmVezQdoFazRequisicao - registra um serviço que é criado uma vez por solicitação.
+    //    services.AddTransient<IMeuServico, MeuServico>(); // VariasVezes - registra um serviço que é criado cada vez que é solicitado
 
-        return services;
-    }
-
-    public static IServiceCollection AddServices(this IServiceCollection services)
-    {
-        services.AddScoped<IAutorizaService, AutorizaService>(); // UmVezQdoFazRequisicao - registra um serviço que é criado uma vez por solicitação.
-        services.AddScoped<IProdutoService, ProdutoService>(); // UmVezQdoFazRequisicao - registra um serviço que é criado uma vez por solicitação.
-        services.AddScoped<ICategoriaService, CategoriaService>(); // UmVezQdoFazRequisicao - registra um serviço que é criado uma vez por solicitação.
-        services.AddScoped<IAlunoService, AlunoService>(); // UmVezQdoFazRequisicao - registra um serviço que é criado uma vez por solicitação.
-        services.AddTransient<IMeuServico, MeuServico>(); // VariasVezes - registra um serviço que é criado cada vez que é solicitado
-
-        return services;
-    }
+    //    return services;
+    //}
 
     public static IServiceCollection AddFilters(this IServiceCollection services)
     {
@@ -162,65 +145,65 @@ public static class DependencyInjection // Configure
         return services;
     }
 
-    public static IServiceCollection AddAuth(this IServiceCollection services, IConfiguration configuration)
-    {
-        services.AddIdentity<ApplicationUser, IdentityRole>(options => {
-            options.Password.RequireNonAlphanumeric = false;
-            options.Password.RequireDigit = false;
-            options.Password.RequireUppercase = false;
-            options.Password.RequireLowercase = false;
-            options.Password.RequiredLength = 3;
-        })
-            .AddEntityFrameworkStores<AppDbContext>()
-            .AddDefaultTokenProviders();
+    //public static IServiceCollection AddAuth(this IServiceCollection services, IConfiguration configuration)
+    //{
+    //    services.AddIdentity<ApplicationUser, IdentityRole>(options => {
+    //        options.Password.RequireNonAlphanumeric = false;
+    //        options.Password.RequireDigit = false;
+    //        options.Password.RequireUppercase = false;
+    //        options.Password.RequireLowercase = false;
+    //        options.Password.RequiredLength = 3;
+    //    })
+    //        .AddEntityFrameworkStores<AppDbContext>()
+    //        .AddDefaultTokenProviders();
 
-        services.AddAuthentication(x => {
-            x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-        })
-            .AddJwtBearer(opt => {
-                opt.TokenValidationParameters = new TokenValidationParameters {
-                    ValidateActor = true,
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidateLifetime = true,
-                    ClockSkew = TimeSpan.Zero,
-                    ValidAudience = configuration["TokenConfiguration:Audience"],
-                    ValidIssuer = configuration["TokenConfiguration:Issuer"],
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:key"]))
-                };
-            });
+    //    services.AddAuthentication(x => {
+    //        x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    //        x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    //    })
+    //        .AddJwtBearer(opt => {
+    //            opt.TokenValidationParameters = new TokenValidationParameters {
+    //                ValidateActor = true,
+    //                ValidateIssuer = true,
+    //                ValidateAudience = true,
+    //                ValidateLifetime = true,
+    //                ClockSkew = TimeSpan.Zero,
+    //                ValidAudience = configuration["TokenConfiguration:Audience"],
+    //                ValidIssuer = configuration["TokenConfiguration:Issuer"],
+    //                ValidateIssuerSigningKey = true,
+    //                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:key"]))
+    //            };
+    //        });
 
-        //services.AddAuthentication("Bearer")
-        //    .AddJwtBearer("Bearer", options =>
-        //    {
-        //        options.Authority = "https://localhost:4435/";
-        //        options.TokenValidationParameters = new TokenValidationParameters { ValidateAudience = false };
-        //    });
+    //    //services.AddAuthentication("Bearer")
+    //    //    .AddJwtBearer("Bearer", options =>
+    //    //    {
+    //    //        options.Authority = "https://localhost:4435/";
+    //    //        options.TokenValidationParameters = new TokenValidationParameters { ValidateAudience = false };
+    //    //    });
 
-        //services.AddAuthorization(options =>
-        //{
-        //    options.AddPolicy("ApiScope", policy =>
-        //    {
-        //        policy.RequireAuthenticatedUser();
-        //        policy.RequireClaim("scope", "geek_shopping");
-        //    });
-        //});
+    //    //services.AddAuthorization(options =>
+    //    //{
+    //    //    options.AddPolicy("ApiScope", policy =>
+    //    //    {
+    //    //        policy.RequireAuthenticatedUser();
+    //    //        policy.RequireClaim("scope", "geek_shopping");
+    //    //    });
+    //    //});
 
-        //services.AddAuthorization(options =>
-        //{
-        //    options.FallbackPolicy = new AuthorizationPolicyBuilder()
-        //      .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
-        //      .RequireAuthenticatedUser()
-        //      .Build();
-        //    options.AddPolicy("EmployeePolicy", p => p.RequireAuthenticatedUser().RequireClaim("EmployeeCode"));
-        //    options.AddPolicy("Employee005Policy", p => p.RequireAuthenticatedUser().RequireClaim("EmployeeCode", "005"));
-        //    options.AddPolicy("CpfPolicy", p => p.RequireAuthenticatedUser().RequireClaim("Cpf"));
-        //});
+    //    //services.AddAuthorization(options =>
+    //    //{
+    //    //    options.FallbackPolicy = new AuthorizationPolicyBuilder()
+    //    //      .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
+    //    //      .RequireAuthenticatedUser()
+    //    //      .Build();
+    //    //    options.AddPolicy("EmployeePolicy", p => p.RequireAuthenticatedUser().RequireClaim("EmployeeCode"));
+    //    //    options.AddPolicy("Employee005Policy", p => p.RequireAuthenticatedUser().RequireClaim("EmployeeCode", "005"));
+    //    //    options.AddPolicy("CpfPolicy", p => p.RequireAuthenticatedUser().RequireClaim("Cpf"));
+    //    //});
 
-        return services;
-    }
+    //    return services;
+    //}
 
     public static IServiceCollection AddCorsLocal(this IServiceCollection services)
     {
@@ -371,8 +354,7 @@ public static class DependencyInjection // Configure
 
     public static ILoggingBuilder AddCustomLogger(this ILoggingBuilder logging)
     {
-        logging.AddProvider(new 
-            CustomLoggerProvider(new CustomLoggerProviderConfiguration { LogLevel = LogLevel.Information }));
+        logging.AddProvider(new CustomLoggerProvider(new CustomLoggerProviderConfiguration { LogLevel = LogLevel.Information }));
 
         return logging;
     }

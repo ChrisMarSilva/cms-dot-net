@@ -2,7 +2,7 @@
 
 namespace Catalogo.Domain.Models;
 
-public class BaseEntity
+public abstract class BaseEntity
 {
 
     [Key]
