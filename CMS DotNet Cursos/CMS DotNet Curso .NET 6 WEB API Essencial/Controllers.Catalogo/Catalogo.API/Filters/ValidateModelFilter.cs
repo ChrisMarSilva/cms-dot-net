@@ -31,7 +31,7 @@ public class ErroResponseVM
     }
 
     public void AdicionarErro(string key, string message)
-    { 
-    
+    {
+
     }
 }

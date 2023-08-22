@@ -35,7 +35,7 @@ app.UseSwaggerMiddleware(app.Environment);
 app.UseCorsMiddleware();
 app.UseHttpsRedirection();
 app.UseResponseCompression();
-app.UseRouting(); 
+app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseCors(opt => opt.AllowAnyOrigin());

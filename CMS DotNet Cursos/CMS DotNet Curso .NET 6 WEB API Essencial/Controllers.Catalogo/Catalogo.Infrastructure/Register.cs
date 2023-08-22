@@ -27,7 +27,8 @@ public static class Register
         services.AddScoped<ICategoriaRepository, CategoriaRepository>(); // UmVezQdoFazRequisicao - registra um serviço que é criado uma vez por solicitação.
         services.AddScoped<IAlunoRepository, AlunoRepository>(); // UmVezQdoFazRequisicao - registra um serviço que é criado uma vez por solicitação.
 
-        services.AddIdentity<ApplicationUser, IdentityRole>(options => {
+        services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+        {
             options.Password.RequireNonAlphanumeric = false;
             options.Password.RequireDigit = false;
             options.Password.RequireUppercase = false;
@@ -37,11 +38,13 @@ public static class Register
            .AddEntityFrameworkStores<AppDbContext>()
            .AddDefaultTokenProviders();
 
-        services.AddAuthentication(x => {
+        services.AddAuthentication(x =>
+        {
             x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
             x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
         })
-            .AddJwtBearer(opt => {
+            .AddJwtBearer(opt =>
+            {
                 opt.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateActor = true,

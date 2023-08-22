@@ -15,7 +15,7 @@ public class BaseEntityConfiguration<T> : IEntityTypeConfiguration<T> where T : 
 
     public virtual void Configure(EntityTypeBuilder<T> builder)
     {
-        if (!string.IsNullOrEmpty(_tableName)) 
+        if (!string.IsNullOrEmpty(_tableName))
             builder.ToTable(_tableName);
 
         builder.HasKey(x => x.Id);

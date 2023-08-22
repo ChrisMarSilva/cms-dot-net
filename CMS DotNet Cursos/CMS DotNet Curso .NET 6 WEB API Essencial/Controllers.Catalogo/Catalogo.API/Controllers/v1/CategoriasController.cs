@@ -31,7 +31,7 @@ public class CategoriasController : ControllerBase // : BaseController<Categoria
     //}
 
     public CategoriasController(
-        ILogger<CategoriasController> logger, 
+        ILogger<CategoriasController> logger,
         ICategoriaService categService)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -81,7 +81,7 @@ public class CategoriasController : ControllerBase // : BaseController<Categoria
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<CategoriaResponseDTO>))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> GetPaginacao(int pag = 1, int reg = 5) 
+    public async Task<IActionResult> GetPaginacao(int pag = 1, int reg = 5)
     {
         // _logger.LogInformation($"{_className}.GetAll()");
         try

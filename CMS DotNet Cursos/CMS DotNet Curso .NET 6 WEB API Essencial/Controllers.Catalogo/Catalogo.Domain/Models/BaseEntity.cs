@@ -9,7 +9,7 @@ public abstract class BaseEntity
     public Guid Id { get; private set; } // Id // ID
     public DateTime DataCadastro { get; private set; } // CreatedAt // CreateDate // DataCadastro
     public DateTime? DataAlteracao { get; private set; } // UpdatedAt // ModifiedDate // DataAlteracao
-    
+
     // public bool IsActive { get; set; }
 
     public BaseEntity()

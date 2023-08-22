@@ -10,7 +10,8 @@ public static class ApiExceptionMiddlewareExtensions
     {
         app.UseExceptionHandler(appError =>
         {
-            appError.Run(async context => {
+            appError.Run(async context =>
+            {
                 context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                 context.Response.ContentType = "application/json";
 

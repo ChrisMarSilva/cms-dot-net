@@ -93,13 +93,14 @@ public static class DependencyInjection // Configure
     public static IServiceCollection AddControllersWithJson(this IServiceCollection services)
     {
         services.AddControllers()
-             .AddJsonOptions(opt => {
+             .AddJsonOptions(opt =>
+             {
                  opt.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
                  opt.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase, false));
-                 opt.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull; 
-                 opt.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase; 
+                 opt.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+                 opt.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
                  opt.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
-                 opt.JsonSerializerOptions.DictionaryKeyPolicy = JsonNamingPolicy.CamelCase; 
+                 opt.JsonSerializerOptions.DictionaryKeyPolicy = JsonNamingPolicy.CamelCase;
              })
              .AddOData(opt => opt.Expand().Select().Count().OrderBy().Filter());
 
@@ -110,7 +111,8 @@ public static class DependencyInjection // Configure
     {
         // services.AddSwagger();
 
-        services.AddSwaggerGen(opt => {
+        services.AddSwaggerGen(opt =>
+        {
 
             opt.SwaggerDoc("v1", new OpenApiInfo { Title = "Catalogo.API", Version = "v1", Description = "Catalogo.API", TermsOfService = new Uri("https://www.google.com.br/"), Contact = new OpenApiContact() { Name = "CMS", Email = "cms@gmail.com", Url = new Uri("https://www.google.com.br/"), }, });
             opt.SwaggerDoc("v2", new OpenApiInfo { Title = "Catalogo.API", Version = "v2" });
@@ -118,7 +120,7 @@ public static class DependencyInjection // Configure
             // c.EnableAnnotations();
 
             var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-            var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile); 
+            var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
             opt.IncludeXmlComments(xmlPath);
 
             // opt.OperationFilter<SecurityRequirementsOperationFilter>();
@@ -134,7 +136,7 @@ public static class DependencyInjection // Configure
                 Type = SecuritySchemeType.ApiKey,
                 Scheme = "Bearer"
             });
-            
+
             opt.AddSecurityRequirement(new OpenApiSecurityRequirement { {
                     new OpenApiSecurityScheme{ Reference = new OpenApiReference{Type = ReferenceType.SecurityScheme, Id = "Bearer"}, Scheme = "oauth2", Name = "Bearer", In= ParameterLocation.Header},
                     new List<string> ()
@@ -207,7 +209,7 @@ public static class DependencyInjection // Configure
 
     public static IServiceCollection AddCorsLocal(this IServiceCollection services)
     {
-        services.AddCors(policyBuilder => policyBuilder.AddPolicy("AllowAllOrigins", builder => { builder.AllowAnyOrigin(); builder.AllowAnyHeader(); builder.AllowAnyMethod(); }) )
+        services.AddCors(policyBuilder => policyBuilder.AddPolicy("AllowAllOrigins", builder => { builder.AllowAnyOrigin(); builder.AllowAnyHeader(); builder.AllowAnyMethod(); }))
             .AddSingleton<IActionContextAccessor, ActionContextAccessor>()
             .AddSingleton<IHttpContextAccessor, HttpContextAccessor>()
             .AddScoped<IUrlHelper>(x => x.GetRequiredService<IUrlHelperFactory>().GetUrlHelper(x.GetRequiredService<IActionContextAccessor>().ActionContext))
@@ -231,7 +233,8 @@ public static class DependencyInjection // Configure
 
     public static IServiceCollection AddVersioning(this IServiceCollection services)
     {
-        services.AddApiVersioning(opt => {
+        services.AddApiVersioning(opt =>
+        {
             opt.AssumeDefaultVersionWhenUnspecified = true;
             opt.DefaultApiVersion = new ApiVersion(1, 0);
             opt.ReportApiVersions = true;
@@ -242,7 +245,8 @@ public static class DependencyInjection // Configure
                 new MediaTypeApiVersionReader("x-api-version"));
         });
 
-        services.AddVersionedApiExplorer(opt => {
+        services.AddVersionedApiExplorer(opt =>
+        {
             opt.GroupNameFormat = "'v'VVV"; // "VVV"
             opt.SubstituteApiVersionInUrl = true;
         });
@@ -265,7 +269,7 @@ public static class DependencyInjection // Configure
             app.UseSwagger();
 
             //app.UseSwagger(c => { c.RouteTemplate = "swagger/{documentName}/swagger.json"; });
-            
+
             //app.UseSwagger(c => {
             //    c.PreSerializeFilters.Add((document, request) => {
             //        var paths = document.Paths.ToDictionary(item => item.Key.ToLowerInvariant(), item => item.Value);
@@ -276,7 +280,8 @@ public static class DependencyInjection // Configure
             //    });
             //});
 
-            app.UseSwaggerUI(opt => {
+            app.UseSwaggerUI(opt =>
+            {
                 string swaggerJsonBasePath = string.IsNullOrWhiteSpace(opt.RoutePrefix) ? "." : "..";
                 opt.SwaggerEndpoint($"{swaggerJsonBasePath}/swagger/v1/swagger.json", "Catalogo.API - V1");
                 opt.SwaggerEndpoint($"{swaggerJsonBasePath}/swagger/v2/swagger.json", "Catalogo.API - V2");
@@ -327,10 +332,13 @@ public static class DependencyInjection // Configure
     {
         app.UseHealthChecks("/status", new HealthCheckOptions()
         {
-            ResponseWriter = async (context, report) => {
-                var result = JsonConvert.SerializeObject(new {
+            ResponseWriter = async (context, report) =>
+            {
+                var result = JsonConvert.SerializeObject(new
+                {
                     statusApplication = report.Status.ToString(),
-                    healthChecks = report.Entries.Select(e => new {
+                    healthChecks = report.Entries.Select(e => new
+                    {
                         check = e.Key,
                         status = Enum.GetName(typeof(HealthStatus), e.Value.Status),
                         description = e.Value.Description,
@@ -338,7 +346,8 @@ public static class DependencyInjection // Configure
                     })
                 },
                 Formatting.None,
-                new JsonSerializerSettings() {
+                new JsonSerializerSettings()
+                {
                     NullValueHandling = NullValueHandling.Ignore,
                     DefaultValueHandling = DefaultValueHandling.Include,
                     ReferenceLoopHandling = ReferenceLoopHandling.Ignore,

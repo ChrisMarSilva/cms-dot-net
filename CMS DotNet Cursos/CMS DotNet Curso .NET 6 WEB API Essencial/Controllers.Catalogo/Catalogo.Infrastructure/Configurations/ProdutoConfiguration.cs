@@ -19,6 +19,6 @@ public class ProdutoConfiguration : BaseEntityConfiguration<Produto>
         builder.Property(x => x.Estoque).HasColumnName("estoque").HasColumnType("float").IsRequired();
         builder.Property(x => x.CategoriaId).HasColumnName("categoria_id").IsRequired();
 
-        builder.HasOne(x => x.Categoria).WithMany(x => x.Produtos).HasForeignKey(p => p.CategoriaId); 
+        builder.HasOne(x => x.Categoria).WithMany(x => x.Produtos).HasForeignKey(p => p.CategoriaId);
     }
 }

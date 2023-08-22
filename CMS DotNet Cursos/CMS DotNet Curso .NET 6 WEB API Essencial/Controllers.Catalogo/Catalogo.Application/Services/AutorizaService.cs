@@ -63,7 +63,7 @@ public class AutorizaService : IAutorizaService
             //};
             //var tokenHandler = new JwtSecurityTokenHandler();
             //var token = tokenHandler.CreateToken(tokenDescriptor);
-            
+
             // (HttpContext http)
             // var user = http.User;
             //var idUser = user.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;

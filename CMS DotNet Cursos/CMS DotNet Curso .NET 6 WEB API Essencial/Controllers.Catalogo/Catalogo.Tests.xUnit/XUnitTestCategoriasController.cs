@@ -17,13 +17,13 @@ namespace Catalogo.Tests.xUnit;
 
 public class XUnitTestCategoriasController
 {
-    public static string connectionString = 
+    public static string connectionString =
         "Server=localhost;Port=3306;Database=catalogo_api;Uid=root;Pwd=Chrs8723;Persist Security Info=False;Connect Timeout=300;Connection Reset=False;Max Pool Size=300;";
     public static DbContextOptions<AppDbContext> dbContextOptions { get; }
     protected readonly AppDbContext _context;
     private IProdutoRepository _prodRepository;
     private ICategoriaRepository _categRepository;
-    private IUnitOfWork _uow; 
+    private IUnitOfWork _uow;
     private IMapper _mapper;
     private readonly ICategoriaService _categService;
     private CategoriasController _categController;
@@ -50,7 +50,7 @@ public class XUnitTestCategoriasController
         _prodRepository = new ProdutoRepository(_context);
         _categRepository = new CategoriaRepository(_context);
 
-        _uow = new UnitOfWork(_context,_prodRepository, _categRepository);
+        _uow = new UnitOfWork(_context, _prodRepository, _categRepository);
 
         var config = new MapperConfiguration(cfg => { cfg.AddProfile(new MappingProfile()); });
         _mapper = config.CreateMapper();
