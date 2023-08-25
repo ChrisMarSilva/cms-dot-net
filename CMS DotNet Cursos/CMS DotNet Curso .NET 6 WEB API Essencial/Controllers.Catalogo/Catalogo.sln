@@ -23,6 +23,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Catalogo.Application", "Cat
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Catalogo.Infrastructure", "Catalogo.Infrastructure\Catalogo.Infrastructure.csproj", "{6E5AF696-FE3C-464A-BD0E-73547A207B8A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catalogo.Web.Mvc", "Catalogo.Web.Mvc\Catalogo.Web.Mvc.csproj", "{1E15E718-F7E2-452E-844A-0DD596AE02F0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -65,6 +67,10 @@ Global
 		{6E5AF696-FE3C-464A-BD0E-73547A207B8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6E5AF696-FE3C-464A-BD0E-73547A207B8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6E5AF696-FE3C-464A-BD0E-73547A207B8A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1E15E718-F7E2-452E-844A-0DD596AE02F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1E15E718-F7E2-452E-844A-0DD596AE02F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1E15E718-F7E2-452E-844A-0DD596AE02F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1E15E718-F7E2-452E-844A-0DD596AE02F0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
