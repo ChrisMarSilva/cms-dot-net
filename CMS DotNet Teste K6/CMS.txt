@@ -5,14 +5,27 @@ npm install uuid@3.4.0
 //import uuid from './uuid.js';
  //  uuid.v1();
 
-k6 run --vus=20 --iterations=100 02_tit_inc.js
+
+cd "D:\CMS DotNet\CMS DotNet Teste K6"
 
 k6 run 01_auth.js
 k6 run 02_tit_inc.js
+k6 run 03_tit_alt.js
+k6 run 04_tit_sit.js
+k6 run 05_tit_det.js
+
 k6 run --vus 20 --duration 60s 02_tit_inc.js
+k6 run --vus 20 --duration 60s 03_tit_alt.js
+k6 run --vus 20 --duration 60s 04_tit_sit.js
+k6 run --vus 20 --duration 60s 05_tit_det.js
+
 k6 run --vus 1000 --duration 600s 02_tit_inc.js
 k6 run --vus 1000 --duration 3600s 02_tit_inc.js
+k6 run --vus=20 --iterations=100 02_tit_inc.js
 
 20 usuários virtuais simultâneos (vus)
 duração 60 milissegundos (duration).
 
+PRJDNPC_DST_TITULO_STC_ATL
+
+23090111345273206333M

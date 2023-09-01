@@ -1,22 +1,7 @@
 import http from 'k6/http';
-import { check, sleep } from "k6";
 import { uuidv4 } from 'https://jslib.k6.io/k6-utils/1.4.0/index.js';
 import { authenticateJDOAuth } from './01_auth.js';
 
-// export const options = {
-//     thresholds: {
-//       // Assert that 99% of requests finish within 3000ms.
-//       http_req_duration: ["p(99) < 3000"],
-//     },
-//     // Ramp the number of virtual users up and down
-//     stages: [
-//       { duration: "30s", target: 15 },
-//       { duration: "1m", target: 15 },
-//       { duration: "20s", target: 0 },
-//     ],
-// };
-
-  
 export function setup() {
     const token = authenticateJDOAuth();
     //console.log( token.json('access_token') );
@@ -30,22 +15,22 @@ export default function (data) {
 
     var payload = {
         IdReqSistemaCliente: uuidv4().toString(),
-        //NumCtrlPart: "100000000000000000000",
         ISPBPartDestinatarioPrincipal: 4358798,
         ISPBPartDestinatarioAdmtd: 4358798,
-        CodPartDestinatario: 77,
+		NumIdentcTit: '2023082100000000001',
+		NumRefAtlCadTit: '2023082100000000002',
         TpPessoaBenfcrioOr: "F",
         CpfCnpjBenfcrioOr: 35034411822,
-        NomRzSocBenfcrioOr: "Razao Social BenfcrioOr",
-        NomFantsBenfcrioOr: "Nome Fantasia BenfcrioOr",
+        NomRzSocBenfcrioOr: "Razao Social BenfcrioOr - Alterado",
+        NomFantsBenfcrioOr: "Nome Fantasia BenfcrioOr - Alterado",
         LogradBenfcrioOr: "Rua do BenfcrioOr 111",
         CidBenfcrioOr: "Cidade do BenfcrioOr 111",
         UfBenfcrioOr: "SP",
         CepBenfcrioOr: "11111111",
         TpPessoaBenfcrioFinl: "F",
         CpfCnpjBenfcrioFinl: 35034411822,
-        NomRzSocBenfcrioFinl: "Razao Social BenfcrioFinl",
-        NomFantsBenfcrioFinl: "Nome Fantasia BenfcrioFinl",
+        NomRzSocBenfcrioFinl: "Razao Social BenfcrioFin - Alteradol",
+        NomFantsBenfcrioFinl: "Nome Fantasia BenfcrioFinl - Alterado",
         TpPessoaPagdr: "J",
         CpfCnpjPagdr: 39985277484501,
         NomRzSocPagdr: "Razao Social Pagdr",
@@ -56,14 +41,14 @@ export default function (data) {
         CepPagdr: "33333333",
         TpIdentcSacdrAvalst: 2,
         IdentcSacdrAvalst: 47782312092690,
-        NomRzSocSacdrAvalst: "Razao Social Avalst",
+        NomRzSocSacdrAvalst: "Razao Social Avalst - Alterado",
         CodCartTit: 1,
         CodMoedaCNAB: 9,
         IdentdNossoNum: "13245678901324567890",
         NumCodBarras: "07799707771500000100000029170110202301230001",
         NumLinhaDigtvl: "07799707771500000100000029170110202301231000001",
         DtVencTit: "2050-01-01",
-        VlrTit: 100,
+        VlrTit: 200,
         NumDocTit: "132456789013245",
         CodEspTit: 31,
         DtEmsTit: "2023-08-23",
@@ -117,31 +102,31 @@ export default function (data) {
             }
         ],
         TpVlrPercMinTit: "P",
-        VlrPercMinTit: 10.0,
+        VlrPercMinTit: 20.0,
         TpVlrPercMaxTit: "V",
-        VlrPercMaxTit: 100.0,
+        VlrPercMaxTit: 200.0,
         TpModlCalc: 1,
         TpAutcRecbtVlrDivgte: 1,
         Calc: [
             {
-                VlrCalcdJuros: 1.0,
-                VlrCalcdMulta: 2.0,
-                VlrCalcdDesct: 3.0,
-                VlrTotCobrar: 4.0,
+                VlrCalcdJuros: 12.0,
+                VlrCalcdMulta: 23.0,
+                VlrCalcdDesct: 34.0,
+                VlrTotCobrar: 45.0,
                 DtValiddCalc: "2024-03-29"
             },
             {
-                VlrCalcdJuros: 11.0,
-                VlrCalcdMulta: 22.0,
-                VlrCalcdDesct: 33.0,
-                VlrTotCobrar: 44.0,
+                VlrCalcdJuros: 111.0,
+                VlrCalcdMulta: 222.0,
+                VlrCalcdDesct: 333.0,
+                VlrTotCobrar: 444.0,
                 DtValiddCalc: "2024-04-29"
             }
         ],
         TxtInfBenfcrio: [
-            "Texto 01",
-            "Texto 02",
-            "Texto 03"
+            "Texto 01 - Alterado",
+            "Texto 02 - Alterado",
+            "Texto 03 - Alterado"
         ],
         DtMovto: "2024-09-01"
     };
@@ -158,9 +143,6 @@ export default function (data) {
         },
     };
 
-    const res = http.post(url, JSON.stringify(payload), headers);
-    // console.log(res.body);
-
-    //check(res, { "status was 200": (r) => r.status == 200 });
-    //  sleep(1);
+    const res = http.put(url, JSON.stringify(payload), headers);
+    //console.log(res.body);
 }
