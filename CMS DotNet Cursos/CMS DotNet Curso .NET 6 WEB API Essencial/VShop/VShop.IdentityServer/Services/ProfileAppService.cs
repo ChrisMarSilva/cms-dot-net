@@ -53,7 +53,7 @@ public class ProfileAppService : IProfileService
                 }
             }
         }
-        
+
         context.IssuedClaims = claims; //retorna as claims no contexto
     }
 

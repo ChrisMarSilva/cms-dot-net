@@ -21,7 +21,8 @@ public class CartService : ICartService
 
     private static void PutTokenInHeaderAuthorization(string token, HttpClient client)
     {
-        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(scheme: "Bearer", parameter: token);
+        client.DefaultRequestHeaders.Authorization = 
+            new AuthenticationHeaderValue(scheme: "Bearer", parameter: token);
     }
 
     public async Task<CartViewModel?> GetCartByUserIdAsync(string userId, string token)

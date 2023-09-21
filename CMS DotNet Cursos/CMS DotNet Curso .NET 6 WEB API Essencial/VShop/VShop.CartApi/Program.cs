@@ -4,9 +4,10 @@ using Microsoft.OpenApi.Models;
 using VShop.CartApi.Context;
 using VShop.CartApi.Repositories;
 using VShop.CartApi.Repositories.Interfaces;
+using VShop.CartApi.Services;
+using VShop.CartApi.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
-
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -28,11 +29,7 @@ builder.Services.AddSwaggerGen(c =>
          {
             new OpenApiSecurityScheme
             {
-               Reference = new OpenApiReference
-               {
-                  Type = ReferenceType.SecurityScheme,
-                  Id = "Bearer"
-               },
+               Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "Bearer" },
                Scheme = "oauth2",
                Name = "Bearer",
                In= ParameterLocation.Header
@@ -43,25 +40,23 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-// builder.Services.AddDbContext<AppDbContext>(opt => opt.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
-builder.Services.AddDbContextPool<AppDbContext>(opt => opt.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+builder.Services.AddDbContextPool<AppDbContext>(opt => opt.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString))); // AddDbContextPool // AddDbContext
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-builder.Services.AddScoped<ICartRepository, CartRepository>();
 
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("CorsPolicy", builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
-});
+builder.Services.AddCors(options => { options.AddPolicy("CorsPolicy", builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()); });
+
+// Repository
+builder.Services.AddScoped<ICartRepository, CartRepository>(); // UmVezQdoFazRequisicao - registra um serviço que é criado uma vez por solicitação.
+
+// Service
+builder.Services.AddScoped<ICartService, CartService>(); // UmVezQdoFazRequisicao - registra um serviço que é criado uma vez por solicitação.
 
 builder.Services.AddAuthentication("Bearer")
     .AddJwtBearer("Bearer", options =>
     {
         options.Authority = builder.Configuration["VShop.IdentityServer:ApplicationUrl"];
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateAudience = false
-        };
+        options.TokenValidationParameters = new TokenValidationParameters { ValidateAudience = false };
     });
 
 builder.Services.AddAuthorization(options =>
