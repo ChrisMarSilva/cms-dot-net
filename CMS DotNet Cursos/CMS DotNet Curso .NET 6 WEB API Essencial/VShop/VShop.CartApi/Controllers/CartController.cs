@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using VShop.CartApi.Dtos;
 using VShop.CartApi.Repositories.Interfaces;
+using VShop.CartApi.Services.Interfaces;
 
 namespace VShop.CartApi.Controllers;
 
@@ -8,49 +9,13 @@ namespace VShop.CartApi.Controllers;
 [ApiController]
 public class CartController : ControllerBase
 {
+    private readonly ICartService _service;
     private readonly ICartRepository _repository;
 
-    public CartController(ICartRepository repository)
+    public CartController(ICartService service, ICartRepository repository)
     {
+        _service = service;
         _repository = repository;
-    }
-
-    [HttpPost("checkout")]
-    public async Task<ActionResult<CheckoutHeaderDto>> Checkout(CheckoutHeaderDto checkoutDto)
-    {
-        var cart = await _repository.GetCartByUserIdAsync(checkoutDto.UserId);
-
-        if (cart is null)
-        {
-            return NotFound($"Cart Not found for {checkoutDto.UserId}");
-        }
-
-        checkoutDto.CartItems = cart.CartItems;
-        checkoutDto.DateTime = DateTime.Now;
-
-        return Ok(checkoutDto);
-    }
-
-    [HttpPost("applycoupon")]
-    public async Task<ActionResult<CartDto>> ApplyCoupon(CartDto cartDto)
-    {
-        var result = await _repository.ApplyCouponAsync(cartDto.CartHeader.UserId, cartDto.CartHeader.CouponCode);
-
-        if (!result)
-            return NotFound($"CartHeader not found for userId = {cartDto.CartHeader.UserId}");
-
-        return Ok(result);
-    }
-
-    [HttpDelete("deletecoupon/{userId}")]
-    public async Task<ActionResult<CartDto>> DeleteCoupon(string userId)
-    {
-        var result = await _repository.DeleteCouponAsync(userId);
-
-        if (!result)
-            return NotFound($"Discount Coupon not found for userId = {userId}");
-
-        return Ok(result);
     }
 
     [HttpGet("getcart/{userid}")]
@@ -81,7 +46,7 @@ public class CartController : ControllerBase
     {
         var cart = await _repository.UpdateCartAsync(cartDto);
 
-        if (cart == null) 
+        if (cart == null)
             return NotFound();
 
         return Ok(cart);
@@ -96,5 +61,41 @@ public class CartController : ControllerBase
             return BadRequest();
 
         return Ok(status);
+    }
+
+    [HttpPost("applycoupon")]
+    public async Task<ActionResult<CartDto>> ApplyCoupon(CartDto cartDto)
+    {
+        var result = await _repository.ApplyCouponAsync(cartDto.CartHeader.UserId, cartDto.CartHeader.CouponCode);
+
+        if (!result)
+            return NotFound($"CartHeader not found for userId = {cartDto.CartHeader.UserId}");
+
+        return Ok(result);
+    }
+
+    [HttpDelete("deletecoupon/{userId}")]
+    public async Task<ActionResult<CartDto>> DeleteCoupon(string userId)
+    {
+        var result = await _repository.DeleteCouponAsync(userId);
+
+        if (!result)
+            return NotFound($"Discount Coupon not found for userId = {userId}");
+
+        return Ok(result);
+    }
+
+    [HttpPost("checkout")]
+    public async Task<ActionResult<CheckoutHeaderDto>> Checkout(CheckoutHeaderDto checkoutDto)
+    {
+        var cart = await _repository.GetCartByUserIdAsync(checkoutDto.UserId);
+
+        if (cart is null)
+            return NotFound($"Cart Not found for {checkoutDto.UserId}");
+
+        checkoutDto.CartItems = cart.CartItems;
+        checkoutDto.DateTime = DateTime.Now;
+
+        return Ok(checkoutDto);
     }
 }
