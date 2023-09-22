@@ -22,10 +22,30 @@ public class HomeController : Controller
         _cartService = cartService;
     }
 
+    private async Task<string> GetAccessTokenAsync()
+    {
+        var token = await HttpContext.GetTokenAsync(tokenName: "access_token");
+
+        return token ?? "";
+    }
+
+    private string GetUserId()
+    {
+        var userId = User
+            .Claims
+            .Where(u => u.Type == "sub")?
+            .FirstOrDefault()?
+            .Value;
+
+        return userId ?? "";
+    }
+
     public async Task<IActionResult> Index()
     {
         var token = string.Empty;
-        var products = await _productService.GetAllProductsAsync(token: token);
+
+        var products = await _productService
+            .GetAllProductsAsync(token: token);
 
         if (products is null)
             return View("Error");
@@ -37,8 +57,10 @@ public class HomeController : Controller
     [HttpGet]
     public async Task<ActionResult<ProductViewModel>> ProductDetails(int id)
     {
-        var token = await GetAccessToken();
-        var product = await _productService.FindProductByIdAsync(id: id, token: token);
+        var token = await GetAccessTokenAsync();
+
+        var product = await _productService
+            .FindProductByIdAsync(id: id, token: token);
 
         if (product is null)
             return View("Error");
@@ -51,17 +73,13 @@ public class HomeController : Controller
     [ActionName("ProductDetails")]
     public async Task<ActionResult<ProductViewModel>> ProductDetailsPost(ProductViewModel productVM)
     {
-        var token = await HttpContext.GetTokenAsync("access_token");
+        var token = await GetAccessTokenAsync();
+        var userId = GetUserId();
 
-        CartViewModel cart = new()
-        {
-            CartHeader = new CartHeaderViewModel
-            {
-                UserId = User.Claims.Where(u => u.Type == "sub")?.FirstOrDefault()?.Value ?? ""
-            }
-        };
+        CartViewModel cart = new() { CartHeader = new CartHeaderViewModel { UserId = userId } };
 
-        var product = await _productService.FindProductByIdAsync(id: productVM.Id, token: token);
+        var product = await _productService
+            .FindProductByIdAsync(id: productVM.Id, token: token);
 
         CartItemViewModel cartItem = new()
         {
@@ -70,11 +88,12 @@ public class HomeController : Controller
             Product = product
         };
 
-        var cartItemsVM = new List<CartItemViewModel>(); // List<CartItemViewModel>
+        var cartItemsVM = new List<CartItemViewModel>();
         cartItemsVM.Add(cartItem);
         cart.CartItems = cartItemsVM;
 
-        var result = await _cartService.AddItemToCartAsync(cartVM: cart, token: token);
+        var result = await _cartService
+            .AddItemToCartAsync(cartVM: cart, token: token);
 
         if (result is not null)
             return RedirectToAction(actionName: nameof(Index));
@@ -93,20 +112,13 @@ public class HomeController : Controller
     [Authorize]
     public async Task<IActionResult> Login()
     {
-        var accessToken = await HttpContext.GetTokenAsync(tokenName: "access_token");
+        var token = await GetAccessTokenAsync();
 
         return RedirectToAction(actionName: nameof(Index));
     }
 
     public IActionResult Logout()
     {
-        return SignOut("Cookies", "oidc"); //  properties, params string[] authenticationSchemes)
-    }
-
-    private async Task<string> GetAccessToken()
-    {
-        var token = await HttpContext.GetTokenAsync(tokenName: "access_token");
-
-        return token ?? "";
+        return SignOut("Cookies", "oidc");
     }
 }

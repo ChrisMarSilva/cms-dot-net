@@ -19,11 +19,17 @@ public class ProductsController : Controller
         _productService = productService;
         _categoryService = categoryService;
     }
+    private async Task<string> GetAccessTokenAsync()
+    {
+        var token = await HttpContext.GetTokenAsync(tokenName: "access_token");
+
+        return token ?? "";
+    }
 
     [HttpGet]
     public async Task<ActionResult<IEnumerable<ProductViewModel>>> Index()
     {
-        var token = await GetAccessToken();
+        var token = await GetAccessTokenAsync();
         var result = await _productService.GetAllProductsAsync(token: token);
 
         if (result is null)
@@ -35,7 +41,7 @@ public class ProductsController : Controller
     [HttpGet]
     public async Task<IActionResult> CreateProduct()
     {
-        var token = await GetAccessToken();
+        var token = await GetAccessTokenAsync();
         var items = await _categoryService.GetAllCategoriesAsync(token: token);
 
         ViewBag.CategoryId = new SelectList(items: items, dataValueField: "CategoryId", dataTextField: "Name");
@@ -46,7 +52,7 @@ public class ProductsController : Controller
     [HttpPost]
     public async Task<IActionResult> CreateProduct(ProductViewModel productVM)
     {
-        var token = await GetAccessToken();
+        var token = await GetAccessTokenAsync();
 
         if (ModelState.IsValid)
         {
@@ -67,7 +73,7 @@ public class ProductsController : Controller
     [HttpGet]
     public async Task<IActionResult> UpdateProduct(int id)
     {
-        var token = await GetAccessToken();
+        var token = await GetAccessTokenAsync();
         var items = await _categoryService.GetAllCategoriesAsync(token: token);
 
         ViewBag.CategoryId = new SelectList(items: items, dataValueField: "CategoryId", dataTextField: "Name");
@@ -85,7 +91,7 @@ public class ProductsController : Controller
     {
         if (ModelState.IsValid)
         {
-            var token = await GetAccessToken();
+            var token = await GetAccessTokenAsync();
             var result = await _productService.UpdateProductAsync(productVM: productVM, token: token);
 
             if (result is not null)
@@ -98,7 +104,7 @@ public class ProductsController : Controller
     [HttpGet]
     public async Task<ActionResult<ProductViewModel>> DeleteProduct(int id)
     {
-        var token = await GetAccessToken();
+        var token = await GetAccessTokenAsync();
         var result = await _productService.FindProductByIdAsync(id: id, token: token);
 
         if (result is null)
@@ -110,19 +116,12 @@ public class ProductsController : Controller
     [HttpPost(), ActionName("DeleteProduct")]
     public async Task<IActionResult> DeleteConfirmed(int id)
     {
-        var token = await GetAccessToken();
+        var token = await GetAccessTokenAsync();
         var result = await _productService.DeleteProductByIdAsync(id: id, token: token);
 
         if (!result)
             return View("Error");
 
         return RedirectToAction(actionName: "Index");
-    }
-
-    private async Task<string> GetAccessToken()
-    {
-        var token = await HttpContext.GetTokenAsync(tokenName: "access_token");
-
-        return token ?? "";
     }
 }

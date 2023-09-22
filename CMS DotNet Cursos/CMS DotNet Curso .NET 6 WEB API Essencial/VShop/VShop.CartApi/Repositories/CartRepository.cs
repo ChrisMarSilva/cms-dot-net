@@ -59,25 +59,21 @@ public class CartRepository : ICartRepository
                 .CartItems
                 .FirstOrDefaultAsync(c => c.Id == cartItemId);
 
-            int total = _context
-                .CartItems
+            int total = _context.CartItems
                 .Where(c => c.CartHeaderId == cartItem!.CartHeaderId)
                 .Count();
 
             _context.CartItems.Remove(cartItem!);
-            //await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
 
             if (total == 1)
             {
-                var cartHeader = await _context
-                    .CartHeaders
+                var cartHeader = await _context.CartHeaders
                     .FirstOrDefaultAsync(c => c.Id == cartItem!.CartHeaderId);
 
                 _context.CartHeaders.Remove(cartHeader!);
-               // await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
             }
-
-            await _context.SaveChangesAsync();
 
             return true;
         }
@@ -134,7 +130,7 @@ public class CartRepository : ICartRepository
         var cartItem = await _context //Se CartHeader não é null - verifica se CartItems possui o mesmo produto
             .CartItems
             .AsNoTracking()
-            .FirstOrDefaultAsync(p => p.ProductId == cartDto.CartItems.FirstOrDefault()!.ProductId 
+            .FirstOrDefaultAsync(p => p.ProductId == cartDto.CartItems.FirstOrDefault()!.ProductId
                                       && p.CartHeaderId == cartHeader!.Id);
 
         if (cartItem is null)

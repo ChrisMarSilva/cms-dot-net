@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using VShop.CartApi.Dtos;
-using VShop.CartApi.Models;
 using VShop.CartApi.Repositories.Interfaces;
 using VShop.CartApi.Services.Interfaces;
 

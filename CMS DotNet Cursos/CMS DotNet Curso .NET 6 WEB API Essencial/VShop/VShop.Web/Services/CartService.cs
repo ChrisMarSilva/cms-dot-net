@@ -21,7 +21,7 @@ public class CartService : ICartService
 
     private static void PutTokenInHeaderAuthorization(string token, HttpClient client)
     {
-        client.DefaultRequestHeaders.Authorization = 
+        client.DefaultRequestHeaders.Authorization =
             new AuthenticationHeaderValue(scheme: "Bearer", parameter: token);
     }
 
@@ -30,14 +30,17 @@ public class CartService : ICartService
         var client = _clientFactory.CreateClient(name: "CartApi");
         PutTokenInHeaderAuthorization(token: token, client: client);
 
-        using var response = await client.GetAsync(requestUri: $"{apiEndpoint}/getcart/{userId}");
+        using var response = await client
+            .GetAsync(requestUri: $"{apiEndpoint}/getcart/{userId}");
 
         if (!response.IsSuccessStatusCode)
             return null;
 
         var apiResponse = await response.Content.ReadAsStreamAsync();
 
-        var cartVM = await JsonSerializer.DeserializeAsync<CartViewModel>(utf8Json: apiResponse, options: _options);
+        var cartVM = await JsonSerializer
+            .DeserializeAsync<CartViewModel>(utf8Json: apiResponse, options: _options);
+
         return cartVM;
     }
 
@@ -46,16 +49,22 @@ public class CartService : ICartService
         var client = _clientFactory.CreateClient(name: "CartApi");
         PutTokenInHeaderAuthorization(token: token, client: client);
 
-        var content = new StringContent(JsonSerializer.Serialize(cart), Encoding.UTF8, "application/json");
+        var content = new StringContent(
+            content: JsonSerializer.Serialize(value: cart),
+            encoding: Encoding.UTF8,
+            mediaType: "application/json");
 
-        using var response = await client.PostAsync(requestUri: $"{apiEndpoint}/addcart/", content: content);
+        using var response = await client
+            .PostAsync(requestUri: $"{apiEndpoint}/addcart/", content: content);
 
         if (!response.IsSuccessStatusCode)
             return null;
 
         var apiResponse = await response.Content.ReadAsStreamAsync();
 
-        var cartVM = await JsonSerializer.DeserializeAsync<CartViewModel>(utf8Json: apiResponse, options: _options);
+        var cartVM = await JsonSerializer
+            .DeserializeAsync<CartViewModel>(utf8Json: apiResponse, options: _options);
+
         return cartVM;
     }
 
@@ -64,14 +73,17 @@ public class CartService : ICartService
         var client = _clientFactory.CreateClient(name: "CartApi");
         PutTokenInHeaderAuthorization(token: token, client: client);
 
-        using var response = await client.PutAsJsonAsync(requestUri: $"{apiEndpoint}/updatecart/", value: cartVM);
+        using var response = await client
+            .PutAsJsonAsync(requestUri: $"{apiEndpoint}/updatecart/", value: cartVM);
 
         if (!response.IsSuccessStatusCode)
             return null;
 
         var apiResponse = await response.Content.ReadAsStreamAsync();
 
-        var cartUpdated = await JsonSerializer.DeserializeAsync<CartViewModel>(utf8Json: apiResponse, options: _options);
+        var cartUpdated = await JsonSerializer
+            .DeserializeAsync<CartViewModel>(utf8Json: apiResponse, options: _options);
+
         return cartUpdated;
     }
 
@@ -80,7 +92,8 @@ public class CartService : ICartService
         var client = _clientFactory.CreateClient(name: "CartApi");
         PutTokenInHeaderAuthorization(token: token, client: client);
 
-        using var response = await client.DeleteAsync(requestUri: $"{apiEndpoint}/deletecart/" + cartId);
+        using var response = await client
+            .DeleteAsync(requestUri: $"{apiEndpoint}/deletecart/" + cartId);
 
         return response.IsSuccessStatusCode;
     }
@@ -95,9 +108,13 @@ public class CartService : ICartService
         var client = _clientFactory.CreateClient(name: "CartApi");
         PutTokenInHeaderAuthorization(token: token, client: client);
 
-        var content = new StringContent(JsonSerializer.Serialize(cartVM), Encoding.UTF8, "application/json");
+        var content = new StringContent(
+            content: JsonSerializer.Serialize(value: cartVM),
+            encoding: Encoding.UTF8,
+            mediaType: "application/json");
 
-        using var response = await client.PostAsync(requestUri: $"{apiEndpoint}/applycoupon/", content: content);
+        using var response = await client
+            .PostAsync(requestUri: $"{apiEndpoint}/applycoupon/", content: content);
 
         return response.IsSuccessStatusCode;
     }
@@ -107,7 +124,8 @@ public class CartService : ICartService
         var client = _clientFactory.CreateClient(name: "CartApi");
         PutTokenInHeaderAuthorization(token: token, client: client);
 
-        using var response = await client.DeleteAsync(requestUri: $"{apiEndpoint}/deletecoupon/{userId}");
+        using var response = await client
+            .DeleteAsync(requestUri: $"{apiEndpoint}/deletecoupon/{userId}");
 
         return response.IsSuccessStatusCode;
     }
@@ -117,16 +135,22 @@ public class CartService : ICartService
         var client = _clientFactory.CreateClient(name: "CartApi");
         PutTokenInHeaderAuthorization(token: token, client: client);
 
-        var content = new StringContent(JsonSerializer.Serialize(cartHeader), Encoding.UTF8, "application/json");
+        var content = new StringContent(
+            content: JsonSerializer.Serialize(value: cartHeader),
+            encoding: Encoding.UTF8,
+            mediaType: "application/json");
 
-        using var response = await client.PostAsync(requestUri: $"{apiEndpoint}/checkout/", content: content);
+        using var response = await client
+            .PostAsync(requestUri: $"{apiEndpoint}/checkout/", content: content);
 
         if (!response.IsSuccessStatusCode)
             return null;
 
         var apiResponse = await response.Content.ReadAsStreamAsync();
 
-        var cartHeaderVM = await JsonSerializer.DeserializeAsync<CartHeaderViewModel>(utf8Json: apiResponse, options: _options);
+        var cartHeaderVM = await JsonSerializer
+            .DeserializeAsync<CartHeaderViewModel>(utf8Json: apiResponse, options: _options);
+
         return cartHeaderVM;
     }
 }
