@@ -21,7 +21,8 @@ public class CartController : ControllerBase
     [HttpGet("getcart/{userid}")]
     public async Task<ActionResult<CartDto>> GetByUserId(string userid)
     {
-        var cartDto = await _repository.GetCartByUserIdAsync(userid);
+        var cartDto = await _repository
+            .GetCartByUserIdAsync(userId: userid);
 
         if (cartDto is null)
             return NotFound();
@@ -29,11 +30,11 @@ public class CartController : ControllerBase
         return Ok(cartDto);
     }
 
-
     [HttpPost("addcart")]
     public async Task<ActionResult<CartDto>> AddCart(CartDto cartDto)
     {
-        var cart = await _repository.UpdateCartAsync(cartDto);
+        var cart = await _repository
+            .UpdateCartAsync(cart: cartDto);
 
         if (cart is null)
             return NotFound();
@@ -44,7 +45,8 @@ public class CartController : ControllerBase
     [HttpPut("updatecart")]
     public async Task<ActionResult<CartDto>> UpdateCart(CartDto cartDto)
     {
-        var cart = await _repository.UpdateCartAsync(cartDto);
+        var cart = await _repository
+            .UpdateCartAsync(cart: cartDto);
 
         if (cart == null)
             return NotFound();
@@ -55,7 +57,8 @@ public class CartController : ControllerBase
     [HttpDelete("deletecart/{id}")]
     public async Task<ActionResult<bool>> DeleteCart(int id)
     {
-        var status = await _repository.DeleteItemCartAsync(id);
+        var status = await _repository
+            .DeleteItemCartAsync(cartItemId: id);
 
         if (!status)
             return BadRequest();
@@ -66,7 +69,9 @@ public class CartController : ControllerBase
     [HttpPost("applycoupon")]
     public async Task<ActionResult<CartDto>> ApplyCoupon(CartDto cartDto)
     {
-        var result = await _repository.ApplyCouponAsync(cartDto.CartHeader.UserId, cartDto.CartHeader.CouponCode);
+        var result = await _repository.ApplyCouponAsync(
+            userId: cartDto.CartHeader.UserId,
+            couponCode: cartDto.CartHeader.CouponCode);
 
         if (!result)
             return NotFound($"CartHeader not found for userId = {cartDto.CartHeader.UserId}");
@@ -77,7 +82,8 @@ public class CartController : ControllerBase
     [HttpDelete("deletecoupon/{userId}")]
     public async Task<ActionResult<CartDto>> DeleteCoupon(string userId)
     {
-        var result = await _repository.DeleteCouponAsync(userId);
+        var result = await _repository
+            .DeleteCouponAsync(userId: userId);
 
         if (!result)
             return NotFound($"Discount Coupon not found for userId = {userId}");
@@ -88,7 +94,8 @@ public class CartController : ControllerBase
     [HttpPost("checkout")]
     public async Task<ActionResult<CheckoutHeaderDto>> Checkout(CheckoutHeaderDto checkoutDto)
     {
-        var cart = await _repository.GetCartByUserIdAsync(checkoutDto.UserId);
+        var cart = await _repository.
+            GetCartByUserIdAsync(userId: checkoutDto.UserId);
 
         if (cart is null)
             return NotFound($"Cart Not found for {checkoutDto.UserId}");

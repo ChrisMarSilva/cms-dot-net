@@ -2,6 +2,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using VShop.DiscountApi.Context;
+using VShop.DiscountApi.Repositories;
+using VShop.DiscountApi.Repositories.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,7 +12,7 @@ builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "VShop.DiscountApi", Version = "v1" }); 
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "VShop.DiscountApi", Version = "v1" });
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Description = @"'Bearer' [space] seu token",
@@ -43,10 +45,10 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddCors(options => { options.AddPolicy("CorsPolicy", builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()); });
 
 // Repository
-//builder.Services.AddScoped<ICartRepository, CartRepository>(); // UmVezQdoFazRequisicao - registra um serviço que é criado uma vez por solicitação.
+builder.Services.AddScoped<ICouponRepository, CouponRepository>(); // UmVezQdoFazRequisicao - registra um serviço que é criado uma vez por solicitação.
 
 // Service
-//builder.Services.AddScoped<ICartService, CartService>(); // UmVezQdoFazRequisicao - registra um serviço que é criado uma vez por solicitação.
+//builder.Services.AddScoped<ICouponService, CouponService>(); // UmVezQdoFazRequisicao - registra um serviço que é criado uma vez por solicitação.
 
 builder.Services.AddAuthentication("Bearer")
     .AddJwtBearer("Bearer", options =>
