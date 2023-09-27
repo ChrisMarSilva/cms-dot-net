@@ -20,7 +20,8 @@ public class CouponService : ICouponService
 
     private static void PutTokenInHeaderAuthorization(string token, HttpClient client)
     {
-        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(scheme: "Bearer", parameter: token);
+        client.DefaultRequestHeaders.Authorization = 
+            new AuthenticationHeaderValue(scheme: "Bearer", parameter: token);
     }
 
     public async Task<CouponViewModel?> GetDiscountCouponAsync(string couponCode, string token)
@@ -28,14 +29,17 @@ public class CouponService : ICouponService
         var client = _clientFactory.CreateClient(name: "DiscountApi");
         PutTokenInHeaderAuthorization(token: token, client: client);
 
-        using var response = await client.GetAsync(requestUri: $"{apiEndpoint}/{couponCode}");
+        using var response = await client.GetAsync(
+            requestUri: $"{apiEndpoint}/{couponCode}");
 
         if (!response.IsSuccessStatusCode)
             return null;
 
         var apiResponse = await response.Content.ReadAsStreamAsync();
 
-        var couponVM = await JsonSerializer.DeserializeAsync<CouponViewModel>(utf8Json: apiResponse, options: _options);
+        var couponVM = await JsonSerializer.
+            DeserializeAsync<CouponViewModel>(utf8Json: apiResponse, options: _options);
+
         return couponVM;
     }
 }

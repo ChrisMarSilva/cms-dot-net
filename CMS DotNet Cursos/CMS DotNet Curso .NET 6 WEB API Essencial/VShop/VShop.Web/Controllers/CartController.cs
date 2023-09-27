@@ -111,6 +111,7 @@ public class CartController : Controller
         if (ModelState.IsValid)
         {
             var token = await GetAccessTokenAsync();
+
             var result = await _cartService
                 .CheckoutAsync(cartHeader: cartVM.CartHeader, token: token);
 
@@ -133,6 +134,7 @@ public class CartController : Controller
         if (ModelState.IsValid)
         {
             var token = await GetAccessTokenAsync();
+
             var result = await _cartService
                 .ApplyCouponAsync(cartVM: cartVM, token: token);
 
