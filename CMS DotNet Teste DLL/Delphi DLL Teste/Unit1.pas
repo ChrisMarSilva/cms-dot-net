@@ -2,21 +2,6 @@ unit Unit1;
 
 interface
 
-// function EnviaMensagemURL(
-// ISPB: integer;
-// TpAmbiente: PAnsiChar;
-// DominioURL: PAnsiChar;
-// CdLegado: PAnsiChar;
-// CdUsuario: PAnsiChar;
-// Senha: PAnsiChar;
-// ISPBOrigem: integer;
-// ISPBDestino: integer;
-// ConteudoXML: PAnsiChar;
-// var NumCabSeq: PAnsiChar;
-// var CdRetorno: PAnsiChar;
-// var DscRetorno: PAnsiChar
-// ): integer; stdcall;
-
 function EnviaMensagemURL(
   ISPB: integer;
   TpAmbiente: PAnsiChar;
@@ -27,9 +12,9 @@ function EnviaMensagemURL(
   ISPBOrigem: integer;
   ISPBDestino: integer;
   ConteudoXML: PAnsiChar;
-  NumCabSeq: PAnsiChar;
-  CdRetorno: PAnsiChar;
-  DscRetorno: PAnsiChar
+  var NumCabSeq: PAnsiChar;
+  var CdRetorno: PAnsiChar;
+  var DscRetorno: PAnsiChar
   ): integer; stdcall;
 
 implementation
@@ -90,11 +75,6 @@ function EnviaMensagem_Padrao(
 var
   TempoProc: TDateTime;
   Proc, Param: string;
-
-  RetEnvioMsg: string;
-  RetNumCabSeq: string;
-  wsEnvConteudo: string;
-
 Begin
   Proc := 'EnviaMensagem_Padrao';
   Param :=
@@ -114,13 +94,10 @@ Begin
       TraceAPI.LogApp(TempoProc, Proc, True, Param);
       // MÉTODO - Início
 
-      wsEnvConteudo := ConteudoXML;
-      RetNumCabSeq := 'WSCABLEG000000042404';
-
-      Result := 9;
+      NumCabSeq := 'WSCABLEG000000042404';
       CdRetorno := 'ACS99';
       DscRetorno := 'Envio da Mensagem do Legado realizado com Sucesso'; // 'Realizado com Sucesso'; //
-      NumCabSeq := RetNumCabSeq;
+      Result := 9;
 
       // MÉTODO - Fim
     except
@@ -164,9 +141,10 @@ function EnviaMensagemURL(
   ISPBOrigem: integer;
   ISPBDestino: integer;
   ConteudoXML: PAnsiChar;
-  NumCabSeq: PAnsiChar;
-  CdRetorno: PAnsiChar;
-  DscRetorno: PAnsiChar): integer; stdcall;
+  var NumCabSeq: PAnsiChar;
+  var CdRetorno: PAnsiChar;
+  var DscRetorno: PAnsiChar
+  ): integer; stdcall;
 
 var
   TraceAPI: TJDTraceApp;
@@ -204,29 +182,29 @@ Begin
       EnvCdRetorno := CdRetorno;
       EnvDscRetorno := DscRetorno;
 
-      RetResult := EnviaMensagem_Padrao(TraceAPI, ISPB, TpAmbiente, DominioURL, CdLegado, CdUsuario, Senha, ISPBOrigem, ISPBDestino, ConteudoXML, EnvNumCabSeq, EnvCdRetorno, EnvDscRetorno);
+      // EnvNumCabSeq := PAnsiChar(AnsiString(StringofChar(' ', 20)));
+      // EnvCdRetorno := PAnsiChar(AnsiString(StringofChar(' ', 5)));
+      // EnvDscRetorno := PAnsiChar(AnsiString(StringofChar(' ', 200)));
 
+      RetResult := EnviaMensagem_Padrao(TraceAPI, ISPB, TpAmbiente, DominioURL, CdLegado, CdUsuario, Senha, ISPBOrigem, ISPBDestino, ConteudoXML, EnvNumCabSeq, EnvCdRetorno, EnvDscRetorno);
       Result := RetResult;
+
+      // NumCabSeq := PAnsiChar(AnsiString(EnvNumCabSeq));
       StrCopy(NumCabSeq, PAnsiChar(AnsiString(EnvNumCabSeq)));
+      // StrLCopy(NumCabSeq, PAnsiChar(AnsiString(EnvNumCabSeq)), length(EnvNumCabSeq));
+      // NicksStrPCopy(NumCabSeq, PAnsiChar(EnvNumCabSeq));
+      // EnvNumCabSeq := UTF8String(EnvNumCabSeq);
+      // StrLCopy(@NumCabSeq[0], PAnsiChar(EnvNumCabSeq), Length(NumCabSeq));
+
+      // CdRetorno := PAnsiChar(AnsiString(EnvCdRetorno));
       StrCopy(CdRetorno, PAnsiChar(AnsiString(EnvCdRetorno)));
+      // StrLCopy(CdRetorno, PAnsiChar(AnsiString(EnvCdRetorno)), Length(EnvCdRetorno));
+      // NicksStrPCopy(CdRetorno, PAnsiChar(EnvCdRetorno));
+
+      // DscRetorno := PAnsiChar(AnsiString(EnvDscRetorno));
       StrCopy(DscRetorno, PAnsiChar(AnsiString(EnvDscRetorno)));
-      //
-      // // NumCabSeq := PAnsiChar(AnsiString(EnvNumCabSeq));
-      // StrCopy(NumCabSeq, PAnsiChar(AnsiString(EnvNumCabSeq)));
-      // // StrLCopy(NumCabSeq, PAnsiChar(AnsiString(EnvNumCabSeq)), length(EnvNumCabSeq));
-      // // NicksStrPCopy(NumCabSeq, PAnsiChar(EnvNumCabSeq));
-      // // EnvNumCabSeq := UTF8String(EnvNumCabSeq);
-      // // StrLCopy(@NumCabSeq[0], PAnsiChar(EnvNumCabSeq), Length(NumCabSeq));
-      //
-      // // CdRetorno := PAnsiChar(AnsiString(EnvCdRetorno));
-      // StrCopy(CdRetorno, PAnsiChar(AnsiString(EnvCdRetorno)));
-      // // StrLCopy(CdRetorno, PAnsiChar(AnsiString(EnvCdRetorno)), Length(EnvCdRetorno));
-      // // NicksStrPCopy(CdRetorno, PAnsiChar(EnvCdRetorno));
-      //
-      // // DscRetorno := PAnsiChar(AnsiString(EnvDscRetorno));
-      // StrCopy(DscRetorno, PAnsiChar(AnsiString(EnvDscRetorno)));
-      // // StrLCopy(DscRetorno, PAnsiChar(AnsiString(EnvDscRetorno)), Length(EnvDscRetorno));
-      // // NicksStrPCopy(DscRetorno, PAnsiChar(EnvDscRetorno));
+      // StrLCopy(DscRetorno, PAnsiChar(AnsiString(EnvDscRetorno)), Length(EnvDscRetorno));
+      // NicksStrPCopy(DscRetorno, PAnsiChar(EnvDscRetorno));
 
       // MÉTODO - Fim
     except
