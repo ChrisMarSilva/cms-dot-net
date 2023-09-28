@@ -2,7 +2,7 @@
 
 public class Nome
 {
-    protected Nome()  { }
+    protected Nome() { }
 
     public Nome(string primeiroNome, string ultimoNome)
     {

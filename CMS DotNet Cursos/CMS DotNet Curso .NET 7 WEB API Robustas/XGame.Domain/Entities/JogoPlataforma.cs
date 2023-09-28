@@ -2,6 +2,8 @@
 
 public class JogoPlataforma
 {
+    public JogoPlataforma() { }
+
     public Guid Id { get; set; }
     public Jogo Jogo { get; set; } = new Jogo();
     public Plataforma Plataforma { get; set; } = new Plataforma();

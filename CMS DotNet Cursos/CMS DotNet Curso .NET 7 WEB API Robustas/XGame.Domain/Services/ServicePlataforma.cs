@@ -5,6 +5,8 @@ namespace XGame.Domain.Services;
 
 public class ServicePlataforma : IServicePlataforma
 {
+    public ServicePlataforma() { }
+
     public AdicionarPlataformaResponse AdicionarPlataforma(AdicionarPlataformaRequest request)
     {
         throw new NotImplementedException();

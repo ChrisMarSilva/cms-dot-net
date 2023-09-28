@@ -2,6 +2,8 @@
 
 public class MeusJogo
 {
+    public MeusJogo() { }
+
     public Guid Id { get; set; }
     public JogoPlataforma JogoPlataforma { get; set; } = new JogoPlataforma();
     public bool Desejo { get; set; }

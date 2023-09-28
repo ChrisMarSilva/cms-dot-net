@@ -5,10 +5,7 @@ namespace XGame.Domain.Services;
 
 public class ServiceJogador : IServiceJogador
 {
-    public ServiceJogador()
-    {
-
-    }
+    public ServiceJogador() { }
 
     public AdicionarJogadorResponse AdicionarJogador(AdicionarJogadorRequest request)
     {
