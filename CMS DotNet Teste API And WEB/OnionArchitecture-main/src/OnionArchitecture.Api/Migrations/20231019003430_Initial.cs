@@ -1,9 +1,11 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace InfrastructureLayer.Migrations
+#nullable disable
+
+namespace OnionArchitecture.Api.Migrations
 {
-    public partial class CreateCustomerTable : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
