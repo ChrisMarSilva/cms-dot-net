@@ -1,5 +1,7 @@
-﻿namespace XGame.Domain.Interfaces.Repositories;
+﻿using XGame.Domain.Entities;
 
-public interface IRepositoryJogo
+namespace XGame.Domain.Interfaces.Repositories;
+
+public interface IRepositoryJogo: IRepositoryBase<Jogo, Guid>
 {
 }
