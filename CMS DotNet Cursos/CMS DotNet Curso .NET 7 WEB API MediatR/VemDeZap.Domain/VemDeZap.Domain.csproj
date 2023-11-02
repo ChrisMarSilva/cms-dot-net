@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Commands\Grupo\AdicionarGrupo\" />
+    <Folder Include="Commands\Grupo\AlterarGrupo\" />
+    <Folder Include="Commands\Grupo\ListarGrupo\" />
+    <Folder Include="Commands\Grupo\RemoverGrupo\" />
+    <Folder Include="Commands\Usuario\AdicionarUsuario\" />
+    <Folder Include="Commands\Usuario\AutenticarUsuario\" />
+    <Folder Include="Interfaces\Repositories\Base\" />
+    <Folder Include="Resources\" />
+  </ItemGroup>
+
+</Project>
