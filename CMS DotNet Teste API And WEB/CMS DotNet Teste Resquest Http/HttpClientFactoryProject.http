@@ -1,0 +1,6 @@
+@HttpClientFactoryProject_HostAddress = http://localhost:5211
+
+GET {{HttpClientFactoryProject_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
