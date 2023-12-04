@@ -1,0 +1,626 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="100" height="100" fill="none" viewBox="0 0 100 100">
+  <path fill="#191919" d="M50 98.433c26.62 0 48.2-21.565 48.2-48.166C98.2 23.665 76.62 2.1 50 2.1 23.38 2.1 1.8 23.665 1.8 50.267c0 26.601 21.58 48.166 48.2 48.166z"/>
+  <path fill="url(#paint0_linear_403_2)" d="M49.633 26.967c.233-.367.5-.734.733-1.1-.266.166-.533.366-.8.533a18.612 18.612 0 00-1.1-.633c.267.5.734.833 1.167 1.2z"/>
+  <path fill="url(#paint1_linear_403_2)" d="M46.766 67.033c-1.6-.033-3.166.1-4.766-.1-.134 0-.434-.033-.567-.066-.067.066-.167.166-.2.233.333.467.7.9 1.033 1.333.5.5.9 1.367 1.7 1.367 4.4.067 8.767-.067 13.167.1h.2c-.567-1-1.1-2.033-1.8-2.967-2.9.2-5.833.067-8.767.1z"/>
+  <path fill="url(#paint2_linear_403_2)" d="M49.8 43.833c.233.4.6.7.933 1.034.2-.567.433-1.1.633-1.667-1.233-2.4-2.3-4.867-3.433-7.3-.433-.933-1.233-1.6-2-2.3-.533-.467-1.033-1-1.7-1.3 1.167 2 2.1 4.1 3.1 6.167.9 1.8 1.8 3.533 2.467 5.366z"/>
+  <path fill="url(#paint3_linear_403_2)" d="M62.633 32.7c-1.634 2.766-2.967 5.7-4.467 8.566-.667 1.434-1.367 2.834-2 4.267-.867 1.8-1.9 3.533-2.7 5.367-.433.966-.333 2.066-.367 3.133-.033 2.6-.133 5.233-.1 7.833.034 1.834.934 3.6 2.267 4.834-.267-3.967-.067-7.934-.167-11.9-.1-.967.3-1.834.767-2.634.967-2.366 2.233-4.633 3.367-6.933.766-1.5 1.533-3 2.166-4.567.734-1.2 1.3-2.5 1.967-3.766.267-.567.6-1.1.7-1.734-.3-.933-.9-1.666-1.433-2.466z"/>
+  <path fill="url(#paint4_linear_403_2)" d="M68.9 36.233c-.1-.533 0-1.233-.6-1.5-1.2-.633-2.4-1.4-3.767-1.533.466.7 1.033 1.367 1.366 2.167-.066.633-.433 1.2-.7 1.767-1.8 3.466-3.433 7.066-5.333 10.5-.967 2.566-2.6 4.833-3.333 7.5.3 3.333.166 6.666.2 10 0 .833.366 1.6.666 2.366.7-.933 1.434-1.833 2.067-2.833.4-.5.767-1 1.167-1.5.766.1 1.533.233 2.3.333 1.7-2.533 2.733-5.4 3.7-8.267 1-2.833 1.4-5.8 1.833-8.766.433-3.434.833-6.834.433-10.233z"/>
+  <path fill="url(#paint5_linear_403_2)" d="M41.8 53.233c0-.7-.034-1.4-.4-2-2.467-4.6-4.9-9.2-7.334-13.8-.733-1.433-1.7-2.766-2.933-3.8-.733.334-1.433.667-2.133 1.034a199.376 199.376 0 00-.034 7.733c0 1.4.3 2.8.3 4.233L31.2 56.867c.366 1 1.7 1.6 2.033 2.633.7 1.367 1.333 2.8 2.2 4.033.8-.066 1.6-.133 2.433-.2.7 1 1.267 2.134 2.234 2.9.733-.833 1.766-1.666 1.7-2.9.033-3.333 0-6.733 0-10.1z"/>
+  <path fill="url(#paint6_linear_403_2)" d="M45.766 71.5c-1.033 0-2.1.067-3.1-.233-.333-.334-.633-.7-.933-1.034-.067.2-.167.4-.233.567 2.166 1.833 4.6 3.467 7.266 4.433.4-.2.867-.233 1.3-.066l.2-.034c.934-.4 1.834-.866 2.733-1.333 1.134-.667 2.2-1.4 3.167-2.3-3.466.033-6.933-.033-10.4 0z"/>
+  <path fill="url(#paint7_linear_403_2)" d="M55.2 28.334c-1.034-.5-2.067-.967-3.1-1.434-.734.7-1.4 1.467-2.134 2.167-.1.067-.3.233-.4.333-1.067-.766-2.033-1.7-3.033-2.566-1.467.7-2.934 1.366-4.334 2.166-1.633.7-3.2 1.5-4.8 2.267 2.1-.034 4.234.033 6.334-.034.566 0 1.233-.066 1.7.4.866.734 1.666 1.567 2.566 2.267-.766-.9-1.4-1.966-2.466-2.533-.267-.067-.5-.1-.767-.134-.267-.033-.533-.033-.767-.066.267 0 .534.033.767.066.267.034.5.067.767.134 1.066.566 1.7 1.666 2.466 2.533 1.267 1.5 1.8 3.467 2.7 5.167.167.4.367.767.534 1.166.833-1.033 1.366-2.3 1.866-3.533.367-.967 0-2-.733-2.7-.633-.8-1.6-1.367-1.9-2.366a4.992 4.992 0 012.1-.367c2.7.033 5.433-.034 8.133.033-1.633-1.333-3.733-1.867-5.5-2.966zm-13.667 1.2a5.488 5.488 0 01-.734.466c.267-.166.534-.3.734-.466zm1.266 1.6h.8-.8z"/>
+  <g>
+    <path fill="#3C77DA" d="M38.133 66.767c.467.466.7 1.233.267 1.8-.134.3-.567.266-.767.066-.233-.233-.5-.466-.833-.6l-.2-.1c.4 0 .833 0 1.233.034l.3-1.2zM59.7 69.067c0-.667.033-1.334.133-1.967.2.4.4.767.6 1.167.4-.034.833-.034 1.267-.067-.367.733-1.334.567-2 .867z"/>
+  </g>
+  <g>
+    <path fill="url(#paint8_radial_403_2)" d="M50.8 22.233c-.567-.233-1.2-.733-1.834-.366a213.566 213.566 0 00-6.8 3.3c-1.133.533-2.3 1-3.366 1.7 0 0-.034 0-.034.033-1.733.733-3.4 1.6-5.1 2.4-2.266 1.133-4.6 2.1-6.8 3.333-.066.034-.133.134-.133.2-.267 2.5-.2 5.034-.167 7.567.334 8.467 1.934 17.133 6.334 24.5.933 1.5 1.8 3.033 3 4.333v.034c2 2.833 4.766 5.033 7.6 7 1.866 1.133 3.833 2.266 5.966 2.866h.167c2.433-.766 4.833-1.9 6.8-3.533h.033c1.267-.8 2.334-1.9 3.4-2.9C64 68.667 67.1 63.633 69.033 58.2c.567-1.767 1.2-3.533 1.333-5.367V52.8c.7-2.767 1.067-5.667 1.267-8.5v-.033c.3-1.667.2-3.367.233-5.067-.033-2.167.034-4.367-.3-6.467 0-.1-.066-.166-.133-.2-6.833-3.566-13.8-6.833-20.633-10.3zm-2.367 3.534c.333.166.667.333.967.533.1.067.2.033.266 0 .234-.133.434-.3.667-.433-.2.3-.367.566-.567.866-.1.134-.266.167-.4.067-.3-.333-.666-.633-.933-1.033zm-6.2 3.2c1.333-.767 2.767-1.4 4.167-2.1.1-.034.2-.034.3.033.8.667 2.133 1.933 2.966 2.567.434-.3.434-.3.734-.534.766-.733.966-1.3 1.6-1.933a.32.32 0 01.3-.067c.966.434 1.966.9 2.933 1.367h.033c1.534.933 3.267 1.5 4.8 2.433.234.134.134.5-.133.467-2.433-.033-4.867.033-7.267-.033a4.8 4.8 0 00-1.833.266c-.133.034-.2.2-.133.367.366.867 1.233 1.4 1.8 2.1.733.667 1.1 1.733.733 2.7-.433 1.1-.9 2.2-1.6 3.167-.1.166-.367.133-.467-.034-.1-.266-.233-.5-.333-.766-.9-1.7-1.433-3.667-2.7-5.167l-.033-.033c-.9-.7-1.667-1.5-2.534-2.234-.466-.433-1.1-.366-1.7-.4-1.733.034-3.466 0-5.2 0-.266 0-.366-.366-.1-.5 1.134-.5 2.367-1.1 3.667-1.666-.033 0-.033 0 0 0zM29.5 46.167c-.034-1.3-.334-2.867-.367-4.2-.033-2.534-.2-4.6-.167-7.134 0-.1.067-.2.134-.233.6-.333 1.233-.6 1.833-.9.1-.033.2-.033.3.033 1.167 1.034 2.1 2.3 2.833 3.7 2.467 4.6 4.9 9.2 7.334 13.8.333.6.4 1.334.4 2-.034 3.367 0 6.734 0 10.134.066 1.133-.834 1.933-1.534 2.7-.1.1-.266.133-.366.033-.834-.7-1.367-1.7-1.967-2.6-.067-.067-.133-.133-.233-.1-.7.033-1.4.1-2.1.167-.1 0-.2-.034-.234-.1-.833-1.234-1.433-2.6-2.1-3.9v-.034c-.333-1-.766-2-1.133-3C31.033 53.4 30.1 50.6 29.7 47.3l-.2-1.133zm8.9 22.4c-.134.3-.567.266-.767.066-.333.467-1.2-.133-.833-.6l-.2-.1c.333 0 .7 0 1.033.034.133 0 .233-.067.267-.2l.1-.4c.066-.234.4-.267.5-.067.166.433.2.9-.1 1.267zm7.366 2.933c3.234-.033 6.467.033 9.734 0 .233 0 .366.3.166.467-.833.7-1.7 1.3-2.633 1.833-.9.467-1.8.933-2.733 1.333l-.2.034c-.367.366-.867.366-1.267.1 0 0-.033 0-.033-.034-2.6-.966-5-2.5-7.1-4.3-.1-.066-.1-.2-.067-.3.067-.166.3-.233.433-.066.2.233.4.466.6.666.034.034.067.067.134.067.933.267 1.966.2 2.966.2zm11.4-1.567C52.8 69.767 48.4 69.9 44 69.833c-.8 0-1.2-.866-1.7-1.366-.367-.434-.7-.867-1.034-1.334a1.24 1.24 0 00.2-.233c.567-.7 1.234-1.367 1.634-2.2.333-.667.266-1.4.3-2.1-.034-3.467 0-6.9 0-10.367.033-.933-.4-1.766-.834-2.533-1.333-2.467-2.566-4.967-3.966-7.4-1.767-3.233-3.134-6.833-5.767-9.467-.167-.166-.067-.433.167-.433 1.566-.1 3.1-.167 4.666-.067 2.167.167 4.334.1 6.5.067.034 0 .067 0 .1.033.634.3 1.134.8 1.634 1.267.733.7 1.566 1.333 2 2.3 1.033 2.267 2.066 4.567 3.2 6.833.1.2.366.2.466 0 .867-1.9 1.9-3.733 2.767-5.633.4-.833.533-1.767.367-2.667V34.5c-.2-.567-.534-1.067-.867-1.567-.1-.166 0-.4.2-.4 2.2-.033 4.4.034 6.633 0 .634 0 1.334-.066 1.934.267l.1.1c.5.733 1.066 1.467 1.433 2.267.033.033.033.1.033.166-.1.6-.433 1.134-.7 1.667-.666 1.233-1.233 2.533-1.966 3.767v.033c-.634 1.567-1.434 3.067-2.167 4.567-1.133 2.3-2.4 4.566-3.367 6.933v.033c-.466.8-.866 1.667-.733 2.634.1 3.933-.1 7.866.167 11.8 0 .066.033.133.066.166.067.067.134.134.167.2l.033.034c.7.933 1.234 1.966 1.8 2.966l-.3-.2zm-.433-4.833c-.033-3.333.1-6.667-.2-9.967v-.1c.733-2.633 2.367-4.9 3.333-7.433v-.033c1.9-3.434 3.534-7 5.334-10.467.266-.533.6-1.067.7-1.667 0-.066 0-.1-.034-.133-.266-.567-.6-1.067-.966-1.6-.134-.2.033-.467.266-.4 1.134.267 2.134.867 3.134 1.433.6.267.5.967.6 1.5.4 3.4 0 6.834-.434 10.2-.433 2.934-.8 5.934-1.833 8.767-.967 2.8-1.967 5.633-3.633 8.133-.067.1-.167.134-.267.1l-2-.3c-.1 0-.167.034-.233.1-.367.434-.734.934-1.067 1.367v.033c-.533.867-1.167 1.667-1.767 2.467-.133.167-.366.133-.433-.067-.267-.6-.5-1.233-.5-1.933zm3 3.6c0-.233.033-.467.033-.7a.266.266 0 01.5-.1c.034.067.067.167.1.233.034.1.134.167.234.134h.233c.3 0 .4.433.1.5-.3.1-.6.133-.9.2-.167.033-.333-.1-.3-.267z"/>
+    <path fill="url(#paint9_radial_403_2)" d="M60.833 21.233c-.7-.333-1.367-.8-2.1-.933-2.733-1.5-5.567-2.767-8.333-4.233-.434-.2-.934-.5-1.4-.234-6.4 3.134-12.8 6.234-19.134 9.4-.733.334-1.5.667-2.2 1.1-1.933.734-3.766 1.8-5.7 2.567-.466.233-.3.9-.4 1.333-.533 8.1.067 16.267 2.134 24.134 2.1 7.9 5.633 15.533 11.133 21.666 1.833 1.9 3.733 3.9 6.067 5.2.833.867 1.933 1.334 2.933 1.967 1.767.9 3.6 1.8 5.533 2.3.734-.033 1.367-.433 2.034-.667 1-.466 2.033-.8 2.933-1.433 7.233-3.8 12.867-10.267 16.433-17.567C73.1 60.8 74.9 55.467 75.7 50c.633-3.167.866-6.433 1.033-9.667.033-3.8.233-7.633-.267-11.4a6880.01 6880.01 0 01-15.633-7.7zm13.233 19.134C73.733 46.4 73 52.467 70.933 58.2c-1.467 4.333-3.467 8.533-6.233 12.2-3.8 5.1-9.067 9.1-15 11.367a27.484 27.484 0 01-8.634-4.4C34.9 72.667 30.633 65.833 28.033 58.6c-2.9-8.067-3.833-16.767-3.467-25.3.067-.7 0-1.4.2-2.067 1.367-.866 2.9-1.4 4.334-2.166.5-.234 1-.534 1.5-.767 6.133-2.933 12.233-5.967 18.366-8.933.6-.4 1.234.033 1.8.3 7.667 3.8 15.367 7.5 23.034 11.366.333 3.134.333 6.234.266 9.334z"/>
+  </g>
+  <g>
+    <path fill="url(#paint10_linear_403_2)" d="M60.666 32.4c-2.366.033-4.733-.033-7.1.033.4.634.9 1.267 1.134 2 .2.9.066 1.867-.334 2.667-.966 2.067-2.066 4.033-3 6.133-.233.534-.433 1.1-.633 1.667-.333-.333-.667-.633-.933-1.033-.7-1.834-1.6-3.567-2.434-5.334-1.033-2.066-1.966-4.166-3.1-6.166-2.2 0-4.4.1-6.566-.067-1.767-.1-3.5-.033-5.267.1 2.9 2.7 4.3 6.467 6.167 9.867 1.366 2.433 2.633 4.966 3.966 7.4.434.8.867 1.633.834 2.533 0 3.467-.034 6.9 0 10.367 0 .7.033 1.466-.3 2.1-.4.833-1.067 1.466-1.634 2.2.134 0 .434.033.567.066 1.567.2 3.167.067 4.767.1 2.933-.033 5.866.1 8.766-.1-.066-.066-.2-.2-.233-.266-1.333-1.234-2.233-3-2.267-4.834-.033-2.6.034-5.233.1-7.833.034-1.033-.1-2.133.367-3.133.8-1.834 1.833-3.567 2.7-5.367.633-1.433 1.333-2.833 2-4.267 1.5-2.833 2.867-5.766 4.467-8.566-.634-.334-1.367-.234-2.034-.267z"/>
+    <path fill="#1B58BE" d="M36.8 68.033c.333.133.566.367.833.6-.333.467-1.2-.133-.833-.6z"/>
+  </g>
+  <g>
+    <path fill="#618C95" d="M51.067 25.933l-.267.134h-.033l-.134.1-.733.1h-1l-.7-.1-.433-.234.466-.366.4-.334.4-.3.067-.066.3-.234.433.3.267.234.033.033.467.333.133.134.334.266z"/>
+    <path fill="#557B81" d="M51.067 25.933l-.467.4-.567.5-.033.033-.633.567-.7-.633v-.034l-.067-.033-.4-.4-.033-.033-.4-.367.433.233.7.1h1l.733-.1.134-.1h.033l.267-.133z"/>
+    <path fill="#618C95" d="M49.4 24.633l-.033.034v.033l-.334.4-.333.433-.033.034-.167.233-.3.367-.433-.234.466-.366.4-.334.4-.3.067-.066.3-.234z" opacity=".24"/>
+    <path fill="#618C95" d="M51.067 25.933l-.267.134h-.033l-.134.1-.2-.267-.3-.333-.166-.267-.567-.667.433.3.267.234.033.033.467.333.133.134.334.266zM49.4 24.633l-.267.934-.2.7-.733-.1.467-.6.7-.867.033-.067z" opacity=".39"/>
+    <path fill="#618C95" d="M50.633 26.167l-.733.1-.2-.7-.3-.934.733.934.5.6zM49.367 27.433l-.567-.6V26.8l-.133-.134-.267-.3-.2-.2.7.1h.034l.066.2.133.4h.034l.2.567z" opacity=".24"/>
+    <path fill="#618C95" d="M49.367 27.433l-.7-.633v-.034l-.067-.033-.4-.4-.033-.033-.4-.367.433.233.2.2.267.3.133.134v.033l.567.6z" opacity=".39"/>
+    <path fill="#618C95" d="M50.633 26.166L49.367 27.4l.533-1.133.733-.1z" opacity=".24"/>
+    <path fill="#618C95" d="M51.067 25.933l-.467.4-.567.5-.033.033-.633.567V27.4l.5-.5.033-.034h.033l.667-.7h.033l.134-.1h.033l.267-.133z" opacity=".24"/>
+    <path fill="#618C95" d="M51.067 25.933l-.467.433-.567.5L50 26.9l-.633.533.5-.5.033-.033.667-.667.033-.033.133-.067.034-.033.3-.167z" opacity=".24"/>
+    <path fill="url(#pattern0)" d="M48.666 24.334h1.333v2h-1.333z"/>
+    <path fill="url(#pattern1)" d="M48 24.334h1.667v2H48z"/>
+    <path fill="url(#pattern2)" d="M49.333 24.334h1.333v2h-1.333z"/>
+    <path fill="url(#pattern3)" d="M47.666 25.667h3.667v1h-3.667z"/>
+    <path fill="url(#pattern4)" d="M48.666 26h1.333v1.667h-1.333z"/>
+    <path fill="url(#pattern5)" d="M48 26h1.667v1.667H48z"/>
+    <path fill="url(#pattern6)" d="M49.333 26h1.333v1.667h-1.333z"/>
+    <path fill="url(#pattern7)" d="M49.333 25.667h2v2h-2z"/>
+    <path fill="url(#pattern8)" d="M47.666 25.667h2v2h-2z"/>
+    <path fill="url(#pattern9)" d="M47.666 24.334h2v2h-2z"/>
+    <path fill="url(#pattern10)" d="M49.333 24.334h2v2h-2z"/>
+    <path fill="url(#pattern11)" d="M48.666 24.334h1.333v2h-1.333z"/>
+    <path fill="url(#pattern12)" d="M47.666 25.334h3.667v1h-3.667z"/>
+    <path fill="url(#pattern13)" d="M47.666 25.667h3.667v1.667h-3.667z"/>
+    <path fill="url(#pattern14)" d="M48.333 24.334h2v1h-2z"/>
+    <path fill="url(#pattern15)" d="M49.333 26h1.333v1h-1.333z"/>
+    <path fill="url(#pattern16)" d="M48 26h1.333v1H48z"/>
+    <path fill="url(#pattern17)" d="M48.666 26h1.333v1h-1.333z"/>
+    <path fill="url(#pattern18)" d="M49.333 26H51v1.667h-1.667z"/>
+    <path fill="url(#pattern19)" d="M49.333 24.667H51v1.667h-1.667z"/>
+    <path fill="#000" d="M51.067 25.933l-.467.4-.567.5-.033.034-.633.566-.7-.633v-.033l-.067-.034-.4-.4-.033-.033-.4-.367.466-.366.4-.334.4-.3.067-.066.3-.234.433.3.267.234.033.033.467.333.133.134.334.266z"/>
+    <path fill="url(#pattern20)" d="M48 24.334h1.667v2H48z"/>
+    <path fill="url(#pattern21)" d="M48.666 26.667h1.667v1h-1.667z"/>
+    <path fill="url(#pattern22)" d="M49 24.334h1v1.333h-1z"/>
+    <path fill="url(#pattern23)" d="M47.666 25.334h2.333v1h-2.333z"/>
+    <path fill="url(#pattern24)" d="M49.333 25.667h2v1.667h-2z"/>
+    <path fill="url(#pattern25)" d="M49.333 24.667h1.333v1.667h-1.333z"/>
+    <path fill="url(#pattern26)" d="M48 24.334h1.667v2H48z"/>
+    <path fill="url(#pattern27)" d="M47.666 24.334h2v2h-2z"/>
+    <path fill="url(#pattern28)" d="M49.333 24.334h2v2h-2z"/>
+    <path fill="url(#pattern29)" d="M48.333 25h1v.667h-1z"/>
+    <g>
+      <path fill="url(#paint11_linear_403_2)" d="M51.067 25.933l-.467.4-.567.5-.033.034-.633.566-.7-.633v-.033l-.067-.034-.4-.4-.033-.033-.4-.367.466-.366.4-.334.4-.3.067-.066.3-.234.433.3.267.234.033.033.467.333.133.134.334.266z" opacity=".55"/>
+      <path fill="url(#pattern30)" d="M48 24.334h1.667v2H48z"/>
+    </g>
+    <path fill="url(#pattern31)" d="M49.333 24.334h1.333v2h-1.333z"/>
+    <path fill="url(#pattern32)" d="M50.333 25.667h1v.667h-1z"/>
+    <path fill="url(#pattern33)" d="M49.333 25h1v1h-1z"/>
+    <path fill="url(#pattern34)" d="M48.333 25.334h1v.667h-1z"/>
+    <path fill="url(#pattern35)" d="M48.666 25.667h1.333v.667h-1.333z"/>
+    <path fill="#A2EFF3" d="M48.433 25.434l1.4.6-.233-.834-.767-.133-.4.367z" opacity=".42"/>
+    <path fill="#fff" d="M50.733 25.667l-.3.233-.533.367h-.967v-.033l.4-.367.033-.033.334-.267v-.033l.266-.234.134-.133.633.5z" opacity=".42"/>
+    <path fill="#A2EFF3" d="M48.933 26.267h.967l-.667.766-.3-.766z" opacity=".42"/>
+    <path fill="#A2EFF3" d="M47.767 25.933l1.3-.233.833.567h-.967l-.733-.1-.433-.234z" opacity=".51"/>
+    <path fill="#fff" d="M48.933 26.267l.967.667 1.166-1-.433.233-.667.1h-1.033z" opacity=".42"/>
+    <path fill="#fff" d="M50.633 26.167l-.9.467.167-.367.733-.1zM48.5 25.8l.433.467-.733-.1.3-.367zM49.366 27.433l-.766-.7.066-.066.234-.4h.033l.433 1.166zM49.4 24.633l.233.7-.567.434.334-1.134z" opacity=".84"/>
+    <path fill="#fff" d="M51.067 25.934l-.467.4-.033.033-.2.033.233-.233h.033l.134-.1h.033l.267-.133z" opacity=".84"/>
+    <path fill="url(#paint12_linear_403_2)" d="M48.467 25.8l-.7.134.466-.367.234.233z" opacity=".55"/>
+    <path fill="#fff" d="M48.2 26.167v.167l-.433-.4.433.233z" opacity=".84"/>
+  </g>
+  <g>
+    <path fill="#618C95" d="M61.866 66.5l-.1.267v.066l-.033.134-.4.6-.667.7h-.033v.033l-.534.433-.466.167.033-.6.034-.5.033-.5.033-.067V66.8l.534-.067.366-.066h.034l.566-.1h.2l.4-.067z"/>
+    <path fill="#557B81" d="M61.866 66.5l-.033.633v.767l-.033.833v.034l-.934.066h-.1l-.566.034h-.067l-.5.033.466-.167.534-.433v-.033h.033l.667-.7.4-.6.033-.134v-.066l.1-.267z"/>
+    <path fill="#618C95" d="M59.766 66.8l.034.033v.067l.066.533.1.533V68l.033.3.1.433-.466.167.033-.6.034-.5.033-.5.033-.067V66.8z" opacity=".24"/>
+    <path fill="#618C95" d="M61.866 66.5l-.1.267v.066l-.033.134-.334-.034-.433-.033-.3-.033-.867-.067.5-.067.367-.066h.033l.567-.1h.2l.4-.067z" opacity=".39"/>
+    <path fill="#618C95" d="M59.8 66.8l.466.833.367.633-.534.467-.133-.733-.167-1.1v-.1z" opacity=".39"/>
+    <path fill="#618C95" d="M61.733 66.966l-.4.6-.667-.333-.867-.433 1.167.1.767.066zM61.8 68.767l-.834-.034H60.1l.533-.433v-.033l.2.1h.033l.367.166h.033l.534.234z" opacity=".24"/>
+    <path fill="#618C95" d="M61.8 68.767l-.934.066h-.1l-.566.034h-.067l-.5.033.466-.167h.867l.834.034z" opacity=".39"/>
+    <path fill="#618C95" d="M61.733 66.967l.067 1.767-.467-1.167.4-.6z" opacity=".24"/>
+    <path fill="#618C95" d="M61.866 66.5l-.033.633v.767l-.033.833v.034-.034l-.034-.7v-.066L61.733 67v-.033l.033-.134v-.066l.1-.267z" opacity=".24"/>
+    <path fill="#618C95" d="M61.866 66.5v.633l-.033.767v.033l-.033.834-.034-.7V68l-.033-.967V67l.033-.133v-.034l.1-.333z" opacity=".24"/>
+    <path fill="url(#pattern36)" d="M59.666 66.667h1.667v1.667h-1.667z"/>
+    <path fill="url(#pattern37)" d="M59.666 66.667h1V69h-1z"/>
+    <path fill="url(#pattern38)" d="M59.666 66.667h2.333v1h-2.333z"/>
+    <path fill="url(#pattern39)" d="M59.333 66.334H62v2.667h-2.667z"/>
+    <path fill="url(#pattern40)" d="M60.333 67.334H62v1.667h-1.667z"/>
+    <path fill="url(#pattern41)" d="M59.999 68h2v1h-2z"/>
+    <path fill="url(#pattern42)" d="M60.999 66.667h1V69h-1z"/>
+    <path fill="url(#pattern43)" d="M61.666 66.334h.333v2.667h-.333z"/>
+    <path fill="url(#pattern44)" d="M59.333 68.667H62V69h-2.667z"/>
+    <path fill="url(#pattern45)" d="M59.333 66.667h1V69h-1z"/>
+    <path fill="url(#pattern46)" d="M59.666 66.334h2.333v.667h-2.333z"/>
+    <path fill="url(#pattern47)" d="M59.666 66.667h1.667v1.667h-1.667z"/>
+    <path fill="url(#pattern48)" d="M59.333 66.334H62v2.667h-2.667z"/>
+    <path fill="url(#pattern49)" d="M59.333 66.334H62v2.667h-2.667z"/>
+    <path fill="url(#pattern50)" d="M59.666 66.334h1.333v1.667h-1.333z"/>
+    <path fill="url(#pattern51)" d="M60.999 66.667h1v1.667h-1z"/>
+    <path fill="url(#pattern52)" d="M59.999 68h1.667v1h-1.667z"/>
+    <path fill="url(#pattern53)" d="M60.333 67.334h1.333v1h-1.333z"/>
+    <path fill="url(#pattern54)" d="M61.666 66.667h.333V69h-.333z"/>
+    <path fill="url(#pattern55)" d="M59.666 66.334h2.333v.667h-2.333z"/>
+    <path fill="#000" d="M61.866 66.5l-.033.633v.767l-.033.833v.034l-.934.066h-.1l-.566.034h-.067l-.5.033.033-.6.034-.5.033-.5.033-.067V66.8l.534-.067.366-.066h.034l.566-.1h.2l.4-.067z"/>
+    <path fill="url(#pattern56)" d="M59.666 66.667h1V69h-1z"/>
+    <path fill="url(#pattern57)" d="M60.666 67.667h1.333V69h-1.333z"/>
+    <path fill="url(#pattern58)" d="M59.666 66.667h1v1h-1z"/>
+    <path fill="url(#pattern59)" d="M59.333 67.334h2v1.667h-2z"/>
+    <path fill="url(#pattern60)" d="M61.666 66.334h.333v2.333h-.333z"/>
+    <path fill="url(#pattern61)" d="M59.666 66.667h2.333v1h-2.333z"/>
+    <path fill="url(#pattern62)" d="M59.666 66.667h1V69h-1z"/>
+    <path fill="url(#pattern63)" d="M59.333 66.667h1V69h-1z"/>
+    <path fill="url(#pattern64)" d="M59.666 66.334h2.333v.667h-2.333z"/>
+    <path fill="url(#pattern65)" d="M59.666 67h.333v1h-.333z"/>
+    <g>
+      <path fill="url(#paint13_linear_403_2)" d="M61.866 66.5l-.033.633v.767l-.033.833v.034l-.934.066h-.1l-.566.034h-.067l-.5.033.033-.6.034-.5.033-.5.033-.067V66.8l.534-.067.366-.066h.034l.566-.1h.2l.4-.067z" opacity=".55"/>
+      <path fill="url(#pattern66)" d="M59.666 66.666h.667v2.333h-.667z"/>
+    </g>
+    <path fill="url(#pattern67)" d="M59.666 66.667h2.333v.667h-2.333z"/>
+    <path fill="url(#pattern68)" d="M61.333 66.334H62v.667h-.667z"/>
+    <path fill="url(#pattern69)" d="M60.333 66.667h1v.667h-1z"/>
+    <path fill="url(#pattern70)" d="M59.666 67.334h1v1.333h-1z"/>
+    <path fill="url(#pattern71)" d="M60.333 67.334h1v1h-1z"/>
+    <path fill="#A2EFF3" d="M59.7 68.067l1.366-.6-.733-.4-.6.467-.033.533z" opacity=".42"/>
+    <path fill="#fff" d="M61.466 66.534v.033l-.066.367-.067.633-.7.7v.033-.633l.033-.433v-.567l.8-.133z" opacity=".42"/>
+    <path fill="#A2EFF3" d="M60.633 68.3l.7-.733.1 1.033-.8-.3z" opacity=".42"/>
+    <path fill="#A2EFF3" d="M59.633 68.9l.7-1.1 1-.233-.7.733-.534.434-.466.166z" opacity=".51"/>
+    <path fill="#fff" d="M60.633 68.3l1.166-.267.067-1.533-.133.467-.367.566-.733.767z" opacity=".42"/>
+    <path fill="#fff" d="M61.733 66.967l-.267 1-.133-.4.4-.6zM60.033 68.267l.6.033-.533.433-.067-.466z" opacity=".84"/>
+    <path fill="#fff" d="M61.8 68.767l-1.034.067v-.1l-.133-.434 1.166.467zM59.766 66.834l.7.3-.067.733-.633-1.034zM61.866 66.5l-.033.633-.1.2v-.366l.033-.134v-.066l.1-.267z" opacity=".84"/>
+    <path fill="url(#paint14_linear_403_2)" d="M60 68.3l-.367.6.033-.6H60z" opacity=".55"/>
+    <path fill="#fff" d="M60.1 68.733l.1.134-.567.033.466-.167z" opacity=".84"/>
+  </g>
+  <g>
+    <path fill="#618C95" d="M39 69.434l-.3-.1-.033-.034-.134-.033-.566-.466-.667-.734-.4-.6-.133-.466.566.1.534.066.5.1h.066l.4.067.034.5.033.367v.066l.033.567.034.166.033.434z"/>
+    <path fill="#557B81" d="M39 69.434l-.633-.067-.767-.1h-.033l-.834-.066v-1.034l.034-.567V67l.133.467.4.6.667.734.566.466.134.034.033.033.3.1z"/>
+    <path fill="#618C95" d="M38.833 67.334h-.1l-.5.033-.566.033v.034h-.334l-.433.033-.133-.466.566.1.534.066.5.1h.066l.4.067z" opacity=".24"/>
+    <path fill="#618C95" d="M39 69.434l-.3-.1-.034-.033-.133-.034.033-.333.067-.433.067-.3.133-.867.034.5.033.367v.066l.033.567.034.167.033.433z" opacity=".39"/>
+    <path fill="#618C95" d="M38.833 67.334l-.866.433-.667.3-.4-.6.767-.033 1.066-.1h.1z" opacity=".39"/>
+    <path fill="#618C95" d="M38.533 69.267l-.566-.466.367-.634.5-.833-.2 1.167-.1.766zM36.733 69.2l.067-.833v-.033l.033-.2.034-.4.033-.267.4.6-.1.2-.2.367v.033l-.267.534z" opacity=".24"/>
+    <path fill="#618C95" d="M36.733 69.2V68.168l.034-.567V67l.133.467-.033.267-.034.4-.033.2v.033l-.067.834z" opacity=".39"/>
+    <path fill="#618C95" d="M38.533 69.267l-1.8-.1 1.234-.367.566.467zM39 69.434l-.633-.067-.767-.1h-.033l-.834-.067v-.033l.734.033h.066l.967.067h.033l.134.033.033.034.3.1z" opacity=".24"/>
+    <path fill="#618C95" d="M39 69.434l-.633-.067-.734-.066H37.6l-.833-.1.7.033h.066l.967.033h.033l.134.067h.033l.3.1z" opacity=".24"/>
+    <path fill="url(#pattern72)" d="M37 67.334h2v1.667h-2z"/>
+    <path fill="url(#pattern73)" d="M36.666 67.334h2.333v1h-2.333z"/>
+    <path fill="url(#pattern74)" d="M37.666 67.334h1.333v2h-1.333z"/>
+    <path fill="url(#pattern75)" d="M36.666 66.667h2.333v3h-2.333z"/>
+    <path fill="url(#pattern76)" d="M36.666 68.001h1.333v1.333h-1.333z"/>
+    <path fill="url(#pattern77)" d="M36.666 67.334h.667v2h-.667z"/>
+    <path fill="url(#pattern78)" d="M36.666 68.667h2v.667h-2z"/>
+    <path fill="url(#pattern79)" d="M36.666 69.001h2.333v.667h-2.333z"/>
+    <path fill="url(#pattern80)" d="M36.666 66.667h.333v2.667h-.333z"/>
+    <path fill="url(#pattern81)" d="M36.666 66.667h2.333v1h-2.333z"/>
+    <path fill="url(#pattern82)" d="M38.333 67.334H39v2.333h-.667z"/>
+    <path fill="url(#pattern83)" d="M37 67.334h2v1.667h-2z"/>
+    <path fill="url(#pattern84)" d="M36.666 66.667h2.333v3h-2.333z"/>
+    <path fill="url(#pattern85)" d="M36.666 66.667h2.333v3h-2.333z"/>
+    <path fill="url(#pattern86)" d="M37.666 67.001h1.333v1.333h-1.333z"/>
+    <path fill="url(#pattern87)" d="M37 68.667h1.667v.667H37z"/>
+    <path fill="url(#pattern88)" d="M36.666 67.334h.667v1.667h-.667z"/>
+    <path fill="url(#pattern89)" d="M37 68.001h1v1.333h-1z"/>
+    <path fill="url(#pattern90)" d="M36.666 69.001h2.333v.333h-2.333z"/>
+    <path fill="url(#pattern91)" d="M38.333 67.334H39v2.333h-.667z"/>
+    <path fill="#000" d="M39 69.434l-.633-.067-.767-.1h-.033l-.834-.066v-1.034l.034-.567V67l.566.1.534.067.5.1h.066l.4.067.034.5.033.367v.066l.033.567.034.166.033.434z"/>
+    <path fill="url(#pattern92)" d="M36.666 67.334h2.333v.667h-2.333z"/>
+    <path fill="url(#pattern93)" d="M36.666 68.001h1v1.333h-1z"/>
+    <path fill="url(#pattern94)" d="M38 67.001h1v1h-1z"/>
+    <path fill="url(#pattern95)" d="M36.666 66.667h1.333V69h-1.333z"/>
+    <path fill="url(#pattern96)" d="M37 69.001h2v.667h-2z"/>
+    <path fill="url(#pattern97)" d="M37.666 67.334h1.333v2h-1.333z"/>
+    <path fill="url(#pattern98)" d="M36.666 67.001h2.333v1.333h-2.333z"/>
+    <path fill="url(#pattern99)" d="M36.666 66.667h2.333v1h-2.333z"/>
+    <path fill="url(#pattern100)" d="M38.333 67.001H39v2.667h-.667z"/>
+    <path fill="url(#pattern101)" d="M37.666 67.001h.667v.667h-.667z"/>
+    <g>
+      <path fill="url(#paint15_linear_403_2)" d="M39 69.434l-.633-.067-.767-.1h-.033l-.834-.066v-1.034l.034-.567V67l.566.1.534.067.5.1h.066l.4.067.034.5.033.367v.066l.033.567.034.166.033.434z" opacity=".55"/>
+      <path fill="url(#pattern102)" d="M36.666 67.001h2.333v.667h-2.333z"/>
+    </g>
+    <path fill="url(#pattern103)" d="M38.333 67.001H39v2.333h-.667z"/>
+    <path fill="url(#pattern104)" d="M38.333 69.001H39v.667h-.667z"/>
+    <path fill="url(#pattern105)" d="M38 67.667h1v1h-1z"/>
+    <path fill="url(#pattern106)" d="M37 67.334h1.333v.667H37z"/>
+    <path fill="url(#pattern107)" d="M37.333 67.667h1V69h-1z"/>
+    <path fill="#A2EFF3" d="M37.6 67.134l.466 1.433.467-.733-.4-.6-.533-.1z" opacity=".42"/>
+    <path fill="#fff" d="M38.967 69.034V69l-.4-.066-.6-.134-.667-.733.567.067h.066l.4.033.367.033h.2l.067.834z" opacity=".42"/>
+    <path fill="#A2EFF3" d="M37.3 68.067l.666.733-1.033.034.367-.767z" opacity=".42"/>
+    <path fill="#A2EFF3" d="M36.767 67l1.066.8.134 1-.667-.733-.4-.6-.133-.466z" opacity=".51"/>
+    <path fill="#fff" d="M37.3 68.067l.167 1.2 1.533.167-.467-.167-.533-.433-.7-.767z" opacity=".42"/>
+    <path fill="#fff" d="M38.533 69.267l-.967-.333.4-.134.567.467zM37.367 67.467l-.067.6-.4-.6h.467zM36.733 69.2v-1.033l.1-.033.467-.067-.567 1.133zM38.833 67.334l-.366.666-.734-.133 1.1-.534zM39 69.434l-.633-.067h-.034l-.166-.133.333.033h.033l.133.034.034.033.3.1z" opacity=".84"/>
+    <path fill="url(#paint16_linear_403_2)" d="M37.333 67.4l-.566-.4.566.1v.3z" opacity=".55"/>
+    <path fill="#fff" d="M36.9 67.467l-.133.133V67l.133.467z" opacity=".84"/>
+  </g>
+  <defs>
+    <pattern id="pattern0" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(.25 .16667)" xlink:href="#image0_403_2"/>
+    </pattern>
+    <pattern id="pattern1" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(.2 .16667)" xlink:href="#image1_403_2"/>
+    </pattern>
+    <pattern id="pattern2" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(.25 .16667)" xlink:href="#image2_403_2"/>
+    </pattern>
+    <pattern id="pattern3" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(.0909 .33333)" xlink:href="#image3_403_2"/>
+    </pattern>
+    <pattern id="pattern4" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(.25 .2)" xlink:href="#image4_403_2"/>
+    </pattern>
+    <pattern id="pattern5" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(.2)" xlink:href="#image5_403_2"/>
+    </pattern>
+    <pattern id="pattern6" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(.25 .2)" xlink:href="#image6_403_2"/>
+    </pattern>
+    <pattern id="pattern7" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(.16667)" xlink:href="#image7_403_2"/>
+    </pattern>
+    <pattern id="pattern8" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(.16667)" xlink:href="#image8_403_2"/>
+    </pattern>
+    <pattern id="pattern9" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(.16667)" xlink:href="#image9_403_2"/>
+    </pattern>
+    <pattern id="pattern10" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(.16667)" xlink:href="#image10_403_2"/>
+    </pattern>
+    <pattern id="pattern11" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(.25 .16667)" xlink:href="#image11_403_2"/>
+    </pattern>
+    <pattern id="pattern12" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(.0909 .33333)" xlink:href="#image12_403_2"/>
+    </pattern>
+    <pattern id="pattern13" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(.0909 .2)" xlink:href="#image13_403_2"/>
+    </pattern>
+    <pattern id="pattern14" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(.16667 .33333)" xlink:href="#image14_403_2"/>
+    </pattern>
+    <pattern id="pattern15" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(.25 .33333)" xlink:href="#image15_403_2"/>
+    </pattern>
+    <pattern id="pattern16" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(.25 .33333)" xlink:href="#image16_403_2"/>
+    </pattern>
+    <pattern id="pattern17" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(.25 .33333)" xlink:href="#image17_403_2"/>
+    </pattern>
+    <pattern id="pattern18" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(.2)" xlink:href="#image18_403_2"/>
+    </pattern>
+    <pattern id="pattern19" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(.2)" xlink:href="#image19_403_2"/>
+    </pattern>
+    <pattern id="pattern20" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(.2 .16667)" xlink:href="#image20_403_2"/>
+    </pattern>
+    <pattern id="pattern21" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(.2 .33333)" xlink:href="#image21_403_2"/>
+    </pattern>
+    <pattern id="pattern22" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(.33333 .25)" xlink:href="#image22_403_2"/>
+    </pattern>
+    <pattern id="pattern23" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(.14286 .33333)" xlink:href="#image23_403_2"/>
+    </pattern>
+    <pattern id="pattern24" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(.16667 .2)" xlink:href="#image24_403_2"/>
+    </pattern>
+    <pattern id="pattern25" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(.25 .2)" xlink:href="#image25_403_2"/>
+    </pattern>
+    <pattern id="pattern26" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(.2 .16667)" xlink:href="#image26_403_2"/>
+    </pattern>
+    <pattern id="pattern27" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(.16667)" xlink:href="#image27_403_2"/>
+    </pattern>
+    <pattern id="pattern28" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(.16667)" xlink:href="#image28_403_2"/>
+    </pattern>
+    <pattern id="pattern29" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(.33333 .5)" xlink:href="#image29_403_2"/>
+    </pattern>
+    <pattern id="pattern30" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(.2 .16667)" xlink:href="#image30_403_2"/>
+    </pattern>
+    <pattern id="pattern31" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(.25 .16667)" xlink:href="#image31_403_2"/>
+    </pattern>
+    <pattern id="pattern32" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(.33333 .5)" xlink:href="#image32_403_2"/>
+    </pattern>
+    <pattern id="pattern33" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(.33333)" xlink:href="#image33_403_2"/>
+    </pattern>
+    <pattern id="pattern34" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(.33333 .5)" xlink:href="#image34_403_2"/>
+    </pattern>
+    <pattern id="pattern35" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(.25 .5)" xlink:href="#image35_403_2"/>
+    </pattern>
+    <pattern id="pattern36" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(.2)" xlink:href="#image36_403_2"/>
+    </pattern>
+    <pattern id="pattern37" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(.33333 .14286)" xlink:href="#image37_403_2"/>
+    </pattern>
+    <pattern id="pattern38" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(.14286 .33333)" xlink:href="#image38_403_2"/>
+    </pattern>
+    <pattern id="pattern39" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(.125)" xlink:href="#image39_403_2"/>
+    </pattern>
+    <pattern id="pattern40" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(.2)" xlink:href="#image40_403_2"/>
+    </pattern>
+    <pattern id="pattern41" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(.16667 .33333)" xlink:href="#image41_403_2"/>
+    </pattern>
+    <pattern id="pattern42" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(.33333 .14286)" xlink:href="#image42_403_2"/>
+    </pattern>
+    <pattern id="pattern43" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(1 .125)" xlink:href="#image43_403_2"/>
+    </pattern>
+    <pattern id="pattern44" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(.125 1)" xlink:href="#image44_403_2"/>
+    </pattern>
+    <pattern id="pattern45" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(.33333 .14286)" xlink:href="#image45_403_2"/>
+    </pattern>
+    <pattern id="pattern46" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(.14286 .5)" xlink:href="#image46_403_2"/>
+    </pattern>
+    <pattern id="pattern47" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(.2)" xlink:href="#image47_403_2"/>
+    </pattern>
+    <pattern id="pattern48" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(.125)" xlink:href="#image48_403_2"/>
+    </pattern>
+    <pattern id="pattern49" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(.125)" xlink:href="#image49_403_2"/>
+    </pattern>
+    <pattern id="pattern50" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(.25 .2)" xlink:href="#image50_403_2"/>
+    </pattern>
+    <pattern id="pattern51" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(.33333 .2)" xlink:href="#image51_403_2"/>
+    </pattern>
+    <pattern id="pattern52" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(.2 .33333)" xlink:href="#image52_403_2"/>
+    </pattern>
+    <pattern id="pattern53" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(.25 .33333)" xlink:href="#image53_403_2"/>
+    </pattern>
+    <pattern id="pattern54" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(1 .14286)" xlink:href="#image54_403_2"/>
+    </pattern>
+    <pattern id="pattern55" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(.14286 .5)" xlink:href="#image55_403_2"/>
+    </pattern>
+    <pattern id="pattern56" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(.33333 .14286)" xlink:href="#image56_403_2"/>
+    </pattern>
+    <pattern id="pattern57" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(.25)" xlink:href="#image57_403_2"/>
+    </pattern>
+    <pattern id="pattern58" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(.33333)" xlink:href="#image58_403_2"/>
+    </pattern>
+    <pattern id="pattern59" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(.16667 .2)" xlink:href="#image59_403_2"/>
+    </pattern>
+    <pattern id="pattern60" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(1 .14286)" xlink:href="#image60_403_2"/>
+    </pattern>
+    <pattern id="pattern61" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(.14286 .33333)" xlink:href="#image61_403_2"/>
+    </pattern>
+    <pattern id="pattern62" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(.33333 .14286)" xlink:href="#image62_403_2"/>
+    </pattern>
+    <pattern id="pattern63" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(.33333 .14286)" xlink:href="#image63_403_2"/>
+    </pattern>
+    <pattern id="pattern64" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(.14286 .5)" xlink:href="#image64_403_2"/>
+    </pattern>
+    <pattern id="pattern65" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(1 .33333)" xlink:href="#image65_403_2"/>
+    </pattern>
+    <pattern id="pattern66" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(.5 .14286)" xlink:href="#image66_403_2"/>
+    </pattern>
+    <pattern id="pattern67" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(.14286 .5)" xlink:href="#image67_403_2"/>
+    </pattern>
+    <pattern id="pattern68" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(.5)" xlink:href="#image68_403_2"/>
+    </pattern>
+    <pattern id="pattern69" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(.33333 .5)" xlink:href="#image69_403_2"/>
+    </pattern>
+    <pattern id="pattern70" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(.33333 .25)" xlink:href="#image70_403_2"/>
+    </pattern>
+    <pattern id="pattern71" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(.33333)" xlink:href="#image71_403_2"/>
+    </pattern>
+    <pattern id="pattern72" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(.16667 .2)" xlink:href="#image72_403_2"/>
+    </pattern>
+    <pattern id="pattern73" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(.14286 .33333)" xlink:href="#image73_403_2"/>
+    </pattern>
+    <pattern id="pattern74" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(.25 .16667)" xlink:href="#image74_403_2"/>
+    </pattern>
+    <pattern id="pattern75" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(.14286 .11111)" xlink:href="#image75_403_2"/>
+    </pattern>
+    <pattern id="pattern76" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(.25)" xlink:href="#image76_403_2"/>
+    </pattern>
+    <pattern id="pattern77" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(.5 .16667)" xlink:href="#image77_403_2"/>
+    </pattern>
+    <pattern id="pattern78" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(.16667 .5)" xlink:href="#image78_403_2"/>
+    </pattern>
+    <pattern id="pattern79" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(.14286 .5)" xlink:href="#image79_403_2"/>
+    </pattern>
+    <pattern id="pattern80" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(1 .125)" xlink:href="#image80_403_2"/>
+    </pattern>
+    <pattern id="pattern81" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(.14286 .33333)" xlink:href="#image81_403_2"/>
+    </pattern>
+    <pattern id="pattern82" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(.5 .14286)" xlink:href="#image82_403_2"/>
+    </pattern>
+    <pattern id="pattern83" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(.16667 .2)" xlink:href="#image83_403_2"/>
+    </pattern>
+    <pattern id="pattern84" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(.14286 .11111)" xlink:href="#image84_403_2"/>
+    </pattern>
+    <pattern id="pattern85" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(.14286 .11111)" xlink:href="#image85_403_2"/>
+    </pattern>
+    <pattern id="pattern86" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(.25)" xlink:href="#image86_403_2"/>
+    </pattern>
+    <pattern id="pattern87" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(.2 .5)" xlink:href="#image87_403_2"/>
+    </pattern>
+    <pattern id="pattern88" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(.5 .2)" xlink:href="#image88_403_2"/>
+    </pattern>
+    <pattern id="pattern89" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(.33333 .25)" xlink:href="#image89_403_2"/>
+    </pattern>
+    <pattern id="pattern90" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(.14286 1)" xlink:href="#image90_403_2"/>
+    </pattern>
+    <pattern id="pattern91" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(.5 .14286)" xlink:href="#image91_403_2"/>
+    </pattern>
+    <pattern id="pattern92" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(.14286 .5)" xlink:href="#image92_403_2"/>
+    </pattern>
+    <pattern id="pattern93" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(.33333 .25)" xlink:href="#image93_403_2"/>
+    </pattern>
+    <pattern id="pattern94" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(.33333)" xlink:href="#image94_403_2"/>
+    </pattern>
+    <pattern id="pattern95" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(.25 .14286)" xlink:href="#image95_403_2"/>
+    </pattern>
+    <pattern id="pattern96" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(.16667 .5)" xlink:href="#image96_403_2"/>
+    </pattern>
+    <pattern id="pattern97" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(.25 .16667)" xlink:href="#image97_403_2"/>
+    </pattern>
+    <pattern id="pattern98" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(.14286 .25)" xlink:href="#image98_403_2"/>
+    </pattern>
+    <pattern id="pattern99" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(.14286 .33333)" xlink:href="#image99_403_2"/>
+    </pattern>
+    <pattern id="pattern100" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(.5 .125)" xlink:href="#image100_403_2"/>
+    </pattern>
+    <pattern id="pattern101" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(.5)" xlink:href="#image101_403_2"/>
+    </pattern>
+    <pattern id="pattern102" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(.14286 .5)" xlink:href="#image102_403_2"/>
+    </pattern>
+    <pattern id="pattern103" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(.5 .14286)" xlink:href="#image103_403_2"/>
+    </pattern>
+    <pattern id="pattern104" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(.5)" xlink:href="#image104_403_2"/>
+    </pattern>
+    <pattern id="pattern105" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(.33333)" xlink:href="#image105_403_2"/>
+    </pattern>
+    <pattern id="pattern106" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(.25 .5)" xlink:href="#image106_403_2"/>
+    </pattern>
+    <pattern id="pattern107" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <use transform="scale(.33333 .25)" xlink:href="#image107_403_2"/>
+    </pattern>
+    <linearGradient id="paint0_linear_403_2" x1="48.442" x2="50.358" y1="26.372" y2="26.372" gradientUnits="userSpaceOnUse">
+      <stop offset=".003" stop-color="#0F2381"/>
+      <stop offset="1" stop-color="#142D8F"/>
+    </linearGradient>
+    <linearGradient id="paint1_linear_403_2" x1="41.244" x2="57.368" y1="68.398" y2="68.398" gradientUnits="userSpaceOnUse">
+      <stop offset=".003" stop-color="#0F2381"/>
+      <stop offset="1" stop-color="#142D8F"/>
+    </linearGradient>
+    <linearGradient id="paint2_linear_403_2" x1="44.265" x2="51.37" y1="38.613" y2="38.613" gradientUnits="userSpaceOnUse">
+      <stop offset=".003" stop-color="#0F2381"/>
+      <stop offset="1" stop-color="#142D8F"/>
+    </linearGradient>
+    <linearGradient id="paint3_linear_403_2" x1="53.024" x2="64.132" y1="49.682" y2="49.682" gradientUnits="userSpaceOnUse">
+      <stop offset=".003" stop-color="#0F2381"/>
+      <stop offset="1" stop-color="#142D8F"/>
+    </linearGradient>
+    <linearGradient id="paint4_linear_403_2" x1="56.533" x2="69.078" y1="50.329" y2="50.329" gradientUnits="userSpaceOnUse">
+      <stop offset=".003" stop-color="#0F2381"/>
+      <stop offset="1" stop-color="#2059C5"/>
+    </linearGradient>
+    <linearGradient id="paint5_linear_403_2" x1="28.949" x2="41.814" y1="49.941" y2="49.941" gradientUnits="userSpaceOnUse">
+      <stop offset=".003" stop-color="#0F2381"/>
+      <stop offset="1" stop-color="#2059C5"/>
+    </linearGradient>
+    <linearGradient id="paint6_linear_403_2" x1="41.492" x2="56.18" y1="72.738" y2="72.738" gradientUnits="userSpaceOnUse">
+      <stop offset=".003" stop-color="#0F2381"/>
+      <stop offset="1" stop-color="#2059C5"/>
+    </linearGradient>
+    <linearGradient id="paint7_linear_403_2" x1="37.411" x2="60.717" y1="33.485" y2="33.485" gradientUnits="userSpaceOnUse">
+      <stop offset=".002" stop-color="#0F2381"/>
+      <stop offset="1" stop-color="#2059C5"/>
+    </linearGradient>
+    <linearGradient id="paint10_linear_403_2" x1="29.807" x2="62.101" y1="36.948" y2="55.593" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#5A88EE"/>
+      <stop offset="1" stop-color="#2059C5"/>
+    </linearGradient>
+    <linearGradient id="paint11_linear_403_2" x1="49.44" x2="49.367" y1="25.035" y2="27.975" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#D0E8E8"/>
+      <stop offset=".084" stop-color="#C7E6E5"/>
+      <stop offset=".224" stop-color="#ADE0DE"/>
+      <stop offset=".401" stop-color="#84D7D3"/>
+      <stop offset=".567" stop-color="#57CDC7"/>
+      <stop offset=".865" stop-color="#34B6B4"/>
+      <stop offset=".994" stop-color="#298791"/>
+    </linearGradient>
+    <linearGradient id="paint12_linear_403_2" x1="47.773" x2="48.457" y1="25.744" y2="25.744" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#D0E8E8"/>
+      <stop offset=".084" stop-color="#C7E6E5"/>
+      <stop offset=".224" stop-color="#ADE0DE"/>
+      <stop offset=".401" stop-color="#84D7D3"/>
+      <stop offset=".567" stop-color="#57CDC7"/>
+      <stop offset=".865" stop-color="#34B6B4"/>
+      <stop offset=".994" stop-color="#298791"/>
+    </linearGradient>
+    <linearGradient id="paint13_linear_403_2" x1="60.099" x2="62.2" y1="67.102" y2="69.161" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#D0E8E8"/>
+      <stop offset=".084" stop-color="#C7E6E5"/>
+      <stop offset=".224" stop-color="#ADE0DE"/>
+      <stop offset=".401" stop-color="#84D7D3"/>
+      <stop offset=".567" stop-color="#57CDC7"/>
+      <stop offset=".865" stop-color="#34B6B4"/>
+      <stop offset=".994" stop-color="#298791"/>
+    </linearGradient>
+    <linearGradient id="paint14_linear_403_2" x1="59.481" x2="59.948" y1="68.804" y2="68.304" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#D0E8E8"/>
+      <stop offset=".084" stop-color="#C7E6E5"/>
+      <stop offset=".224" stop-color="#ADE0DE"/>
+      <stop offset=".401" stop-color="#84D7D3"/>
+      <stop offset=".567" stop-color="#57CDC7"/>
+      <stop offset=".865" stop-color="#34B6B4"/>
+      <stop offset=".994" stop-color="#298791"/>
+    </linearGradient>
+    <linearGradient id="paint15_linear_403_2" x1="38.527" x2="36.302" y1="67.645" y2="69.57" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#D0E8E8"/>
+      <stop offset=".084" stop-color="#C7E6E5"/>
+      <stop offset=".224" stop-color="#ADE0DE"/>
+      <stop offset=".401" stop-color="#84D7D3"/>
+      <stop offset=".567" stop-color="#57CDC7"/>
+      <stop offset=".865" stop-color="#34B6B4"/>
+      <stop offset=".994" stop-color="#298791"/>
+    </linearGradient>
+    <linearGradient id="paint16_linear_403_2" x1="36.881" x2="37.341" y1="66.89" y2="67.395" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#D0E8E8"/>
+      <stop offset=".084" stop-color="#C7E6E5"/>
+      <stop offset=".224" stop-color="#ADE0DE"/>
+      <stop offset=".401" stop-color="#84D7D3"/>
+      <stop offset=".567" stop-color="#57CDC7"/>
+      <stop offset=".865" stop-color="#34B6B4"/>
+      <stop offset=".994" stop-color="#298791"/>
+    </linearGradient>
+    <radialGradient id="paint8_radial_403_2" cx="0" cy="0" r="1" gradientTransform="matrix(51.9098 0 0 51.8942 67.184 31.321)" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#C19752"/>
+      <stop offset="1" stop-color="#F7EC91"/>
+    </radialGradient>
+    <radialGradient id="paint9_radial_403_2" cx="0" cy="0" r="1" gradientTransform="matrix(59.7219 0 0 59.704 38.535 52.336)" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#C19752"/>
+      <stop offset="1" stop-color="#F7EC91"/>
+    </radialGradient>
+  </defs>
+</svg>

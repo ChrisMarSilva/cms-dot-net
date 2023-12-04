@@ -4,9 +4,12 @@ namespace CMS_DotNet_Teste_Resquest_Http_FoxBit.Infrastructure.Context.Interface
 
 public interface IUnitOfWork
 {
+    ICurrencyRepository Currencies { get; }
+    IMarketRepository Markets { get; }
+    IMarketQuoteRepository MarketQuotes { get; }
     ITradeRepository Trades { get; }
     void Commit();
     void Rollback();
     Task<bool> CommitAsync();
-    Task<bool> RollbackAsync();
+    //Task<bool> RollbackAsync();
 }

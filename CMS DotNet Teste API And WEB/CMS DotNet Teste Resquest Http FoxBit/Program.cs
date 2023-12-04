@@ -1,23 +1,75 @@
-﻿using CMS_DotNet_Teste_Resquest_Http_FoxBit.Controllers;
-using CMS_DotNet_Teste_Resquest_Http_FoxBit.Domain.Models;
+﻿using CMS_DotNet_Teste_Resquest_Http_FoxBit.Application.Services;
+using CMS_DotNet_Teste_Resquest_Http_FoxBit.Application.Services.Interfaces;
 using CMS_DotNet_Teste_Resquest_Http_FoxBit.Infrastructure.Context;
+using CMS_DotNet_Teste_Resquest_Http_FoxBit.Infrastructure.Context.Interfaces;
+using CMS_DotNet_Teste_Resquest_Http_FoxBit.Infrastructure.Repositories;
+using CMS_DotNet_Teste_Resquest_Http_FoxBit.Infrastructure.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+
+//ID do usuário: 258442
+//Chave de acesso: Ksh9WoRMI3xVdAklxI6mbfwZiWyGeIN6zSSGOmr7
+//Chave secreta: O2Ga6PXVJlLTrAx454QSq4qXYsCRBB2lW0sXEqM6
 
 Console.WriteLine("INI");
 try
 {
-    var tradeController = new TradeController();
-    tradeController.GetAll();
+    Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("pt-BR");
+    Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo("pt-BR");
 
-    using var context = new AppDbContext();
+    var serviceCollection = new ServiceCollection();
 
-    //var trade1 = context.Trades.AsNoTracking().FirstOrDefault(x => x.id == 1);
+    serviceCollection.AddScoped<ICurrencyService, CurrencyService>(); // AddScoped = UmVezQdoFazRequisicao - registra um serviço que é criado uma vez por solicitação.
+    serviceCollection.AddScoped<IMarketService, MarketService>(); // AddScoped = UmVezQdoFazRequisicao - registra um serviço que é criado uma vez por solicitação.
+    serviceCollection.AddScoped<IMarketQuoteService, MarketQuoteService>(); // AddScoped = UmVezQdoFazRequisicao - registra um serviço que é criado uma vez por solicitação.
+    serviceCollection.AddScoped<ITradeService, TradeService>(); // AddScoped = UmVezQdoFazRequisicao - registra um serviço que é criado uma vez por solicitação.
 
-    var trade = new TradeModel();
-    context.Trades.Add(trade);
+    serviceCollection.AddScoped<ICurrencyRepository, CurrencyRepository>(); // AddScoped = UmVezQdoFazRequisicao - registra um serviço que é criado uma vez por solicitação.
+    serviceCollection.AddScoped<IMarketRepository, MarketRepository>(); // AddScoped = UmVezQdoFazRequisicao - registra um serviço que é criado uma vez por solicitação.
+    serviceCollection.AddScoped<IMarketQuoteRepository, MarketQuoteRepository>(); // AddScoped = UmVezQdoFazRequisicao - registra um serviço que é criado uma vez por solicitação.
+    serviceCollection.AddScoped<ITradeRepository, TradeRepository>(); // AddScoped = UmVezQdoFazRequisicao - registra um serviço que é criado uma vez por solicitação.
 
-    context.SaveChanges();
+    serviceCollection.AddScoped<IUnitOfWork, UnitOfWork>();
+    var connectionString = "Server=localhost;Port=3306;Database=tamo_na_bolsa_foxbit;Uid=root;Pwd=Chrs8723;Persist Security Info=False;Connect Timeout=300;Connection Reset=False;Max Pool Size=300;"; // ;Trust Server Certificate=true
+    serviceCollection.AddDbContextPool<AppDbContext>(opt => opt.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+
+    var serviceProvider = serviceCollection.BuildServiceProvider();
+
+    //Currency
+    var eventCurrencyService = serviceProvider.GetService<ICurrencyService>();
+    //await eventCurrencyService!.GetCurrenciesAsync();
+    await eventCurrencyService!.GetIconCurrenciesAsync();
+
+    //Market
+    //var eventMarketService = serviceProvider.GetService<IMarketService>();
+    //await eventMarketService!.GetMarketsAsync();
+
+    //MarketQuote
+    //var eventMarketQuoteService = serviceProvider.GetService<IMarketQuoteService>();
+    //await eventMarketQuoteService!.GetMarketQuotesAsync();
 
 
+
+
+
+
+    //var eventTradeService = serviceProvider.GetService<ITradeService>();
+    //await eventTradeService!.GetCurrenciesAsync();
+
+    //var trades = eventService?.GetAllAsync().Result;
+    //Console.WriteLine(trades);
+
+    //var tradeController = new TradeController();
+    //tradeController.GetAll();
+
+    //var builder = new DbContextOptionsBuilder<AppDbContext>();
+    //using var context = new AppDbContext(builder.Options);
+    //using var context = new AppDbContext();
+    //var trades = context.Trades.Where(x => x.id > 0).ToList();
+    //Console.WriteLine(trades);
+    //var trade = new TradeModel(id: 1, sn: "sss", client_order_id: 2, market_symbol: "sss", side: "sss", type: "sss", state: "sss", price: 3, price_avg: 3, quantity: 3, quantity_executed: 3, instant_amount: 3, instant_amount_executed: 3, created_at: DateTime.Now, trades_count: 3, remark: "sss", funds_received: 3);
+    //context.Trades.Add(trade);
+    //context.SaveChanges();
 }
 catch (Exception ex)
 {

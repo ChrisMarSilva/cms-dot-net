@@ -1,33 +1,19 @@
 ﻿using CMS_DotNet_Teste_Resquest_Http_FoxBit.Infrastructure.Context;
 using CMS_DotNet_Teste_Resquest_Http_FoxBit.Infrastructure.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using System.Linq.Expressions;
 
 namespace CMS_DotNet_Teste_Resquest_Http_FoxBit.Infrastructure.Repositories;
 
 public class BaseRepository<T> : IBaseRepository<T> where T : class
 {
-    private readonly ILogger<BaseRepository<T>> _logger;
     public readonly AppDbContext _ctx; // DbContext // AppDbContext
     protected readonly DbSet<T> _dbSet;
-    private readonly string _className;
 
     public BaseRepository(AppDbContext ctx)
     {
         _ctx = ctx;
         _dbSet = _ctx.Set<T>();
-        _className = GetType().FullName;
-    }
-
-    public BaseRepository(ILogger<BaseRepository<T>> logger, AppDbContext ctx)
-    {
-        _logger = logger;
-        _ctx = ctx;
-        _dbSet = _ctx.Set<T>();
-        _className = GetType().FullName;
-
-        _logger.LogInformation($"{_className}");
     }
 
     public IQueryable<T> GetAll() //public async Task<IEnumerable<T>> GetAllAsync()
@@ -88,10 +74,10 @@ public class BaseRepository<T> : IBaseRepository<T> where T : class
         return await _dbSet.Where(expression).AnyAsync(cancellationToken);
     }
 
-    public async Task<List<T>> LocalizaPaginaAsync(int numeroPagina, int quantidadeRegistros)
-    {
-        return await _dbSet.Skip(quantidadeRegistros * (numeroPagina - 1)).Take(quantidadeRegistros).ToListAsync();
-    }
+    //public async Task<List<T>> LocalizaPaginaAsync(int numeroPagina, int quantidadeRegistros)
+    //{
+    //    return await _dbSet.Skip(quantidadeRegistros * (numeroPagina - 1)).Take(quantidadeRegistros).ToListAsync();
+    //}
 
     public async Task<int> GetTotalRegistrosAsync()
     {
@@ -101,12 +87,14 @@ public class BaseRepository<T> : IBaseRepository<T> where T : class
     public async Task<T> AddAsync(T entity, CancellationToken cancellationToken = default)
     {
         await _dbSet.AddAsync(entity, cancellationToken);
+
         return entity;
     }
 
     public async Task<IEnumerable<T>> AddRangeAsync(IEnumerable<T> entities, CancellationToken cancellationToken = default)
     {
         await _dbSet.AddRangeAsync(entities, cancellationToken);
+
         return entities;
     }
 
@@ -126,6 +114,12 @@ public class BaseRepository<T> : IBaseRepository<T> where T : class
     public bool RemoveRange(IEnumerable<T> entities)
     {
         _dbSet.RemoveRange(entities);
+        return true;
+    }
+
+    public async Task<bool> RemoveAllAsync(string tableName)
+    {
+        await _ctx.Database.ExecuteSqlRawAsync($"TRUNCATE TABLE {tableName}");
         return true;
     }
 }

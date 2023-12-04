@@ -2,7 +2,11 @@
 
 public class TradeModel
 {
-    public TradeModel() { }
+    public TradeModel() 
+    { 
+    
+    }
+
     public TradeModel(long id, string sn, long client_order_id, string market_symbol,
         string side, string type, string state, double price, double price_avg, 
         double quantity, double quantity_executed, double instant_amount, 
@@ -45,4 +49,9 @@ public class TradeModel
     public int trades_count { get; set; }
     public string remark { get; set; } = string.Empty;
     public double funds_received { get; set; }
+
+    //public override string ToString()
+    //{
+    //    return "";
+    //}
 }
