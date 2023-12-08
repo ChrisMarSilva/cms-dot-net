@@ -117,6 +117,12 @@ public class BaseRepository<T> : IBaseRepository<T> where T : class
         return true;
     }
 
+    public async Task<bool> RemoveWhereAsync(string tableName, string where)
+    {
+        await _ctx.Database.ExecuteSqlRawAsync($"DELETE FROM {tableName} WHERE {where}");
+        return true;
+    }
+
     public async Task<bool> RemoveAllAsync(string tableName)
     {
         await _ctx.Database.ExecuteSqlRawAsync($"TRUNCATE TABLE {tableName}");

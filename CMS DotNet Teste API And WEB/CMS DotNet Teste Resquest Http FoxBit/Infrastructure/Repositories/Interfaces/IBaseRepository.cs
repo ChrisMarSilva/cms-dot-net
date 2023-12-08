@@ -15,6 +15,7 @@ public interface IBaseRepository<T>
     Task<IEnumerable<T>> AddRangeAsync(IEnumerable<T> entities, CancellationToken cancellationToken = default);
     T Update(T entity);
     bool Remove(T entity);
-    bool RemoveRange(IEnumerable<T> entities);
+    bool RemoveRange(IEnumerable<T> entities);    
+    Task<bool> RemoveWhereAsync(string tableName, string where);
     Task<bool> RemoveAllAsync(string tableName);
 }

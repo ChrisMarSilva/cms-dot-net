@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace CMS_DotNet_Teste_Resquest_Http_FoxBit_Api.Context.Configurations;
+namespace CMS_DotNet_Teste_Resquest_Http_FoxBit.Infrastructure.Configurations;
 
 public class CurrencyConfiguration : IEntityTypeConfiguration<CurrencyModel>
 {

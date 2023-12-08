@@ -184,32 +184,81 @@ namespace CMS_DotNet_Teste_Resquest_Http_FoxBit_Api.Migrations
                     b.ToTable("TbTnBFoxbit_MarketQuotes", (string)null);
                 });
 
-            modelBuilder.Entity("CMS_DotNet_Teste_Resquest_Http_FoxBit_Api.Models.TradeModel", b =>
+            modelBuilder.Entity("CMS_DotNet_Teste_Resquest_Http_FoxBit_Api.Models.MemberInfoModel", b =>
                 {
-                    b.Property<long>("id")
-                        .HasColumnType("bigint")
-                        .HasColumnName("id");
-
-                    b.Property<decimal>("client_order_id")
-                        .HasColumnType("numeric(15,0)")
-                        .HasColumnName("client_order_id");
+                    b.Property<string>("sn")
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)")
+                        .HasColumnName("sn");
 
                     b.Property<DateTime>("created_at")
                         .HasPrecision(3)
                         .HasColumnType("datetime(3)")
                         .HasColumnName("created_at");
 
-                    b.Property<decimal>("funds_received")
-                        .HasColumnType("decimal(21,8)")
-                        .HasColumnName("funds_received");
+                    b.Property<bool>("disabled")
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("disabled");
 
-                    b.Property<decimal>("instant_amount")
-                        .HasColumnType("decimal(21,8)")
-                        .HasColumnName("instant_amount");
+                    b.Property<string>("email")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("varchar(250)")
+                        .HasColumnName("email");
 
-                    b.Property<decimal>("instant_amount_executed")
+                    b.Property<decimal>("level")
+                        .HasColumnType("numeric(3,0)")
+                        .HasColumnName("level");
+
+                    b.HasKey("sn")
+                        .HasName("PkTnBFoxbit_MemberInfos");
+
+                    b.ToTable("TbTnBFoxbit_MemberInfos", (string)null);
+                });
+
+            modelBuilder.Entity("CMS_DotNet_Teste_Resquest_Http_FoxBit_Api.Models.SystemTimeModel", b =>
+                {
+                    b.Property<string>("type")
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)")
+                        .HasColumnName("type");
+
+                    b.Property<DateTime>("iso")
+                        .HasMaxLength(20)
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("iso");
+
+                    b.Property<long>("timestamp")
+                        .HasPrecision(3)
+                        .HasColumnType("bigint")
+                        .HasColumnName("timestamp");
+
+                    b.HasKey("type", "iso")
+                        .HasName("PkTnBFoxbit_SystemTime");
+
+                    b.ToTable("TbTnBFoxbit_SystemTime", (string)null);
+                });
+
+            modelBuilder.Entity("CMS_DotNet_Teste_Resquest_Http_FoxBit_Api.Models.TradeModel", b =>
+                {
+                    b.Property<decimal>("id")
+                        .HasColumnType("numeric(15,0)")
+                        .HasColumnName("id");
+
+                    b.Property<DateTime>("created_at")
+                        .HasPrecision(3)
+                        .HasColumnType("datetime(3)")
+                        .HasColumnName("created_at");
+
+                    b.Property<decimal>("fee")
                         .HasColumnType("decimal(21,8)")
-                        .HasColumnName("instant_amount_executed");
+                        .HasColumnName("fee");
+
+                    b.Property<string>("fee_currency_symbol")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)")
+                        .HasColumnName("fee_currency_symbol");
 
                     b.Property<string>("market_symbol")
                         .IsRequired()
@@ -217,27 +266,17 @@ namespace CMS_DotNet_Teste_Resquest_Http_FoxBit_Api.Migrations
                         .HasColumnType("varchar(20)")
                         .HasColumnName("market_symbol");
 
+                    b.Property<decimal>("order_id")
+                        .HasColumnType("numeric(15,0)")
+                        .HasColumnName("order_id");
+
                     b.Property<decimal>("price")
                         .HasColumnType("decimal(21,8)")
                         .HasColumnName("price");
 
-                    b.Property<decimal>("price_avg")
-                        .HasColumnType("decimal(21,8)")
-                        .HasColumnName("price_avg");
-
                     b.Property<decimal>("quantity")
                         .HasColumnType("decimal(21,8)")
                         .HasColumnName("quantity");
-
-                    b.Property<decimal>("quantity_executed")
-                        .HasColumnType("decimal(21,8)")
-                        .HasColumnName("quantity_executed");
-
-                    b.Property<string>("remark")
-                        .IsRequired()
-                        .HasMaxLength(250)
-                        .HasColumnType("varchar(250)")
-                        .HasColumnName("remark");
 
                     b.Property<string>("side")
                         .IsRequired()
@@ -250,22 +289,6 @@ namespace CMS_DotNet_Teste_Resquest_Http_FoxBit_Api.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("varchar(20)")
                         .HasColumnName("sn");
-
-                    b.Property<string>("state")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("varchar(20)")
-                        .HasColumnName("state");
-
-                    b.Property<decimal>("trades_count")
-                        .HasColumnType("numeric(9,0)")
-                        .HasColumnName("trades_count");
-
-                    b.Property<string>("type")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("varchar(20)")
-                        .HasColumnName("type");
 
                     b.HasKey("id")
                         .HasName("PkTnBFoxbit_Trades");

@@ -4,9 +4,11 @@ namespace CMS_DotNet_Teste_Resquest_Http_FoxBit.Infrastructure.Context.Interface
 
 public interface IUnitOfWork
 {
+    ISystemTimeRepository SystemTimes { get; }
     ICurrencyRepository Currencies { get; }
     IMarketRepository Markets { get; }
     IMarketQuoteRepository MarketQuotes { get; }
+    IMemberInfoRepository MemberInfos { get; }
     ITradeRepository Trades { get; }
     void Commit();
     void Rollback();

@@ -19,26 +19,34 @@ try
 
     var serviceCollection = new ServiceCollection();
 
-    serviceCollection.AddScoped<ICurrencyService, CurrencyService>(); // AddScoped = UmVezQdoFazRequisicao - registra um serviço que é criado uma vez por solicitação.
-    serviceCollection.AddScoped<IMarketService, MarketService>(); // AddScoped = UmVezQdoFazRequisicao - registra um serviço que é criado uma vez por solicitação.
-    serviceCollection.AddScoped<IMarketQuoteService, MarketQuoteService>(); // AddScoped = UmVezQdoFazRequisicao - registra um serviço que é criado uma vez por solicitação.
-    serviceCollection.AddScoped<ITradeService, TradeService>(); // AddScoped = UmVezQdoFazRequisicao - registra um serviço que é criado uma vez por solicitação.
+    serviceCollection.AddScoped<ISystemTimeService, SystemTimeService>();
+    serviceCollection.AddScoped<ICurrencyService, CurrencyService>();
+    serviceCollection.AddScoped<IMarketService, MarketService>();
+    serviceCollection.AddScoped<IMarketQuoteService, MarketQuoteService>();
+    serviceCollection.AddScoped<IMemberInfoService, MemberInfoService>();
+    serviceCollection.AddScoped<ITradeService, TradeService>();
 
-    serviceCollection.AddScoped<ICurrencyRepository, CurrencyRepository>(); // AddScoped = UmVezQdoFazRequisicao - registra um serviço que é criado uma vez por solicitação.
-    serviceCollection.AddScoped<IMarketRepository, MarketRepository>(); // AddScoped = UmVezQdoFazRequisicao - registra um serviço que é criado uma vez por solicitação.
-    serviceCollection.AddScoped<IMarketQuoteRepository, MarketQuoteRepository>(); // AddScoped = UmVezQdoFazRequisicao - registra um serviço que é criado uma vez por solicitação.
-    serviceCollection.AddScoped<ITradeRepository, TradeRepository>(); // AddScoped = UmVezQdoFazRequisicao - registra um serviço que é criado uma vez por solicitação.
+    serviceCollection.AddScoped<ISystemTimeRepository, SystemTimeRepository>();
+    serviceCollection.AddScoped<ICurrencyRepository, CurrencyRepository>();
+    serviceCollection.AddScoped<IMarketRepository, MarketRepository>();
+    serviceCollection.AddScoped<IMarketQuoteRepository, MarketQuoteRepository>();
+    serviceCollection.AddScoped<IMemberInfoRepository, MemberInfoRepository>();
+    serviceCollection.AddScoped<ITradeRepository, TradeRepository>();
 
     serviceCollection.AddScoped<IUnitOfWork, UnitOfWork>();
-    var connectionString = "Server=localhost;Port=3306;Database=tamo_na_bolsa_foxbit;Uid=root;Pwd=Chrs8723;Persist Security Info=False;Connect Timeout=300;Connection Reset=False;Max Pool Size=300;"; // ;Trust Server Certificate=true
+    var connectionString = "Server=localhost;Port=3306;Database=tamo_na_bolsa_foxbit;Uid=root;Pwd=Chrs8723;Persist Security Info=False;Connect Timeout=300;Connection Reset=False;Max Pool Size=300;";
     serviceCollection.AddDbContextPool<AppDbContext>(opt => opt.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 
     var serviceProvider = serviceCollection.BuildServiceProvider();
 
+    //SystemTime
+    //var eventSystemTimeService = serviceProvider.GetService<ISystemTimeService>();
+    //await eventSystemTimeService!.GetTimeAsync("Trade");
+
     //Currency
-    var eventCurrencyService = serviceProvider.GetService<ICurrencyService>();
+    //var eventCurrencyService = serviceProvider.GetService<ICurrencyService>();
     //await eventCurrencyService!.GetCurrenciesAsync();
-    await eventCurrencyService!.GetIconCurrenciesAsync();
+    //await eventCurrencyService!.GetIconCurrenciesAsync();
 
     //Market
     //var eventMarketService = serviceProvider.GetService<IMarketService>();
@@ -48,13 +56,11 @@ try
     //var eventMarketQuoteService = serviceProvider.GetService<IMarketQuoteService>();
     //await eventMarketQuoteService!.GetMarketQuotesAsync();
 
+    //var eventMemberInfoService = serviceProvider.GetService<IMemberInfoService>();
+    //await eventMemberInfoService!.GetInfosAsync();
 
-
-
-
-
-    //var eventTradeService = serviceProvider.GetService<ITradeService>();
-    //await eventTradeService!.GetCurrenciesAsync();
+    var eventTradeService = serviceProvider.GetService<ITradeService>();
+    await eventTradeService!.GetTradesAsync();
 
     //var trades = eventService?.GetAllAsync().Result;
     //Console.WriteLine(trades);

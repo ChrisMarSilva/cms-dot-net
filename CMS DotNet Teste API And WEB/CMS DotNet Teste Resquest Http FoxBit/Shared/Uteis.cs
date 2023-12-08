@@ -86,7 +86,7 @@ public static class Uteis
     }
 
 
-    public async static Task<string> GetRequestWithAuth(string requestUri, string signature, long timestamp)
+    public async static Task<string> GetRequestWithAuth(string requestUri, string signature, long timestamp, bool removeData = true)
     {
         try
         {
@@ -120,6 +120,7 @@ public static class Uteis
             //Console.WriteLine(response.RequestMessage);
 
             response.EnsureSuccessStatusCode();
+
             if (!response.IsSuccessStatusCode)
                 throw new ApplicationException($"Something went wrong calling the API: {response.ReasonPhrase}");
 
@@ -128,7 +129,7 @@ public static class Uteis
             //Console.WriteLine(response);
             //Console.WriteLine(Uteis.ToJsonFormat(response));
 
-            if (!string.IsNullOrEmpty(responseBody))
+            if (removeData && !string.IsNullOrEmpty(responseBody))
             {
                 responseBody = responseBody.Substring(8, responseBody.Length - 8); // responseBody.Remove(0, 1);
                 responseBody = responseBody.Remove(responseBody.Length - 1);

@@ -9,9 +9,11 @@ public class AppDbContext : DbContext
     public AppDbContext() { }
     public AppDbContext(DbContextOptions<AppDbContext> opt) : base(opt) { }
 
+    //public DbSet<SystemTimeModel> SystemTimes { get; set; }
     //public DbSet<CurrencyModel> Currencies { get; set; }
     //public DbSet<MarketModel> Markets { get; set; }
     //public DbSet<MarketQuoteModel> MarketQuotes { get; set; }
+    //public DbSet<MemberInfoModel> MemberInfos { get; set; }
     //public DbSet<TradeModel> Trades { get; set; } //public virtual DbSet<TradeModel> Trades { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder opt)

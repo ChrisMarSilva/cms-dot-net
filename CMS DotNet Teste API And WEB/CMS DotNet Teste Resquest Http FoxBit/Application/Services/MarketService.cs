@@ -37,7 +37,7 @@ public class MarketService : IMarketService
 
         foreach (var market in markets)
         {
-            Console.WriteLine($"#{(index + 1):0000}: {market.symbol}");
+            Console.WriteLine($"#{(index + 1):0000}: {market.symbol}"); // {index:D4} // $"{index:0000}" // index.ToString("0###") // index.ToString("D4"); // index.ToString().PadLeft(4, '0')
 
             entities.Add(new MarketModel(
                 symbol: market.symbol,
