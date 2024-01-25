@@ -18,11 +18,13 @@ var retryPolicy = HttpPolicyExtensions
 builder.Services.AddHttpClient("TodoApi", options => // builder.Services.AddHttpClient<ITodoService, TodoService>(options => //
 {
     options.BaseAddress = new Uri(builder.Configuration["ApiConfig:BaseUrl"]!);
+    options.Timeout = new TimeSpan(0, 0, 50);
 }).AddPolicyHandler(retryPolicy);
 
 builder.Services.AddRefitClient<ITodoApi>().ConfigureHttpClient(c =>
 {
     c.BaseAddress = new Uri(builder.Configuration["ApiConfig:BaseUrl"]!);
+    c.Timeout = new TimeSpan(0, 0, 50);
 }).AddPolicyHandler(retryPolicy);
 
 builder.Services.AddScoped<ITodoService, TodoService>();
