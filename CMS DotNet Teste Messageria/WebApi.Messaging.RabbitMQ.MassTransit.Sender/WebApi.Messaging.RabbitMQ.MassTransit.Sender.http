@@ -1,0 +1,6 @@
+@WebApi.Messaging.RabbitMQ.MassTransit.Sender_HostAddress = http://localhost:5007
+
+GET {{WebApi.Messaging.RabbitMQ.MassTransit.Sender_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
