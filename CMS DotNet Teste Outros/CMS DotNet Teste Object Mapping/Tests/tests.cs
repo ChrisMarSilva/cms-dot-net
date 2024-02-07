@@ -1,5 +1,6 @@
 ﻿//using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Running;
+
 //using AutoMapper;
 using CMS_DotNet_Teste_Object_Mapping.Benchmarks;
 //using CMS_DotNet_Teste_Object_Mapping.Dtos;
@@ -9,7 +10,7 @@ using CMS_DotNet_Teste_Object_Mapping.Benchmarks;
 //using Nelibur.ObjectMapper;
 
 
-namespace CMS_DotNet_Teste_Object_Mapping;
+namespace CMS_DotNet_Teste_Object_Mapping.Tests;
 
 //var person = new Person
 //{
