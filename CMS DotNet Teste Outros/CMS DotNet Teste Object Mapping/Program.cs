@@ -22,26 +22,56 @@ Console.ReadLine();
 
 
 /*
- 
-  Method            | NumberOfItems | Mean      | Error     | StdDev    | Median    | Ratio | RatioSD | Rank | Gen0   | Completed Work Items | Lock Contentions | Allocated | Alloc Ratio |
-|------------------ |-------------- |----------:|----------:|----------:|----------:|------:|--------:|-----:|-------:|---------------------:|-----------------:|----------:|------------:|
-| ImplicitOperator2 | 100           |  13.24 ns |  0.319 ns |  0.249 ns |  13.22 ns |  0.76 |    0.15 |    1 | 0.0306 |                    - |                - |      48 B |        1.00 |
-| Mapperly          | 100           |  15.27 ns |  0.303 ns |  0.324 ns |  15.16 ns |  0.91 |    0.15 |    2 | 0.0306 |                    - |                - |      48 B |        1.00 |
-| ImplicitOperator  | 100           |  17.00 ns |  1.391 ns |  4.102 ns |  14.62 ns |  1.00 |    0.00 |    2 | 0.0306 |                    - |                - |      48 B |        1.00 |
-| Mapster           | 100           |  43.14 ns |  1.792 ns |  5.200 ns |  41.15 ns |  2.67 |    0.65 |    3 | 0.0306 |                    - |                - |      48 B |        1.00 |
-| TinyMapper        | 100           |  51.88 ns |  1.017 ns |  0.849 ns |  51.84 ns |  3.02 |    0.57 |    4 | 0.0305 |                    - |                - |      48 B |        1.00 |
-| AutoMapper        | 100           | 134.31 ns |  2.745 ns |  4.510 ns | 133.20 ns |  6.83 |    1.66 |    5 | 0.0305 |                    - |                - |      48 B |        1.00 |
-| ExpressMapper     | 100           | 142.64 ns |  3.282 ns |  8.930 ns | 140.10 ns |  8.65 |    1.90 |    6 | 0.0560 |                    - |                - |      88 B |        1.83 |
-| AgileObjects      | 100           | 658.66 ns | 13.281 ns | 37.459 ns | 646.54 ns | 40.21 |    7.98 |    7 | 0.1984 |                    - |                - |     312 B |        6.50 |
 
-// * Hints *
-Outliers
-  BenchmarkConfiguration.ImplicitOperator2: Default -> 3 outliers were removed (17.53 ns..21.00 ns)
-  BenchmarkConfiguration.Mapperly: Default          -> 3 outliers were removed (19.35 ns..24.32 ns)
-  BenchmarkConfiguration.Mapster: Default           -> 3 outliers were removed (57.83 ns..59.58 ns)
-  BenchmarkConfiguration.TinyMapper: Default        -> 2 outliers were removed (62.33 ns, 72.78 ns)
-  BenchmarkConfiguration.AutoMapper: Default        -> 5 outliers were removed (169.32 ns..192.53 ns)
-  BenchmarkConfiguration.ExpressMapper: Default     -> 14 outliers were removed (177.35 ns..241.15 ns)
-  BenchmarkConfiguration.AgileObjects: Default      -> 8 outliers were removed (785.34 ns..909.66 ns)
+
+| Method                  | NumberOfItems | Mean          | Error        | StdDev       | Ratio | RatioSD | Rank | Completed Work Items | Lock Contentions | Gen0    | Gen1    | Gen2    | Allocated | Alloc Ratio |
+|------------------------ |-------------- |--------------:|-------------:|-------------:|------:|--------:|-----:|---------------------:|-----------------:|--------:|--------:|--------:|----------:|------------:|
+| MapWithMapperly         | 1             |      13.45 ns |     0.080 ns |     0.071 ns |  0.31 |    0.00 |    1 |                    - |                - |  0.0119 |       - |       - |     112 B |        0.61 |
+| MapWithMapster          | 1             |      21.85 ns |     0.098 ns |     0.092 ns |  0.50 |    0.00 |    3 |                    - |                - |  0.0119 |       - |       - |     112 B |        0.61 |
+| MapWithManualMapping    | 1             |      40.99 ns |     0.262 ns |     0.245 ns |  0.93 |    0.01 |    4 |                    - |                - |  0.0196 |       - |       - |     184 B |        1.00 |
+| MapWithImplicitOperator | 1             |      43.98 ns |     0.302 ns |     0.268 ns |  1.00 |    0.00 |    5 |                    - |                - |  0.0196 |       - |       - |     184 B |        1.00 |
+| MapWithAutoMapper       | 1             |      58.12 ns |     0.552 ns |     0.489 ns |  1.32 |    0.01 |    6 |                    - |                - |  0.0144 |       - |       - |     136 B |        0.74 |
+| MapWithAutoMapper       | 1             |      59.68 ns |     0.317 ns |     0.248 ns |  1.36 |    0.01 |    7 |                    - |                - |  0.0144 |       - |       - |     136 B |        0.74 |
+| MapWithAgileMapper      | 1             |     206.91 ns |     1.951 ns |     1.825 ns |  4.71 |    0.06 |    8 |                    - |                - |  0.0398 |       - |       - |     376 B |        2.04 |
+| MapWithAgileMapper      | 1             |     207.92 ns |     2.929 ns |     2.740 ns |  4.73 |    0.07 |    8 |                    - |                - |  0.0398 |       - |       - |     376 B |        2.04 |
+| MapWithExpressMapper    | 1             |     349.88 ns |     1.974 ns |     1.750 ns |  7.96 |    0.05 |    9 |                    - |                - |  0.0668 |       - |       - |     632 B |        3.43 |
+| MapWithExpressMapper    | 1             |     353.19 ns |     2.839 ns |     2.517 ns |  8.03 |    0.06 |    9 |                    - |                - |  0.0668 |       - |       - |     632 B |        3.43 |
+|                         |               |               |              |              |       |         |      |                      |                  |         |         |         |           |             |
+| MapWithMapperly         | 10            |      71.96 ns |     0.499 ns |     0.466 ns |  0.65 |    0.01 |    1 |                    - |                - |  0.0654 |  0.0001 |       - |     616 B |        0.90 |
+| MapWithMapster          | 10            |      80.77 ns |     0.725 ns |     0.678 ns |  0.73 |    0.01 |    2 |                    - |                - |  0.0654 |  0.0001 |       - |     616 B |        0.90 |
+| MapWithManualMapping    | 10            |     100.45 ns |     0.561 ns |     0.498 ns |  0.90 |    0.01 |    4 |                    - |                - |  0.0731 |  0.0001 |       - |     688 B |        1.00 |
+| MapWithImplicitOperator | 10            |     111.30 ns |     0.513 ns |     0.455 ns |  1.00 |    0.00 |    5 |                    - |                - |  0.0731 |  0.0001 |       - |     688 B |        1.00 |
+| MapWithAutoMapper       | 10            |     155.62 ns |     0.729 ns |     0.682 ns |  1.40 |    0.01 |    7 |                    - |                - |  0.0858 |  0.0002 |       - |     808 B |        1.17 |
+| MapWithAgileMapper      | 10            |     272.10 ns |     2.150 ns |     2.011 ns |  2.44 |    0.02 |    8 |                    - |                - |  0.0935 |       - |       - |     880 B |        1.28 |
+| MapWithExpressMapper    | 10            |     512.27 ns |     4.308 ns |     4.030 ns |  4.60 |    0.04 |   10 |                    - |                - |  0.1459 |       - |       - |    1376 B |        2.00 |
+|                         |               |               |              |              |       |         |      |                      |                  |         |         |         |           |             |
+| MapWithTinyMapper       | 100           |            NA |           NA |           NA |     ? |       ? |    ? |                   NA |               NA |      NA |      NA |      NA |        NA |           ? |
+| MapWithManualMapping    | 100           |     542.98 ns |     4.693 ns |     3.919 ns |  0.72 |    0.01 |    1 |                    - |                - |  0.6084 |  0.0124 |       - |    5728 B |        1.00 |
+| MapWithMapperly         | 100           |     557.80 ns |     3.217 ns |     3.009 ns |  0.74 |    0.00 |    2 |                    - |                - |  0.6008 |  0.0124 |       - |    5656 B |        0.99 |
+| MapWithMapster          | 100           |     574.50 ns |     2.461 ns |     2.302 ns |  0.76 |    0.00 |    3 |                    - |                - |  0.6008 |  0.0124 |       - |    5656 B |        0.99 |
+| MapWithImplicitOperator | 100           |     755.53 ns |     1.669 ns |     1.479 ns |  1.00 |    0.00 |    4 |                    - |                - |  0.6084 |  0.0124 |       - |    5728 B |        1.00 |
+| MapWithAutoMapper       | 100           |     904.48 ns |     3.485 ns |     3.089 ns |  1.20 |    0.00 |    5 |                    - |                - |  0.7429 |  0.0162 |       - |    6992 B |        1.22 |
+| MapWithAgileMapper      | 100           |     931.15 ns |     4.274 ns |     3.789 ns |  1.23 |    0.01 |    6 |                    - |                - |  0.6285 |  0.0134 |       - |    5920 B |        1.03 |
+| MapWithExpressMapper    | 100           |   1,912.50 ns |    10.982 ns |    10.273 ns |  2.53 |    0.01 |    7 |                    - |                - |  0.8774 |  0.0191 |       - |    8281 B |        1.45 |
+|                         |               |               |              |              |       |         |      |                      |                  |         |         |         |           |             |
+| MapWithTinyMapper       | 1000          |            NA |           NA |           NA |     ? |       ? |    ? |                   NA |               NA |      NA |      NA |      NA |        NA |           ? |
+| MapWithManualMapping    | 1000          |   5,168.46 ns |    39.425 ns |    34.949 ns |  0.68 |    0.01 |    1 |                    - |                - |  5.9586 |  0.9918 |       - |   56128 B |        1.00 |
+| MapWithMapperly         | 1000          |   5,826.07 ns |    86.286 ns |    72.052 ns |  0.76 |    0.01 |    2 |                    - |                - |  5.9509 |  0.9842 |       - |   56056 B |        1.00 |
+| MapWithMapster          | 1000          |   5,900.83 ns |    43.295 ns |    36.154 ns |  0.77 |    0.01 |    2 |                    - |                - |  5.9509 |  0.9842 |       - |   56056 B |        1.00 |
+| MapWithAgileMapper      | 1000          |   7,474.99 ns |   138.566 ns |   136.091 ns |  0.98 |    0.02 |    3 |                    - |                - |  5.9814 |  0.8926 |       - |   56320 B |        1.00 |
+| MapWithAutoMapper       | 1000          |   7,511.59 ns |    13.715 ns |    11.453 ns |  0.98 |    0.01 |    3 |                    - |                - |  6.8588 |  1.1368 |       - |   64600 B |        1.15 |
+| MapWithImplicitOperator | 1000          |   7,642.89 ns |    42.904 ns |    40.132 ns |  1.00 |    0.00 |    4 |                    - |                - |  5.9586 |  0.9918 |       - |   56128 B |        1.00 |
+| MapWithExpressMapper    | 1000          |  15,089.80 ns |    58.311 ns |    51.691 ns |  1.97 |    0.01 |    5 |                    - |                - |  7.7515 |  1.2817 |       - |   73099 B |        1.30 |
+|                         |               |               |              |              |       |         |      |                      |                  |         |         |         |           |             |
+| MapWithTinyMapper       | 10000         |            NA |           NA |           NA |     ? |       ? |    ? |                   NA |               NA |      NA |      NA |      NA |        NA |           ? |
+| MapWithMapperly         | 10000         |  68,257.22 ns |   574.771 ns |   479.960 ns |  0.75 |    0.02 |    1 |                    - |                - | 59.4482 | 24.1699 |       - |  560056 B |        1.00 |
+| MapWithManualMapping    | 10000         |  70,222.24 ns |   729.292 ns |   646.498 ns |  0.78 |    0.02 |    2 |                    - |                - | 59.4482 | 24.0479 |       - |  560128 B |        1.00 |
+| MapWithMapster          | 10000         |  72,568.42 ns |   922.432 ns |   770.273 ns |  0.80 |    0.02 |    3 |                    - |                - | 59.4482 | 24.1699 |       - |  560056 B |        1.00 |
+| MapWithAgileMapper      | 10000         |  83,115.74 ns |   967.908 ns |   808.247 ns |  0.92 |    0.02 |    4 |                    - |                - | 59.4482 | 23.8037 |       - |  560320 B |        1.00 |
+| MapWithImplicitOperator | 10000         |  90,404.96 ns | 1,773.124 ns | 1,658.582 ns |  1.00 |    0.00 |    5 |                    - |                - | 59.4482 | 24.0479 |       - |  560128 B |        1.00 |
+| MapWithAutoMapper       | 10000         | 297,793.93 ns | 5,839.639 ns | 7,593.180 ns |  3.33 |    0.10 |    6 |                    - |                - | 83.0078 | 82.5195 | 41.5039 |  742470 B |        1.33 |
+| MapWithExpressMapper    | 10000         | 361,702.85 ns | 5,461.034 ns | 5,108.255 ns |  4.00 |    0.09 |    7 |                    - |                - | 83.0078 | 82.5195 | 41.5039 |  823076 B |        1.47 |
+
+
 
  */
