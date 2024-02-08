@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 namespace TesteBenchmarkDotNet.Benchmarks
 {
     [MemoryDiagnoser]
-    public class UnnecessaryJoinsBenchmark : Benchmark
+    public class BenchmarkUnnecessaryJoins : Benchmark
     {
         [Benchmark]
         public async Task<List<CustomView>> WithJoins()

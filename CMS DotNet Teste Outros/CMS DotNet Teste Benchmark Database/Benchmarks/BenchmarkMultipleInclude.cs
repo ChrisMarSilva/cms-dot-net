@@ -5,7 +5,7 @@ using TesteBenchmarkDotNet.Models;
 namespace TesteBenchmarkDotNet.Benchmarks
 {
     [MemoryDiagnoser]
-    public class MultipleIncludeBenchmark : Benchmark
+    public class BenchmarkMultipleInclude : Benchmark
     {
         [Benchmark]
         public async Task<List<Book>> MultipleIncludeChain()

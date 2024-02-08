@@ -4,7 +4,7 @@ using TesteBenchmarkDotNet.Models;
 namespace TesteBenchmarkDotNet.Benchmarks
 {
     [MemoryDiagnoser]
-    public class SelectWhereBenchmark : Benchmark
+    public class BenchmarkSelectWhere : Benchmark
     {
         [Params("1", "500")]
         public string? NameParams { get; set; }
