@@ -19,6 +19,26 @@ public class TransacaoRequestDto
 
     public bool IsValid()
     {
+
+        /*
+          if (request.Tipo!.Equals("d", StringComparison.OrdinalIgnoreCase))
+                {
+                    var novoSado = Math.Abs(saldoCarteira - request.Valor!.Value);
+                    if (limiteCliente < novoSado) return Results.UnprocessableEntity("Novo saldo do cliente menor que seu limite disponível."); 
+
+                    //carteira.Saldo -= request.Valor!.Value;
+                }
+                else if (request.Tipo!.Equals("C", StringComparison.OrdinalIgnoreCase))
+                {
+                    //carteira.Saldo += request.Valor!.Value;
+                }
+                else 
+                {
+                    return Results.UnprocessableEntity("Tipo de transação inválido."); 
+                }
+
+         */
+
         // errorResponseDto = ErrorResponseDto.Begin(HttpStatusCode.BadRequest, "Payload inválido.");
 
         //if (string.IsNullOrEmpty(Identificador))
@@ -50,6 +70,7 @@ public class TransacaoRequestDto
         //errorResponseDto.End();
 
         //return !(errorResponseDto.Errors?.Any() ?? false);
-        return false;
+
+        return true;
     }
 }

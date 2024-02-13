@@ -1,9 +1,15 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Dapper;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Rinha.Backend._2024.API.Context;
 using Rinha.Backend._2024.API.Models.Dtos;
 using Rinha.Backend._2024.API.Models.Read;
 using Rinha.Backend._2024.API.Models.Write;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace Rinha.Backend._2024.API.Endpoints;
 
@@ -11,62 +17,39 @@ public static class ClientesEndpoints
 {
     public static void UseMapClientesEndpoints(this WebApplication app)
     {
-        app.MapPost("/clientes/{id:int}/transacoes", async (short id, [FromBody] TransacaoRequestDto request, [FromServices] AppWriteDbContext contextWrite, [FromServices] AppReadDbContext contextRead) =>
+        app.MapPost("/clientes/{id:int}/transacoes", async (short id, [FromBody] TransacaoRequestDto request, [FromServices] AppReadDbContext contextRead, [FromServices] AppWriteDbContext contextWrite) =>
         {
             try
             {
-                //var cliente = await contextRead.Clientes
-                //    .AsNoTracking()
-                //    .FirstOrDefaultAsync(x => x.IdCliente == id);
+                if (!request.IsValid()) return Results.UnprocessableEntity("Payload inválido.");
 
-                var cliente = await contextRead.Clientes
-                   .AsNoTracking()
-                   .Where(x => x.IdCliente == id)
-                   .Select(x => new ClienteReadModel { IdCliente = x.IdCliente, Limite = x.Limite })
-                   .FirstOrDefaultAsync();
+                var connection = (SqlConnection)contextRead.Database.GetDbConnection();
+                if (connection is null) return Results.UnprocessableEntity("Conexão inválida.");
+                if  (connection.State == ConnectionState.Closed) connection.Open();
 
-                if (cliente is null) return Results.NotFound("Cliente não localizado.");
+                var limiteCliente = await connection.QueryFirstOrDefaultAsync<long>("SELECT limite FROM Cliente WITH(NOLOCK) WHERE idcliente = @pIdcliente", new { pIdcliente = id });
+                if (limiteCliente == default) return Results.NotFound("Cliente não localizado.");
 
-                //var carteira = await contextWrite.Carteiras
-                //    .FirstOrDefaultAsync(x => x.IdCliente == id);
+                var saldoCarteira = await connection.QueryFirstOrDefaultAsync<long>("SELECT saldo FROM ClienteCarteira WITH(NOLOCK) WHERE idcliente = @pIdcliente", new { pIdcliente = id });
 
-                var carteira = await contextWrite.Carteiras
-                    .Where(x => x.IdCliente == id)
-                    .Select(x => new ClienteCarteiraWriteModel { IdCliente = x.IdCliente, Saldo = x.Saldo })
-                    .FirstOrDefaultAsync();
+                long novoSado = default;
+                if (request.Tipo!.Equals("d", StringComparison.OrdinalIgnoreCase)) novoSado = saldoCarteira + limiteCliente - request.Valor!.Value;
+                else novoSado = saldoCarteira + limiteCliente + request.Valor!.Value;
+                if (novoSado < 0) return Results.UnprocessableEntity("Novo saldo do cliente menor que seu limite disponível.");
+                novoSado -= limiteCliente;
 
-                if (carteira is null) return Results.NotFound("Carteira do Cliente não localizado.");
-
-                if (request.Tipo!.Equals("d", StringComparison.OrdinalIgnoreCase))
-                {
-                    var novoSado = Math.Abs(carteira.Saldo - request.Valor!.Value);
-                    if (cliente.Limite < novoSado) return Results.UnprocessableEntity("Novo saldo do cliente menor que seu limite disponível."); 
-
-                    carteira.Saldo -= request.Valor!.Value;
-                }
-                else if (request.Tipo!.Equals("C", StringComparison.OrdinalIgnoreCase))
-                {
-                    carteira.Saldo += request.Valor!.Value;
-                }
-                else 
-                {
-                    return Results.UnprocessableEntity("Tipo de transação inválido."); 
-                }
-
-                var transacao = new ClienteTransacaoWriteModel( 
-                    idCliente: cliente.IdCliente, 
-                    valor: request.Valor!.Value,
-                    tipo: request.Tipo.ToLower(), 
-                    descricao: request.Descricao!);
-
-                using (var transaction = await contextWrite.Database.BeginTransactionAsync()) //await using var transaction = await _pagadorCommandRepository.BeginTransactionAsync();
+                using (var transaction = await connection.BeginTransactionAsync())
                 {
                     try
                     {
-                        contextWrite.Carteiras.Update(carteira);
-                        await contextWrite.Transacoes.AddAsync(transacao);
+                        string sqlUpdCarteira = "UPDATE ClienteCarteira SET Saldo = @pSaldo WHERE idcliente = @pIdcliente";
+                        object[] paramUpdCarteira = { new { pSaldo = novoSado, pIdcliente = id } };
+                        var affectedRowsUpdCarteira = await connection.ExecuteAsync(sqlUpdCarteira, paramUpdCarteira, transaction);
 
-                        await contextWrite.SaveChangesAsync(); //await _pagadorCommandRepository.SaveChangesAsync();
+                        string sqlInsTransacao = "INSERT INTO ClienteTransacao (IdCliente, Valor, Tipo, Descricao, DtHrRegistro) Values (@pIdcliente, @pValor, @pTipo, @pDescricao, @pDtHrRegistro)";
+                        object[] paramInsTransacao = { new { pIdcliente = id, pValor = request.Valor!.Value, pTipo = request.Tipo.ToLower(), pDescricao = request.Descricao!, pDtHrRegistro = DateTime.Now } };
+                        var affectedRowsInsTransacao = await connection.ExecuteAsync(sqlInsTransacao, paramInsTransacao, transaction);
+
                         await transaction.CommitAsync();
                     }
                     catch
@@ -76,7 +59,7 @@ public static class ClientesEndpoints
                     }
                 }
 
-                var response = new TransacaoResponseDto(Limite: cliente.Limite, Saldo: carteira.Saldo);
+                var response = new TransacaoResponseDto(Limite: limiteCliente, Saldo: novoSado);
                 return Results.Ok(response); 
             }
             catch (Exception ex)
@@ -94,10 +77,6 @@ public static class ClientesEndpoints
         {
             try
             {
-                //var cliente = await contextRead.Clientes
-                //    .AsNoTracking()
-                //    .FirstOrDefaultAsync(x => x.IdCliente == id);
-
                 var cliente = await contextRead.Clientes
                     .AsNoTracking()
                     .Where(x => x.IdCliente == id)
@@ -106,33 +85,21 @@ public static class ClientesEndpoints
 
                 if (cliente is null) return Results.NotFound("Cliente não localizado.");
 
-                //var carteira = await contextRead.Carteiras
-                //    .AsNoTracking()
-                //    .FirstOrDefaultAsync(x => x.IdCliente == id);
-
                 var carteira = await contextRead.Carteiras
                     .AsNoTracking()
                     .Where(x => x.IdCliente == id)
-                    .Select(x => new ClienteCarteiraReadModel { IdCliente = x.IdCliente, Saldo = x.Saldo })
+                    .Select(x => new ExtratoSaldoResponseDto(x.Saldo, DateTime.Now, cliente.Limite))
                     .FirstOrDefaultAsync();
-
-                if (carteira is null) return Results.NotFound("Carteira do Cliente não localizado.");
 
                 var transacoes = await contextRead.Transacoes
                   .AsNoTracking()
                   .Where(x => x.IdCliente == id)
                   .OrderByDescending(c => c.DtHrRegistro)
                   .Take(10)
-                  .Select(x => new ClienteTransacaoReadModel { IdTransacao = x.IdTransacao, IdCliente = x.IdCliente, Valor = x.Valor, Tipo = x.Tipo, Descricao = x.Descricao, DtHrRegistro = x.DtHrRegistro })
-                  //.Select(x => new ExtratoTransacoesResponseDto { valor = x.Valor, tipo = x.Tipo, descricao = x.Descricao, realizada_em = x.DtHrRegistro.ToString("yyyy-MM-ddTHH:mm:ss.ffffffZ", System.Globalization.CultureInfo.InvariantCulture) })
+                  .Select(x => new ExtratoTransacoesResponseDto(x.Valor, x.Tipo, x.Descricao, x.DtHrRegistro.ToString("yyyy-MM-ddTHH:mm:ss.ffffffZ", System.Globalization.CultureInfo.InvariantCulture)))
                   .ToListAsync();
 
-                //if (transacoes is null || !transacoes.Any()) return Results.NotFound("Transações do Cliente não localizada.");
-
-                var response = new ExtratoResponseDto(
-                    saldo: new ExtratoSaldoResponseDto(total: carteira.Saldo, data_extrato: DateTime.Now, limite: cliente.Limite), 
-                    Transacoes: transacoes is null || !transacoes.Any() ? null : transacoes.Select(x => new ExtratoTransacoesResponseDto(valor: x.Valor, tipo: x.Tipo, descricao: x.Descricao, realizada_em: x.DtHrRegistro.ToString("yyyy-MM-ddTHH:mm:ss.ffffffZ", System.Globalization.CultureInfo.InvariantCulture))).ToList()
-                );
+                var response = new ExtratoResponseDto(saldo: carteira!, Transacoes: transacoes);
 
                 return Results.Ok(response);
             }
