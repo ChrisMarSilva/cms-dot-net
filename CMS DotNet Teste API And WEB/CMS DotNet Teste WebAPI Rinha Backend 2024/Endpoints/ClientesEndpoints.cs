@@ -74,7 +74,7 @@ public static class ClientesEndpoints
           .WithName("Transacoes")
           .WithTags("Clientes");
 
-        //        [FromServices] IPessoaRepository pessoaRepository
+        //[FromServices] IPessoaRepository pessoaRepository
         //async ValueTask<Results<Ok<Pessoa>, NotFound>>
         //async ValueTask<Results<Created, UnprocessableEntity>>
         //async ValueTask<Results<Ok<List<Pessoa>>, BadRequest>>
@@ -92,7 +92,7 @@ public static class ClientesEndpoints
 
                 var saldoCarteira = await connection.QueryFirstOrDefaultAsync<long>("SELECT saldo FROM ClienteCarteira WITH(NOLOCK) WHERE idcliente = @pIdcliente", new { pIdcliente = id }, commandTimeout: 60);
 
-                var transacoes = await connection.QueryAsync<ClienteTransacaoReadModel>("SELECT TOP(10) * FROM ClienteTransacao WITH(NOLOCK) WHERE idcliente = @pIdcliente ORDER BY dthrregistro DESC", new { pIdcliente = id }, commandTimeout: 60);
+                var transacoes = await connection.QueryAsync<ClienteTransacaoReadModel>("SELECT TOP(10) Valor, Tipo, Descricao, DtHrRegistro FROM ClienteTransacao WITH(NOLOCK) WHERE idcliente = @pIdcliente ORDER BY dthrregistro DESC", new { pIdcliente = id }, commandTimeout: 60);
 
                 var response = new ExtratoResponseDto(
                     saldo: new ExtratoSaldoResponseDto(saldoCarteira, DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss.ffffffZ", System.Globalization.CultureInfo.InvariantCulture), limiteCliente),
