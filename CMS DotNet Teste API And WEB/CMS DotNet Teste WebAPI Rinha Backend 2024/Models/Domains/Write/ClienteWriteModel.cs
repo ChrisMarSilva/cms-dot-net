@@ -1,4 +1,4 @@
-﻿namespace Rinha.Backend._2024.API.Models.Write;
+﻿namespace Rinha.Backend._2024.API.Models.Domains.Write;
 
 internal sealed class ClienteWriteModel
 {

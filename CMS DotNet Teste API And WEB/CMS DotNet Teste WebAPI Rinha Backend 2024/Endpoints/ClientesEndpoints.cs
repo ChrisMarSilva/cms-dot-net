@@ -3,8 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Rinha.Backend._2024.API.Context;
-using Rinha.Backend._2024.API.Models.Dtos;
-using Rinha.Backend._2024.API.Models.Read;
+using Rinha.Backend._2024.API.Models.Domains.Read;
+using Rinha.Backend._2024.API.Models.Dtos.RequestDtos;
+using Rinha.Backend._2024.API.Models.Dtos.ResponseDtos;
 using System.Data;
 
 namespace Rinha.Backend._2024.API.Endpoints;
@@ -13,13 +14,12 @@ public static class ClientesEndpoints
 {
     public static void UseMapClientesEndpoints(this WebApplication app)
     {
-        app.MapPost("/clientes/{id:int}/transacoes", async (short id, [FromBody] TransacaoRequestDto request, [FromServices] AppReadDbContext contextRead, [FromServices] AppWriteDbContext contextWrite, CancellationToken cancellationToken) =>
+        app.MapPost("/clientes/{id:int}/transacoes", 
+            async (short id, [FromBody] TransacaoRequestDto request, [FromServices] AppReadDbContext contextRead, [FromServices] AppWriteDbContext contextWrite, CancellationToken cancellationToken) =>
         {
             try
             {
-                if (!request.Valido()) return TypedResults.UnprocessableEntity("Payload inválido."); // Results.UnprocessableEntity("Payload inválido.");
-
-                //using var context = _corePooledDbContextFactory.CreateDbContext();
+                if (!request.Valido()) Results.UnprocessableEntity("Payload inválido.");
 
                 var connection = (SqlConnection)contextRead.Database.GetDbConnection();
                 if (connection is null) return Results.UnprocessableEntity("Conexão inválida.");
@@ -57,11 +57,9 @@ public static class ClientesEndpoints
                     }
                 }
 
-                var response = new TransacaoResponseDto(
-                    Limite: limiteCliente, 
-                    Saldo: novoSado);
+                var response = new TransacaoResponseDto { Limite = limiteCliente,  Saldo = novoSado };
 
-                return TypedResults.Ok(response); // Results.Ok(response); 
+                return Results.Ok(response); 
             }
             catch (Exception ex)
             {
@@ -74,12 +72,8 @@ public static class ClientesEndpoints
           .WithName("Transacoes")
           .WithTags("Clientes");
 
-        //[FromServices] IPessoaRepository pessoaRepository
-        //async ValueTask<Results<Ok<Pessoa>, NotFound>>
-        //async ValueTask<Results<Created, UnprocessableEntity>>
-        //async ValueTask<Results<Ok<List<Pessoa>>, BadRequest>>
-
-        app.MapGet("/clientes/{id:int}/extrato", async (short id, [FromServices] AppReadDbContext contextRead, CancellationToken cancellationToken) =>
+        app.MapGet("/clientes/{id:int}/extrato", 
+            async (short id, [FromServices] AppReadDbContext contextRead, CancellationToken cancellationToken) =>
         {
             try
             {
@@ -94,10 +88,11 @@ public static class ClientesEndpoints
 
                 var transacoes = await connection.QueryAsync<ClienteTransacaoReadModel>("SELECT TOP(10) Valor, Tipo, Descricao, DtHrRegistro FROM ClienteTransacao WITH(NOLOCK) WHERE idcliente = @pIdcliente ORDER BY dthrregistro DESC", new { pIdcliente = id }, commandTimeout: 60);
 
-                var response = new ExtratoResponseDto(
-                    saldo: new ExtratoSaldoResponseDto(saldoCarteira, DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss.ffffffZ", System.Globalization.CultureInfo.InvariantCulture), limiteCliente),
-                    Transacoes: transacoes?.Select(x => new ExtratoTransacoesResponseDto(valor: x.Valor, tipo: x.Tipo, descricao: x.Descricao, realizada_em: x.DtHrRegistro.ToString("yyyy-MM-ddTHH:mm:ss.ffffffZ", System.Globalization.CultureInfo.InvariantCulture))).ToList()
-                );
+                var response = new ExtratoResponseDto
+                {
+                    Saldo = new ExtratoSaldoResponseDto { Total = saldoCarteira, Data_Extrato = DateTime.Now, Limite = limiteCliente },
+                    Transacoes = transacoes?.Select(x => new ExtratoTransacoesResponseDto { Valor = x.Valor, Tipo = x.Tipo, Descricao = x.Descricao, Realizada_Em = x.DtHrRegistro }).ToList()
+                };
 
                 return Results.Ok(response);
             }

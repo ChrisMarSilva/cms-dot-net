@@ -1,6 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Flunt.Notifications;
+using Microsoft.EntityFrameworkCore;
 using Rinha.Backend._2024.API.Context.Interfaces;
-using Rinha.Backend._2024.API.Models.Write;
+using Rinha.Backend._2024.API.Models.Domains.Write;
 using System.Data;
 
 namespace Rinha.Backend._2024.API.Context;
@@ -16,13 +17,13 @@ internal sealed class AppWriteDbContext : DbContext, IDataContext
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
+        builder.Ignore<Notification>();
+        //builder.ApplyConfigurationsFromAssembly(Assembly.GetAssembly(typeof(AppDbContext))!);
         builder.ApplyConfigurationsFromAssembly(typeof(AppWriteDbContext).Assembly, WriteConfigurationsFilter);
-
         base.OnModelCreating(builder);
     }
 
-    private static bool WriteConfigurationsFilter(Type type) =>
-        type.FullName?.Contains("Configurations.Write") ?? false;
+    private static bool WriteConfigurationsFilter(Type type) => type.FullName?.Contains("Configurations.Write") ?? false;
 
     public async Task OpenConnection()
     {

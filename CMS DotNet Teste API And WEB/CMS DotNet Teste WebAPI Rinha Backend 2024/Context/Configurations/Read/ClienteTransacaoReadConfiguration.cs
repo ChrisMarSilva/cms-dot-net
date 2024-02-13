@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Rinha.Backend._2024.API.Models.Read;
+using Rinha.Backend._2024.API.Models.Domains.Read;
 
 namespace Rinha.Backend._2024.API.Context.Configurations.Read;
 
@@ -16,7 +16,7 @@ internal sealed class ClienteTransacaoReadConfiguration : IEntityTypeConfigurati
         //builder.Property(x => x.IdCliente).HasColumnName("idcliente").IsRequired();
         //builder.Property(x => x.Valor).HasColumnName("valor").IsRequired();
         //builder.Property(x => x.Tipo).HasColumnName("tipo").HasColumnType("char(1)").IsRequired();
-        //builder.Property(x => x.Descricao).HasColumnName("descricao").HasMaxLength(10).IsRequired(false);
+        //builder.Property(x => x.Descricao).HasColumnName("descricao").HasMaxLength(10).IsRequired();
         //builder.Property(x => x.DtHrRegistro).HasColumnName("dthrregistro").HasPrecision(7).IsRequired();
 
         //builder.HasIndex(x => x.IdCliente)

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Rinha.Backend._2024.API.Models.Dtos;
+namespace Rinha.Backend._2024.API.Models.Dtos.ResponseDtos;
 
 public class TransacaoRequestDto
 {
@@ -21,7 +21,7 @@ public class TransacaoRequestDto
     {
         if (!Valor.HasValue || Valor.Value < 1 || Valor.Value > 9223372036854775807) return false;
         if (string.IsNullOrEmpty(Tipo) || Tipo.Length != 1) return false;
-        if (string.IsNullOrEmpty(Descricao) ||Descricao.Length > 10) return false;
+        if (string.IsNullOrEmpty(Descricao) || Descricao.Length > 10) return false;
         if (!Tipo.Equals("d", StringComparison.OrdinalIgnoreCase) && !Tipo.Equals("c", StringComparison.OrdinalIgnoreCase)) return false;
         return true;
     }

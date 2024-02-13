@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Rinha.Backend._2024.API.Models.Read;
+using Rinha.Backend._2024.API.Models.Domains.Read;
 
 namespace Rinha.Backend._2024.API.Context.Configurations.Read;
 

@@ -1,4 +1,10 @@
-﻿//namespace Rinha.Backend._2024.API.Models;
+﻿namespace Rinha.Backend._2024.API.Models.Domains.Read;
+
+internal sealed class ClienteReadModel
+{
+    public short IdCliente { get; set; }
+    public long Limite { get; set; }
+}
 
 //public sealed class ClienteModel
 //{
