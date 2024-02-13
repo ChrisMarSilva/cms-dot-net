@@ -23,6 +23,18 @@ internal sealed class ClienteTransacaoReadConfiguration : IEntityTypeConfigurati
         //    .IsUnique(false)
         //    .HasDatabaseName("IxClienteTransacao01");
 
+        //SqlServerIndexBuilderExtensions.IncludeProperties(
+        //    builder.HasIndex(x => x.IdCliente)
+        //        .IsUnique(false)
+        //        .HasDatabaseName("IxClienteTransacao02"), 
+        //    x => x.DtHrRegistro);
+
+        SqlServerIndexBuilderExtensions.IncludeProperties(
+            builder.HasIndex(x => x.IdCliente)
+                .IsUnique(false)
+                .HasDatabaseName("IxClienteTransacao03"),
+        x => new { x.DtHrRegistro, x.Tipo, x.Valor, x.Descricao });
+
         //builder.HasOne(x => x.Cliente)
         //    .WithMany(x => x.Transacoes)
         //    .HasForeignKey(x => x.IdCliente)

@@ -38,8 +38,8 @@ public sealed class DataContextSQLServer : DbContext
         {
             var connectionString = @"Data Source=127.0.0.1,5402;Initial Catalog=RinhaBackend2024;User ID=sa;Password=Hello123#;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
             optionsBuilder.UseSqlServer(connectionString);
-            //optionsBuilder.UseSqlServer(connectionString).LogTo(Console.WriteLine, LogLevel.Information);
-            //optionsBuilder.UseSqlServer(connectionString).ConfigureWarnings(warnings => warnings.Throw(RelationalEventId.QueryClientEvaluationWarning));
+            //optionsBuilder.LogTo(Console.WriteLine, LogLevel.Information);
+            //optionsBuilder.EnabledSensitiveDataLogging();
             optionsBuilder.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
             SqlMapper.AddTypeMap(typeof(DateTime), DbType.DateTime2);
         }

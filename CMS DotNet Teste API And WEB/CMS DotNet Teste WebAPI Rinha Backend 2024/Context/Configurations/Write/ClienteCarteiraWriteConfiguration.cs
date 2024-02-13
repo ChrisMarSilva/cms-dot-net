@@ -15,6 +15,12 @@ internal sealed class ClienteCarteiraWriteConfiguration : IEntityTypeConfigurati
         builder.Property(x => x.IdCliente).HasColumnName("idcliente").IsRequired();// .ValueGeneratedOnAdd().UseIdentityColumn()
         builder.Property(x => x.Saldo).HasColumnName("saldo").IsRequired();
 
+        //SqlServerIndexBuilderExtensions.IncludeProperties(
+        //    builder.HasIndex(x => x.IdCliente)
+        //        .IsUnique(false)
+        //        .HasDatabaseName("IxClienteCarteira01"), 
+        //    x => x.Saldo);
+
         //builder.HasOne(x => x.Cliente)
         //    .WithOne(x => x.Carteira)
         //    .HasForeignKey<ClienteCarteiraModel>(x => x.IdCliente)

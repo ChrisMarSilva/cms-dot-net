@@ -20,13 +20,15 @@ public static class ServiceCollectionsExtensions
         builder.Services.AddDbContextPool<AppWriteDbContext>(opt =>
         {
             opt.UseSqlServer(connectionString, builder => { builder.CommandTimeout(30); });
+            //opt.LogTo(Console.WriteLine, LogLevel.Information);
             SqlMapper.AddTypeMap(typeof(DateTime), DbType.DateTime2);
         }).AddScoped<IDataContext>(sp => sp.GetRequiredService<AppWriteDbContext>());
 
         //SQLServer - Configurações do contexto para leitura
-        builder.Services.AddDbContextPool<AppReadDbContext>(opt =>
+        builder.Services.AddDbContextPool<AppReadDbContext>(opt => // AddDbContext // AddDbContextPool // AddPooledDbContextFactory
         {
             opt.UseSqlServer(connectionString, builder => { builder.CommandTimeout(30); });
+            //opt.LogTo(Console.WriteLine, LogLevel.Information);
             opt.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
             SqlMapper.AddTypeMap(typeof(DateTime), DbType.DateTime2);
         }).AddScoped<IDataContext>(sp => sp.GetRequiredService<AppReadDbContext>());

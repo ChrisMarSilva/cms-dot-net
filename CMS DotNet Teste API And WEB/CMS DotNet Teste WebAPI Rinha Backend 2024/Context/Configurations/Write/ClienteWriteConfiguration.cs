@@ -14,5 +14,11 @@ internal sealed class ClienteWriteConfiguration : IEntityTypeConfiguration<Clien
 
         builder.Property(x => x.IdCliente).HasColumnName("idcliente").IsRequired(); //.ValueGeneratedOnAdd().UseIdentityColumn()
         builder.Property(x => x.Limite).HasColumnName("limite").IsRequired();
+
+        //SqlServerIndexBuilderExtensions.IncludeProperties(
+        //    builder.HasIndex(x => x.IdCliente)
+        //        .IsUnique(false)
+        //        .HasDatabaseName("IxCliente01"), 
+        //    x => x.Limite);
     }
 }

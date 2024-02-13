@@ -17,6 +17,7 @@ internal sealed class AppWriteDbContext : DbContext, IDataContext
     protected override void OnModelCreating(ModelBuilder builder)
     {
         builder.ApplyConfigurationsFromAssembly(typeof(AppWriteDbContext).Assembly, WriteConfigurationsFilter);
+
         base.OnModelCreating(builder);
     }
 

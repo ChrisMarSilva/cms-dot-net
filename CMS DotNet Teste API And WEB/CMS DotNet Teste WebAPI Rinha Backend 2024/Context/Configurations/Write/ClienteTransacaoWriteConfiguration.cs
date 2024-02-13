@@ -1,6 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Rinha.Backend._2024.API.Models.Write;
+using System.Drawing;
 
 namespace Rinha.Backend._2024.API.Context.Configurations.Write;
 
@@ -22,6 +24,18 @@ internal sealed class ClienteTransacaoWriteConfiguration : IEntityTypeConfigurat
         //builder.HasIndex(x => x.IdCliente)
         //    .IsUnique(false)
         //    .HasDatabaseName("IxClienteTransacao01");
+
+        //SqlServerIndexBuilderExtensions.IncludeProperties(
+        //    builder.HasIndex(x => x.IdCliente)
+        //        .IsUnique(false)
+        //        .HasDatabaseName("IxClienteTransacao02"),
+        //    x => x.DtHrRegistro);
+
+        SqlServerIndexBuilderExtensions.IncludeProperties(
+            builder.HasIndex(x => x.IdCliente)
+                .IsUnique(false)
+                .HasDatabaseName("IxClienteTransacao03"),
+        x => new { x.DtHrRegistro, x.Tipo, x.Valor, x.Descricao });
 
         //builder.HasOne(x => x.Cliente)
         //    .WithMany(x => x.Transacoes)

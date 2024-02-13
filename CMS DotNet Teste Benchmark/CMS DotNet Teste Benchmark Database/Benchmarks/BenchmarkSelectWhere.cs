@@ -46,6 +46,62 @@ public class BenchmarkSelectWhere : BenchmarkSQLServer
 }
 
 
+//| Method                           | _idCliente | Mean     | Error     | StdDev    | Median   | Rank | Completed Work Items | Lock Contentions | Gen0   | Allocated |
+//|--------------------------------- |----------- |---------:|----------:|----------:|---------:|-----:|---------------------:|-----------------:|-------:|----------:|
+//| SQLServer_EF_WhereFirst_Full     | 1          | 3.755 ms | 0.6100 ms | 1.6491 ms | 2.973 ms |    3 |               3.0000 |           0.0156 | 7.8125 |  13.07 KB |
+//| SQLServer_EF_SelectFirst_Full_02 | 1          | 2.798 ms | 0.2837 ms | 0.7670 ms | 2.494 ms |    1 |                    - |                - | 3.9063 |   6.28 KB |
+//| SQLServer_DP_Select_Full_01      | 1          | 2.971 ms | 0.2756 ms | 0.7729 ms | 2.688 ms |    2 |               3.0000 |           0.0078 | 3.9063 |   6.73 KB |
+//| SQLServer_DP_Select_Full_03      | 1          | 2.638 ms | 0.1441 ms | 0.4111 ms | 2.489 ms |    1 |               3.0000 |           0.0234 |      - |   6.81 KB |  SQLServer_DP_Select_Full_03
+//| SQLServer_DP_Select_Full_04      | 1          | 3.186 ms | 0.3232 ms | 0.9115 ms | 3.115 ms |    2 |               3.0000 |           0.0117 | 3.9063 |   6.73 KB |
+//|                                  |            |          |           |           |          |      |                      |                  |        |           |
+//| SQLServer_EF_WhereFirst_Full     | 100        | 2.906 ms | 0.1694 ms | 0.4862 ms | 2.747 ms |    3 |               3.0000 |                - | 7.8125 |  14.98 KB |
+//| SQLServer_EF_SelectFirst_Full_02 | 100        | 2.341 ms | 0.1474 ms | 0.4108 ms | 2.195 ms |    1 |                    - |                - | 3.9063 |   6.15 KB |  SQLServer_EF_SelectFirst_Full_02
+//| SQLServer_DP_Select_Full_01      | 100        | 2.685 ms | 0.2500 ms | 0.6758 ms | 2.415 ms |    2 |               3.0000 |           0.0078 | 3.9063 |   6.55 KB |
+//| SQLServer_DP_Select_Full_03      | 100        |       NA |        NA |        NA |       NA |    ? |                   NA |               NA |     NA |        NA |
+//| SQLServer_DP_Select_Full_04      | 100        |       NA |        NA |        NA |       NA |    ? |                   NA |               NA |     NA |        NA |
+//|                                  |            |          |           |           |          |      |                      |                  |        |           |
+//| SQLServer_EF_WhereFirst_Full     | 500        | 4.124 ms | 0.5748 ms | 1.6117 ms | 3.652 ms |    2 |               3.0000 |                - |      - |  15.38 KB |
+//| SQLServer_EF_SelectFirst_Full_02 | 500        | 2.437 ms | 0.1384 ms | 0.3993 ms | 2.311 ms |    1 |                    - |                - | 3.9063 |   6.17 KB |
+//| SQLServer_DP_Select_Full_01      | 500        | 2.378 ms | 0.0909 ms | 0.2518 ms | 2.306 ms |    1 |               3.0000 |           0.0078 |      - |   6.56 KB |  SQLServer_DP_Select_Full_01
+//| SQLServer_DP_Select_Full_03      | 500        |       NA |        NA |        NA |       NA |    ? |                   NA |               NA |     NA |        NA |
+//| SQLServer_DP_Select_Full_04      | 500        |       NA |        NA |        NA |       NA |    ? |                   NA |               NA |     NA |        NA |
+//|                                  |            |          |           |           |          |      |                      |                  |        |           |
+//| SQLServer_EF_WhereFirst_Full     | 1000       | 3.238 ms | 0.2577 ms | 0.7268 ms | 3.021 ms |    3 |               3.0000 |           0.0625 | 7.8125 |  12.88 KB |
+//| SQLServer_EF_SelectFirst_Full_02 | 1000       | 2.562 ms | 0.1741 ms | 0.4912 ms | 2.387 ms |    2 |                    - |                - |      - |   6.16 KB |
+//| SQLServer_DP_Select_Full_01      | 1000       | 2.351 ms | 0.0969 ms | 0.2764 ms | 2.277 ms |    1 |               3.0000 |           0.0234 |      - |   5.37 KB |  SQLServer_DP_Select_Full_01
+//| SQLServer_DP_Select_Full_03      | 1000       |       NA |        NA |        NA |       NA |    ? |                   NA |               NA |     NA |        NA |
+//| SQLServer_DP_Select_Full_04      | 1000       |       NA |        NA |        NA |       NA |    ? |                   NA |               NA |     NA |        NA |
+//|                                  |            |          |           |           |          |      |                      |                  |        |           |
+//| SQLServer_EF_WhereFirst_Full     | 5000       | 3.099 ms | 0.2858 ms | 0.7529 ms | 2.965 ms |    1 |               3.0000 |           0.0391 | 7.8125 |  12.77 KB |  SQLServer_EF_WhereFirst_Full
+//| SQLServer_EF_SelectFirst_Full_02 | 5000       | 3.744 ms | 0.7431 ms | 2.0716 ms | 2.835 ms |    1 |                    - |                - | 3.9063 |   6.15 KB |
+//| SQLServer_DP_Select_Full_01      | 5000       | 5.677 ms | 1.4215 ms | 4.0557 ms | 3.793 ms |    2 |               3.0000 |           0.0078 |      - |   5.37 KB |
+//| SQLServer_DP_Select_Full_03      | 5000       |       NA |        NA |        NA |       NA |    ? |                   NA |               NA |     NA |        NA |
+//| SQLServer_DP_Select_Full_04      | 5000       |       NA |        NA |        NA |       NA |    ? |                   NA |               NA |     NA |        NA |
+//|                                  |            |          |           |           |          |      |                      |                  |        |           |
+//| SQLServer_EF_WhereFirst_Full     | 10000      | 6.623 ms | 1.4007 ms | 4.1301 ms | 5.093 ms |    3 |               3.0078 |           0.0078 | 7.8125 |  12.77 KB |
+//| SQLServer_EF_SelectFirst_Full_02 | 10000      | 5.916 ms | 1.5733 ms | 4.6142 ms | 3.463 ms |    2 |                    - |                - | 3.9063 |   6.15 KB |
+//| SQLServer_DP_Select_Full_01      | 10000      | 2.991 ms | 0.4296 ms | 1.1468 ms | 2.488 ms |    1 |               3.0000 |           0.0313 |      - |   5.38 KB |  SQLServer_DP_Select_Full_01
+//| SQLServer_DP_Select_Full_03      | 10000      |       NA |        NA |        NA |       NA |    ? |                   NA |               NA |     NA |        NA |
+//| SQLServer_DP_Select_Full_04      | 10000      |       NA |        NA |        NA |       NA |    ? |                   NA |               NA |     NA |        NA |
+//|                                  |            |          |           |           |          |      |                      |                  |        |           |
+//| SQLServer_EF_WhereFirst_Full     | 20000      | 2.869 ms | 0.2587 ms | 0.7169 ms | 2.609 ms |    1 |               3.0000 |                - |      - |  13.09 KB |
+//| SQLServer_EF_SelectFirst_Full_02 | 20000      | 2.783 ms | 0.2653 ms | 0.7483 ms | 2.520 ms |    1 |                    - |                - |      - |   6.16 KB |
+//| SQLServer_DP_Select_Full_01      | 20000      | 3.554 ms | 0.7020 ms | 1.9569 ms | 2.763 ms |    1 |               3.0000 |           0.0117 |      - |   5.37 KB |
+//| SQLServer_DP_Select_Full_03      | 20000      |       NA |        NA |        NA |       NA |    ? |                   NA |               NA |     NA |        NA |
+//| SQLServer_DP_Select_Full_04      | 20000      |       NA |        NA |        NA |       NA |    ? |                   NA |               NA |     NA |        NA |
+//|                                  |            |          |           |           |          |      |                      |                  |        |           |
+//| SQLServer_EF_WhereFirst_Full     | 30000      | 8.675 ms | 2.5018 ms | 7.0971 ms | 5.142 ms |    2 |               3.0000 |                - |      - |  12.83 KB |
+//| SQLServer_EF_SelectFirst_Full_02 | 30000      | 3.212 ms | 0.4361 ms | 1.2300 ms | 2.753 ms |    1 |                    - |                - | 3.9063 |   6.15 KB |
+//| SQLServer_DP_Select_Full_01      | 30000      | 3.126 ms | 0.2831 ms | 0.8168 ms | 2.897 ms |    1 |               3.0000 |                - |      - |   5.39 KB |  SQLServer_DP_Select_Full_01
+//| SQLServer_DP_Select_Full_03      | 30000      |       NA |        NA |        NA |       NA |    ? |                   NA |               NA |     NA |        NA |
+//| SQLServer_DP_Select_Full_04      | 30000      |       NA |        NA |        NA |       NA |    ? |                   NA |               NA |     NA |        NA |
+//|                                  |            |          |           |           |          |      |                      |                  |        |           |
+//| SQLServer_EF_WhereFirst_Full     | 32767      | 4.105 ms | 0.2746 ms | 0.7654 ms | 3.908 ms |    3 |               3.0000 |           0.0156 |      - |  15.35 KB |
+//| SQLServer_EF_SelectFirst_Full_02 | 32767      | 2.456 ms | 0.1356 ms | 0.3954 ms | 2.354 ms |    1 |                    - |                - | 3.9063 |   6.15 KB |  SQLServer_EF_SelectFirst_Full_02
+//| SQLServer_DP_Select_Full_01      | 32767      | 3.251 ms | 0.3040 ms | 0.8675 ms | 3.188 ms |    2 |               3.0000 |           0.0156 |      - |    6.6 KB |
+//| SQLServer_DP_Select_Full_03      | 32767      |       NA |        NA |        NA |       NA |    ? |                   NA |               NA |     NA |        NA |
+//| SQLServer_DP_Select_Full_04      | 32767      |       NA |        NA |        NA |       NA |    ? |                   NA |               NA |     NA |        NA |
+
 //| Method                         | _idCliente | Mean     | Error     | StdDev    | Median   | Rank | Completed Work Items | Lock Contentions | Gen0   | Allocated |
 //|------------------------------- |----------- |---------:|----------:|----------:|---------:|-----:|---------------------:|-----------------:|-------:|----------:|
 //| SQLServer_EF_Select_Limite     | 1          | 2.243 ms | 0.0439 ms | 0.0857 ms | 2.231 ms |    1 |               3.0000 |           0.0117 | 7.8125 |  14.01 KB |

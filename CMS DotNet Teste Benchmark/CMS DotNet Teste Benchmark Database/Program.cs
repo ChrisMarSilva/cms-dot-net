@@ -73,7 +73,16 @@ try
 
     //using (var context = new DataContextSQLServer()) // DataContextSQLite // DataContextMySQL // DataContextSQLServer
     //{
+		
+    //    //context.Database.Delete();
+    //    //context.Database.Create();
+		
+		
+    //    //context.Database.EnsureDeleted();
     //    //context.Database.EnsureCreated();
+	
+	coreBlogContext.Database.EnsureDeleted();
+        _coreBlogContext.Database.EnsureCreated();
 
     //    //    foreach (var cliente in context.Clientes)
     //    //        Console.WriteLine($"ID: {cliente.Id}, Limite: {cliente.Limite}");
