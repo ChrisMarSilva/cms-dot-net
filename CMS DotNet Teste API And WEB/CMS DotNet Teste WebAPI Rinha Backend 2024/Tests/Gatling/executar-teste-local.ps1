@@ -14,10 +14,10 @@ function Run-Gatling {
 function Start-Test {
     for ($i = 1; $i -le 20; $i++) {
         try {
-            # 2 requests to wake the 2 API instances up :)
-            Invoke-RestMethod -Uri "http://localhost:5097/clientes/1/extrato" -ErrorAction Stop # 9999 # 5097
+            # 2 requests to wake the 2 API instances up :) # 9999 # 5097
+            Invoke-RestMethod -Uri "http://localhost:5097/clientes/1/extrato" -ErrorAction Stop
             Write-Host ""
-            Invoke-RestMethod -Uri "http://localhost:5097/clientes/1/extrato" -ErrorAction Stop # 9999 # 5097
+            Invoke-RestMethod -Uri "http://localhost:5097/clientes/1/extrato" -ErrorAction Stop
             Write-Host ""
             Run-Gatling
             break

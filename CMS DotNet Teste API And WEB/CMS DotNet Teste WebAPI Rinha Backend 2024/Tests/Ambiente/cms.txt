@@ -1,0 +1,6 @@
+
+cd "C:\Users\chris\Desktop\CMS DotNet\CMS DotNet Teste API And WEB\CMS DotNet Teste WebAPI Rinha Backend 2024"
+cd "C:\Users\chris\Desktop\CMS DotNet\CMS DotNet Teste API And WEB\CMS DotNet Teste WebAPI Rinha Backend 2024\Tests\Ambiente"
+
+docker-compose down
+docker-compose up -d --build

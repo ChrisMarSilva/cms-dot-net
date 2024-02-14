@@ -2,19 +2,19 @@
 
 namespace Rinha.Backend._2024.API.Models.Dtos.ResponseDtos;
 
-public class TransacaoRequestDto
+public sealed record TransacaoRequestDto
 {
-    [Required(ErrorMessage = "Campo obrigatório.")]
+    //[Required(ErrorMessage = "Campo obrigatório.")]
     //[RegularExpression("^\\d{1,9223372036854775808 }$", ErrorMessage = "Valor informado não confere com a expressão regular aceita {1}.")]
     public long? Valor { get; init; }
 
-    [Required(ErrorMessage = "Campo obrigatório.")]
-    [RegularExpression("^(c|d)$")]
-    [StringLength(1, MinimumLength = 1, ErrorMessage = "Máximo de {1} caractere.")]
+    //[Required(ErrorMessage = "Campo obrigatório.")]
+    //[RegularExpression("^(c|d)$")]
+    //[StringLength(1, MinimumLength = 1, ErrorMessage = "Máximo de {1} caractere.")]
     public string? Tipo { get; init; } = null!;
 
-    [Required(ErrorMessage = "Campo obrigatório.")]
-    [StringLength(10, MinimumLength = 1, ErrorMessage = "Máximo de {1} caracteres.")]
+    //[Required(ErrorMessage = "Campo obrigatório.")]
+    //[StringLength(10, MinimumLength = 1, ErrorMessage = "Máximo de {1} caracteres.")]
     public string? Descricao { get; init; } = string.Empty;
 
     internal bool Valido()

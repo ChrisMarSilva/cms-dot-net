@@ -5,7 +5,7 @@ namespace Rinha.Backend._2024.API.Models.Dtos.RequestDtos;
 
 public sealed record ExtratoResponseDto
 {
-    public ExtratoSaldoResponseDto Saldo { get; set; }
+    public ExtratoSaldoResponseDto? Saldo { get; set; } = null;
     public ICollection<ExtratoTransacoesResponseDto>? Transacoes { get; set; }
 };
 

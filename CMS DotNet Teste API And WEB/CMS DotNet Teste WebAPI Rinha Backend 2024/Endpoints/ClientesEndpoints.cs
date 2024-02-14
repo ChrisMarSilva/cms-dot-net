@@ -1,8 +1,7 @@
-﻿using Dapper;
+﻿using Azure;
+using Dapper;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using Rinha.Backend._2024.API.Context;
 using Rinha.Backend._2024.API.Models.Domains.Read;
 using Rinha.Backend._2024.API.Models.Dtos.RequestDtos;
 using Rinha.Backend._2024.API.Models.Dtos.ResponseDtos;
@@ -14,45 +13,47 @@ public static class ClientesEndpoints
 {
     public static void UseMapClientesEndpoints(this WebApplication app)
     {
-        app.MapPost("/clientes/{id:int}/transacoes", 
-            async (short id, [FromBody] TransacaoRequestDto request, [FromServices] AppReadDbContext contextRead, [FromServices] AppWriteDbContext contextWrite, CancellationToken cancellationToken) =>
+        app.MapPost("/clientes/{id:int}/transacoes", async (short id, [FromBody] TransacaoRequestDto request, [FromServices] IDbConnection connection, CancellationToken cancellationToken) =>
         {
             try
             {
                 if (!request.Valido()) Results.UnprocessableEntity("Payload inválido.");
 
-                var connection = (SqlConnection)contextRead.Database.GetDbConnection();
                 if (connection is null) return Results.UnprocessableEntity("Conexão inválida.");
                 if  (connection.State == ConnectionState.Closed) connection.Open();
 
-                var limiteCliente = await connection.QueryFirstOrDefaultAsync<long>("SELECT limite FROM Cliente WITH(NOLOCK) WHERE idcliente = @pIdcliente", new { pIdcliente = id }, commandTimeout: 60);
+                var limiteCliente = await connection.QueryFirstOrDefaultAsync<long>("SELECT Limite FROM Cliente WITH(NOLOCK) WHERE IdCliente = @pIdcliente", new { pIdcliente = id }, commandTimeout: 60);
                 if (limiteCliente == default) return Results.NotFound("Cliente não localizado.");
 
-                var saldoCarteira = await connection.QueryFirstOrDefaultAsync<long>("SELECT saldo FROM ClienteCarteira WITH(NOLOCK) WHERE idcliente = @pIdcliente", new { pIdcliente = id }, commandTimeout: 60);
+                var saldoCarteira = await connection.QueryFirstOrDefaultAsync<long>("SELECT Saldo FROM ClienteCarteira WITH(NOLOCK) WHERE IdCliente = @pIdcliente", new { pIdcliente = id }, commandTimeout: 60);
+
+                long valor = request.Valor!.Value;
+                string tipo = request.Tipo!.ToLower();
+                string descricao = request.Descricao!;
 
                 long novoSado = default;
-                if (request.Tipo!.Equals("d", StringComparison.OrdinalIgnoreCase)) novoSado = saldoCarteira + limiteCliente - request.Valor!.Value;
-                else novoSado = saldoCarteira + limiteCliente + request.Valor!.Value;
+                if (tipo.Equals("d")) novoSado = saldoCarteira + limiteCliente - valor;
+                else novoSado = saldoCarteira + limiteCliente + valor;
+                
                 if (novoSado < 0) return Results.UnprocessableEntity("Novo saldo do cliente menor que seu limite disponível.");
-                novoSado -= limiteCliente;
 
-                using (var transaction = await connection.BeginTransactionAsync())
+                using (var transaction = connection.BeginTransaction())
                 {
                     try
                     {
-                        string sqlUpdCarteira = "UPDATE ClienteCarteira SET Saldo = @pSaldo WHERE idcliente = @pIdcliente";
-                        object[] paramUpdCarteira = { new { pSaldo = novoSado, pIdcliente = id } };
+                        var sqlUpdCarteira = "UPDATE ClienteCarteira SET Saldo = Saldo " + (tipo.Equals("d") ? "-" : "+") + " @pValor WHERE idcliente = @pIdcliente";
+                        object[] paramUpdCarteira = { new { pValor = valor, pIdcliente = id } };
                         var affectedRowsUpdCarteira = await connection.ExecuteAsync(sqlUpdCarteira, paramUpdCarteira, transaction, commandTimeout: 60);
 
-                        string sqlInsTransacao = "INSERT INTO ClienteTransacao (IdCliente, Valor, Tipo, Descricao, DtHrRegistro) Values (@pIdcliente, @pValor, @pTipo, @pDescricao, @pDtHrRegistro)";
-                        object[] paramInsTransacao = { new { pIdcliente = id, pValor = request.Valor!.Value, pTipo = request.Tipo.ToLower(), pDescricao = request.Descricao!, pDtHrRegistro = DateTime.Now } };
+                        var sqlInsTransacao = "INSERT INTO ClienteTransacao (IdCliente, Valor, Tipo, Descricao, DtHrRegistro) Values (@pIdcliente, @pValor, @pTipo, @pDescricao, @pDtHrRegistro)";
+                        object[] paramInsTransacao = { new { pIdcliente = id, pValor = valor, pTipo = tipo, pDescricao = descricao, pDtHrRegistro = DateTime.Now } };
                         var affectedRowsInsTransacao = await connection.ExecuteAsync(sqlInsTransacao, paramInsTransacao, transaction, commandTimeout: 60);
 
-                        await transaction.CommitAsync();
+                        transaction.Commit();
                     }
                     catch
                     {
-                        await transaction.RollbackAsync();
+                        transaction.Rollback();
                         throw;
                     }
                 }
@@ -72,21 +73,20 @@ public static class ClientesEndpoints
           .WithName("Transacoes")
           .WithTags("Clientes");
 
-        app.MapGet("/clientes/{id:int}/extrato", 
-            async (short id, [FromServices] AppReadDbContext contextRead, CancellationToken cancellationToken) =>
+        app.MapGet("/clientes/{id:int}/extrato", async (short id, [FromServices] IDbConnection connection, CancellationToken cancellationToken) =>
         {
             try
             {
-                var connection = (SqlConnection)contextRead.Database.GetDbConnection();
                 if (connection is null) return Results.UnprocessableEntity("Conexão inválida.");
                 if (connection.State == ConnectionState.Closed) connection.Open();
 
-                var limiteCliente = await connection.QueryFirstOrDefaultAsync<long>("SELECT limite FROM Cliente WITH(NOLOCK) WHERE idcliente = @pIdcliente", new { pIdcliente = id }, commandTimeout: 60);
+                var limiteCliente = await connection.QueryFirstOrDefaultAsync<long>("SELECT Limite FROM Cliente WITH(NOLOCK) WHERE IdCliente = @pIdcliente", new { pIdcliente = id }, commandTimeout: 60);
                 if (limiteCliente == default) return Results.NotFound("Cliente não localizado.");
 
-                var saldoCarteira = await connection.QueryFirstOrDefaultAsync<long>("SELECT saldo FROM ClienteCarteira WITH(NOLOCK) WHERE idcliente = @pIdcliente", new { pIdcliente = id }, commandTimeout: 60);
+                var saldoCarteira = await connection.QueryFirstOrDefaultAsync<long>("SELECT Saldo FROM ClienteCarteira WITH(NOLOCK) WHERE IdCliente = @pIdcliente", new { pIdcliente = id }, commandTimeout: 60);
 
-                var transacoes = await connection.QueryAsync<ClienteTransacaoReadModel>("SELECT TOP(10) Valor, Tipo, Descricao, DtHrRegistro FROM ClienteTransacao WITH(NOLOCK) WHERE idcliente = @pIdcliente ORDER BY dthrregistro DESC", new { pIdcliente = id }, commandTimeout: 60);
+                //var transacoes = await connection.QueryAsync<ClienteTransacaoReadModel>("SELECT TOP(10) Valor, Tipo, Descricao, DtHrRegistro FROM ClienteTransacao WITH(NOLOCK) WHERE IdCliente = @pIdcliente ORDER BY dthrregistro DESC", new { pIdcliente = id }, commandTimeout: 60);
+                var transacoes = await connection.QueryAsync<ClienteTransacaoReadModel>("SELECT TOP(10) Valor, Tipo, Descricao, DtHrRegistro FROM ClienteTransacao WITH(NOLOCK) WHERE IdCliente = @pIdcliente ORDER BY IdTransacao DESC", new { pIdcliente = id }, commandTimeout: 60);
 
                 var response = new ExtratoResponseDto
                 {
@@ -105,5 +105,10 @@ public static class ClientesEndpoints
           .Produces(StatusCodes.Status422UnprocessableEntity)
           .WithName("Extrato")
           .WithTags("Clientes");
+
+        app.MapGet("/ping", () => Results.Ok("Pong"))
+         .Produces<string>(StatusCodes.Status200OK)
+         .WithName("Ping")
+         .WithTags("Clientes");
     }
 }

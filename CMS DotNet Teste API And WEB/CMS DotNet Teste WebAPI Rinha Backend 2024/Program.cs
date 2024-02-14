@@ -12,9 +12,7 @@ builder.Services
 builder.AddApiSwagger();
 builder.AddApiCompression();
 builder.AddApiPersistence();
-
-builder.Services.AddCors();
-//builder.Services.AddCors(options => { options.AddPolicy("CorsPolicy", b => { b.AllowAnyMethod().AllowAnyHeader().AllowAnyOrigin().Build(); }); });
+builder.Services.AddCors(); // .AddCors(options => { options.AddPolicy("CorsPolicy", b => { b.AllowAnyMethod().AllowAnyHeader().AllowAnyOrigin().Build(); }); });
 
 builder.Services.Configure<HostOptions>(cfg =>
 {
@@ -25,18 +23,22 @@ builder.Services.Configure<HostOptions>(cfg =>
 var app = builder.Build();
 
 app.UseResponseCompression();
+//app.Run(async (context) =>
+//{
+//    context.Response.Headers.Add("Content-Type", "text/plain");
+//    await context.Response.WriteAsync("Hello World!");
+//});
+
 app.UseHttpsRedirection();
 app.UseMapClientesEndpoints();
 app.UseExceptionHandling(app.Environment);
 app.UseSwaggerMiddleware(app.Environment);
+app.UseAppCors(); // "CorsPolicy"
 
-app.UseAppCors();
-//app.UseCors("CorsPolicy");
-
-await using (var localScope = app.Services.CreateAsyncScope())
-{
-    await localScope.ServiceProvider.GetRequiredService<IDataContext>().OpenConnection();
-}
+//await using (var localScope = app.Services.CreateAsyncScope())
+//{
+//    await localScope.ServiceProvider.GetRequiredService<IDataContext>().OpenConnection();
+//}
 
 app.Run();
 

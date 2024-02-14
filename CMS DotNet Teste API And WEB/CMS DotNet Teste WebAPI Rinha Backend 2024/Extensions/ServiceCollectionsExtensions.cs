@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using Microsoft.AspNetCore.ResponseCompression;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Rinha.Backend._2024.API.Context;
@@ -16,22 +17,26 @@ public static class ServiceCollectionsExtensions
         //SQLServer
         var connectionString = builder.Configuration.GetConnectionString("DefaultConnectionSQLServer");
 
-        //SQLServer - Configurações do contexto para escrita
-        builder.Services.AddDbContextPool<AppWriteDbContext>(opt =>
-        {
-            opt.UseSqlServer(connectionString, builder => { builder.CommandTimeout(30); });
-            //opt.LogTo(Console.WriteLine, LogLevel.Information);
-            SqlMapper.AddTypeMap(typeof(DateTime), DbType.DateTime2);
-        }).AddScoped<IDataContext>(sp => sp.GetRequiredService<AppWriteDbContext>());
+        ////SQLServer - Configurações do contexto para escrita
+        //builder.Services.AddDbContextPool<AppWriteDbContext>(opt =>
+        //{
+        //    opt.UseSqlServer(connectionString, builder => { builder.CommandTimeout(30); });
+        //    //opt.LogTo(Console.WriteLine, LogLevel.Information);
+        //    SqlMapper.AddTypeMap(typeof(DateTime), DbType.DateTime2);
+        //}).AddScoped<IDataContext>(sp => sp.GetRequiredService<AppWriteDbContext>());
 
-        //SQLServer - Configurações do contexto para leitura
-        builder.Services.AddDbContextPool<AppReadDbContext>(opt => // AddDbContext // AddDbContextPool // AddPooledDbContextFactory
-        {
-            opt.UseSqlServer(connectionString, builder => { builder.CommandTimeout(30); });
-            //opt.LogTo(Console.WriteLine, LogLevel.Information);
-            opt.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
-            SqlMapper.AddTypeMap(typeof(DateTime), DbType.DateTime2);
-        }).AddScoped<IDataContext>(sp => sp.GetRequiredService<AppReadDbContext>());
+        ////SQLServer - Configurações do contexto para leitura
+        //builder.Services.AddDbContextPool<AppReadDbContext>(opt => // AddDbContext // AddDbContextPool // AddPooledDbContextFactory
+        //{
+        //    opt.UseSqlServer(connectionString, builder => { builder.CommandTimeout(30); });
+        //    //opt.LogTo(Console.WriteLine, LogLevel.Information);
+        //    opt.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+        //    SqlMapper.AddTypeMap(typeof(DateTime), DbType.DateTime2);
+        //}).AddScoped<IDataContext>(sp => sp.GetRequiredService<AppReadDbContext>());
+
+        builder.Services.AddTransient<IDbConnection>(db => new SqlConnection(connectionString));
+        //builder.Services.AddSqlDataSource(connectionString);
+        //builder.Services.AddSqlDataSource(connectionString, setupAction => {  setupAction.EnableVerboseLogging(); });
 
         //Postgres
         //var connectionString = builder.Configuration.GetConnectionString("DefaultConnectionPostgres"); 
@@ -73,7 +78,7 @@ public static class ServiceCollectionsExtensions
             options.Providers.Add<BrotliCompressionProvider>();
             options.Providers.Add<GzipCompressionProvider>();
         }).Configure<GzipCompressionProviderOptions>(options => { options.Level = CompressionLevel.Fastest; }) // SmallestSize
-          .Configure<BrotliCompressionProviderOptions>(options =>  {  options.Level = CompressionLevel.Fastest; });
+          .Configure<BrotliCompressionProviderOptions>(options => { options.Level = CompressionLevel.Fastest; });
 
         return builder;
     }
