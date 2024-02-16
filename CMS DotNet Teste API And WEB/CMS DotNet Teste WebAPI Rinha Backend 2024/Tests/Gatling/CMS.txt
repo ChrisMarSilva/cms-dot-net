@@ -22,6 +22,8 @@ PATH = C:\gatling\gatling-charts-highcharts-bundle-3.10.3\bin
 
 ./executar-teste-local.sh
 
+
+power shell
 cd "C:\Users\chris\Desktop\CMS DotNet\CMS DotNet Teste API And WEB\CMS DotNet Teste WebAPI Rinha Backend 2024\Tests\Gatling"
 ./executar-teste-local.ps1
 

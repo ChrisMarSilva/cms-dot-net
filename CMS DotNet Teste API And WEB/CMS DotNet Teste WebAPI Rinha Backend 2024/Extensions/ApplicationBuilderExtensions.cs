@@ -4,14 +4,16 @@ public static class ApplicationBuilderExtensions
 {
     public static IApplicationBuilder UseExceptionHandling(this IApplicationBuilder app, IWebHostEnvironment environment)
     {
+        //if (environment.IsDevelopment())
+        //    app.UseDeveloperExceptionPage();
+
         if (environment.IsDevelopment())
         {
             app.UseDeveloperExceptionPage();
-            // app.UseBrowserLink(); // Microsoft.VisualStudio.Web.BrowserLink
         }
         else
         {
-            //app.UseResponseCompression();
+            app.UseDefaultExceptionHandler().UseDefaultStatusCodePages();
         }
 
         return app;

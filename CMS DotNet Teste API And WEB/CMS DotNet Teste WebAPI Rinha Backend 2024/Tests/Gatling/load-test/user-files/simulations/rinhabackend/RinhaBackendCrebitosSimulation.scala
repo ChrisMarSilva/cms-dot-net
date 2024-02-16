@@ -54,7 +54,7 @@ class RinhaBackendCrebitosSimulation
   }
 
   val httpProtocol = http
-    .baseUrl("http://localhost:5097")
+    .baseUrl("http://localhost:9999")
     .userAgentHeader("Agente do Caos - 2024/Q1")
 
   val debitos = scenario("débitos")

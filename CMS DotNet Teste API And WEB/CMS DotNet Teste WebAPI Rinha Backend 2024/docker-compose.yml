@@ -6,38 +6,6 @@ networks:
     name: rinha-nginx-2024q1
 
 services:
-  api01: &api
-    build:
-      context: .
-      dockerfile: Dockerfile
-    hostname: api01
-    restart: always
-    environment:
-      - DB_HOSTNAME=db
-    # ports:
-    #   - "3001:8080"
-    depends_on:
-      - db
-
-  api02:
-    <<: *api 
-    hostname: api02
-    environment:
-      - DB_HOSTNAME=db
-    # ports:
-    #   - "3002:8080"
- 
-  nginx:
-    #container_name: wrk-web-nginx
-    image: nginx:latest  # nginx:1.21.6-alpine
-    restart: always
-    volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf:ro
-    ports:
-      - "9999:9999" 
-    depends_on:
-      - api01
-      - api02
 
   db:
     image: postgres:latest
@@ -51,3 +19,71 @@ services:
       - "5432:5432"
     volumes:
       - ./script.sql:/docker-entrypoint-initdb.d/script.sql
+      - ./postgres.conf:/etc/postgresql/postgresql.conf
+      - ./data:/var/lib/postgresql/data
+    command: ["postgres", "-c", "config_file=/etc/postgresql/postgresql.conf"]
+    # network_mode: host
+    # deploy:
+      # resources:
+        # limits:
+          # cpus: "0.8"
+          # memory: "2.5GB"
+          
+  api01: &api
+    build:
+      context: .
+      dockerfile: Dockerfile
+    hostname: api01
+    restart: always
+    environment:
+      #- DB_HOSTNAME=db
+      #- ConnectionStrings__DefaultConnectionPostgres = "Host=db;Database=rinha;Username=admin;Password=123;Maximum Pool Size=150;Timeout=60;Cancellation Timeout=0;No Reset On Close=true"
+      - ASPNETCORE_ENVIRONMENT="Production" 
+      - ASPNETCORE_URLS="http://localhost:8080"  # http://0.0.0.0:80
+      - MENSAGEM="Teste via Docker Compose - api01"
+    # ports:
+      # - "3001:8080"
+    depends_on:
+      - db
+    # network_mode: host
+    # deploy:
+      # resources:
+        # limits:
+          # cpus: "0.3"
+          # memory: "350MB"
+
+  api02:
+    <<: *api 
+    hostname: api02
+    environment:
+      #- DB_HOSTNAME=db
+      #- ConnectionStrings__DefaultConnectionPostgres = "Host=localhost;Database=rinha;Username=admin;Password=123;Maximum Pool Size=150;Timeout=60;Cancellation Timeout=0;No Reset On Close=true"
+      - ASPNETCORE_ENVIRONMENT = Development
+      - ASPNETCORE_URLS = "http://localhost:8081"
+      - MENSAGEM = "Teste via Docker Compose - api02"
+    # ports:
+      # - "3002:8080"
+    # network_mode: host
+    # deploy:
+      # resources:
+        # limits:
+          # cpus: "0.3"
+          # memory: "350MB"
+          
+  nginx:
+    #container_name: wrk-web-nginx
+    #network_mode: host
+    image: nginx:latest  # nginx:1.21.6-alpine
+    restart: always
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - "9999:9999" 
+    depends_on:
+      - api01
+      - api02
+    # deploy:
+      # resources:
+        # limits:
+          # cpus: "0.1"
+          # memory: "100MB"

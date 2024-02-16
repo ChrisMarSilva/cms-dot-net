@@ -1,10 +1,7 @@
-﻿using Azure;
-using Dapper;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Rinha.Backend._2024.API.Models.Domains.Read;
-using Rinha.Backend._2024.API.Models.Dtos.RequestDtos;
-using Rinha.Backend._2024.API.Models.Dtos.ResponseDtos;
+﻿using Microsoft.AspNetCore.Mvc;
+using Npgsql;
+using Rinha.Backend._2024.API.Dtos;
+using Rinha.Backend._2024.API.Repositories.Interfaces;
 using System.Data;
 
 namespace Rinha.Backend._2024.API.Endpoints;
@@ -13,52 +10,60 @@ public static class ClientesEndpoints
 {
     public static void UseMapClientesEndpoints(this WebApplication app)
     {
-        app.MapPost("/clientes/{id:int}/transacoes", async (short id, [FromBody] TransacaoRequestDto request, [FromServices] IDbConnection connection, CancellationToken cancellationToken) =>
+        app.MapPost("/clientes/{id:int}/transacoes", async (
+            short id, 
+            [FromBody] TransacaoRequestDto request,
+            [FromServices] NpgsqlConnection connection, // NpgsqlDataSource // NpgsqlConnection // [FromKeyedServices("write")]
+            [FromServices] IClienteRepository clienteRepo,
+            //[FromServices] IClienteCarteiraRepository carteiraRepo,
+            [FromServices] IClienteTransacaoRepository transacaoRepo,
+            CancellationToken cancellationToken) =>
         {
             try
             {
                 if (!request.Valido()) Results.UnprocessableEntity("Payload inválido.");
 
-                if (connection is null) return Results.UnprocessableEntity("Conexão inválida.");
-                if  (connection.State == ConnectionState.Closed) connection.Open();
+                //if (connection is null) return Results.UnprocessableEntity("Conexão inválida.");
+                if (connection.State == ConnectionState.Closed) await connection.OpenAsync();
+                // await using var conn = await connection.OpenConnectionAsync();
+                //await connection.OpenConnectionAsync(cancellationToken);
 
-                var limiteCliente = await connection.QueryFirstOrDefaultAsync<long>("SELECT Limite FROM Cliente WITH(NOLOCK) WHERE IdCliente = @pIdcliente", new { pIdcliente = id }, commandTimeout: 60);
-                if (limiteCliente == default) return Results.NotFound("Cliente não localizado.");
+                //var limiteCliente = await clienteRepo.GetLimiteAsync(id);
+                //if (limiteCliente == default) return Results.NotFound("Cliente não localizado.");
 
-                var saldoCarteira = await connection.QueryFirstOrDefaultAsync<long>("SELECT Saldo FROM ClienteCarteira WITH(NOLOCK) WHERE IdCliente = @pIdcliente", new { pIdcliente = id }, commandTimeout: 60);
+                //var saldoCarteira = await carteiraRepo.GetSaldoAsync(id);
+                //var saldoCarteira = await clienteRepo.GetSaldoAsync(id);
 
-                long valor = request.Valor!.Value;
-                string tipo = request.Tipo!.ToLower();
-                string descricao = request.Descricao!;
+                var cliente = await clienteRepo.GetByIdAsync(id);
+                if (cliente is null) return Results.NotFound("Cliente não localizado.");
+                var limiteCliente = cliente.Limite;
+                var saldoCarteira = cliente.Saldo;
 
                 long novoSado = default;
-                if (tipo.Equals("d")) novoSado = saldoCarteira + limiteCliente - valor;
-                else novoSado = saldoCarteira + limiteCliente + valor;
-                
+                if (request.Tipo!.Equals("d")) novoSado = saldoCarteira + limiteCliente - request.Valor!.Value;
+                else novoSado = saldoCarteira + limiteCliente + request.Valor!.Value;
                 if (novoSado < 0) return Results.UnprocessableEntity("Novo saldo do cliente menor que seu limite disponível.");
+                novoSado -= limiteCliente;
 
-                using (var transaction = connection.BeginTransaction())
-                {
-                    try
-                    {
-                        var sqlUpdCarteira = "UPDATE ClienteCarteira SET Saldo = Saldo " + (tipo.Equals("d") ? "-" : "+") + " @pValor WHERE idcliente = @pIdcliente";
-                        object[] paramUpdCarteira = { new { pValor = valor, pIdcliente = id } };
-                        var affectedRowsUpdCarteira = await connection.ExecuteAsync(sqlUpdCarteira, paramUpdCarteira, transaction, commandTimeout: 60);
+                // var con = await connection.OpenConnectionAsync(cancellationToken);
 
-                        var sqlInsTransacao = "INSERT INTO ClienteTransacao (IdCliente, Valor, Tipo, Descricao, DtHrRegistro) Values (@pIdcliente, @pValor, @pTipo, @pDescricao, @pDtHrRegistro)";
-                        object[] paramInsTransacao = { new { pIdcliente = id, pValor = valor, pTipo = tipo, pDescricao = descricao, pDtHrRegistro = DateTime.Now } };
-                        var affectedRowsInsTransacao = await connection.ExecuteAsync(sqlInsTransacao, paramInsTransacao, transaction, commandTimeout: 60);
+                //using (var transaction = await connection.BeginTransactionAsync())
+                //{
+                //    try
+                //    {
+                //await carteiraRepo.UpdateSaldoAsync(id, request.Tipo, request.Valor.Value, null); // transaction
+                await clienteRepo.UpdateSaldoAsync(id, request.Tipo, request.Valor.Value, null);
+                await transacaoRepo.AddAsync(id, request.Valor.Value, request.Tipo, request.Descricao!, null);
+                //        await transaction.CommitAsync();
+                //    }
+                //    catch
+                //    {
+                //        await transaction.RollbackAsync();
+                //        throw;
+                //    }
+                //}
 
-                        transaction.Commit();
-                    }
-                    catch
-                    {
-                        transaction.Rollback();
-                        throw;
-                    }
-                }
-
-                var response = new TransacaoResponseDto { Limite = limiteCliente,  Saldo = novoSado };
+                var response = new TransacaoResponseDto { Limite = limiteCliente, Saldo = novoSado };
 
                 return Results.Ok(response); 
             }
@@ -73,21 +78,34 @@ public static class ClientesEndpoints
           .WithName("Transacoes")
           .WithTags("Clientes");
 
-        app.MapGet("/clientes/{id:int}/extrato", async (short id, [FromServices] IDbConnection connection, CancellationToken cancellationToken) =>
+        app.MapGet("/clientes/{id:int}/extrato", async (
+            short id,
+            [FromServices] NpgsqlConnection connection, // NpgsqlDataSource // NpgsqlConnection // [FromKeyedServices("read")]
+            [FromServices] IClienteRepository clienteRepo,
+            //[FromServices] IClienteCarteiraRepository carteiraRepo,
+            [FromServices] IClienteTransacaoRepository transacaoRepo,
+            CancellationToken cancellationToken) =>
         {
             try
             {
-                if (connection is null) return Results.UnprocessableEntity("Conexão inválida.");
-                if (connection.State == ConnectionState.Closed) connection.Open();
+                //if (connection is null) return Results.UnprocessableEntity("Conexão inválida.");
+                if (connection.State == ConnectionState.Closed) await connection.OpenAsync();
+                //await using var conn = await connection.OpenConnectionAsync();
+                //await connection.OpenConnectionAsync(cancellationToken);
 
-                var limiteCliente = await connection.QueryFirstOrDefaultAsync<long>("SELECT Limite FROM Cliente WITH(NOLOCK) WHERE IdCliente = @pIdcliente", new { pIdcliente = id }, commandTimeout: 60);
-                if (limiteCliente == default) return Results.NotFound("Cliente não localizado.");
+                //var limiteCliente = await clienteRepo.GetLimiteAsync(id);
+                //if (limiteCliente == default) return Results.NotFound("Cliente não localizado.");
 
-                var saldoCarteira = await connection.QueryFirstOrDefaultAsync<long>("SELECT Saldo FROM ClienteCarteira WITH(NOLOCK) WHERE IdCliente = @pIdcliente", new { pIdcliente = id }, commandTimeout: 60);
+                //var saldoCarteira = await carteiraRepo.GetSaldoAsync(id);
+                //var saldoCarteira = await clienteRepo.GetSaldoAsync(id);
 
-                //var transacoes = await connection.QueryAsync<ClienteTransacaoReadModel>("SELECT TOP(10) Valor, Tipo, Descricao, DtHrRegistro FROM ClienteTransacao WITH(NOLOCK) WHERE IdCliente = @pIdcliente ORDER BY dthrregistro DESC", new { pIdcliente = id }, commandTimeout: 60);
-                var transacoes = await connection.QueryAsync<ClienteTransacaoReadModel>("SELECT TOP(10) Valor, Tipo, Descricao, DtHrRegistro FROM ClienteTransacao WITH(NOLOCK) WHERE IdCliente = @pIdcliente ORDER BY IdTransacao DESC", new { pIdcliente = id }, commandTimeout: 60);
+                var cliente = await clienteRepo.GetByIdAsync(id);
+                if (cliente is null) return Results.NotFound("Cliente não localizado.");
+                var limiteCliente = cliente.Limite;
+                var saldoCarteira = cliente.Saldo;
 
+                var transacoes = await transacaoRepo.GetAllAsync(id);
+              
                 var response = new ExtratoResponseDto
                 {
                     Saldo = new ExtratoSaldoResponseDto { Total = saldoCarteira, Data_Extrato = DateTime.Now, Limite = limiteCliente },
@@ -106,9 +124,20 @@ public static class ClientesEndpoints
           .WithName("Extrato")
           .WithTags("Clientes");
 
-        app.MapGet("/ping", () => Results.Ok("Pong"))
-         .Produces<string>(StatusCodes.Status200OK)
-         .WithName("Ping")
-         .WithTags("Clientes");
+        app.MapGet("/ping", ([FromServices] NpgsqlDataSource connection) =>
+        {
+            //return Results.Ok("Pong");
+            return connection.ConnectionString;
+        }).Produces<string>(StatusCodes.Status200OK)
+          .WithName("Ping")
+          .WithTags("Clientes");
+
+        app.MapGet("/teste", ([FromServices] IConfiguration configuration) =>
+        {
+            return configuration["MENSAGEM"];
+        }).Produces<string>(StatusCodes.Status200OK)
+          .WithName("Teste")
+          .WithTags("Clientes");
+
     }
 }

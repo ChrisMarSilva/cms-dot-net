@@ -6,7 +6,8 @@ export default function () {
     const idCliente = randomIntBetween(1, 5);
 
     // const url = `http://localhost:65005/clientes/${idCliente.toString()}/transacoes`; // IIS
-    const url = `http://localhost:5097/clientes/${idCliente.toString()}/transacoes`; // Degub 
+    // const url = `http://localhost:5097/clientes/${idCliente.toString()}/transacoes`; // Degub 
+    const url = `http://localhost:9999/clientes/${idCliente.toString()}/transacoes`; // Docker 
 
     const headers = { headers: { 'Accept-Encoding': 'gzip, deflate', 'Content-Type': 'application/json' } };
 

@@ -16,11 +16,20 @@ namespace TesteBenchmarkDotNet.Benchmarks;
 [MarkdownExporter] // [MarkdownExporter, HtmlExporter, CsvExporter, RPlotExporter]
 public class BenchmarkSelectWhere : BenchmarkSQLServer
 {
+    //long
     //private readonly string _rawSqlEFLimite = @"SELECT limite as Value FROM Cliente WITH(NOLOCK) WHERE IdCliente = @idCliente";
     //private readonly string _rawSqlDPLimite = @"SELECT limite FROM Cliente WITH(NOLOCK) WHERE idcliente = @pIdcliente";
+    private readonly string _rawSqlDPLimite = "SELECT limite FROM cliente WHERE id = @pIdcliente";
+    private readonly string _rawSqlPGLimite = "SELECT limite FROM cliente WHERE id = @pIdcliente";
+
+    //ClienteModel
     //private readonly string _rawSqlEFFull = @"SELECT * FROM Cliente WITH(NOLOCK) WHERE idcliente = {0}";
-    private readonly string _rawSqlDPFull = @"SELECT * FROM Cliente WITH(NOLOCK) WHERE idcliente = @pIdcliente";
-    [Params(1, 100, 500, 1_000, 5_000, 10_000, 20_000, 30_000, 32_767)] public short _idCliente { get; set; }
+    //private readonly string _rawSqlDPFull = @"SELECT * FROM Cliente WITH(NOLOCK) WHERE idcliente = @pIdcliente";
+    private readonly string _rawSqlDPFull = "SELECT id, limite FROM cliente WHERE id = @pIdcliente";
+    private readonly string _rawSqlPGFull = "SELECT id, limite FROM cliente WHERE id = @pIdcliente";
+
+    [Params(1)] public short _idCliente { get; set; }
+    //[Params(1, 100, 500, 1_000, 5_000, 10_000, 20_000, 30_000, 32_767)] public short _idCliente { get; set; }
 
     ////EF - long
     //[Benchmark] public async Task<long> SQLServer_EF_Select_Limite() => await ContextSQLServer.Database.SqlQueryRaw<long>(sql: _rawSqlEFLimite, parameters: new SqlParameter("@idCliente", _idCliente)).FirstOrDefaultAsync();
@@ -29,21 +38,132 @@ public class BenchmarkSelectWhere : BenchmarkSQLServer
 
     ////DP - long
     //[Benchmark] public async Task<long> SQLServer_DP_Select_Limite_01() => await ConnectionSQLServer.QueryFirstOrDefaultAsync<long>(_rawSqlDPLimite, new { pIdcliente = _idCliente }); // MELHOR
-    //[Benchmark] public async Task<long> SQLServer_DP_Select_Limite_02() => await ConnectionSQLServer.ExecuteScalarAsync<long>(_rawSqlDPLimite, new { pIdcliente = _idCliente });
+    [Benchmark] public async Task<long> SQLServer_DP_Select_Limite_01() => await ConnectionPostgreSQL.QueryFirstOrDefaultAsync<long>(_rawSqlDPLimite, new { pIdcliente = _idCliente }); // MELHOR
+
+    //PG - long
+    [Benchmark]
+    public async Task<long> PostgreSQL_PG_Select_Limite_01()
+    {
+        long result = default;
+
+        await using var command = ConnectionPostgreSQL.CreateCommand();
+        command.CommandText = _rawSqlPGLimite;
+        command.Parameters.AddWithValue("pIdcliente", _idCliente);
+
+        result = Convert.ToInt64(await command.ExecuteScalarAsync());
+
+        return result;
+    }
+
+    [Benchmark]
+    public async Task<long> PostgreSQL_PG_Select_Limite_02()
+    {
+        long result = default;
+
+        await using var command = ConnectionPostgreSQL.CreateCommand();
+        command.CommandText = _rawSqlPGLimite;
+        command.Parameters.AddWithValue("pIdcliente", _idCliente);
+
+        await using var reader = await command.ExecuteReaderAsync();
+        if (await reader.ReadAsync()) result = reader.GetInt64(0);
+
+        return result;
+    }
+
+    [Benchmark]
+    public async Task<long> PostgreSQL_PG_Select_Limite_03()
+    {
+        long result = default;
+
+        await using var command = ConnectionPostgreSQL.CreateCommand();
+        command.CommandText = _rawSqlPGLimite;
+        command.Parameters.AddWithValue("pIdcliente", _idCliente);
+
+        await using var reader = await command.ExecuteReaderAsync().ConfigureAwait(false);
+        if (await reader.ReadAsync().ConfigureAwait(false)) result = reader.GetInt64(0);
+
+        return result;
+    }
 
     //EF - ClienteModel
     //[Benchmark] public async Task<ClienteModel> SQLServer_EF_Select_Full() => await ContextSQLServer.Clientes.FromSqlRaw(_rawSqlEFFull, _idCliente).AsNoTracking().FirstOrDefaultAsync();
-    [Benchmark] public async Task<ClienteModel> SQLServer_EF_WhereFirst_Full() => await ContextSQLServer.Clientes.AsNoTracking().Where(x => x.IdCliente == _idCliente).Select(x => new ClienteModel(x.IdCliente, x.Limite)).FirstOrDefaultAsync();
-    //[Benchmark] public async Task<ClienteModel> SQLServer_EF_SelectFirst_Full_01() => await ContextSQLServer.Clientes.AsNoTracking().Select(x => new ClienteModel(x.IdCliente, x.Limite)).Where(x => x.IdCliente == _idCliente).FirstOrDefaultAsync();
-    [Benchmark] public async Task<ClienteModel> SQLServer_EF_SelectFirst_Full_02() => ContextSQLServer.Clientes.AsNoTracking().AsEnumerable().Select(x => new ClienteModel(x.IdCliente, x.Limite)).Where(x => x.IdCliente == _idCliente).ToList().FirstOrDefault();
-    
-    //DP - ClienteModel
-    [Benchmark] public async Task<ClienteModel> SQLServer_DP_Select_Full_01() => await ConnectionSQLServer.QueryFirstOrDefaultAsync<ClienteModel>(_rawSqlDPFull, new { pIdcliente = _idCliente });
-    //[Benchmark] public async Task<ClienteModel> SQLServer_DP_Select_Full_02() => await ConnectionSQLServer.ExecuteScalarAsync<ClienteModel>(_rawSqlDPFull, new { pIdcliente = _idCliente });
-    [Benchmark] public async Task<ClienteModel> SQLServer_DP_Select_Full_03() => await ConnectionSQLServer.QuerySingleAsync<ClienteModel>(_rawSqlDPFull, new { pIdcliente = _idCliente });
-    [Benchmark] public async Task<ClienteModel> SQLServer_DP_Select_Full_04() => await ConnectionSQLServer.QueryFirstAsync<ClienteModel>(_rawSqlDPFull, new { pIdcliente = _idCliente });
+    //[Benchmark] public async Task<ClienteModel> SQLServer_EF_WhereFirst_Full() => await ContextSQLServer.Clientes.AsNoTracking().Where(x => x.IdCliente == _idCliente).Select(x => new ClienteModel(x.IdCliente, x.Limite)).FirstOrDefaultAsync();
+    //[Benchmark] public async Task<ClienteModel> SQLServer_EF_SelectFirst_Full_01() => await ContextSQLServer.Clientes.AsNoTracking().Select(x => new ClienteModel(x.IdCliente, x.Limite)).Where(x => x.IdCliente == _idCliente).FirstOrDefaultAsync(); // erro
+    //[Benchmark] public ClienteModel SQLServer_EF_SelectFirst_Full_02() => ContextSQLServer.Clientes.AsNoTracking().AsEnumerable().Select(x => new ClienteModel(x.IdCliente, x.Limite)).Where(x => x.IdCliente == _idCliente).ToList().FirstOrDefault();
 
+    //DP - ClienteModel
+    //[Benchmark] public async Task<ClienteModel> SQLServer_DP_Select_Full_01() => await ConnectionSQLServer.QueryFirstOrDefaultAsync<ClienteModel>(_rawSqlDPFull, new { pIdcliente = _idCliente }); // MELHOR
+    [Benchmark] public async Task<ClienteModel> SQLServer_DP_Select_Full_01() => await ConnectionPostgreSQL.QueryFirstOrDefaultAsync<ClienteModel>(_rawSqlDPFull, new { pIdcliente = _idCliente }); // MELHOR
+    ////[Benchmark] public async Task<ClienteModel> SQLServer_DP_Select_Full_02() => await ConnectionSQLServer.ExecuteScalarAsync<ClienteModel>(_rawSqlDPFull, new { pIdcliente = _idCliente });// erro
+    //[Benchmark] public async Task<ClienteModel> SQLServer_DP_Select_Full_03() => await ConnectionSQLServer.QuerySingleAsync<ClienteModel>(_rawSqlDPFull, new { pIdcliente = _idCliente });
+    //[Benchmark] public async Task<ClienteModel> SQLServer_DP_Select_Full_04() => await ConnectionSQLServer.QueryFirstAsync<ClienteModel>(_rawSqlDPFull, new { pIdcliente = _idCliente });
+
+    //PG - ClienteModel
+    [Benchmark]
+    public async Task<ClienteModel> PostgreSQL_PG_Select_Full_01()
+    {
+        ClienteModel result = default;
+
+        await using var command = ConnectionPostgreSQL.CreateCommand();
+        command.CommandText = _rawSqlPGFull;
+        command.Parameters.AddWithValue("pIdcliente", _idCliente);
+
+        await using var reader = await command.ExecuteReaderAsync();
+        if (await reader.ReadAsync()) result = new ClienteModel(reader.GetInt16(0), reader.GetInt64(1));
+
+        return result;
+    }
+
+    [Benchmark]
+    public async Task<ClienteModel> PostgreSQL_PG_Select_Full_02()
+    {
+        ClienteModel result = default;
+
+        await using var command = ConnectionPostgreSQL.CreateCommand();
+        command.CommandText = _rawSqlPGFull;
+        command.Parameters.AddWithValue("pIdcliente", _idCliente);
+
+        await using var reader = await command.ExecuteReaderAsync().ConfigureAwait(false);
+        if (await reader.ReadAsync().ConfigureAwait(false)) result = new ClienteModel(reader.GetInt16(0), reader.GetInt64(1));
+
+        return result;
+    }
+
+    //[Benchmark]
+    //public async Task<IList<ClienteModel>> PostgreSQL_PG_Select_Full_03()
+    //{
+    //    var result = new List<ClienteModel>();
+
+    //    await using var command = ConnectionPostgreSQL.CreateCommand();
+    //    command.CommandText = _rawSqlPGFull;
+    //    command.Parameters.AddWithValue("pIdcliente", _idCliente);
+
+    //    await using var reader = await command.ExecuteReaderAsync();
+
+    //    while (await reader.ReadAsync())
+    //    {
+    //        var cliente = new ClienteModel(reader.GetInt16(0), reader.GetInt64(1));
+    //        result.Add(cliente);
+    //    }
+
+    //    return result;
+    //}
 }
+
+
+//| Method                         | _idCliente | Mean     | Error     | StdDev    | Median   | Rank | Completed Work Items | Lock Contentions | Allocated |
+//|------------------------------- |----------- |---------:|----------:|----------:|---------:|-----:|---------------------:|-----------------:|----------:|
+//| PostgreSQL_PG_Select_Limite_03 | 1          | 1.406 ms | 0.0215 ms | 0.0168 ms | 1.398 ms |    1 |               3.0000 |           0.0039 |   1.35 KB |
+//| PostgreSQL_PG_Select_Limite_02 | 1          | 1.457 ms | 0.0291 ms | 0.0524 ms | 1.445 ms |    1 |               3.0000 |           0.0020 |   1.36 KB |
+//| SQLServer_DP_Select_Limite_01  | 1          | 1.465 ms | 0.0290 ms | 0.0271 ms | 1.471 ms |    1 |               3.0000 |                - |   1.76 KB |
+//| PostgreSQL_PG_Select_Limite_01 | 1          | 1.545 ms | 0.0537 ms | 0.1443 ms | 1.495 ms |    1 |               3.0000 |           0.0078 |   1.51 KB |
+
+//| Method                         | _idCliente | Mean     | Error     | StdDev    | Median   | Rank | Completed Work Items | Lock Contentions | Allocated |
+//|------------------------------- |----------- |---------:|----------:|----------:|---------:|-----:|---------------------:|-----------------:|----------:|
+//| PostgreSQL_PG_Select_Full_02   | 1          | 1.409 ms | 0.0208 ms | 0.0174 ms | 1.403 ms |    1 |               3.0000 |           0.0078 |   1.51 KB |
+//| PostgreSQL_PG_Select_Full_01   | 1          | 1.421 ms | 0.0223 ms | 0.0186 ms | 1.418 ms |    1 |               3.0000 |           0.0039 |   1.49 KB |
+//| SQLServer_DP_Select_Full_01    | 1          | 1.516 ms | 0.0485 ms | 0.1369 ms | 1.455 ms |    1 |               3.0000 |           0.0020 |    1.9 KB |
+
 
 
 //| Method                           | _idCliente | Mean     | Error     | StdDev    | Median   | Rank | Completed Work Items | Lock Contentions | Gen0   | Allocated |
@@ -101,6 +221,7 @@ public class BenchmarkSelectWhere : BenchmarkSQLServer
 //| SQLServer_DP_Select_Full_01      | 32767      | 3.251 ms | 0.3040 ms | 0.8675 ms | 3.188 ms |    2 |               3.0000 |           0.0156 |      - |    6.6 KB |
 //| SQLServer_DP_Select_Full_03      | 32767      |       NA |        NA |        NA |       NA |    ? |                   NA |               NA |     NA |        NA |
 //| SQLServer_DP_Select_Full_04      | 32767      |       NA |        NA |        NA |       NA |    ? |                   NA |               NA |     NA |        NA |
+
 
 //| Method                         | _idCliente | Mean     | Error     | StdDev    | Median   | Rank | Completed Work Items | Lock Contentions | Gen0   | Allocated |
 //|------------------------------- |----------- |---------:|----------:|----------:|---------:|-----:|---------------------:|-----------------:|-------:|----------:|

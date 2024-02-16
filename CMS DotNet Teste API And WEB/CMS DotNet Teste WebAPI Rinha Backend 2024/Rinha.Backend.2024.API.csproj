@@ -4,35 +4,30 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <!--<InvariantGlobalization>true</InvariantGlobalization>-->
 	  <InvariantGlobalization>false</InvariantGlobalization>
     <RootNamespace>Rinha.Backend._2024.API</RootNamespace>
     <UserSecretsId>0cb5053f-9511-4505-abfc-2a19225dc800</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <DockerfileContext>.</DockerfileContext>
-    <!--<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-    <DockerfileContext>.</DockerfileContext>-->
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Context\Configurations\Read\ClienteTransacaoReadConfiguration.cs~RF39f5527e.TMP" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Dapper" Version="2.1.28" />
-    <PackageReference Include="Dapper.Contrib" Version="2.0.78" />
-    <PackageReference Include="Dapper.FluentMap" Version="2.0.0" />
+	  <!--<PackageReference Include="Dapper.Contrib" Version="2.0.78" />-->
+	  <!--<PackageReference Include="Dapper.FluentMap" Version="2.0.0" />-->
     <PackageReference Include="Flunt" Version="2.0.5" />
-    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.1" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.1" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.1" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.0">
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.2">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.6" />
-    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.0" />
-    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="7.0.0" />
+    <PackageReference Include="Npgsql" Version="8.0.2" />
+    <PackageReference Include="Npgsql.DependencyInjection" Version="8.0.2" />
+	  <!--<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.0" />-->
+	  <!--<PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="7.0.0" />-->
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
   </ItemGroup>
 
