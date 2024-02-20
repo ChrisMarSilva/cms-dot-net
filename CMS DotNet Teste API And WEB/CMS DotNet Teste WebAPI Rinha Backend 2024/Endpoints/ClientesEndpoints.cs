@@ -40,9 +40,14 @@ public static class ClientesEndpoints
                 var saldoCarteira = cliente.Saldo;
 
                 long novoSado = default;
-                if (request.Tipo!.Equals("d")) novoSado = saldoCarteira + limiteCliente - request.Valor!.Value;
-                else novoSado = saldoCarteira + limiteCliente + request.Valor!.Value;
-                if (novoSado < 0) return Results.UnprocessableEntity("Novo saldo do cliente menor que seu limite disponível.");
+                if (request.Tipo!.Equals("d")) 
+                {
+                    novoSado = saldoCarteira + limiteCliente - request.Valor!.Value;
+                    if (novoSado < 0) return Results.UnprocessableEntity("Novo saldo do cliente menor que seu limite disponível.");
+                }
+                else {
+                    novoSado = saldoCarteira + limiteCliente + request.Valor!.Value;
+                }
                 novoSado -= limiteCliente;
 
                 // var con = await connection.OpenConnectionAsync(cancellationToken);
