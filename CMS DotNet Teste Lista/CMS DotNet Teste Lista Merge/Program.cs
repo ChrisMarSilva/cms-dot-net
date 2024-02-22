@@ -1,8 +1,6 @@
-﻿using System.Collections.Generic;
-using Teste_com_Lista.Models;
-using static System.Net.Mime.MediaTypeNames;
+﻿using Teste_com_Lista.Models;
 
-Console.WriteLine("INI"); 
+Console.WriteLine("INI");
 try
 {
 
@@ -11,31 +9,32 @@ try
 
     var contasBase = new HashSet<PagadorContaModel>();
 
-    //contasBase.Add(new PagadorContaModel(2024020500001, "A", 1234, "CC", 10040, DateTime.Now, null));
-    //contasBase.Add(new PagadorContaModel(2024020500001, "A", 1234, "CC", 10050, null, null));
-    //contasBase.Add(new PagadorContaModel(2024020500001, "A", 1234, "CC", 10060, null, null));
+    contasBase.Add(new PagadorContaModel(2024020500001, "A", 1234, "CC", 10040, DateTime.Now, null));
+    contasBase.Add(new PagadorContaModel(2024020500001, "A", 1234, "CC", 10050, DateTime.Now, null));
+    contasBase.Add(new PagadorContaModel(2024020500001, "A", 1234, "CC", 10060, DateTime.Now, null));
 
     Console.WriteLine($"");
     Console.WriteLine($"  CONTAS DA BASE DE DADOS");
     //if (contasBase?.Any() ?? false)
-        foreach (var conta in contasBase)
-            Console.WriteLine($"     {conta}");
+    foreach (var conta in contasBase)
+        Console.WriteLine($"     {conta}");
 
     // ===========================================================================================================
     // ===========================================================================================================
 
     var contasNovas = new HashSet<PagadorContaModel>();
 
-    //contasNovas.Add(new PagadorContaModel(2024020500001, "A", 1234, "CC", 10040, DateTime.Now, "E"));
-    //contasNovas.Add(new PagadorContaModel(2024020500001, "A", 1234, "CC", 10050, null, "E"));
-    //contasNovas.Add(new PagadorContaModel(2024020500001, "A", 1234, "CC", 10060, null, "E"));
-    //contasNovas.Add(new PagadorContaModel(2024020500001, "A", 1234, "CC", 10070, DateTime.Now, "I"));
+    contasNovas.Add(new PagadorContaModel(2024020500001, "A", 1234, "CC", 10040, DateTime.Now, "E"));
+    //contasNovas.Add(new PagadorContaModel(2024020500001, "A", 1234, "CC", 10050, DateTime.Now, "E"));
+    //contasNovas.Add(new PagadorContaModel(2024020500001, "A", 1234, "CC", 10060, DateTime.Now, "E"));
+    contasNovas.Add(new PagadorContaModel(2024020500001, "A", 1234, "CC", 10070, DateTime.Now, "I"));
+    //contasNovas.Add(new PagadorContaModel(2024020500001, "A", 1234, "CC", 10080, DateTime.Now, "E"));
 
     Console.WriteLine($"");
     Console.WriteLine($"  CONTAS PARA SEREM ALTERADA OU EXLUIDAS");
     //if (contasNovas?.Any() ?? false)
-        foreach (var conta in contasNovas)
-            Console.WriteLine($"     {conta}");
+    foreach (var conta in contasNovas)
+        Console.WriteLine($"     {conta}");
 
     // ===========================================================================================================
     // ===========================================================================================================
@@ -45,7 +44,7 @@ try
     // SOMENTE ADD CONTAS DA BASE QUE NAO FORAM EXCLUIDAS
 
     if (contasBase?.Any() ?? false)
-    //{
+        //{
         //var contasBaseFiltradas = contasBase
         //      .Where(x => (x.IndrManutCtCliPagdr ?? "I") != "E")
         //      .ToList(); // Converta para lista para evitar chamadas repetitivas em um loop
@@ -59,7 +58,7 @@ try
     // SOMENTE ADD AS NOVAS CONTAS NAO SERAO EXCLUIDAS
 
     if (contasNovas?.Any() ?? false)
-    //{
+        //{
         //    var contasNovasFiltradas = contasNovas
         //          .Where(x => (x.IndrManutCtCliPagdr ?? "I") != "E")
         //          .ToList(); // Converta para lista para evitar chamadas repetitivas em um loop
@@ -69,6 +68,28 @@ try
         foreach (var conta in contasNovas.Where(x => (x.IndrManutCtCliPagdr ?? "I") != "E"))
             contasValidadas.Add(new PagadorContaModel(conta.NumCtrlReq, conta.TpAgCliPagdr, conta.AgCliPagdr, conta.TpCtCliPagdr, conta.CtCliPagdr, conta.DtAdesCliPagdrDda?.Date, conta.IndrManutCtCliPagdr));
     //}
+
+    // VALIDAR SE TEM CONTAS EXCLUIDAS E NAO TEM CONTA ATIVA
+
+    //verificar se todos os itens de um array tem no outro array
+    //bool exiteTodasContasExcluidas = contasNovas?
+    //    .Where(x => (x.IndrManutCtCliPagdr ?? "I") == "E")
+    //    .All(x => contasBase!.Contains(x)) ?? false;
+
+    var exitemTodasContasExcluidas = contasNovas?
+               .Where(contaDoRequest => (contaDoRequest.IndrManutCtCliPagdr ?? "I") == "E")
+               .All(contaDoRequest => contasBase!
+                   .Any(contaDaBase => contaDaBase.AgCliPagdr == contaDoRequest.AgCliPagdr &&
+                                       contaDaBase.TpAgCliPagdr == contaDoRequest.TpAgCliPagdr &&
+                                       contaDaBase.CtCliPagdr == contaDoRequest.CtCliPagdr)
+                   ) ?? false;
+
+    if (!exitemTodasContasExcluidas)
+    {
+        Console.WriteLine($"");
+        Console.WriteLine($"  existem contas excluidas que não estão ativa na Base");
+    }
+
 
     // REMOVER AS NOVAS CONTAS EXCLUIDAS DAS CONTAS PARA VALIDAR
 
@@ -105,8 +126,8 @@ try
     Console.WriteLine($"");
     Console.WriteLine($"  CONTAS PARA SEREM VALIDADADS");
     //if (contasValidadas?.Any() ?? false)
-        foreach (var conta in contasValidadas)
-            Console.WriteLine($"     {conta}");
+    foreach (var conta in contasValidadas)
+        Console.WriteLine($"     {conta}");
 
     // ===========================================================================================================
     // ===========================================================================================================
@@ -114,15 +135,15 @@ try
     Console.WriteLine($"");
     if (contasValidadas?.Any() ?? false)
     {
-        var anyNumNotaFisDuplicate = contasValidadas
+        var anyContasDuplicate = contasValidadas
             .GroupBy(x => new { x.AgCliPagdr, x.TpAgCliPagdr, x.CtCliPagdr, x.IndrManutCtCliPagdr })
             .Any(g => g.Count() > 1);
 
-        if (anyNumNotaFisDuplicate)
-            Console.WriteLine($"  ==> VALIDAÇÃO: Existe conta duplicada"); 
+        if (anyContasDuplicate)
+            Console.WriteLine($"  ==> VALIDAÇÃO: Existe conta duplicada");
 
-        if (contasValidadas?.All(conta => conta?.DtAdesCliPagdrDda == null) ?? true)
-            Console.WriteLine($"  ==> VALIDAÇÃO: Pelo menos um campo \"dtAdesCliPagdrDda\" é obrigatório.");
+        if (contasValidadas?.Any(conta => conta?.DtAdesCliPagdrDda == null) ?? false)
+            Console.WriteLine($"  ==> VALIDAÇÃO: O campo \"dtAdesCliPagdrDda\" é obrigatório.");
     }
     else
     {
