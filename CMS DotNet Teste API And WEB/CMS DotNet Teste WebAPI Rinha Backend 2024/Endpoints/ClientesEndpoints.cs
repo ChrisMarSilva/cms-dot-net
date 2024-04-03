@@ -10,7 +10,9 @@ public static class ClientesEndpoints
 {
     public static void UseMapClientesEndpoints(this WebApplication app)
     {
-        app.MapPost("/clientes/{id:int}/transacoes", async (
+        RouteGroupBuilder route = app.MapGroup("/clientes");
+
+        route.MapPost("/clientes/{id:int}/transacoes", async (
             short id, 
             [FromBody] TransacaoRequestDto request,
             [FromServices] NpgsqlConnection connection, // NpgsqlDataSource // NpgsqlConnection // [FromKeyedServices("write")]
@@ -81,9 +83,10 @@ public static class ClientesEndpoints
           .Produces(StatusCodes.Status404NotFound)
           .Produces(StatusCodes.Status422UnprocessableEntity)
           .WithName("Transacoes")
-          .WithTags("Clientes");
+          .WithTags("Clientes")
+          .WithOpenApi();
 
-        app.MapGet("/clientes/{id:int}/extrato", async (
+        route.MapGet("/clientes/{id:int}/extrato", async (
             short id,
             [FromServices] NpgsqlConnection connection, // NpgsqlDataSource // NpgsqlConnection // [FromKeyedServices("read")]
             [FromServices] IClienteRepository clienteRepo,
@@ -127,22 +130,7 @@ public static class ClientesEndpoints
           .Produces(StatusCodes.Status404NotFound)
           .Produces(StatusCodes.Status422UnprocessableEntity)
           .WithName("Extrato")
-          .WithTags("Clientes");
-
-        app.MapGet("/ping", ([FromServices] NpgsqlDataSource connection) =>
-        {
-            //return Results.Ok("Pong");
-            return connection.ConnectionString;
-        }).Produces<string>(StatusCodes.Status200OK)
-          .WithName("Ping")
-          .WithTags("Clientes");
-
-        app.MapGet("/teste", ([FromServices] IConfiguration configuration) =>
-        {
-            return configuration["MENSAGEM"];
-        }).Produces<string>(StatusCodes.Status200OK)
-          .WithName("Teste")
-          .WithTags("Clientes");
-
+          .WithTags("Clientes")
+          .WithOpenApi();
     }
 }
