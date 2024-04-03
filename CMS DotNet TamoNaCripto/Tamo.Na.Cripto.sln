@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34714.143
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tamo.Na.Cripto.Web", "Tamo.Na.Cripto.Web\Tamo.Na.Cripto.Web.csproj", "{79A7CC03-C3E8-4941-9CDB-80F99E743944}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tamo.Na.Cripto.Teste.Console", "Tamo.Na.Cripto.Teste.Console\Tamo.Na.Cripto.Teste.Console.csproj", "{64D7881C-08E2-4153-AD2E-201E987F56CC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{79A7CC03-C3E8-4941-9CDB-80F99E743944}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{79A7CC03-C3E8-4941-9CDB-80F99E743944}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{79A7CC03-C3E8-4941-9CDB-80F99E743944}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{79A7CC03-C3E8-4941-9CDB-80F99E743944}.Release|Any CPU.Build.0 = Release|Any CPU
+		{64D7881C-08E2-4153-AD2E-201E987F56CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{64D7881C-08E2-4153-AD2E-201E987F56CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{64D7881C-08E2-4153-AD2E-201E987F56CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{64D7881C-08E2-4153-AD2E-201E987F56CC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4F94BC7B-C00D-46A2-8B8D-00F5ACBFBFFC}
+	EndGlobalSection
+EndGlobal
