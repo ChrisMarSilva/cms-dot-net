@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4"
+    crossorigin="anonymous">
+
+  <title>Azure SignalR Sign-in Sample</title>
+  <style>
+    .navbar {
+      padding: 0;
+    }
+
+    .navbar-brand {
+      padding: 0;
+      margin: 0;
+    }
+
+    .nav-logo-img {
+      width: 50px;
+    }
+
+    .container-fluid {
+      margin-top: 80px;
+    }
+
+    .title-text {
+      color: #d0d0d0;
+    }
+
+    #qrcode > img {
+      width: 80%;
+      height: 80%;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <nav class="navbar navbar-expand-sm bg-dark fixed-top navbar-dark">
+      <a class="navbar-brand " href="#">
+        <img src="images/signalr-logo.png" alt="logo" class="nav-logo-img">
+      </a>
+      <div class="justify-content-center d-flex flex-fill">
+        <h5 class="title-text d-md-block d-none" id="count-large">Connecting...</h5>
+        <h5 class="title-text d-block d-md-none" id="count-small">Connecting...</h5>
+      </div>
+    </nav>
+  </header>
+  <div id="main" class="container-fluid collapse">
+    <div class="row">
+      <div class="col-12 col-md-4">
+        <div class="justify-content-center d-flex flex-fill">
+          <h5># of visitors by OS</h5>
+        </div>
+        <canvas id="chartByOS" width="400" height="400"></canvas>
+      </div>
+      <div class="col-12 col-md-4">
+        <div class="justify-content-center d-flex flex-fill">
+          <h5># of visitors by browser</h5>
+        </div>
+        <canvas id="chartByBrowser" width="400" height="400"></canvas>
+      </div>
+      <div class="col-md-4 d-none d-md-block">
+        <div id="qrcode" class="justify-content-center d-flex flex-fill"></div>
+        <div class="justify-content-center d-flex flex-fill">
+          <h5>Scan to check-in</h5>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@0.3.0"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@aspnet/signalr@1.0.0/dist/browser/signalr.min.js"></script>
+  <script src="scripts/qrcode.min.js"></script>
+  <script>
+    var chartByOS, chartByBrowser;
+
+    function prepareData(data) {
+      var list = [];
+      for (var label in data) list.push([label, data[label]]);
+      list.sort((x, y) => x[0] > y[0] ? 1 : x[0] == y[0] ? 0 : -1);
+      return {
+        labels: list.map(i => i[0]),
+        values: list.map(i => i[1])
+      };
+    }
+
+    function createChart(element, data) {
+      var backgroundColors = [
+        'rgba(255, 99, 132, 0.2)',
+        'rgba(54, 162, 235, 0.2)',
+        'rgba(255, 206, 86, 0.2)',
+        'rgba(75, 192, 192, 0.2)',
+        'rgba(153, 102, 255, 0.2)',
+        'rgba(255, 159, 64, 0.2)'
+      ];
+      var borderColors = [
+        'rgba(255,99,132,1)',
+        'rgba(54, 162, 235, 1)',
+        'rgba(255, 206, 86, 1)',
+        'rgba(75, 192, 192, 1)',
+        'rgba(153, 102, 255, 1)',
+        'rgba(255, 159, 64, 1)'
+      ];
+      var sorted = prepareData(data);
+      var allBgColors = [], allBdColors = [];
+      for (var i = 0; i < sorted.labels.length; i += backgroundColors.length) {
+        allBgColors = allBgColors.concat(backgroundColors);
+        allBdColors = allBdColors.concat(borderColors);
+      }
+
+      var ctx = element.getContext('2d');
+      return new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: sorted.labels,
+          datasets: [{
+            label: '# of Visitors',
+            data: sorted.values,
+            backgroundColor: allBgColors,
+            borderColor: allBdColors,
+            borderWidth: 1
+          }]
+        },
+        options: {
+          legend: {
+            display: false
+          },
+          plugins: {
+            datalabels: {
+              color: 'black',
+              font: {
+                size: '20',
+                weight: 'bold'
+              },
+              formatter: Math.round
+            }
+          },
+          scales: {
+            yAxes: [{
+              ticks: {
+                beginAtZero: true
+              }
+            }],
+            xAxes: [{
+              ticks: {
+                autoSkip: false
+              }
+            }]
+          }
+        }
+      });
+    }
+
+    function updateStatus(text) {
+      $('#count-large').text(text);
+      $('#count-small').text(text);
+    }
+
+    function updateCount(count) {
+      $('#count-large').text(`${count} people have visited this page`);
+      $('#count-small').text(`${count} visitors`);
+    }
+
+    function updateChart(chart, data) {
+      var sorted = prepareData(data);
+      chart.data.labels = sorted.labels;
+      chart.data.datasets[0].data = sorted.values;
+      chart.update();
+    }
+
+    function initPage(stat) {
+      updateCount(stat.totalNumber);
+      chartByOS = createChart(document.getElementById("chartByOS"), stat.byOS);
+      chartByBrowser = createChart(document.getElementById("chartByBrowser"), stat.byBrowser);
+      $("#main").show();
+      new QRCode(document.getElementById("qrcode"), {
+        text: window.location.href,
+        width: 512,
+        height: 512,
+      });
+    }
+
+    function updatePage(totalNumber, byOS, byBrowser) {
+      updateCount(totalNumber);
+      updateChart(chartByOS, byOS);
+      updateChart(chartByBrowser, byBrowser);
+    }
+
+    function startConnection(url, accessToken) {
+      var connection = new signalR.HubConnectionBuilder()
+        .withUrl(url, { accessTokenFactory: () => accessToken })
+        .build();
+
+      connection.on('updateSignInStats', updatePage);
+      connection.onclose(() => updateStatus('Disconnected'));
+      connection.start().catch(() => updateStatus('Disconnected'));
+    }
+
+    $.getJSON('/signin').done(result => {
+      initPage(result.stats);
+      startConnection(result.authInfo.serviceUrl, result.authInfo.accessToken);
+    });
+  </script>
+</body>
+
+</html>
