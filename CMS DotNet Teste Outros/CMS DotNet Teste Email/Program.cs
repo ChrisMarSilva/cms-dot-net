@@ -28,10 +28,9 @@ try
     var autentica = "S";
     var usuario = "cristiano.martins@jdconsultores.com.br";
     var senha = "JD@cm2024";
-    var host = "10.10.20.12";  // var host = "smtp.jdconsultores.com.br";
-    var port = 25; 
+    var host = "smtp-mail.outlook.com";
+    var port = 587; 
 
-    Console.WriteLine("Dados MimeMessage");
     var message = new MimeMessage();
     message.From.Add(new MailboxAddress(name: usuario, address: usuario));
     message.To.Add(new MailboxAddress(name: usuario, address: usuario));
