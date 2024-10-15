@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35327.3
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleAppSample", "ConsoleAppSample\ConsoleAppSample.csproj", "{65438905-9EEF-43A1-91BA-411EFB0456B3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleAppMongoDB", "ConsoleAppMongoDB\ConsoleAppMongoDB.csproj", "{C846D5C8-3142-4812-8C34-7E4DFA127C75}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{65438905-9EEF-43A1-91BA-411EFB0456B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{65438905-9EEF-43A1-91BA-411EFB0456B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{65438905-9EEF-43A1-91BA-411EFB0456B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{65438905-9EEF-43A1-91BA-411EFB0456B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C846D5C8-3142-4812-8C34-7E4DFA127C75}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C846D5C8-3142-4812-8C34-7E4DFA127C75}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C846D5C8-3142-4812-8C34-7E4DFA127C75}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C846D5C8-3142-4812-8C34-7E4DFA127C75}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0875C7DC-E3B3-4E8F-9840-9D765E0ABF02}
+	EndGlobalSection
+EndGlobal
