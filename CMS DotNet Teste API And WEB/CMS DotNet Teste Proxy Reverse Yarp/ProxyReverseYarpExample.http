@@ -1,0 +1,11 @@
+@ProxyReverseYarpExample_HostAddress = https://localhost:7183
+
+### Get Todos
+GET {{ProxyReverseYarpExample_HostAddress}}/todos
+Accept: application/json
+### 
+
+### Get weatherforecast
+GET {{ProxyReverseYarpExample_HostAddress}}/weatherforecast/
+Accept: application/json
+### 
