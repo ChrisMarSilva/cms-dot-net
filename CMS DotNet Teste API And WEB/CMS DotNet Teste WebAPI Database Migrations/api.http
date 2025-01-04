@@ -1,0 +1,39 @@
+@HostAddress = https://localhost:7214
+
+###
+GET {{HostAddress}}/weatherforecast
+Accept: application/json
+###
+
+###
+POST {{HostAddress}}/movies
+Content-Type: application/json
+{
+    "title": "Teste2",
+    "yearOfRelease": 2025
+}
+###
+
+###
+GET {{HostAddress}}/movies/5ce62f81-c3e7-4249-a054-93199ab39cd8
+###
+
+###
+GET {{HostAddress}}/movies
+###
+
+###
+PUT {{HostAddress}}/movies/5ce62f81-c3e7-4249-a054-93199ab39cd8
+Content-Type: application/json
+{
+    "title": "Teste3",
+    "yearOfRelease": 2024
+}
+###
+
+###
+DELETE {{HostAddress}}/movies/309f3c02-b043-4a29-837a-2d7e4012fa89
+###
+
+GET https://migrations-movies-api-b9arcjb6hseuffgx.westeurope-01.azurewebsites.net/movies
+###
