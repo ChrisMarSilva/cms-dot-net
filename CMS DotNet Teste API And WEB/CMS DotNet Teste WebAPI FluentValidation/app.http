@@ -1,0 +1,152 @@
+@InputValidation_HostAddress = https://localhost:7178
+@InputValidation_HostAddressRegister = {{InputValidation_HostAddress}}/api/register
+
+### Valid Registration
+POST {{InputValidation_HostAddress}}/api/register
+Content-Type: application/json
+{
+    "email": "email@gmail.com",
+    "password": "12345678",
+    "confirmPassword": "12345678",
+    "personalInfo": {
+        "firstName": "Nome",
+        "lastName": "Sobrenome",
+        "PreferredName": "Pessoal"
+    },
+    "address": {
+        "street": "Rua Tal, 123",
+        "city": "Cidade",
+        "state": "SP",
+        "postalCode": "123456",
+        "country": "Pais"
+    },
+    "interests": ["ler", "programar", "investir"],
+    "dateOfBirth": "1980-01-01",
+    "phoneNumber": "555-5555-555",
+    "acceptTerms": true
+}
+
+### Invalid Email
+POST {{InputValidation_HostAddressRegister}}
+Content-Type: application/json
+{
+    "email": "invalid-email",
+    "password": "12345678",
+    "confirmPassword": "12345678",
+    "personalInfo": {
+        "firstName": "Nome",
+        "lastName": "Sobrenome",
+        "PreferredName": "Pessoal"
+    },
+    "address": {
+        "street": "Rua Tal, 123",
+        "city": "Cidade",
+        "state": "SP",
+        "postalCode": "123456",
+        "country": "Pais"
+    },
+    "interests": ["ler", "programar", "investir"],
+    "dateOfBirth": "1980-01-01",
+    "phoneNumber": "555-5555-555",
+    "acceptTerms": true
+}
+    
+### Missing required fields
+POST {{InputValidation_HostAddressRegister}}
+Content-Type: application/json
+{
+    "email": "email@gmail.com",
+    "password": "12345678",
+    "confirmPassword": "12345678",
+    "personalInfo": {
+        "firstName": "",
+        "lastName": "",
+        "PreferredName": "Pessoal"
+    },
+    "address": {
+        "street": "",
+        "city": "",
+        "state": "SP",
+        "postalCode": "123456",
+        "country": "Pais"
+    },
+    "interests": [],
+    "dateOfBirth": "1980-01-01",
+    "phoneNumber": "",
+    "acceptTerms": false
+}
+
+### Underage registration
+POST {{InputValidation_HostAddressRegister}}
+Content-Type: application/json
+{
+    "email": "email@gmail.com",
+    "password": "12345678",
+    "confirmPassword": "12345678",
+    "personalInfo": {
+        "firstName": "Nome",
+        "lastName": "Sobrenome",
+        "PreferredName": "Pessoal"
+    },
+    "address": {
+        "street": "Rua Tal, 123",
+        "city": "Cidade",
+        "state": "SP",
+        "postalCode": "123456",
+        "country": "Pais"
+    },
+    "interests": ["ler", "programar", "investir"],
+    "dateOfBirth": "2010-01-01",
+    "phoneNumber": "555-5555-555",
+    "acceptTerms": true
+}
+
+### Password Mismatch
+POST {{InputValidation_HostAddressRegister}}
+Content-Type: application/json
+{
+    "email": "email@gmail.com",
+    "password": "12345678",
+    "confirmPassword": "87654321",
+    "personalInfo": {
+        "firstName": "Nome",
+        "lastName": "Sobrenome",
+        "PreferredName": "Pessoal"
+    },
+    "address": {
+        "street": "Rua Tal, 123",
+        "city": "Cidade",
+        "state": "SP",
+        "postalCode": "123456",
+        "country": "Pais"
+    },
+    "interests": ["ler", "programar", "investir"],
+    "dateOfBirth": "1980-01-01",
+    "phoneNumber": "555-5555-555",
+    "acceptTerms": true
+}
+
+### Terms not accepted
+POST {{InputValidation_HostAddressRegister}}
+Content-Type: application/json
+{
+    "email": "email@gmail.com",
+    "password": "12345678",
+    "confirmPassword": "12345678",
+    "personalInfo": {
+        "firstName": "Nome",
+        "lastName": "Sobrenome",
+        "PreferredName": "Pessoal"
+    },
+    "address": {
+        "street": "Rua Tal, 123",
+        "city": "Cidade",
+        "state": "SP",
+        "postalCode": "123456",
+        "country": "Pais"
+    },
+    "interests": ["ler", "programar", "investir"],
+    "dateOfBirth": "1980-01-01",
+    "phoneNumber": "555-5555-555",
+    "acceptTerms": false
+}

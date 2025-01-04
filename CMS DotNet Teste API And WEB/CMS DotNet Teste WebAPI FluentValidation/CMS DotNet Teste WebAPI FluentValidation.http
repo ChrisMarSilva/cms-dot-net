@@ -1,0 +1,6 @@
+@CMS_DotNet_Teste_WebAPI_FluentValidation_HostAddress = http://localhost:5238
+
+GET {{CMS_DotNet_Teste_WebAPI_FluentValidation_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
