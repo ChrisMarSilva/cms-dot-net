@@ -1,0 +1,29 @@
+@HostAddress = http://localhost:5125
+
+GET {{HostAddress}}/weatherforecast/
+Accept: application/json
+###
+
+POST {{HostAddress}}/orders/
+Content-Type: application/json
+{
+    "CustomerName": "Teste1",
+    "Amount": 100
+}
+###
+
+GET {{HostAddress}}/orders/
+Accept: application/json
+###
+
+POST {{HostAddress}}/webhook/subscription/
+Content-Type: application/json
+{
+    "EventType": "order.created",
+    "WebhookUrl": "https://webhook.site/906abc8b-8323-4207-aa57-9ae93204dd66"
+}
+###
+
+GET {{HostAddress}}/webhook/subscription/AAA
+Accept: application/json
+###

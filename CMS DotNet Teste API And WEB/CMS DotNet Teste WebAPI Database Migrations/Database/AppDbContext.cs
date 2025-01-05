@@ -1,4 +1,5 @@
-﻿using CMS_DotNet_Teste_WebAPI_Database_Migrations.Movies;
+﻿
+using CMS_DotNet_Teste_WebAPI_Database_Migrations.Movies;
 using Microsoft.EntityFrameworkCore;
 
 namespace CMS_DotNet_Teste_WebAPI_Database_Migrations.Database;
