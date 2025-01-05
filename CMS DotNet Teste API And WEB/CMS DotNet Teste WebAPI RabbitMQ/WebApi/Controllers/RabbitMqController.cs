@@ -1,5 +1,6 @@
 using MassTransit;
 using Microsoft.AspNetCore.Mvc;
+using RabbitMQ.Api.Extensions;
 using RabbitMQ.Contratos.Requests;
 
 namespace WebApi.Controllers;
@@ -20,7 +21,7 @@ public class RabbitMqController : ControllerBase
     }
 
     [HttpPost("send")]
-    public async Task<IActionResult> SendMessage([FromBody] MessageDto message)
+    public async Task<IActionResult> SendMessage([FromBody] MessageDto message, CancellationToken cancellationToken = default)
     {
         if (message == null || string.IsNullOrWhiteSpace(message.Text))
             return BadRequest("A mensagem não pode ser vazia.");
@@ -29,8 +30,10 @@ public class RabbitMqController : ControllerBase
         if (string.IsNullOrEmpty(queueName))
             return StatusCode(500, "Nome da fila não está configurado.");
 
-        var endpoint = await _sendEndpointProvider.GetSendEndpoint(new Uri($"queue:{queueName}"));
-        await endpoint.Send(message);
+        await _sendEndpointProvider.SendAsync(
+            queue: queueName,
+            message: message,
+            cancellationToken: cancellationToken); // CancellationToken.None
 
         return Ok($"Mensagem enviada com sucesso para a fila: {queueName}");
     }

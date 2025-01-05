@@ -1,6 +1,8 @@
 ﻿namespace RabbitMQ.Contratos.Requests;
 
-public class MessageDto
-{
-    public string Text { get; set; } = string.Empty;    
-}
+public record MessageDto(string Text);
+
+//public class MessageDto
+//{
+//    public string Text { get; set; } = string.Empty;
+//}

@@ -19,15 +19,14 @@ public class MessageConsumer : IConsumer<MessageDto>
         try
         {
             var message = new Message(context.Message.Text);
+            _dbContext.Messages.Add(message);
 
             await using var transaction = await _dbContext.Database.BeginTransactionAsync();
-
-            _dbContext.Messages.Add(message);
             await _dbContext.SaveChangesAsync();
-
             await transaction.CommitAsync();
 
             //Console.WriteLine($"Mensagem salva no banco: {message.Texto}");
+            // return Task.CompletedTask;
         }
         catch (Exception ex)
         {

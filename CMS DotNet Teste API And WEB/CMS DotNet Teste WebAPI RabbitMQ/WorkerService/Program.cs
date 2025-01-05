@@ -38,7 +38,7 @@ builder.Services.AddMassTransit(x =>
         cfg.ReceiveEndpoint(configuration["RabbitMQ:Queue"]!, e =>
         {
             e.ConfigureConsumer<MessageConsumer>(context);
-            
+
             // Configurar Retry Policy - 3: Número de tentativas - 5s: Intervalo entre cada tentativa.
             e.UseMessageRetry(r => r.Interval(3, TimeSpan.FromSeconds(5)));
             // e.UseMessageRetry(r => r.Exponential(3, TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(10), TimeSpan.FromSeconds(2)));
@@ -55,6 +55,13 @@ builder.Services.AddMassTransit(x =>
         });
 
         //cfg.Message<Fault>(e => e.SetEntityName("jd.fault"));
+
+        cfg.ConfigureEndpoints(context);
+    });
+
+    x.UsingInMemory((context, cfg) =>
+    {
+        cfg.ConfigureEndpoints(context);
     });
 });
 

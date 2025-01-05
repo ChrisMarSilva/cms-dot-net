@@ -6,10 +6,6 @@ builder.Services.AddOpenApi();
 
 var configuration = builder.Configuration;
 
-// WARN[0002] Request Failed
-// error="Post \"https://localhost:7222/api/rabbitmq/send\": dial tcp 127.0.0.1:7222:
-// connectex: No connection could be made because the target machine actively refused it."
-
 //// Carregar configurações do RabbitMQ
 //var rabbitMqConfig = builder.Configuration.GetSection("RabbitMQ");
 //var rabbitCfg = configuration.GetSection("RabbitMQ");
@@ -23,15 +19,17 @@ var configuration = builder.Configuration;
 //    string.IsNullOrEmpty(rabbitMqConfig["Queue"])) 
 //    throw new Exception("Configurações do RabbitMQ estão incompletas no appsettings.json");
 
+// builder.Services.AddTransient<IPublishBusExtension, PublishBus>();
+
 // Configurar MassTransit com RabbitMQ
 builder.Services.AddMassTransit(config =>
 {
-    config.UsingRabbitMq((_, cfg) =>
+    config.UsingRabbitMq((context, cfg) =>
     {
         cfg.Host(
             configuration.GetValue("RabbitMQ:Host", "localhost"),
             configuration.GetValue<ushort>("RabbitMQ:Port", 5672),
-            configuration.GetValue("RabbitMQ:VirtualHost", "/"), 
+            configuration.GetValue("RabbitMQ:VirtualHost", "/"),
             h =>
         {
             h.Username(configuration["RabbitMQ:Username"]!);
@@ -42,6 +40,7 @@ builder.Services.AddMassTransit(config =>
         });
 
         // cfg.Message<Fault>(e => e.SetEntityName("jd.fault"));
+        cfg.ConfigureEndpoints(context);
     });
 });
 
@@ -54,8 +53,10 @@ builder.Services
     });
 
 var app = builder.Build();
+
 if (app.Environment.IsDevelopment())
     app.MapOpenApi();
+
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
