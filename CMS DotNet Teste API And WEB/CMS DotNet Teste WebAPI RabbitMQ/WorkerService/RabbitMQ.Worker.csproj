@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Worker">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>dotnet-WorkerService-051e0a7e-8d33-4e36-a949-72736ffb466a</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MassTransit" Version="8.3.4" />
+	<PackageReference Include="MassTransit.RabbitMQ" Version="8.3.4" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Models\RabbitMQ.Models.csproj" />
+    <ProjectReference Include="..\RabbitMQ.Contratos\RabbitMQ.Contratos.csproj" />
+    <ProjectReference Include="..\Repositories\RabbitMQ.Repositories.csproj" />
+  </ItemGroup>
+</Project>

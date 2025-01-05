@@ -1,0 +1,8 @@
+@HostAddress = https://localhost:7222
+
+### Send Msg
+POST {{HostAddress}}/api/rabbitmq/send
+Content-Type: application/json
+{
+    "text": "Olá, RabbitMQ - 002!"
+}
