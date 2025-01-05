@@ -20,19 +20,19 @@ public class MessageConsumer : IConsumer<MessageDto>
         {
             var message = new Message(context.Message.Text);
 
-            //await using var transaction = await _dbContext.Database.BeginTransactionAsync();
+            await using var transaction = await _dbContext.Database.BeginTransactionAsync();
 
             _dbContext.Messages.Add(message);
             await _dbContext.SaveChangesAsync();
 
-            //await transaction.CommitAsync();
+            await transaction.CommitAsync();
 
-            Console.WriteLine($"Mensagem salva no banco: {message.Texto}");
+            //Console.WriteLine($"Mensagem salva no banco: {message.Texto}");
         }
         catch (Exception ex)
         {
             // transaction.Rollback();
-            Console.WriteLine($"❌ Erro ao processar mensagem: {ex.Message}");
+            Console.WriteLine($"Erro ao processar mensagem: {ex.Message}");
             throw; // Garante que a mensagem será reencaminhada para retry
         }
     }

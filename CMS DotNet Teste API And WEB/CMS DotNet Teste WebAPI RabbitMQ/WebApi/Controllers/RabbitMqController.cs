@@ -1,7 +1,5 @@
 using MassTransit;
-using MassTransit.Transports;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 using RabbitMQ.Contratos.Requests;
 
 namespace WebApi.Controllers;
@@ -11,18 +9,12 @@ namespace WebApi.Controllers;
 public class RabbitMqController : ControllerBase
 {
     private readonly ILogger<RabbitMqController> _logger;
-    //private readonly IPublishEndpoint _publishEndpoint;
     private readonly ISendEndpointProvider _sendEndpointProvider;
     private readonly IConfiguration _configuration;
 
-    public RabbitMqController(
-        ILogger<RabbitMqController> logger, 
-        //IPublishEndpoint publishEndpoint,
-        ISendEndpointProvider sendEndpointProvider, 
-        IConfiguration configuration)
+    public RabbitMqController(ILogger<RabbitMqController> logger, ISendEndpointProvider sendEndpointProvider, IConfiguration configuration)
     {
         _logger = logger;
-        //_publishEndpoint = publishEndpoint;
         _sendEndpointProvider = sendEndpointProvider;
         _configuration = configuration;
     }
@@ -37,11 +29,9 @@ public class RabbitMqController : ControllerBase
         if (string.IsNullOrEmpty(queueName))
             return StatusCode(500, "Nome da fila não está configurado.");
 
-        //await _publishEndpoint.Publish<MessageDto>(new { Text = message.Text });
         var endpoint = await _sendEndpointProvider.GetSendEndpoint(new Uri($"queue:{queueName}"));
         await endpoint.Send(message);
 
         return Ok($"Mensagem enviada com sucesso para a fila: {queueName}");
-        //return Ok("Mensagem enviada com sucesso!");
     }
 }
