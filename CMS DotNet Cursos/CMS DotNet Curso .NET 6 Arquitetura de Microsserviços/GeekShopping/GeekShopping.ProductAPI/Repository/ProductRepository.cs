@@ -9,11 +9,11 @@ namespace GeekShopping.ProductAPI.Repository
 {
     public class ProductRepository : IProductRepository
     {
-        private readonly ILogger<ProductController> _logger;
+        private readonly ILogger<ProductRepository> _logger;
         private readonly MySQLContext _context;
         private IMapper _mapper;
 
-        public ProductRepository(ILogger<ProductController> logger, MySQLContext context, IMapper mapper)
+        public ProductRepository(ILogger<ProductRepository> logger, MySQLContext context, IMapper mapper)
         {
             _logger = logger;
             this._context = context;

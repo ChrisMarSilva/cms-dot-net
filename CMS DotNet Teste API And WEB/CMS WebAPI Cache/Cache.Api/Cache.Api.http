@@ -1,0 +1,33 @@
+@HostAddress = http://localhost:5042
+@HostAddressUser = {{HostAddress}}/api/user
+
+### User: Get All
+GET {{HostAddressUser}}
+Accept: application/json
+
+### User: Create
+POST {{HostAddressUser}}
+Content-Type: application/json
+{
+    "name": "Personal 001",
+    "email": "perssonal.001@gmail.com",
+    "password": "12345678"
+}
+
+### User: Get By Id
+GET {{HostAddressUser}}/5e86bcd2-7357-4786-9ee0-7959f4cc39c3
+Accept: application/json
+
+### User: Alter
+PUT {{HostAddressUser}}/5e86bcd2-7357-4786-9ee0-7959f4cc39c3
+Content-Type: application/json
+{
+    "name": "Personal 002",
+    "email": "perssonal.002@gmail.com",
+    "password": "87654321"
+}
+
+### User: Delete
+DELETE {{HostAddressUser}}/5e86bcd2-7357-4786-9ee0-7959f4cc39c3
+
+###
