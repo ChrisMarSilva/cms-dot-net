@@ -2,9 +2,9 @@
 
 public sealed class UserModel
 {
-    public UserModel() 
-    { 
-    } 
+    public UserModel()
+    {
+    }
 
     public UserModel(string name, string email, string password)
     {

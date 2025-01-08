@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Caching.Memory;
+﻿using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Caching.Hybrid;
+using Microsoft.Extensions.Caching.Memory;
 using StackExchange.Redis;
 using System.Text.Json;
 
@@ -57,7 +59,7 @@ public class RedisCacheService : ICacheService
 
         bool wasRemoved = await _cache.KeyDeleteAsync(key);
 
-        if (!wasRemoved) throw new Exception($"Key {key} was not found in the cache.");
+        // if (!wasRemoved) throw new Exception($"Key {key} was not found in the cache.");
     }
 }
 
@@ -91,5 +93,60 @@ public class InMemoryCacheService : ICacheService
     public async Task RemoveCacheValueAsync(string key)
     {
         _cache.Remove(key);
+    }
+}
+
+public class HybridCacheService
+{
+    private readonly ILogger<HybridCacheService> _logger;
+    private readonly HybridCache _cache;
+    //private readonly InMemoryCacheService _cacheInMemory;
+    //private readonly RedisCacheService _cacheRedis;
+    private static HybridCacheEntryOptions _options;
+
+    public HybridCacheService(ILogger<HybridCacheService> logger, HybridCache cache)
+    {
+        _logger = logger;
+        _cache = cache;
+        //_cacheInMemory = cacheInMemory;
+        //_cacheRedis = cacheRedis;
+
+        var _options = new HybridCacheEntryOptions
+        {
+            Expiration = TimeSpan.FromMinutes(10),
+            LocalCacheExpiration = TimeSpan.FromMinutes(2),
+            Flags = HybridCacheEntryFlags.DisableDistributedCache
+        };
+    }
+
+    public async Task<T?> GetCacheValueAsync<T>(string key)
+    {
+        //var value = default(T);
+
+        //value = await _cacheInMemory.GetCacheValueAsync<T>(key);
+        //if (value is not null)
+        //    return value;
+
+        //value = await _cacheRedis.GetCacheValueAsync<T>(key);
+        //if (value is null)
+        //    return default(T);
+
+        var value = await _cache.GetOrCreateAsync<T>(key, async token => default(T), _options);
+
+        return value;
+    }
+
+    public async Task SetCacheValueAsync<T>(string key, T value)
+    {
+        //await _cacheInMemory.SetCacheValueAsync<T>(key, value);
+        //await _cacheRedis.SetCacheValueAsync<T>(key, value);
+        await _cache.SetAsync<T>(key, value, _options);
+    }
+
+    public async Task RemoveCacheValueAsync(string key)
+    {
+        //await _cacheInMemory.RemoveCacheValueAsync(key);
+        //await _cacheRedis.RemoveCacheValueAsync(key);
+        await _cache.RemoveAsync(key);
     }
 }

@@ -6,7 +6,7 @@ namespace Cache.Api.Contracts.Mappings;
 
 public static class ContraUserMappingctMapping
 {
-    public static UserModel MapToUserModel(this UserRequestDto request) => 
+    public static UserModel MapToUserModel(this UserRequestDto request) =>
         new UserModel(
             name: request.Name,
             email: request.Email,

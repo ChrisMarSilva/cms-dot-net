@@ -52,6 +52,18 @@ public static class ServiceExtensions
         services.AddSingleton<IDatabase>(cfg => ConnectionMultiplexer.Connect(connectionStringRedis).GetDatabase());
         services.AddSingleton<ICacheService, RedisCacheService>();
 
+        // services.AddSingleton<HybridCacheService>();
+        //services.AddHybridCache(options =>
+        //{
+        //    options.MaximumPayloadBytes = 1024 * 1024; // 1 MB
+        //    options.MaximumKeyLength = 256;
+        //    options.DefaultEntryOptions = new HybridCacheEntryOptions
+        //    {
+        //        Expiration = TimeSpan.FromMinutes(5),
+        //        LocalCacheExpiration = TimeSpan.FromMinutes(1)
+        //    };
+        //});
+
         services.AddLogging();
 
         return services;
@@ -74,7 +86,8 @@ public static class ServiceExtensions
     {
         // return app.UseCors("CorsPolicy");
 
-        app.UseCors(p => {
+        app.UseCors(p =>
+        {
             p.AllowAnyOrigin();
             p.WithMethods(); // "GET"
             p.AllowAnyHeader();

@@ -65,6 +65,6 @@ public class AppDbContext : DbContext
     public async Task OpenConnection()
     {
         if (Database.GetDbConnection().State != ConnectionState.Open)
-            try  { await Database.OpenConnectionAsync(); } catch { }
+            try { await Database.OpenConnectionAsync(); } catch { }
     }
 }

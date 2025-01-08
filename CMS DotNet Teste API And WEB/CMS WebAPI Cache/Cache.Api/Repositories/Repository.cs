@@ -47,15 +47,15 @@ public class Repository<T> : IRepository<T> where T : class
         _dbSet = _ctx.Set<T>();
     }
 
-    public IQueryable<T> GetAll() => 
+    public IQueryable<T> GetAll() =>
         _dbSet.AsNoTracking();
 
     public IQueryable<T> ListarPor(Expression<Func<T, bool>> where, params Expression<Func<T, object>>[] includeProperties) =>
         Listar(includeProperties).Where(where);
 
     public IQueryable<T> ListarEOrdenadosPor<TKey>(Expression<Func<T, bool>> where, Expression<Func<T, TKey>> ordem, bool ascendente = true, params Expression<Func<T, object>>[] includeProperties) =>
-        ascendente 
-            ? ListarPor(where, includeProperties).OrderBy(ordem) 
+        ascendente
+            ? ListarPor(where, includeProperties).OrderBy(ordem)
             : ListarPor(where, includeProperties).OrderByDescending(ordem);
 
     public IQueryable<T> Listar(params Expression<Func<T, object>>[] includeProperties)
@@ -67,15 +67,15 @@ public class Repository<T> : IRepository<T> where T : class
     }
 
     public IQueryable<T> ListarOrdenadosPor<TKey>(Expression<Func<T, TKey>> ordem, bool ascendente = true, params Expression<Func<T, object>>[] includeProperties) =>
-        ascendente 
-            ? Listar(includeProperties).OrderBy(ordem) 
+        ascendente
+            ? Listar(includeProperties).OrderBy(ordem)
             : Listar(includeProperties).OrderByDescending(ordem);
 
     public async Task<IEnumerable<T>> GetAllAsync(CancellationToken cancellationToken = default) =>
         await _dbSet.AsNoTracking().ToListAsync(cancellationToken);
 
     public async Task<IEnumerable<T>> LocalizaPaginaAsync(int numeroPagina, int quantidadeRegistros, CancellationToken cancellationToken = default) =>
-        await _dbSet.Skip(quantidadeRegistros* (numeroPagina - 1)).Take(quantidadeRegistros).ToListAsync(cancellationToken);
+        await _dbSet.Skip(quantidadeRegistros * (numeroPagina - 1)).Take(quantidadeRegistros).ToListAsync(cancellationToken);
 
     //                   If your result set returns 0 records:     If you result set returns 1 record:  If your result set returns many records:
     // SingleOrDefault   returns the default value for the type    returns that record                  throws an exception
@@ -93,7 +93,7 @@ public class Repository<T> : IRepository<T> where T : class
     public async Task<bool> IsUniqueAsync(Expression<Func<T, bool>> expression, CancellationToken cancellationToken = default) =>
         await _dbSet.Where(expression).AnyAsync(cancellationToken);
 
-    public async Task<int> GetTotalRegistrosAsync(CancellationToken cancellationToken = default) => 
+    public async Task<int> GetTotalRegistrosAsync(CancellationToken cancellationToken = default) =>
         await _dbSet.AsNoTracking().CountAsync(cancellationToken);
 
     public async Task<T> AddAsync(T entity, CancellationToken cancellationToken = default)
