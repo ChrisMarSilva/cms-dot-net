@@ -6,7 +6,9 @@ using FluentValidation.Results;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
 using StackExchange.Redis;
+using System.Buffers;
 using System.IO.Compression;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace Cache.Api.Extensions;
 
@@ -34,7 +36,14 @@ public static class ServiceExtensions
         //var connectionString = configuration.GetConnectionString("DefaultConnectionSQLite");
         var connectionString = configuration.GetConnectionString("DefaultConnectionPostgres");
 
-        services.AddDbContext<AppDbContext>(opt => opt.UseNpgsql(connectionString));
+        services.AddDbContext<AppDbContext>(opt => 
+        {
+            //opt.EnableSensitiveDataLogging();
+            opt.UseNpgsql(connectionString);
+            //.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking)
+            //.UseSnakeCaseNamingConvention();
+            // System.Diagnostics.Debug.WriteLine(comando);
+        });
         //services.AddDbContext<AppDbContext>(opt => opt.UseSqlServer(connectionString, builder => { builder.CommandTimeout(30); })}).AddScoped<IDataContext>(sp => sp.GetRequiredService<AppWriteDbContext>());
         //services.AddDbContext<AppDbContext>(opt => opt.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
         //services.AddDbContext<AppDbContext>(opt => opt.UseSqlite(connectionString));
@@ -52,23 +61,23 @@ public static class ServiceExtensions
         services.AddSingleton<IDatabase>(cfg => ConnectionMultiplexer.Connect(connectionStringRedis).GetDatabase());
         services.AddSingleton<ICacheService, RedisCacheService>();
 
-        // services.AddSingleton<HybridCacheService>();
+        //#pragma warning disable EXTEXP0018
         //services.AddHybridCache(options =>
         //{
         //    options.MaximumPayloadBytes = 1024 * 1024; // 1 MB
         //    options.MaximumKeyLength = 256;
         //    options.DefaultEntryOptions = new HybridCacheEntryOptions
         //    {
-        //        Expiration = TimeSpan.FromMinutes(5),
-        //        LocalCacheExpiration = TimeSpan.FromMinutes(1)
+        //        Expiration = TimeSpan.FromMinutes(10),
+        //        LocalCacheExpiration = TimeSpan.FromMinutes(10)
         //    };
         //});
+        //#pragma warning restore EXTEXP0018
 
         services.AddLogging();
 
         return services;
     }
-
 
     public static IServiceCollection AddServices(this IServiceCollection services)
     {
@@ -78,6 +87,21 @@ public static class ServiceExtensions
         // services.AddValidatorsFromAssemblyContaining<UserRequestDtoValidator>();
         // services.AddScoped<IValidator<UserRequestDto>, UserRequestDtoValidator>();
         // services.Configure<ValidationSettings>(configuration.GetSection("ValidationSettings"));
+
+        return services;
+    }
+
+    public static IServiceCollection AddIdempotency(this IServiceCollection services, IConfiguration configuration)
+    {
+        //var idempotencyOptions = new IdempotencyOptions();
+        //configuration.GetSection("Idempotency").Bind(idempotencyOptions);
+
+        //services.AddRedisIdempotency(configuration, delegate (IdempotencyOptions cfg)
+        //{
+        //    cfg.HeaderName = "Chave-Idempotencia";
+        //    cfg.TTLInHours = idempotencyOptions.TTLInHours;
+        //    cfg.Prefix = idempotencyOptions.Prefix;
+        //});
 
         return services;
     }
@@ -96,6 +120,13 @@ public static class ServiceExtensions
         return app;
     }
 
+    public static IApplicationBuilder UseIdempotency(this IApplicationBuilder app)
+    {
+        // app.UseMiddleware<IdempotencyMiddleware>(Array.Empty<object>());
+
+        return app;
+    }
+
     public static IDictionary<string, string[]> ToDictionary(this ValidationResult validationResult)
     {
         return validationResult.Errors
@@ -105,12 +136,4 @@ public static class ServiceExtensions
             g => g.Select(x => x.ErrorMessage).ToArray()
           );
     }
-
-    //public static void AddToModelState(this ValidationResult result, ModelStateDictionary modelState)
-    //{
-    //    foreach (var error in result.Errors)
-    //    {
-    //        modelState.AddModelError(error.PropertyName, error.ErrorMessage);
-    //    }
-    //}
 }

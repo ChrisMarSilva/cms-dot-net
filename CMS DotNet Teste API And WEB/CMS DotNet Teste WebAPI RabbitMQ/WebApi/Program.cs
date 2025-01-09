@@ -21,10 +21,14 @@ var configuration = builder.Configuration;
 
 // builder.Services.AddTransient<IPublishBusExtension, PublishBus>();
 
+
+
 // Configurar MassTransit com RabbitMQ
-builder.Services.AddMassTransit(config =>
+builder.Services.AddMassTransit(x =>
 {
-    config.UsingRabbitMq((context, cfg) =>
+    x.SetKebabCaseEndpointNameFormatter(); // formatar os nomes de fila para Caso Kebab "MyQueue" -> "my-queue"
+
+    x.UsingRabbitMq((context, cfg) =>
     {
         cfg.Host(
             configuration.GetValue("RabbitMQ:Host", "localhost"),
@@ -38,6 +42,8 @@ builder.Services.AddMassTransit(config =>
             //h.UseDefaultSslConfiguration(configuration);
             h.PublisherConfirmation = configuration.GetValue("RabbitMQ:PublisherConfirmation", true);
         });
+
+        cfg.UseMessageRetry(r => r.Exponential(10, TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(60), TimeSpan.FromSeconds(5)));
 
         // cfg.Message<Fault>(e => e.SetEntityName("jd.fault"));
         cfg.ConfigureEndpoints(context);

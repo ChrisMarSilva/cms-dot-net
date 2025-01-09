@@ -18,6 +18,9 @@ builder.Services.AddMassTransit(x =>
 {
     x.AddConsumer<MessageConsumer>();
 
+    x.SetKebabCaseEndpointNameFormatter(); // formatar os nomes de fila para Caso Kebab "MyQueue" -> "my-queue"
+    //x.SetEndpointNameFormatter(new KebabCaseEndpointNameFormatter(prefix: "Dev", includeNamespace: false));
+
     x.UsingRabbitMq((context, cfg) =>
     {
         // var rabbitMqConfig = builder.Configuration.GetSection("RabbitMQ");
@@ -55,6 +58,8 @@ builder.Services.AddMassTransit(x =>
         });
 
         //cfg.Message<Fault>(e => e.SetEntityName("jd.fault"));
+
+        cfg.UseMessageRetry(r => r.Exponential(10, TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(60), TimeSpan.FromSeconds(5)));
 
         cfg.ConfigureEndpoints(context);
     });

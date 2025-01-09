@@ -27,20 +27,22 @@ public class UserService : IUserService
 
     public async Task<IEnumerable<UserModel>> GetAllAsync(CancellationToken cancellationToken = default)
     {
-        var result = await _cacheService.GetCacheValueAsync<IEnumerable<UserModel>>("user:list");
-
-        if (result is null || result.Count() == 0)
-        {
-            result = await _repository.GetAllAsync(cancellationToken);
-            await _cacheService.SetCacheValueAsync<IEnumerable<UserModel>>("user:list", result);
-        }
+        var result = await _repository.GetAllAsync(cancellationToken);
 
         return result;
     }
 
     public async Task<UserModel?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        return await _repository.GetByIdAsync(x => x.Id == id, cancellationToken);
+        var result = await _cacheService.GetCacheValueAsync<UserModel>($"user:{id}");
+
+        if (result is null)
+        {
+            result = await _repository.GetByIdAsync(x => x.Id == id, cancellationToken);
+            await _cacheService.SetCacheValueAsync<UserModel>($"user:{id}", result);
+        }
+
+        return result;
     }
 
     public async Task<UserModel> CreateAsync(UserModel userModel, CancellationToken cancellationToken = default)

@@ -1,33 +1,55 @@
 @HostAddress = http://localhost:5042
 @HostAddressUser = {{HostAddress}}/api/user
+@IdempotencyKey = {{$guid}}
+@IdempotencyKey1 = a165503c-5eba-47af-b94a-193daab832c1
+@IdempotencyKey2 = b92dd041-23fc-489c-989e-8b064e49e052
+@IdempotencyKey3 = c5a4fadc-bdd8-4356-8e70-eb049591ff02
 
 ### User: Get All
 GET {{HostAddressUser}}
 Accept: application/json
+Idempotency-Key: {{IdempotencyKey}}
+###
 
 ### User: Create
 POST {{HostAddressUser}}
 Content-Type: application/json
+Idempotency-Key: {{IdempotencyKey}}
 {
     "name": "Personal 001",
     "email": "perssonal.001@gmail.com",
     "password": "12345678"
 }
+###
+
+### User: Create with Errors
+POST {{HostAddressUser}}
+Content-Type: application/json
+Idempotency-Key: {{IdempotencyKey}}
+{
+    "name": "",
+    "email": "",
+    "password": ""
+}
+###
 
 ### User: Get By Id
-GET {{HostAddressUser}}/5e86bcd2-7357-4786-9ee0-7959f4cc39c3
-Accept: application/json
+GET {{HostAddressUser}}/deb004d2-14fd-430a-b919-aa104a20552f
+Idempotency-Key: {{IdempotencyKey}}
+###
 
 ### User: Alter
 PUT {{HostAddressUser}}/5e86bcd2-7357-4786-9ee0-7959f4cc39c3
 Content-Type: application/json
+Idempotency-Key: {{IdempotencyKey}}
 {
     "name": "Personal 002",
     "email": "perssonal.002@gmail.com",
     "password": "87654321"
 }
+###
 
 ### User: Delete
-DELETE {{HostAddressUser}}/5e86bcd2-7357-4786-9ee0-7959f4cc39c3
-
+DELETE {{HostAddressUser}}/71ec513f-eae4-4dfe-9b42-f442edef2209
+Idempotency-Key: {{$guid}}
 ###

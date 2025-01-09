@@ -1,5 +1,6 @@
 using Cache.Api.Database.Contexts;
 using Cache.Api.Extensions;
+using Cache.Api.Filters;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,12 +10,21 @@ builder.Configuration
     .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true)
     .AddEnvironmentVariables();
 
-builder.Services.AddControllers().AddJsonOptions(options => { options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull; });
+builder.Services.AddControllers(opt =>
+{
+    opt.Filters.Add<ValidateModelFilterAttribute>(-9999);
+    //opt.Filters.Add<ValidateIdempotencyKeyFilterAttribute>();
+}).AddJsonOptions(opt => 
+{ 
+    opt.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull; 
+});
+
 builder.Services.AddOpenApi();
 builder.Services.AddCompression();
 builder.Services.AddInfra(builder.Configuration);
 builder.Services.AddServices();
 builder.Services.AddCors();
+builder.Services.AddIdempotency(builder.Configuration);
 
 var app = builder.Build();
 
@@ -35,5 +45,6 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
 app.UseAppCors();
+app.UseIdempotency();
 
 app.Run();

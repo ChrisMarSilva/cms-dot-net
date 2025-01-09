@@ -1,9 +1,12 @@
 ﻿using Cache.Api.Contracts.Mappings;
 using Cache.Api.Contracts.Requests;
+using Cache.Api.Contracts.Responses;
 using Cache.Api.Database.Contexts;
+using Cache.Api.Filters;
 using Cache.Api.Services;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 
 namespace Cache.Api.Controllers;
 
@@ -23,75 +26,100 @@ public class UserController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IResult> GetAll(CancellationToken cancellationToken = default)
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<UserResponseDto>))]
+    [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ErroResponseDto))]
+    [ProducesDefaultResponseType(typeof(ErroResponseDto))]
+    [ValidateIdempotencyKeyFilterAttribute(cacheTimeInMinutes: 60)]
+    //[ServiceFilter(typeof(ValidateIdempotencyKeyFilterAttribute))]
+    public async Task<IActionResult> GetAll(CancellationToken cancellationToken = default)
     {
         try
         {
             var usersModel = await _userService.GetAllAsync(cancellationToken);
 
             var response = usersModel.MapToResponse();
-            return Results.Ok(response);
+            return Ok(response);
         }
         catch (Exception ex)
         {
-            return Results.InternalServerError(ex.Message);
+            _logger.LogCritical(ex, "Falha geral, segue a descrição: {description}.", ex.Message);
+            return StatusCode(StatusCodes.Status500InternalServerError, ErroResponseDto.Iniciar(HttpStatusCode.InternalServerError, "Falha interna durante o processamente. Favor tentar novamente"));
         }
     }
 
-    [HttpGet("{id:Guid}")]
-    public async Task<IResult> FindById(Guid id, CancellationToken cancellationToken = default)
+    [HttpGet("{id:guid}")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserResponseDto))]
+    [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ErroResponseDto))]
+    [ProducesDefaultResponseType(typeof(ErroResponseDto))]
+    [ValidateIdempotencyKeyFilterAttribute]
+    public async Task<IActionResult> FindById(Guid id, CancellationToken cancellationToken = default)
     {
         try
         {
             var userModel = await _userService.GetByIdAsync(id, cancellationToken);
 
-            if (userModel is null || userModel.Id == Guid.Empty)
-                return Results.NotFound();
+            if (userModel is null)
+                return NotFound(new ErroResponseDto(HttpStatusCode.NotFound, "Nenhuma registro encontrado com esse id."));
 
             var response = userModel.MapToResponse();
-            return Results.Ok(response);
+            return Ok(response);
         }
         catch (Exception ex)
         {
-            return Results.InternalServerError(ex.Message);
+            _logger.LogCritical(ex, "Falha geral, segue a descrição: {description}.", ex.Message);
+            return StatusCode(StatusCodes.Status500InternalServerError, ErroResponseDto.Iniciar(HttpStatusCode.InternalServerError, "Falha interna durante o processamente. Favor tentar novamente"));
         }
     }
 
     [HttpPost]
-    public async Task<IResult> Create([FromBody] UserRequestDto request, CancellationToken cancellationToken = default)
+    [ProducesResponseType(StatusCodes.Status202Accepted, Type = typeof(UserResponseDto))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ErroResponseDto))]
+    [ProducesDefaultResponseType(typeof(ErroResponseDto))]
+    [ValidateIdempotencyKeyFilterAttribute]
+    public async Task<IActionResult> Create([FromBody] UserRequestDto request, [FromHeader(Name = "Idempotency-Key")] string idempotenceKey, CancellationToken cancellationToken = default)
     {
         try
         {
             var validationResult = await _validator.ValidateAsync(request);
 
             if (!validationResult.IsValid)
-                return Results.ValidationProblem(validationResult.ToDictionary());
+                return StatusCode(StatusCodes.Status400BadRequest, ErroResponseDto.Iniciar(validationResult.Errors));
 
             var userModel = request.MapToUserModel();
             var result = await _userService.CreateAsync(userModel, cancellationToken);
             var response = result.MapToResponse();
 
-            return Results.Created(nameof(FindById), response);
+            var idempotencyResult = AcceptedAtAction(nameof(FindById), new { Id = response.Id }, response);
+            HttpContext.Items["idempotency-response-body"] = idempotencyResult;
+            //HttpContext.Items[IdempotencyOptions.IdempotencyResponseBodyKey] = idempotencyResult;
+
+            return idempotencyResult;
+            // return Created(nameof(FindById), response);
         }
         catch (Exception ex)
         {
-            return Results.InternalServerError(ex.Message);
+            _logger.LogCritical(ex, "Falha geral, segue a descrição: {description}.", ex.Message);
+            return StatusCode(StatusCodes.Status500InternalServerError, ErroResponseDto.Iniciar(HttpStatusCode.InternalServerError, "Falha interna durante o processamente. Favor tentar novamente"));
         }
     }
 
-    [HttpPut("{id:Guid}")]
-    public async Task<IResult> Update([FromBody] UserRequestDto request, Guid id, CancellationToken cancellationToken = default)
+    [HttpPut("{id:guid}")]
+    [ProducesResponseType(StatusCodes.Status202Accepted, Type = typeof(UserResponseDto))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ErroResponseDto))]
+    [ProducesDefaultResponseType(typeof(ErroResponseDto))]
+    [ValidateIdempotencyKeyFilterAttribute]
+    public async Task<IActionResult> Update([FromBody] UserRequestDto request, [FromHeader(Name = "Idempotency-Key")] string idempotenceKey, Guid id, CancellationToken cancellationToken = default)
     {
         try
         {
             var validationResult = await _validator.ValidateAsync(request);
 
             if (!validationResult.IsValid)
-                return Results.ValidationProblem(validationResult.ToDictionary());
+                return StatusCode(StatusCodes.Status400BadRequest, ErroResponseDto.Iniciar(validationResult.Errors));
 
             var userModel = await _userService.GetByIdAsync(id, cancellationToken);
             if (userModel is null || userModel.Id == Guid.Empty)
-                return Results.NotFound();
+                return NotFound(new ErroResponseDto(HttpStatusCode.NotFound, "Nenhuma registro encontrado com esse id."));
 
             var userRequest = request.MapToUserModel();
 
@@ -100,31 +128,42 @@ public class UserController : ControllerBase
             var result = await _userService.UpdateAsync(userModel, cancellationToken);
             var response = result!.MapToResponse();
 
-            return Results.Ok(response);
+            var idempotencyResult = AcceptedAtAction(nameof(FindById), new { Id = response.Id }, response);
+            HttpContext.Items["idempotency-response-body"] = idempotencyResult;
+            //HttpContext.Items[IdempotencyOptions.IdempotencyResponseBodyKey] = idempotencyResult;
+
+            return idempotencyResult;
+            // return Ok(response);
         }
         catch (Exception ex)
         {
-            return Results.InternalServerError(ex.Message);
+            _logger.LogCritical(ex, "Falha geral, segue a descrição: {description}.", ex.Message);
+            return StatusCode(StatusCodes.Status500InternalServerError, ErroResponseDto.Iniciar(HttpStatusCode.InternalServerError, "Falha interna durante o processamente. Favor tentar novamente"));
         }
     }
 
-    [HttpDelete("{id:Guid}")]
-    public async Task<IResult> Delete(Guid id, CancellationToken cancellationToken = default)
+    [HttpDelete("{id:guid}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent, Type = typeof(UserResponseDto))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ErroResponseDto))]
+    [ProducesDefaultResponseType(typeof(ErroResponseDto))]
+    //[ValidateIdempotencyKeyFilterAttribute]
+    public async Task<IActionResult> Delete(Guid id, CancellationToken cancellationToken = default)
     {
         try
         {
             var userModel = await _userService.GetByIdAsync(id, cancellationToken);
 
-            if (userModel is null || userModel.Id == Guid.Empty)
-                return Results.NotFound();
+            if (userModel is null)
+                return NotFound(new ErroResponseDto(HttpStatusCode.NotFound, "Nenhuma registro encontrado com esse id."));
 
             await _userService.DeleteByIdAsync(userModel, cancellationToken);
 
-            return Results.NoContent();
+            return NoContent();
         }
         catch (Exception ex)
         {
-            return Results.InternalServerError(ex.Message);
+            _logger.LogCritical(ex, "Falha geral, segue a descrição: {description}.", ex.Message);
+            return StatusCode(StatusCodes.Status500InternalServerError, ErroResponseDto.Iniciar(HttpStatusCode.InternalServerError, "Falha interna durante o processamente. Favor tentar novamente"));
         }
     }
 }

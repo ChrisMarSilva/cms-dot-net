@@ -74,8 +74,12 @@ public class Repository<T> : IRepository<T> where T : class
     public async Task<IEnumerable<T>> GetAllAsync(CancellationToken cancellationToken = default) =>
         await _dbSet.AsNoTracking().ToListAsync(cancellationToken);
 
-    public async Task<IEnumerable<T>> LocalizaPaginaAsync(int numeroPagina, int quantidadeRegistros, CancellationToken cancellationToken = default) =>
-        await _dbSet.Skip(quantidadeRegistros * (numeroPagina - 1)).Take(quantidadeRegistros).ToListAsync(cancellationToken);
+    public async Task<IEnumerable<T>> LocalizaPaginaAsync(int pageNumber, int pageSize, CancellationToken cancellationToken = default) =>
+        await _dbSet.AsNoTracking()
+            //.OrderBy(p => p.Id)
+            .Skip(pageSize * (pageNumber - 1)) // .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync(cancellationToken);
 
     //                   If your result set returns 0 records:     If you result set returns 1 record:  If your result set returns many records:
     // SingleOrDefault   returns the default value for the type    returns that record                  throws an exception

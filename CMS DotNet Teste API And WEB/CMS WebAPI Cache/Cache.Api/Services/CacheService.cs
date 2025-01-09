@@ -9,7 +9,7 @@ namespace Cache.Api.Services;
 public interface ICacheService
 {
     public Task<T?> GetCacheValueAsync<T>(string key);
-    public Task SetCacheValueAsync<T>(string key, T value);
+    public Task SetCacheValueAsync<T>(string key, T value, TimeSpan? expiry = null);
     public Task RemoveCacheValueAsync(string key);
 }
 
@@ -18,18 +18,14 @@ public class RedisCacheService : ICacheService
     private readonly ILogger<RedisCacheService> _logger;
     private readonly IDatabase _cache;
     //private readonly IConnectionMultiplexer _connectionMultiplexer;
-    private static JsonSerializerOptions _options;
+    private readonly JsonSerializerOptions _options;
 
     public RedisCacheService(ILogger<RedisCacheService> logger, IDatabase cache)
     {
         _logger = logger;
         _cache = cache;
         //_connectionMultiplexer = connectionMultiplexer;
-        _options = new JsonSerializerOptions
-        {
-            PropertyNameCaseInsensitive = true,
-            IncludeFields = true
-        };
+        _options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true, IncludeFields = true };
     }
 
     public async Task<T?> GetCacheValueAsync<T>(string key)
@@ -44,13 +40,13 @@ public class RedisCacheService : ICacheService
         return data;
     }
 
-    public async Task SetCacheValueAsync<T>(string key, T value)
+    public async Task SetCacheValueAsync<T>(string key, T value, TimeSpan? expiry = null)
     {
         //var _cache = _connectionMultiplexer.GetDatabase();
 
         var json = JsonSerializer.Serialize<T>(value, _options);
 
-        await _cache.StringSetAsync(key, json, expiry: TimeSpan.FromSeconds(10), flags: CommandFlags.FireAndForget);
+        await _cache.StringSetAsync(key, json, expiry: expiry, flags: CommandFlags.FireAndForget);
     }
 
     public async Task RemoveCacheValueAsync(string key)
@@ -71,7 +67,7 @@ public class InMemoryCacheService : ICacheService
     public InMemoryCacheService(IMemoryCache cache)
     {
         _cache = cache;
-        var _options = new MemoryCacheEntryOptions()
+        _options = new MemoryCacheEntryOptions()
            .SetSlidingExpiration(TimeSpan.FromSeconds(60))
            .SetAbsoluteExpiration(TimeSpan.FromMinutes(60)) // Expiração absoluta opcional
            .SetPriority(CacheItemPriority.High); // Define prioridade do cache
@@ -85,7 +81,7 @@ public class InMemoryCacheService : ICacheService
         return default(T);
     }
 
-    public async Task SetCacheValueAsync<T>(string key, T value)
+    public async Task SetCacheValueAsync<T>(string key, T value, TimeSpan? expiry = null)
     {
         _cache.Set(key, value, _options);
     }
