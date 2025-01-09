@@ -1,6 +1,7 @@
 using Cache.Api.Database.Contexts;
 using Cache.Api.Extensions;
 using Cache.Api.Filters;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -25,12 +26,14 @@ builder.Services.AddInfra(builder.Configuration);
 builder.Services.AddServices();
 builder.Services.AddCors();
 builder.Services.AddIdempotency(builder.Configuration);
+builder.Services.AddHealthCheck(builder.Configuration);
 
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    app.UseOpenConnection();
 
     await using (var serviceScope = app.Services.CreateAsyncScope())
     await using (var dbContext = serviceScope.ServiceProvider.GetRequiredService<AppDbContext>())
@@ -46,5 +49,27 @@ app.UseAuthorization();
 app.MapControllers();
 app.UseAppCors();
 app.UseIdempotency();
+app.UseHealthCheck();
+app.MapHealthChecks("/health", new HealthCheckOptions
+{
+    ResponseWriter = async (context, report) =>
+    {
+        context.Response.ContentType = "application/json";
+
+        var result = new
+        {
+            status = report.Status.ToString(),
+            checks = report.Entries.Select(entry => new
+            {
+                name = entry.Key,
+                status = entry.Value.Status.ToString(),
+                description = entry.Value.Description
+            }),
+            duration = report.TotalDuration
+        };
+
+        await context.Response.WriteAsJsonAsync(result);
+    }
+});
 
 app.Run();

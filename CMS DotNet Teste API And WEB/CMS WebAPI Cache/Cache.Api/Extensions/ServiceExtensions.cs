@@ -8,11 +8,10 @@ using Microsoft.EntityFrameworkCore;
 using StackExchange.Redis;
 using System.Buffers;
 using System.IO.Compression;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace Cache.Api.Extensions;
 
-public static class ServiceExtensions
+public static class ServiceExtensions 
 {
     public static IServiceCollection AddCompression(this IServiceCollection services)
     {
@@ -106,6 +105,33 @@ public static class ServiceExtensions
         return services;
     }
 
+    public static IServiceCollection AddHealthCheck(this IServiceCollection services, IConfiguration configuration)
+    {
+        var connectionString = configuration.GetConnectionString("DefaultConnectionPostgres");
+        var connectionStringRedis = configuration.GetValue("ConnectionStrings:Redis", "localhost:6379");
+
+        services.AddHttpClient<HealthCheckService>();
+
+        services.AddHealthChecks()
+            .AddNpgSql(connectionString!)
+            .AddRedis(connectionStringRedis, name: "Redis", timeout: TimeSpan.FromSeconds(5))
+            .AddCheck<HealthCheckService>("Serviço Externo");
+
+        return services;
+    }
+
+    public static IApplicationBuilder UseOpenConnection(this IApplicationBuilder app)
+    {
+        //await using var serviceScope = app.Services.CreateAsyncScope()
+        //await using (var dbContext = serviceScope.ServiceProvider.GetRequiredService<AppDbContext>())
+        //{
+        //    // await dbContext.Database.EnsureCreatedAsync();
+        //    await dbContext.OpenConnection();
+        //}
+
+        return app;
+    }
+
     public static IApplicationBuilder UseAppCors(this IApplicationBuilder app)
     {
         // return app.UseCors("CorsPolicy");
@@ -123,6 +149,35 @@ public static class ServiceExtensions
     public static IApplicationBuilder UseIdempotency(this IApplicationBuilder app)
     {
         // app.UseMiddleware<IdempotencyMiddleware>(Array.Empty<object>());
+
+        return app;
+    }
+
+    public static IApplicationBuilder UseHealthCheck(this IApplicationBuilder app)
+    {
+        // app.MapHealthChecks("/health");
+
+        //app.MapHealthChecks("/health", new HealthCheckOptions
+        //{
+        //    ResponseWriter = async (context, report) =>
+        //    {
+        //        context.Response.ContentType = "application/json";
+
+        //        var result = new
+        //        {
+        //            status = report.Status.ToString(),
+        //            checks = report.Entries.Select(entry => new
+        //            {
+        //                name = entry.Key,
+        //                status = entry.Value.Status.ToString(),
+        //                description = entry.Value.Description
+        //            }),
+        //            duration = report.TotalDuration
+        //        };
+
+        //        await context.Response.WriteAsJsonAsync(result);
+        //    }
+        //});
 
         return app;
     }
