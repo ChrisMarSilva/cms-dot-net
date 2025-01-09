@@ -1,9 +1,16 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.12.35527.113 d17.12
+VisualStudioVersion = 17.12.35527.113
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cache.Api", "Cache.Api\Cache.Api.csproj", "{FEFD5210-ACDF-46CC-A32F-6B55C6F07F00}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Prometheus", "Prometheus", "{B0638148-3350-44F8-9961-58EB31A219CB}"
+	ProjectSection(SolutionItems) = preProject
+		prometheus.yml = prometheus.yml
+	EndProjectSection
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{169C35CD-9205-4401-B90A-5E01F05C0AF4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +22,10 @@ Global
 		{FEFD5210-ACDF-46CC-A32F-6B55C6F07F00}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FEFD5210-ACDF-46CC-A32F-6B55C6F07F00}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FEFD5210-ACDF-46CC-A32F-6B55C6F07F00}.Release|Any CPU.Build.0 = Release|Any CPU
+		{169C35CD-9205-4401-B90A-5E01F05C0AF4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{169C35CD-9205-4401-B90A-5E01F05C0AF4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{169C35CD-9205-4401-B90A-5E01F05C0AF4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{169C35CD-9205-4401-B90A-5E01F05C0AF4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -2,6 +2,7 @@ using Cache.Api.Database.Contexts;
 using Cache.Api.Extensions;
 using Cache.Api.Filters;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Prometheus;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -27,6 +28,9 @@ builder.Services.AddServices();
 builder.Services.AddCors();
 builder.Services.AddIdempotency(builder.Configuration);
 builder.Services.AddHealthCheck(builder.Configuration);
+builder.Services.AddMetricsPrometheus(builder.Configuration);
+
+//builder.WebHost.UseUrls("http://0.0.0.0:5042"); // Configure o Kestrel para aceitar conexões de qualquer IP
 
 var app = builder.Build();
 
@@ -50,6 +54,8 @@ app.MapControllers();
 app.UseAppCors();
 app.UseIdempotency();
 app.UseHealthCheck();
+app.UseMetricsPrometheus(builder.Configuration);
+
 app.MapHealthChecks("/health", new HealthCheckOptions
 {
     ResponseWriter = async (context, report) =>
@@ -71,5 +77,8 @@ app.MapHealthChecks("/health", new HealthCheckOptions
         await context.Response.WriteAsJsonAsync(result);
     }
 });
+
+if (builder.Configuration.GetValue("Metrics:Enabled", false))
+    app.MapMetrics();
 
 app.Run();

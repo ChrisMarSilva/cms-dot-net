@@ -109,7 +109,7 @@ export const options = {
 export default function () {
 
     const id = "deb004d2-14fd-430a-b919-aa104a20552f";
-    const url = `http://localhost:5042/api/v1/user/${id}`;
+    const url = `https://localhost:7090/api/v1/user/${id}`;
     const headers = {
         headers: {
             'Content-Type': 'application/json',

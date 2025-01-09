@@ -4,6 +4,9 @@
     <TargetFramework>net9.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>475ad49f-2d2a-437c-b613-fd95447cbe28</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
   </PropertyGroup>
 
   <ItemGroup>
@@ -16,11 +19,15 @@
 	<PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="9.0.0" />
 	<PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="9.0.0" />
 	<PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="9.0.0" />
+	<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.0" />
 	<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.2" />
 	<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.0">
 	   <PrivateAssets>all</PrivateAssets>
 	   <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 	</PackageReference>
+	<PackageReference Include="prometheus-net" Version="8.2.1" />
+	<PackageReference Include="prometheus-net.AspNetCore" Version="8.2.1" />
+	<PackageReference Include="prometheus-net.SystemMetrics" Version="3.1.0" />
 	<PackageReference Include="RedLock.net" Version="2.3.2" />
 	<PackageReference Include="StackExchange.Redis" Version="2.8.24" />
   </ItemGroup>

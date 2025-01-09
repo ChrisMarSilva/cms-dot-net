@@ -5,9 +5,11 @@ using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
+using Prometheus.SystemMetrics;
 using StackExchange.Redis;
 using System.Buffers;
 using System.IO.Compression;
+using Prometheus;
 
 namespace Cache.Api.Extensions;
 
@@ -119,6 +121,19 @@ public static class ServiceExtensions
 
         return services;
     }
+    
+    public static IServiceCollection AddMetricsPrometheus(this IServiceCollection services, IConfiguration configuration)
+    {
+        if (configuration.GetValue("Metrics:Enabled", false))
+        {
+            if (configuration.GetValue("Metrics:ActivateSystemMetrics", false))
+            {
+                services.AddSystemMetrics(configuration.GetValue("Metrics:RegisterDefaultCollectorsForSystemMetrics", false));
+            }
+        }
+
+        return services;
+    }
 
     public static IApplicationBuilder UseOpenConnection(this IApplicationBuilder app)
     {
@@ -178,6 +193,17 @@ public static class ServiceExtensions
         //        await context.Response.WriteAsJsonAsync(result);
         //    }
         //});
+
+        return app;
+    }
+
+    public static IApplicationBuilder UseMetricsPrometheus(this IApplicationBuilder app, IConfiguration configuration)
+    {
+        if (configuration.GetValue("Metrics:Enabled", false))
+        {
+            app.UseMetricServer();
+            app.UseHttpMetrics();
+        }
 
         return app;
     }

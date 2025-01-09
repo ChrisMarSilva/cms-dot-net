@@ -1,4 +1,4 @@
-@HostAddress = http://localhost:5042
+@HostAddress = https://localhost:7090
 @HostAddressUser = {{HostAddress}}/api/v1/user
 @HostAddressHealth = {{HostAddress}}/health
 @IdempotencyKey = {{$guid}}
