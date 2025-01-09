@@ -19,7 +19,7 @@ public class IdempotencyMiddleware
             string.IsNullOrWhiteSpace(idempotenceKeyValue) ||
             !Guid.TryParse(idempotenceKeyValue, out Guid idempotenceKey))
         {
-            var error = ErroResponseDto.Iniciar(HttpStatusCode.BadRequest, $"Header {_headerName} obrigatório"); 
+            var error = ErrorResponseDto.Iniciar(HttpStatusCode.BadRequest, $"Header {_headerName} obrigatório"); 
             context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
             context.Response.ContentType = context.Request.ContentType ?? "application/json; charset=utf-8";
             await context.Response.WriteAsJsonAsync(error);

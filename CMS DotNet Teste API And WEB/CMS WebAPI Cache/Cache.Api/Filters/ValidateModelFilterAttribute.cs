@@ -13,7 +13,7 @@ public sealed class ValidateModelFilterAttribute : ActionFilterAttribute
         if (context.ModelState.IsValid)
             return;
 
-        var erroResponseDto = ErroResponseDto.Iniciar(HttpStatusCode.BadRequest, "Payload inválido");
+        var erroResponseDto = ErrorResponseDto.Iniciar(HttpStatusCode.BadRequest, "Payload inválido");
 
         foreach (string key in context.ModelState.Keys)
         {

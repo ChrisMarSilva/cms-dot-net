@@ -1,5 +1,5 @@
 @HostAddress = http://localhost:5042
-@HostAddressUser = {{HostAddress}}/api/user
+@HostAddressUser = {{HostAddress}}/api/v1/user
 @HostAddressHealth = {{HostAddress}}/health
 @IdempotencyKey = {{$guid}}
 @IdempotencyKey1 = a165503c-5eba-47af-b94a-193daab832c1

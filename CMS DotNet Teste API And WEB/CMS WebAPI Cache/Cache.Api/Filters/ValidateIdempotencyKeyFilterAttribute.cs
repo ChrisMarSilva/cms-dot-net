@@ -29,7 +29,7 @@ public class ValidateIdempotencyKeyFilterAttribute : ActionFilterAttribute, IAsy
            string.IsNullOrWhiteSpace(idempotenceKeyValue) ||
            !Guid.TryParse(idempotenceKeyValue, out Guid idempotenceKey))
         {
-            context.Result = new BadRequestObjectResult(ErroResponseDto.Iniciar(HttpStatusCode.BadRequest, $"Header {_headerName} obrigatório"));
+            context.Result = new BadRequestObjectResult(ErrorResponseDto.Iniciar(HttpStatusCode.BadRequest, $"Header {_headerName} obrigatório"));
             return;
         }
 

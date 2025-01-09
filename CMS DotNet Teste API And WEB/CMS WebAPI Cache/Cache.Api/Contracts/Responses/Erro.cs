@@ -2,14 +2,14 @@
 
 public class Erro
 {
-    public Erro(string campo, ErroResponseDto parent)
+    public Erro(string campo, ErrorResponseDto parent)
     {
         _parent = parent;
         Campo = campo;
         Mensagens = new List<string>();
     }
 
-    private readonly ErroResponseDto _parent;
+    private readonly ErrorResponseDto _parent;
     public string Campo { get; private set; }
     public IList<string> Mensagens { get; private set; }
 
@@ -24,7 +24,7 @@ public class Erro
         return _parent.AddErro(campo);
     }
 
-    public ErroResponseDto Build()
+    public ErrorResponseDto Build()
     {
         return _parent;
     }

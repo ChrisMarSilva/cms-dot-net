@@ -13,13 +13,19 @@ public class HealthCheckService : IHealthCheck
 
     public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
     {
-        var url = "https://jsonplaceholder.typicode.com/todos/1";
-        var response = await _httpClient.GetAsync(url, cancellationToken);
+        try
+        {
+            var response = await _httpClient.GetAsync(
+                requestUri: "https://jsonplaceholder.typicode.com/todos/1",
+                cancellationToken: cancellationToken);
 
-        return response.IsSuccessStatusCode
-            ? HealthCheckResult.Healthy("Serviço está online.")
-            : HealthCheckResult.Unhealthy("Serviço está offline.");
-
-        //return HealthCheckResult.Healthy("Serviço está online.");
+            return response.IsSuccessStatusCode
+                ? HealthCheckResult.Healthy("Serviço está online.")
+                : HealthCheckResult.Degraded("Serviço está offline.");
+        }
+        catch (Exception ex)
+        {
+            return HealthCheckResult.Unhealthy(ex.Message);
+        }
     }
 }

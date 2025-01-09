@@ -1,22 +1,20 @@
-﻿using System.Net;
-using FluentValidation;
-using FluentValidation.Results;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+﻿using FluentValidation.Results;
+using System.Net;
 
 namespace Cache.Api.Contracts.Responses;
 
-public class ErroResponseDto
+public class ErrorResponseDto
 {
-    public ErroResponseDto(string codigo, string? mensagem = null)
+    public ErrorResponseDto(string codigo, string? mensagem = null)
     {
         Codigo = codigo;
         Mensagem = mensagem;
     }
 
-    public ErroResponseDto(HttpStatusCode codigo, string? mensagem = null) 
+    public ErrorResponseDto(HttpStatusCode codigo, string? mensagem = null) 
         : this(((int)codigo).ToString(), mensagem) { }
 
-    public ErroResponseDto(int codigo, string? mensagem = null)
+    public ErrorResponseDto(int codigo, string? mensagem = null)
         : this(codigo.ToString(), mensagem) {  }
 
     private IList<Erro> _erros;
@@ -24,18 +22,18 @@ public class ErroResponseDto
     public string? Mensagem { get; }
     public IEnumerable<Erro> Erros => _erros;
 
-    public static ErroResponseDto Iniciar(string codigo, string? mensagem = null) =>
-        new ErroResponseDto(codigo, mensagem);
+    public static ErrorResponseDto Iniciar(string codigo, string? mensagem = null) =>
+        new ErrorResponseDto(codigo, mensagem);
 
-    public static ErroResponseDto Iniciar(int codigo, string? mensagem = null) =>
-        new ErroResponseDto(codigo, mensagem);
+    public static ErrorResponseDto Iniciar(int codigo, string? mensagem = null) =>
+        new ErrorResponseDto(codigo, mensagem);
 
-    public static ErroResponseDto Iniciar(HttpStatusCode codigo, string? mensagem = null) =>
-        new ErroResponseDto(codigo, mensagem);
+    public static ErrorResponseDto Iniciar(HttpStatusCode codigo, string? mensagem = null) =>
+        new ErrorResponseDto(codigo, mensagem);
 
-    public static ErroResponseDto Iniciar(List<ValidationFailure>? errors = null)
+    public static ErrorResponseDto Iniciar(List<ValidationFailure>? errors = null)
     {
-        var erroResponseDto = new ErroResponseDto(HttpStatusCode.BadRequest, "Payload inválido");
+        var erroResponseDto = new ErrorResponseDto(HttpStatusCode.BadRequest, "Payload inválido");
 
         if (errors != null)
         {
