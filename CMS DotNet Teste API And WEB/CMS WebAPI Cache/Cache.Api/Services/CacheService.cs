@@ -13,6 +13,10 @@ public interface ICacheService
     public Task RemoveCacheValueAsync(string key);
 }
 
+//private static readonly MessagePack.MessagePackSerializerOptions _lz4Options = MessagePack.MessagePackSerializerOptions.Standard.WithCompression((MessagePack.MessagePackCompression)2);
+//return MessagePack.MessagePackSerializer.Serialize<IdempotencyRegister>(instance, _lz4Options, default(CancellationToken));
+//return MessagePack.MessagePackSerializer.Deserialize<IdempotencyRegister>(bytes, _lz4Options, default(CancellationToken));
+
 public class RedisCacheService : ICacheService
 {
     private readonly ILogger<RedisCacheService> _logger;
