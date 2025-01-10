@@ -1,0 +1,14 @@
+﻿@inject NavigationManager _navigationManager
+@rendermode InteractiveServer
+
+<button class="btn btn-primary" @onclick="onRefresh">Refresh</button>
+
+@code {
+
+    private async Task onRefresh()
+    {
+        //LastUpdateTime = DateTime.Now.ToString("HH:mm:ss");
+        _navigationManager.NavigateTo("mensagem", forceLoad: true);
+        //_navigationManager.Refresh();
+    }
+}

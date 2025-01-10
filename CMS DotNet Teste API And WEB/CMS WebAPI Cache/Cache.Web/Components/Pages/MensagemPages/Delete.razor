@@ -1,0 +1,65 @@
+﻿@page "/mensagem/delete"
+@using Cache.Web.Models
+@using Microsoft.EntityFrameworkCore
+@inject Cache.Web.Database.Contexts.AppDbContext context
+@inject NavigationManager _navigationManager
+@rendermode InteractiveServer
+
+<PageTitle>Delete</PageTitle>
+
+<h1>Delete</h1>
+<h3>Are you sure you want to delete this?</h3>
+<h4>Mensagem</h4>
+<hr />
+
+<div>
+    @if (Model is null)
+    {
+        <p><em>Loading...</em></p>
+    }
+    else {
+        <dl class="row">
+            <dt class="col-sm-2">TpMsg</dt>
+            <dd class="col-sm-10">@Model.TpMsg</dd>
+        </dl>
+        <EditForm method="post" Model="Model" OnValidSubmit="HandleSubmit" FormName="delete" Enhance>
+            <button type="submit" class="btn btn-danger" disabled="@(Model is null)">Delete</button> |
+            <a href="/mensagem">Back to List</a>
+        </EditForm>
+    }
+</div>
+
+@code {
+    private MensagemModel? Model { get; set; }
+    [SupplyParameterFromQuery] public Guid Id { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            Model = await context.Mensagens.FirstOrDefaultAsync(m => m.Id == Id);
+            if (Model is null)  _navigationManager.NavigateTo("Error");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Erro: " + ex.Message);
+            _navigationManager.NavigateTo("Error");
+        }
+    }
+
+    public async Task HandleSubmit()
+    {
+        try
+        {
+            context.Mensagens.Remove(Model!);
+            await context.SaveChangesAsync();
+
+            _navigationManager.NavigateTo("/mensagem");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Erro: " + ex.Message);
+            _navigationManager.NavigateTo("Error");
+        }
+    }
+}

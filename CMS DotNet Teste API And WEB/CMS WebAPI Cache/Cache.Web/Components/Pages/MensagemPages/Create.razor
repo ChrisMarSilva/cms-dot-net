@@ -1,0 +1,93 @@
+﻿@page "/mensagem/create"
+@using Cache.Web.Models
+@inject Cache.Web.Database.Contexts.AppDbContext context
+@inject NavigationManager _navigationManager
+@rendermode InteractiveServer
+
+<PageTitle>Create</PageTitle>
+
+<h1>Create</h1>
+<h4>Mensagem</h4>
+<hr />
+
+<div class="row">
+    <div class="col-md-4">
+        <EditForm method="post" Model="@Model" OnValidSubmit="HandleSubmit" FormName="create" Enhance>
+            <DataAnnotationsValidator />
+            <ValidationSummary class="text-danger" />
+
+           <!-- Campo IdMsgJdPi -->
+            <div class="mb-3">
+                <label for="idmsgjdpi" class="form-label">IdMsgJdPi:</label>
+                <InputText id="idmsgjdpi" @bind-Value="@Model!.IdMsgJdPi" class="form-control" />
+                <ValidationMessage For="() => Model.IdMsgJdPi" class="text-danger" />
+            </div>
+
+            <!-- Campo IdMsg -->
+            <div class="mb-3">
+                <label for="idmsg" class="form-label">IdMsg:</label>
+                <InputText id="idmsg" @bind-Value="@Model.IdMsg" class="form-control" />
+                <ValidationMessage For="() => Model.IdMsg" class="text-danger" />
+            </div>
+
+            <!-- Campo TpMsg -->
+            <div class="mb-3">
+                <label for="tpmsg" class="form-label">TpMsg:</label>
+                <InputText id="tpmsg" @bind-Value="@Model.TpMsg" class="form-control" />
+                <ValidationMessage For="() => Model.TpMsg" class="text-danger" />
+            </div>
+
+            <!-- Campo QueueMsg -->
+            <div class="mb-3">
+                <label for="queuemsg" class="form-label">QueueMsg:</label>
+                <InputText id="queuemsg" @bind-Value="@Model.QueueMsg" class="form-control" />
+                <ValidationMessage For="() => Model.QueueMsg" class="text-danger" />
+            </div>
+
+            <!-- Campo XmlMsg -->
+            <div class="mb-3">
+                <label for="xmlmsg" class="form-label">XmlMsg:</label>
+                <InputText id="xmlmsg" @bind-Value="@Model.XmlMsg" class="form-control" />
+                <ValidationMessage For="() => Model.XmlMsg" class="text-danger" />
+            </div>
+
+            <button type="submit" class="btn btn-primary">Create</button>
+        </EditForm>
+    </div>
+</div>
+
+<div>
+    <a href="/mensagem">Back to List</a>
+</div>
+
+
+@code {
+
+    [SupplyParameterFromForm] private MensagemModel? Model { get; set; }
+
+    protected override void OnInitialized() =>
+        Model ??= new() 
+            {
+                Id = Guid.NewGuid(),
+                DtHrRegistro = DateTime.UtcNow
+            };
+
+    public async Task HandleSubmit()
+    {
+        try
+        {
+            Model!.Id = Guid.NewGuid();
+            Model.DtHrRegistro = DateTime.UtcNow;
+
+            context.Mensagens.Add(Model);
+            await context.SaveChangesAsync();
+
+            _navigationManager.NavigateTo("mensagem");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Erro: " + ex.Message);
+            _navigationManager.NavigateTo("Error");
+        }
+    }
+}

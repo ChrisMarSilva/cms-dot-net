@@ -1,0 +1,69 @@
+﻿@page "/mensagem/details"
+@using Microsoft.EntityFrameworkCore
+@using Cache.Web.Models
+@inject Cache.Web.Database.Contexts.AppDbContext context
+@inject NavigationManager _navigationManager
+@rendermode InteractiveServer
+
+<PageTitle>Details</PageTitle>
+
+<h1>Details</h1>
+<h4>Mensagem</h4>
+<hr />
+
+<div>
+    @if (Model is null)
+    {
+        <p><em>Loading...</em></p>
+    }
+    else
+    {
+        <div>
+            <a href="@($"/mensagem/edit?id={Model.Id}")">Edit</a> |
+            <a href="@($"/mensagem")">Back to List</a>
+        </div>
+        <br />
+
+        <dl class="row">
+            <dt class="col-sm-2">DtHrRegistro</dt>
+            <dd class="col-sm-10">@Model.DtHrRegistro</dd>
+
+            <dt class="col-sm-2">Id</dt>
+            <dd class="col-sm-10">@Model.Id</dd>
+
+            <dt class="col-sm-2">IdMsgJdPi</dt>
+            <dd class="col-sm-10">@Model.IdMsgJdPi</dd>
+
+            <dt class="col-sm-2">IdMsg</dt>
+            <dd class="col-sm-10">@Model.IdMsg</dd>
+
+            <dt class="col-sm-2">TpMsg</dt>
+            <dd class="col-sm-10">@Model.TpMsg</dd>
+
+            <dt class="col-sm-2">QueueMsg</dt>
+            <dd class="col-sm-10">@Model.QueueMsg</dd>
+
+            <dt class="col-sm-2">XmlMsg</dt>
+            <dd class="col-sm-10">@Model.XmlMsg</dd>
+        </dl>
+    }
+</div>
+
+@code {
+    private MensagemModel? Model { get; set; }
+    [SupplyParameterFromQuery] public Guid Id { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            Model = await context.Mensagens.FirstOrDefaultAsync(m => m.Id == Id);
+            if (Model is null) _navigationManager.NavigateTo("Error");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Erro: " + ex.Message);
+            _navigationManager.NavigateTo("Error");
+        }
+    }
+}

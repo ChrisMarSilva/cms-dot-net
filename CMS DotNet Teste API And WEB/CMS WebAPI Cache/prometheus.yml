@@ -7,4 +7,82 @@ scrape_configs:
     follow_redirects: true
     static_configs:
       - targets: ['api:7090']
- 
+      # host.docker.internal:7090
+      # docker.for.win.host.internal:7090
+
+  # - job_name: 'prometheus'
+  #   scrape_interval: 10s
+  #   static_configs:
+  #     - targets: ['localhost:7090']
+
+  # - job_name: 'myapp'
+  #   scrape_interval: 10s 
+  #   metrics_path: /metrics
+  #   static_configs:
+  #     - targets: ['docker.for.win.localhost:7090']
+
+  # - job_name: 'myapp1'
+  #   scrape_interval: 10s 
+  #   metrics_path: /metrics
+  #   static_configs:
+  #     - targets: ['docker.for.win.host.internal:7090']
+
+  # - job_name: 'myapp2'
+  #   scrape_interval: 10s 
+  #   metrics_path: /metrics
+  #   static_configs:
+  #     - targets: ['docker.for.win.host.internal.localhost:7090']
+
+  # - job_name: 'myapp3'
+  #   scrape_interval: 10s 
+  #   metrics_path: /metrics
+  #   static_configs:
+  #     - targets: ['docker.for.win.host.localhost:7090']
+
+  # - job_name: 'myapp4'
+  #   scrape_interval: 10s 
+  #   metrics_path: /metrics
+  #   static_configs:
+  #     - targets: ['docker.for.win.localhost:7090']
+
+  # - job_name: 'myapp5'
+  #   scrape_interval: 10s 
+  #   metrics_path: /metrics
+  #   static_configs:
+  #     - targets: ['host.docker.internal:7090']
+
+  # - job_name: 'myapp6'
+  #   scrape_interval: 10s 
+  #   metrics_path: /metrics
+  #   static_configs:
+  #     - targets: ['host.docker.internal.localhost:7090']
+
+  # - job_name: 'myapp7'
+  #   scrape_interval: 10s 
+  #   metrics_path: /metrics
+  #   static_configs:
+  #     - targets: ['docker.for.win.localhost:7090']
+
+  # - job_name: 'myapp8'
+  #   scrape_interval: 10s 
+  #   metrics_path: /metrics
+  #   static_configs:
+  #     - targets: ['127.0.0.1:7090']
+
+  # - job_name: 'myapp9'
+  #   scrape_interval: 10s 
+  #   metrics_path: /metrics
+  #   static_configs:
+  #     - targets: ['localhost:7090']
+
+  # - job_name: 'myapp10'
+  #   scrape_interval: 10s 
+  #   metrics_path: /metrics
+  #   static_configs:
+  #     - targets: ['10.0.75.1:7090']
+
+  # - job_name: 'myapp12'
+  #   scrape_interval: 10s 
+  #   metrics_path: /metrics
+  #   static_configs:
+  #     - targets: ['localhost1:7090']
