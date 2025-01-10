@@ -1,6 +1,13 @@
 ﻿namespace RabbitMQ.Contratos.Requests;
 
-public record MessageDto(string Text);
+public record MensagemDto(
+    string? IdMsgJdPi,
+    string? IdMsg,
+    string? TpMsg,
+    string? QueueMsg,
+    string? XmlMsg);
+
+// public record MessageDto(string Text);
 
 //public class MessageDto
 //{

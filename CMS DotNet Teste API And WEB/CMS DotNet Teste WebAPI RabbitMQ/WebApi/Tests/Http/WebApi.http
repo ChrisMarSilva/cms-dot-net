@@ -6,3 +6,16 @@ Content-Type: application/json
 {
     "text": "Olá, RabbitMQ - 002!"
 }
+###
+
+### Send Msg
+POST {{HostAddress}}/api/rabbitmq/send
+Content-Type: application/json
+{
+    "IdMsgJdPi": "1",
+    "IdMsg": "2",
+    "TpMsg": "3",
+    "QueueMsg": "4",
+    "XmlMsg": "5"
+}
+###

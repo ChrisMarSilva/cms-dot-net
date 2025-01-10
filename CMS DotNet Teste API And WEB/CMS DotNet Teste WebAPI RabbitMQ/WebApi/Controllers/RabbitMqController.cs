@@ -21,17 +21,17 @@ public class RabbitMqController : ControllerBase
     }
 
     [HttpPost("send")]
-    public async Task<IActionResult> SendMessage([FromBody] MessageDto message, CancellationToken cancellationToken = default)
+    public async Task<IActionResult> SendMessage([FromBody] MensagemDto message, CancellationToken cancellationToken = default)
     {
-        if (message == null || string.IsNullOrWhiteSpace(message.Text))
-            return BadRequest("A mensagem não pode ser vazia.");
+        //if (message == null || string.IsNullOrWhiteSpace(message.Text))
+        //    return BadRequest("A mensagem não pode ser vazia.");
 
         var queueName = _configuration["RabbitMQ:Queue"];
-        if (string.IsNullOrEmpty(queueName))
-            return StatusCode(500, "Nome da fila não está configurado.");
+        //if (string.IsNullOrEmpty(queueName))
+        //    return StatusCode(500, "Nome da fila não está configurado.");
 
         await _sendEndpointProvider.SendAsync(
-            queue: queueName,
+            queue: queueName!,
             message: message,
             cancellationToken: cancellationToken); // CancellationToken.None
 

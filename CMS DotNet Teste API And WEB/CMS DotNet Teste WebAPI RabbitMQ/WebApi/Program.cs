@@ -1,4 +1,5 @@
 using MassTransit;
+using RabbitMQ.Contratos.Requests;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
@@ -21,12 +22,11 @@ var configuration = builder.Configuration;
 
 // builder.Services.AddTransient<IPublishBusExtension, PublishBus>();
 
-
-
 // Configurar MassTransit com RabbitMQ
 builder.Services.AddMassTransit(x =>
 {
     x.SetKebabCaseEndpointNameFormatter(); // formatar os nomes de fila para Caso Kebab "MyQueue" -> "my-queue"
+    //x.SetEndpointNameFormatter(new KebabCaseEndpointNameFormatter(prefix: "dev", includeNamespace: false));
 
     x.UsingRabbitMq((context, cfg) =>
     {
@@ -38,15 +38,11 @@ builder.Services.AddMassTransit(x =>
         {
             h.Username(configuration["RabbitMQ:Username"]!);
             h.Password(configuration["RabbitMQ:Password"]!);
-            //h.UseDefaultClusterConfiguration(configuration);
-            //h.UseDefaultSslConfiguration(configuration);
             h.PublisherConfirmation = configuration.GetValue("RabbitMQ:PublisherConfirmation", true);
         });
 
-        cfg.UseMessageRetry(r => r.Exponential(10, TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(60), TimeSpan.FromSeconds(5)));
-
-        // cfg.Message<Fault>(e => e.SetEntityName("jd.fault"));
-        cfg.ConfigureEndpoints(context);
+        cfg.Message<Fault>(e => e.SetEntityName("queue.fault"));
+        cfg.Message<MensagemDto>(e => e.SetEntityName(configuration.GetValue("RabbitMQ:Queue", "queue")));
     });
 });
 
@@ -54,8 +50,9 @@ builder.Services
     .AddOptions<MassTransitHostOptions>()
     .Configure(options =>
     {
-        options.WaitUntilStarted = false;
+        options.WaitUntilStarted = true;
         options.StartTimeout = TimeSpan.FromSeconds(10);
+        options.StopTimeout = TimeSpan.FromSeconds(10);
     });
 
 var app = builder.Build();
