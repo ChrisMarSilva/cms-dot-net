@@ -10,6 +10,7 @@ using StackExchange.Redis;
 using System.Buffers;
 using System.IO.Compression;
 using Prometheus;
+using System.Reflection;
 
 namespace Cache.Api.Extensions;
 
@@ -76,6 +77,9 @@ public static class ServiceExtensions
         //#pragma warning restore EXTEXP0018
 
         services.AddLogging();
+
+        services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
+        //services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetAssembly(typeof(ICore))!));
 
         return services;
     }

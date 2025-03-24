@@ -24,7 +24,7 @@ public class UserController : ControllerBase
     private readonly IUserService _userService;
     private IValidator<UserRequestDto> _validator;
 
-    public UserController(ILogger<UserController> logger, IUserService userService, AppDbContext ctx, IValidator<UserRequestDto> validator)
+    public UserController(ILogger<UserController> logger, IUserService userService, IValidator<UserRequestDto> validator)
     {
         _logger = logger;
         _userService = userService;

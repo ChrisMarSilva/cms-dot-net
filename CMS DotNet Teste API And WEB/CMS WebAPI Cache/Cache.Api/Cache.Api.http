@@ -17,7 +17,7 @@ POST {{HostAddressUser}}
 Content-Type: application/json
 Idempotency-Key: {{IdempotencyKey}}
 {
-    "name": "Personal 001",
+    "name": "Personal 004",
     "email": "perssonal.001@gmail.com",
     "password": "12345678"
 }

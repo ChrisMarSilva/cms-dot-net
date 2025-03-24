@@ -25,29 +25,30 @@ public class AppDbContext : DbContext
         //Configuration.ProxyCreationEnabled = false;
         //Database.Log = comando => System.Diagnostics.Debug.WriteLine(comando);
 
-        //if (!_scriptGenerated)
-        //{
-        //    _scriptGenerated = true;
+        if (!_scriptGenerated)
+        {
+            _scriptGenerated = true;
 
-        //    Console.WriteLine();
-        //    Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine();
 
-        //    var color = Console.ForegroundColor;
-        //    Console.ForegroundColor = ConsoleColor.Green;
+            var color = Console.ForegroundColor;
+            Console.ForegroundColor = ConsoleColor.Green;
 
-        //    Console.WriteLine("-- =========================== INÍCIO DO SCRIPT 000-CrObj_PG.sql================================");
-        //    Console.WriteLine(Database.GenerateCreateScript());
-        //    Console.WriteLine("-- =========================== FINAL DO SCRIPT 000-CrObj_PG.sql================================");
+            Console.WriteLine("-- =========================== INÍCIO DO SCRIPT 000-CrObj_PG.sql================================");
+            Console.WriteLine(Database.GenerateCreateScript());
+            Console.WriteLine("-- =========================== FINAL DO SCRIPT 000-CrObj_PG.sql================================");
 
-        //    //try { Database.EnsureDeleted(); } catch (Exception e) { }
-        //    // try { Console.ForegroundColor = ConsoleColor.Red; Database.EnsureCreated(); } catch (Exception e) { Console.WriteLine(e.Message); }
+            //try { Database.EnsureDeleted(); } catch (Exception e) { }
+            // try { Console.ForegroundColor = ConsoleColor.Red; Database.EnsureCreated(); } catch (Exception e) { Console.WriteLine(e.Message); }
 
-        //    Console.ForegroundColor = color;
-        //    Console.WriteLine();
-        //}
+            Console.ForegroundColor = color;
+            Console.WriteLine();
+        }
     }
 
     public DbSet<UserModel> Users { get; set; }
+    public DbSet<ProductModel> Products { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {

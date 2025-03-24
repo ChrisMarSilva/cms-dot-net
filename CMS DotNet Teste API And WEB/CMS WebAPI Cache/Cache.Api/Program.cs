@@ -17,7 +17,10 @@ builder.Services.AddControllers(opt =>
     opt.Filters.Add<ValidateModelFilterAttribute>(-9999);
     //opt.Filters.Add<ValidateIdempotencyKeyFilterAttribute>();
 }).AddJsonOptions(opt => 
-{ 
+{
+    //opt.JsonSerializerOptions.PropertyNamingPolicy = null;
+    //opt.JsonSerializerOptions.WriteIndented = true;
+    //opt.JsonSerializerOptions.AllowTrailingCommas = true;
     opt.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull; 
 });
 

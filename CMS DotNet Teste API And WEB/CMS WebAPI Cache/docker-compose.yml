@@ -1,91 +1,110 @@
-# cd "C:\Users\chris\Desktop\CMS DotNet\CMS DotNet Teste API And WEB"
-# docker-compose down
-# docker-compose up -d --build
+# # cd "C:\Users\chris\Desktop\CMS DotNet\CMS DotNet Teste API And WEB"
+# # docker-compose down
+# # docker-compose up -d --build
 
-networks:
-  api-net:
-    driver: bridge
+# networks:
+#   api-net:
+#     driver: bridge
     
-services:
+# services:
 
-    cache.api:
-        #image: aspnet:9.0-aspnetcore-runtime
-        container_name: api
-        hostname: api
-        build:
-            context: .
-            dockerfile: Cache.Api/Dockerfile
-        environment:
-          - ASPNETCORE_ENVIRONMENT=Development
-          - ASPNETCORE_URLS=http://+:5042;https://+:7090
-          - ConnectionStrings__DefaultConnection=Host=db;Port=5432;Database=mydb;Username=myuser;Password=mysecurepassword
-          - AppSettings__Setting1=OverriddenValue1
-        restart: unless-stopped
-        ports:
-            - 5042:5042
-            - 7090:7090
-        networks:
-          - api-net
-        # extra_hosts: 
-            # - "host.docker.internal:172.17.0.1"
-            # - "host.docker.internal:host-gateway"
+#     cache.api:
+#         #image: aspnet:9.0-aspnetcore-runtime
+#         container_name: api
+#         hostname: api
+#         build:
+#             context: .
+#             dockerfile: Cache.Api/Dockerfile
+#         environment:
+#           - ASPNETCORE_ENVIRONMENT=Development
+#           - ASPNETCORE_URLS=http://+:5042;https://+:7090
+#           - ConnectionStrings__DefaultConnection=Host=db;Port=5432;Database=mydb;Username=myuser;Password=mysecurepassword
+#           - AppSettings__Setting1=OverriddenValue1
+#         restart: unless-stopped
+#         ports:
+#             - 5042:5042
+#             - 7090:7090
+#         networks:
+#           - api-net
+#         # extra_hosts: 
+#             # - "host.docker.internal:172.17.0.1"
+#             # - "host.docker.internal:host-gateway"
+            
+#     cache.web:
+#         image: ${DOCKER_REGISTRY-}blazorhero
+#         build:
+#           context: .
+#           dockerfile: src/Server/Dockerfile
+#         environment:
+#           - "ConnectionStrings__DefaultConnection=Server=db;Database=BlazorHero;User=sa;Password=Your_password123;MultipleActiveResultSets=true"
+#           - "ASPNETCORE_Kestrel__Certificates__Default__Password=securePassword123"
+#           - "ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx"
+#         volumes:
+#           - ~/.aspnet/https:/https:ro
+#         ports:
+#           - "5005:5005"
+#           - "5006:5006"
+#         depends_on:
+#           - db
+#         restart: on-failure
+#         container_name: blazorhero
 
-    prometheus:
-        image: prom/prometheus:latest
-        container_name: prometheus
-        hostname: prometheus
-        restart: unless-stopped
-        ports:
-            - 9090:9090
-        volumes:
-            - ./prometheus.yml:/etc/prometheus/prometheus.yml
-        networks:
-          - api-net
+#     prometheus:
+#         image: prom/prometheus:latest
+#         container_name: prometheus
+#         hostname: prometheus
+#         restart: unless-stopped
+#         ports:
+#             - 9090:9090
+#         volumes:
+#             - ./prometheus.yml:/etc/prometheus/prometheus.yml
+#         networks:
+#           - api-net
 
-    grafana:
-        image: grafana/grafana:latest
-        container_name: grafana
-        hostname: grafana
-        restart: unless-stopped
-        ports:
-            - 3000:3000
-        environment:
-            - GF_SECURITY_ADMIN_USER=admin
-            - GF_SECURITY_ADMIN_PASSWORD=admin
-        links:
-            - prometheus   
-        depends_on:
-            - prometheus  
-        networks:
-          - api-net
+#     grafana:
+#         image: grafana/grafana:latest
+#         container_name: grafana
+#         hostname: grafana
+#         restart: unless-stopped
+#         ports:
+#             - 3000:3000
+#         environment:
+#             - GF_SECURITY_ADMIN_USER=admin
+#             - GF_SECURITY_ADMIN_PASSWORD=admin
+#         links:
+#             - prometheus   
+#         depends_on:
+#             - prometheus  
+#         networks:
+#           - api-net
 
-    # postgres:
-    #     image: postgres:17.2
-    #     restart: unless-stopped
-    #     container_name: postgres
-    #     hostname: postgres
-    #     environment:
-    #         POSTGRES_PASSWORD: postgres
-    #         POSTGRES_USER: postgres
-    #         POSTGRES_DB: postgres
-    #     ports:
-    #         - "5432:5432"
-    #     volumes:
-    #         - ./data:/var/lib/postgresql/data
-    #         #- ./postgres.conf:/etc/postgresql/postgresql.conf
-    #     #command: ["postgres", "-c", "config_file=/etc/postgresql/postgresql.conf"]
+#     # postgres:
+#     #     image: postgres:17.2
+#     #     restart: unless-stopped
+#     #     container_name: postgres
+#     #     hostname: postgres
+#     #     environment:
+#     #         POSTGRES_PASSWORD: postgres
+#     #         POSTGRES_USER: postgres
+#     #         POSTGRES_DB: postgres
+#     #     ports:
+#     #         - "5432:5432"
+#     #     volumes:
+#     #         - ./data:/var/lib/postgresql/data
+#     #         #- ./postgres.conf:/etc/postgresql/postgresql.conf
+#     #     #command: ["postgres", "-c", "config_file=/etc/postgresql/postgresql.conf"]
 
-      # redis:
-      #   container_name: redis
-      #   hostname: redis
-      #   image: redis:7.4.2  # redis:latest
-      #   restart: always
-      #   ports:
-      #     - 6379:6379
-      #   command: redis-server --requirepass 123 --appendonly yes --save 20 1 --loglevel warning
-      #   volumes:
-      #     - ./data/:/data
-      #   # environment:
-      #   #   - REDIS_REPLICATION_MODE=master
-      #   # networks:
-      #   #   - api-net
+#       # redis:
+#       #   container_name: redis
+#       #   hostname: redis
+#       #   image: redis:7.4.2  # redis:latest
+#       #   restart: always
+#       #   ports:
+#       #     - 6379:6379
+#       #   command: redis-server --requirepass 123 --appendonly yes --save 20 1 --loglevel warning
+#       #   volumes:
+#       #     - ./data/:/data
+#       #   # environment:
+#       #   #   - REDIS_REPLICATION_MODE=master
+#       #   # networks:
+#       #   #   - api-net

@@ -1,8 +1,10 @@
 ﻿using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Hybrid;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Options;
 using StackExchange.Redis;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Cache.Api.Services;
 
@@ -29,7 +31,16 @@ public class RedisCacheService : ICacheService
         _logger = logger;
         _cache = cache;
         //_connectionMultiplexer = connectionMultiplexer;
-        _options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true, IncludeFields = true };
+
+        _options = new JsonSerializerOptions 
+        { 
+            PropertyNameCaseInsensitive = true, 
+            IncludeFields = true,
+            PropertyNamingPolicy = null,
+            WriteIndented = true,
+            AllowTrailingCommas = true,
+            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+        };
     }
 
     public async Task<T?> GetCacheValueAsync<T>(string key)
@@ -51,6 +62,8 @@ public class RedisCacheService : ICacheService
         var json = JsonSerializer.Serialize<T>(value, _options);
 
         await _cache.StringSetAsync(key, json, expiry: expiry, flags: CommandFlags.FireAndForget);
+        //var bytes = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(value, serializerOptions));
+        //return _cache.SetAsync(key, bytes, options);
     }
 
     public async Task RemoveCacheValueAsync(string key)
