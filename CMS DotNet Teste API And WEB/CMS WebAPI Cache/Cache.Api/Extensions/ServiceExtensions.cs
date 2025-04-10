@@ -55,8 +55,7 @@ public static class ServiceExtensions
         services.AddTransient<IUserRepository, UserRepository>();
 
         //services.AddMemoryCache();
-        // services.AddSingleton<ICacheService, InMemoryCacheService>();
-
+        //services.AddSingleton<ICacheService, InMemoryCacheService>();
         var connectionStringRedis = configuration.GetValue("ConnectionStrings:Redis", "localhost:6379");
         //services.AddStackExchangeRedisCache(opt => { opt.Configuration = connectionStringRedis; opt.InstanceName = "RedisDemo_"; });
         //services.AddScoped<IConnectionMultiplexer>(cfg => ConnectionMultiplexer.Connect(connectionStringRedis)});
