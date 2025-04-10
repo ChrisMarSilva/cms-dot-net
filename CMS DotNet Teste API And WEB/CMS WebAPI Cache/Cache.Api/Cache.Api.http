@@ -1,5 +1,6 @@
 @HostAddress = https://localhost:7090
 @HostAddressUser = {{HostAddress}}/api/v1/user
+@HostAddressProduct = {{HostAddress}}/api/v1/product
 @HostAddressHealth = {{HostAddress}}/health
 @IdempotencyKey = {{$guid}}
 @IdempotencyKey1 = a165503c-5eba-47af-b94a-193daab832c1
@@ -53,6 +54,24 @@ Idempotency-Key: {{IdempotencyKey}}
 ### User: Delete
 DELETE {{HostAddressUser}}/71ec513f-eae4-4dfe-9b42-f442edef2209
 Idempotency-Key: {{$guid}}
+###
+
+
+### Product: Get All
+GET {{HostAddressProduct}}
+Accept: application/json
+Idempotency-Key: {{IdempotencyKey}}
+###
+
+### Product: Create
+POST {{HostAddressProduct}}
+Content-Type: application/json
+Idempotency-Key: {{IdempotencyKey}}
+{
+    "name": "Product 002",
+    "description": "Product Description",
+    "price": 20
+}
 ###
 
 ### Health Checks

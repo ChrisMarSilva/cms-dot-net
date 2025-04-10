@@ -10,8 +10,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Prometheus", "Prometheus", 
 		prometheus.yml = prometheus.yml
 	EndProjectSection
 EndProject
-Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{169C35CD-9205-4401-B90A-5E01F05C0AF4}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cache.Web", "Cache.Web\Cache.Web.csproj", "{C2216D89-3951-45D5-B080-06F8A173A024}"
 EndProject
 Global
@@ -24,10 +22,6 @@ Global
 		{FEFD5210-ACDF-46CC-A32F-6B55C6F07F00}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FEFD5210-ACDF-46CC-A32F-6B55C6F07F00}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FEFD5210-ACDF-46CC-A32F-6B55C6F07F00}.Release|Any CPU.Build.0 = Release|Any CPU
-		{169C35CD-9205-4401-B90A-5E01F05C0AF4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{169C35CD-9205-4401-B90A-5E01F05C0AF4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{169C35CD-9205-4401-B90A-5E01F05C0AF4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{169C35CD-9205-4401-B90A-5E01F05C0AF4}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C2216D89-3951-45D5-B080-06F8A173A024}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C2216D89-3951-45D5-B080-06F8A173A024}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C2216D89-3951-45D5-B080-06F8A173A024}.Release|Any CPU.ActiveCfg = Release|Any CPU
