@@ -25,8 +25,8 @@ public static class GeradorEventos
 
         await Parallel.ForEachAsync(autorizacoes, async (autorizacao, cancellationToken) => 
         {
-            var json = JsonSerializer.Serialize(autorizacao, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-            using var content = new StringContent(json, Encoding.UTF8, "application/json");
+            var payload = JsonSerializer.Serialize(autorizacao, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+            using var content = new StringContent(payload, Encoding.UTF8, "application/json");
             
             using var request = new HttpRequestMessage(HttpMethod.Post, UrlAutorizacao) { Content = content  };
             request.Headers.Add("Chave-idempotencia", Guid.NewGuid().ToString());
@@ -141,12 +141,12 @@ public static class GeradorEventos
 
                 var dtFinal = tpFrequencia switch
                 {
-                    TipoFrequencia.Semanal => dtInicial.AddDays(7 * 10),
-                    TipoFrequencia.Mensal => dtInicial.AddMonths(10),
-                    TipoFrequencia.Trimestral => dtInicial.AddMonths(3 * 10),
-                    TipoFrequencia.Semestral => dtInicial.AddMonths(6 * 10),
-                    TipoFrequencia.Anual => dtInicial.AddYears(10),
-                    _ => dtInicial.AddDays(1)
+                    TipoFrequencia.Semanal => dtInicial.AddDays(7 * 10), // 10 semanas
+                    TipoFrequencia.Mensal => dtInicial.AddMonths(10), // 10 meses
+                    TipoFrequencia.Trimestral => dtInicial.AddMonths(3 * 10), // 10 trimestres
+                    TipoFrequencia.Semestral => dtInicial.AddMonths(6 * 10), // 10 semestres
+                    TipoFrequencia.Anual => dtInicial.AddYears(10), // 10 anos
+                    _ => dtInicial.AddDays(1) // 1 dia
                 };
 
                 return new AutorizacaoRequestDto
