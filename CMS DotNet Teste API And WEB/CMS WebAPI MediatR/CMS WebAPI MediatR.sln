@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35931.197 d17.13
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CMS WebAPI MediatR", "CMS WebAPI MediatR.csproj", "{F7060D3B-65AF-4CEB-B31E-2F979267FCC6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CMS DotNet Teste WebAPI with MediatR", "..\CMS DotNet Teste WebAPI with MediatR\CMS DotNet Teste WebAPI with MediatR.csproj", "{736E6955-3631-4A8D-302B-D4BFC52C4C61}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F7060D3B-65AF-4CEB-B31E-2F979267FCC6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F7060D3B-65AF-4CEB-B31E-2F979267FCC6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F7060D3B-65AF-4CEB-B31E-2F979267FCC6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F7060D3B-65AF-4CEB-B31E-2F979267FCC6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{736E6955-3631-4A8D-302B-D4BFC52C4C61}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{736E6955-3631-4A8D-302B-D4BFC52C4C61}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{736E6955-3631-4A8D-302B-D4BFC52C4C61}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{736E6955-3631-4A8D-302B-D4BFC52C4C61}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0EC6CF84-4DC6-4A08-9608-DD8DD3B8F1CA}
+	EndGlobalSection
+EndGlobal
