@@ -1,5 +1,3 @@
-using CMS_WebAPI_MediatR.Controllers;
-
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();

@@ -4,7 +4,7 @@
     <TargetFramework>net9.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <RootNamespace>CMS_WebAPI_MediatR</RootNamespace>
+	  <RootNamespace>CMS_WebAPI_MediatR</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
