@@ -14,7 +14,8 @@
 //[KeepBenchmarkFiles(false)]
 //[GroupBenchmarksBy(BenchmarkLogicalGroupRule.ByMethod)]
 //[Orderer(SummaryOrderPolicy.FastestToSlowest, MethodOrderPolicy.Declared)]
-//[MarkdownExporter, HtmlExporter, CsvExporter, RPlotExporter]
+//[MarkdownExporter, HtmlExporter, CsvExporter, RPlotExporter]//[RankColumn]
+//[RankColumn]
 //public class BenchmarkMappingCity
 //{
 //    [Params(1, 10, 100, 1_000, 10_000, 100_000)]
