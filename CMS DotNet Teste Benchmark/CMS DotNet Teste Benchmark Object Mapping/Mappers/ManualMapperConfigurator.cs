@@ -1,33 +1,17 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using CMS_DotNet_Teste_Object_Mapping.Dtos;
+﻿using CMS_DotNet_Teste_Object_Mapping.Dtos;
 using CMS_DotNet_Teste_Object_Mapping.Models;
 
 namespace CMS_DotNet_Teste_Object_Mapping.Mappers;
 
 public static class ManualMapperConfigurator
 {
-    public static List<PersonDto> ToDto(this IEnumerable<Person> models)
-    {
-        return models
-            .Select(ToDto)
-            .ToList();
-    }
+    public static ICollection<PersonDto>? ToDto(this ICollection<PersonModel>? models) =>
+        models?.Select(ToDto).ToList();
 
-    public static PersonDto ToDto(this Person model)
-    {
-        return new()
-        {
-            Id = model.Id,
-            FirstName = model.FirstName,
-            LastName = model.LastName,
-            Birthday = model.Birthday
-        };
-    }
+    public static PersonDto ToDto(this PersonModel model) =>
+        new() { Id = model.Id, FirstName = model.FirstName, LastName = model.LastName, Birthday = model.Birthday };
 
-
-    //    public static List<Customer> MapTo(this IEnumerable<CustomerDto> dto)
+    //    public static IEnumerable<Customer> MapTo(this IEnumerable<CustomerDto> dto)
     //    {
     //        return dto.Select(MapTo).ToList();
     //    }
@@ -203,7 +187,7 @@ public static class ManualMapperConfigurator
     //        };
     //    }
 
-    //    public static List<City> MapTo(this IEnumerable<CityDto> dto)
+    //    public static IEnumerable<City> MapTo(this IEnumerable<CityDto> dto)
     //    {
     //        return dto.Select(MapTo).ToList();
     //    }

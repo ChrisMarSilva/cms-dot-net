@@ -1,6 +1,6 @@
-﻿namespace CMS_DotNet_Teste_Object_Mapping.Dtos;
+﻿namespace CMS_DotNet_Teste_Object_Mapping.Models;
 
-//public class CustomerDto
+//public class CustomerModel
 //{
 //    public string CustomerID { get; set; }
 //    public string CompanyName { get; set; }
@@ -13,11 +13,11 @@
 //    public string Country { get; set; }
 //    public string Phone { get; set; }
 //    public string Fax { get; set; }
-//    public List<OrderDto> Orders { get; set; }
-//    public CustomerDemographicDto[] CustomerDemographics { get; set; }
+//    public List<OrderModel> Orders { get; set; }
+//    public CustomerDemographicModel[] CustomerDemographics { get; set; }
 //}
 
-//public class OrderDto
+//public class OrderModel
 //{
 //    public int OrderID { get; set; }
 //    public string CustomerID { get; set; }
@@ -33,22 +33,22 @@
 //    public string ShipRegion { get; set; }
 //    public string ShipPostalCode { get; set; }
 //    public string ShipCountry { get; set; }
-//    public EmployeeDto Employee { get; set; }
-//    public List<OrderDetailDto> OrderDetails { get; set; }
-//    public ShipperDto Shipper { get; set; }
+//    public EmployeeModel Employee { get; set; }
+//    public List<OrderDetailModel> OrderDetails { get; set; }
+//    public ShipperModel Shipper { get; set; }
 //}
 
-//public class OrderDetailDto
+//public class OrderDetailModel
 //{
 //    public int OrderID { get; set; }
 //    public int ProductID { get; set; }
 //    public decimal UnitPrice { get; set; }
 //    public short Quantity { get; set; }
 //    public float Discount { get; set; }
-//    public ProductDto Product { get; set; }
+//    public ProductModel Product { get; set; }
 //}
 
-//public class ProductDto
+//public class ProductModel
 //{
 //    public int ProductID { get; set; }
 //    public string ProductName { get; set; }
@@ -60,17 +60,17 @@
 //    public short? UnitsOnOrder { get; set; }
 //    public short? ReorderLevel { get; set; }
 //    public bool Discontinued { get; set; }
-//    public CategoryDto Category { get; set; }
-//    public SupplierDto Supplier { get; set; }
+//    public CategoryModel Category { get; set; }
+//    public SupplierModel Supplier { get; set; }
 //}
 
-//public class CustomerDemographicDto
+//public class CustomerDemographicModel
 //{
 //    public string CustomerTypeID { get; set; }
 //    public string CustomerDesc { get; set; }
 //}
 
-//public class EmployeeDto
+//public class EmployeeModel
 //{
 //    public int EmployeeID { get; set; }
 //    public string LastName { get; set; }
@@ -90,31 +90,31 @@
 //    public string Notes { get; set; }
 //    public int? ReportsTo { get; set; }
 //    public string PhotoPath { get; set; }
-//    public TerritoryDto[] Territories { get; set; }
+//    public TerritoryModel[] Territories { get; set; }
 //}
 
-//public class TerritoryDto
+//public class TerritoryModel
 //{
 //    public string TerritoryID { get; set; }
 //    public string TerritoryDescription { get; set; }
 //    public int RegionID { get; set; }
-//    public RegionDto Region { get; set; }
+//    public RegionModel Region { get; set; }
 //}
 
-//public class RegionDto
+//public class RegionModel
 //{
 //    public int RegionID { get; set; }
 //    public string RegionDescription { get; set; }
 //}
 
-//public class ShipperDto
+//public class ShipperModel
 //{
 //    public int ShipperID { get; set; }
 //    public string CompanyName { get; set; }
 //    public string Phone { get; set; }
 //}
 
-//public class CategoryDto
+//public class CategoryModel
 //{
 //    public int CategoryID { get; set; }
 //    public string CategoryName { get; set; }
@@ -122,7 +122,7 @@
 //    public byte[] Picture { get; set; }
 //}
 
-//public class SupplierDto
+//public class SupplierModel
 //{
 //    public int SupplierID { get; set; }
 //    public string CompanyName { get; set; }

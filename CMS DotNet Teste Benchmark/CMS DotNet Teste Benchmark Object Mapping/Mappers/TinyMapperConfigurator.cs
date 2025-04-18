@@ -8,7 +8,7 @@ public static class TinyMapperConfigurator
 {
     public static void SetUp()
     {
-        TinyMapper.Bind<Person, PersonDto>();
+        TinyMapper.Bind<PersonModel, PersonDto>();
 
         //TinyMapper.Bind<CustomerDto, Customer>();
         //TinyMapper.Bind<OrderDto, Order>();

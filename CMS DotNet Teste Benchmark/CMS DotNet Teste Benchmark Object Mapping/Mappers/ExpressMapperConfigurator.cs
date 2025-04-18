@@ -7,7 +7,7 @@ public static class ExpressMapperConfigurator
 {
     public static void SetUp()
     {
-        ExpressMapper.Mapper.Register<Person, PersonDto>();
+        ExpressMapper.Mapper.Register<PersonModel, PersonDto>();
 
         //ExpressMapper.Mapper.Register<CustomerDto, Customer>();
         //ExpressMapper.Mapper.Register<OrderDto, Order>();

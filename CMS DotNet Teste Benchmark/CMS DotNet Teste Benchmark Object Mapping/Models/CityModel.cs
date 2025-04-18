@@ -1,6 +1,6 @@
-﻿namespace CMS_DotNet_Teste_Object_Mapping.Dtos;
+﻿namespace CMS_DotNet_Teste_Object_Mapping.Models;
 
-//public class CityDto
+//public class CityModel
 //{
 //    public int CityID { get; set; }
 //    public string Name { get; set; }

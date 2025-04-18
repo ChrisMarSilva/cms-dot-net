@@ -6,13 +6,13 @@ namespace CMS_DotNet_Teste_Object_Mapping.Mappers;
 
 public static class AutoMapperConfigurator
 {
-    public static IMapper AutoMapper { get; private set; }
+    public static IMapper? AutoMapper { get; private set; }
 
     public static void SetUp()
     {
         AutoMapper = new MapperConfiguration(cfg =>
         {
-            cfg.CreateMap<Person, PersonDto>();
+            cfg.CreateMap<PersonModel, PersonDto>();
 
             //cfg.CreateMap<CustomerDto, Customer>();
             //cfg.CreateMap<OrderDto, Order>();
