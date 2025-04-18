@@ -23,7 +23,7 @@ public class BenchmarkMappingPerson
     {
         AutoMapperConfigurator.SetUp();
         //Mapster don't need configuration
-        ExpressMapperConfigurator.SetUp();
+        //ExpressMapperConfigurator.SetUp();
         //TinyMapperConfigurator.SetUp();
         //AgileMapper don't need configuration
         _mapperly = new MapperlyMapperConfigurator();
@@ -39,7 +39,7 @@ public class BenchmarkMappingPerson
     [Benchmark] public ICollection<PersonDto>? MapWithManualMapping() => _people?.Select(x => new PersonDto { Id = x.Id, FirstName = x.FirstName, LastName = x.LastName, Birthday = x.Birthday }).ToList();
     [Benchmark] public ICollection<PersonDto>? MapWithAutoMapper() => AutoMapperConfigurator.AutoMapper?.Map<ICollection<PersonDto>>(_people);
     [Benchmark] public ICollection<PersonDto>? MapWithMapster() => _people?.Adapt<ICollection<PersonDto>?>();
-    [Benchmark] public ICollection<PersonDto>? MapWithExpressMapper() => ExpressMapper.Mapper.Map<ICollection<PersonModel>?, ICollection<PersonDto>?>(_people);
+    //[Benchmark] public ICollection<PersonDto>? MapWithExpressMapper() => ExpressMapper.Mapper.Map<ICollection<PersonModel>?, ICollection<PersonDto>?>(_people);
     //[Benchmark] public ICollection<PersonDto>? MapWithTinyMapper() => TinyMapper.Map<ICollection<PersonDto>?>(_people);
     //[Benchmark] public ICollection<PersonDto>? MapWithAgileMapper() => AgileObjects.AgileMapper.Mapper.Map(_people).ToANew<ICollection<PersonDto>?>(); 
     [Benchmark] public ICollection<PersonDto>? MapWithMapperly() => _mapperly.Map(_people);
