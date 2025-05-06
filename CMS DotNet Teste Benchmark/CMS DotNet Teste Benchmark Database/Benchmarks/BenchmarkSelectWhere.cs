@@ -2,7 +2,6 @@
 using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Order;
 using Dapper;
-using Microsoft.EntityFrameworkCore;
 using TesteBenchmarkDotNet.Models;
 
 namespace TesteBenchmarkDotNet.Benchmarks;

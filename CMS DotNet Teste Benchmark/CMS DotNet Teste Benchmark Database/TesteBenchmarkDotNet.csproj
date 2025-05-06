@@ -2,36 +2,50 @@
 
   <PropertyGroup>
 	<OutputType>Exe</OutputType>
-	<TargetFramework>net8.0</TargetFramework>
+	<TargetFramework>net9.0</TargetFramework>
 	<Nullable>disable</Nullable>
 	<ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
   <ItemGroup>
-	<PackageReference Include="BenchmarkDotNet" Version="0.13.12" />
-	<PackageReference Include="BenchmarkDotNet.Annotations" Version="0.13.12" />
-	<PackageReference Include="Dapper" Version="2.1.28" />
-	<PackageReference Include="Dapper.FluentMap" Version="2.0.0" />
-	<PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.1" />
-	<PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="8.0.1" />
-	<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.1">
+	<PackageReference Include="Alachisoft.NCache.OpenSource.SDK" Version="5.0.7" />
+	<PackageReference Include="BenchmarkDotNet" Version="0.14.0" />
+	<PackageReference Include="BenchmarkDotNet.Annotations" Version="0.14.0" />
+	<PackageReference Include="Dapper" Version="2.1.66" />
+	<PackageReference Include="EnyimMemcachedCore" Version="3.3.2" />
+	<PackageReference Include="LiteDB" Version="5.0.21" />
+	<PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.4" />
+	<PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="9.0.4" />
+	<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.4">
 	  <PrivateAssets>all</PrivateAssets>
 	  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 	</PackageReference>
-	<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="8.0.1" />
-	<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite.Core" Version="8.0.1" />
-	<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.1" />
-	<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.1">
+	<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="9.0.4" />
+	<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite.Core" Version="9.0.4" />
+	<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.4" />
+	<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.4">
 		<PrivateAssets>all</PrivateAssets>
 		<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 	</PackageReference>
-	<PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="8.0.0" />
-	<PackageReference Include="SQLitePCLRaw.core" Version="2.1.8" />
-	<PackageReference Include="System.Data.SqlClient" Version="4.8.6" />
-	<PackageReference Include="System.Data.SQLite.Core" Version="1.0.118" />
-	  <PackageReference Include="Npgsql" Version="8.0.2" />
-	  <PackageReference Include="Npgsql.DependencyInjection" Version="8.0.2" />
-	  <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.0" />
+	<PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="9.0.4" />
+	<PackageReference Include="Microsoft.Extensions.Caching.SqlServer" Version="9.0.4" />
+	<PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="8.0.3" />
+	<PackageReference Include="SQLitePCLRaw.core" Version="2.1.11" />
+	<PackageReference Include="StackExchange.Redis" Version="2.8.37" />
+	<PackageReference Include="System.Data.SqlClient" Version="4.9.0" />
+	<PackageReference Include="System.Data.SQLite.Core" Version="1.0.119" />
+	  <PackageReference Include="Npgsql" Version="9.0.3" />
+	  <PackageReference Include="Npgsql.DependencyInjection" Version="9.0.3" />
+	  <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="client.ncconf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="config.ncconf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>
