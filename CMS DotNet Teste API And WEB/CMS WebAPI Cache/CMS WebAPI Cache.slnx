@@ -1,0 +1,7 @@
+<Solution>
+  <Folder Name="/Prometheus/">
+    <File Path="prometheus.yml" />
+  </Folder>
+  <Project Path="Cache.Api/Cache.Api.csproj" />
+  <Project Path="Cache.Web/Cache.Web.csproj" />
+</Solution>
