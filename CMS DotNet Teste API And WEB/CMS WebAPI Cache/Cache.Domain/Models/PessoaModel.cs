@@ -10,9 +10,9 @@ public sealed class PessoaModel
         Situacoes = new HashSet<PessoaSituacaoModel>();
     }
 
-    public PessoaModel(Guid id, string nome) : this()
+    public PessoaModel(string nome) : this()
     {
-        Id = id;
+        Id = Guid.NewGuid();
         Nome = nome;
         DtHrRegistro = DateTime.UtcNow;
 

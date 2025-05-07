@@ -1,6 +1,6 @@
 ﻿namespace Cache.Domain.Repository;
 
-public interface IRepositoryTransaction : IDisposable, IAsyncDisposable
+public interface IBaseRepositoryTransaction : IDisposable, IAsyncDisposable
 {
     Task CommitAsync();
     Task RollbackAsync();

@@ -4,16 +4,22 @@ using System.Reflection;
 
 namespace Cache.Infra.Data.Context;
 
-internal sealed class DataContext: DbContext
+public sealed class AppDbContext: DbContext
 {
+
 #if DEBUG
-    //private static bool _scriptGenerated;
+    private static bool _scriptGenerated;
 #endif
 
-    public DataContext(DbContextOptions<DataContext> options) : base(options)
+    public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
     {
+        //Database.SetInitializer<AppDbContext>(new CreateDatabaseIfNotExists<AppDbContext>());
+        //Database.Initialize(false); // false = Somente ser exeutado uma vez dentro do DbContext]
+        //Configuration.LazyLoadingEnabled = false;
+        //Configuration.ProxyCreationEnabled = false;
+        //Database.Log = comando => System.Diagnostics.Debug.WriteLine(comando);
+
 #if DEBUG
-        //// ReSharper disable once InvertIf
         //if (!_scriptGenerated)
         //{
         //    _scriptGenerated = true;
@@ -37,9 +43,18 @@ internal sealed class DataContext: DbContext
 #endif
     }
 
+    //public DbSet<PessoaModel> Pessoas { get; set; }
+    //public DbSet<PessoaSituacaoModel> SituacaoPessoas { get; set; }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        //if (!optionsBuilder.IsConfigured)
+        //optionsBuilder.UseNpgsql("Server=localhost;Port=5432;Database=postgres;User ID=postgres;Password=postgres;");
+    }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetAssembly(typeof(DataContext))!);
+        modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetAssembly(typeof(AppDbContext))!);
 
         //if (Database.IsNpgsql())
         //{
@@ -93,13 +108,7 @@ internal sealed class DataContext: DbContext
     {
         if (Database.GetDbConnection().State != ConnectionState.Open)
         {
-            try
-            {
-                await Database.OpenConnectionAsync();
-            }
-            catch
-            {
-            }
+            try { await Database.OpenConnectionAsync();  } catch { }
         }
     }
 }

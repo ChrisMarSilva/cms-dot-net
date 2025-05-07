@@ -62,7 +62,7 @@ public class RedisCacheService : ICacheService
         var json = JsonSerializer.Serialize<T>(value, _options);
 
         await _cache.StringSetAsync(key, json, expiry: expiry, flags: CommandFlags.FireAndForget);
-        //var bytes = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(value, serializerOptions));
+        //var bytes = Encoding.UTF8.GetBytes(json);
         //return _cache.SetAsync(key, bytes, options);
     }
 
