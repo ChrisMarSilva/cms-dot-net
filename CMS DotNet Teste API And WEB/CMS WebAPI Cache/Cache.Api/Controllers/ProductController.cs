@@ -1,7 +1,4 @@
 ﻿using Cache.Shared.Core.Commands;
-using Cache.Shared.Core.Notifications;
-using Cache.Shared.Core.Queries;
-using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Cache.Api.Controllers;
@@ -13,50 +10,53 @@ namespace Cache.Api.Controllers;
 public class ProductController : ControllerBase
 {
     private readonly ILogger<ProductController> _logger;
-    private readonly IMediator _mediatr; // ISender // IMediator 
+    //private readonly IMediator _mediatr; // ISender // IMediator 
 
-    public ProductController(ILogger<ProductController> logger, IMediator mediatr)
+    public ProductController(ILogger<ProductController> logger)
     {
         _logger = logger;
-        _mediatr = mediatr;
+        //_mediatr = mediatr;
     }
 
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
-        var products = await _mediatr.Send(new ProductListQuery());
+        //var products = await _mediatr.Send(new ProductListQuery());
 
-        return Ok(products);
+        //return Ok(products);
+        return Ok();
     }
 
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> FindById(Guid id)
     {
-        var product = await _mediatr.Send(new ProductGetQuery(id));
+        //var product = await _mediatr.Send(new ProductGetQuery(id));
 
-        if (product == null)
-            return NotFound();
+        //if (product == null)
+        //    return NotFound();
 
-        return Ok(product);
+        //return Ok(product);
+        return Ok();
     }
 
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] ProductCreateCommand command)
     {
-        var productId = await _mediatr.Send(command);
+        //var productId = await _mediatr.Send(command);
 
-        if (Guid.Empty == productId)
-            return BadRequest();
+        //if (Guid.Empty == productId)
+        //    return BadRequest();
 
-        await _mediatr.Publish(new ProductCreatedNotification(productId));
+        //await _mediatr.Publish(new ProductCreatedNotification(productId));
 
-        return Created($"/product/{productId}", new { id = productId });
+        //return Created($"/product/{productId}", new { id = productId });
+        return Created($"/product/1", new { id = 1 });
     }
 
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> Delete(Guid id)
     {
-        await _mediatr.Send(new ProductDeleteCommand(id));
+        // await _mediatr.Send(new ProductDeleteCommand(id));
 
         return NoContent();
     }

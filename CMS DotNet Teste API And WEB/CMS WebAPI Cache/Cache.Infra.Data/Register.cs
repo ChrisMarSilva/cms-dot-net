@@ -8,7 +8,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using StackExchange.Redis;
-using System.Reflection;
 
 namespace Cache.Infra.Data;
 
@@ -16,12 +15,10 @@ public static class Register
 {
     public static IServiceCollection AddDataContext(this IServiceCollection services, IConfiguration configuration)
     {
-        var connectionString = configuration.GetConnectionString("DefaultConnection");
-
         services.AddDbContext<AppDbContext>(opt =>
         {
             //opt.EnableSensitiveDataLogging();
-            opt.UseNpgsql(connectionString);
+            opt.UseNpgsql(configuration.GetConnectionString("DefaultConnection"));
             //.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking)
             //.UseSnakeCaseNamingConvention();
             // System.Diagnostics.Debug.WriteLine(comando);
@@ -30,11 +27,8 @@ public static class Register
             //opt.UseInMemoryDatabase("TarefasDB")
         });
 
-
         //}).AddUnitOfWork<DataContext>().AddScoped<IDataContext>(sp => sp.GetRequiredService<DataContext>());
-
-        //services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
-        //services.AddTransient<IUserRepository, UserRepository>();
+        services.AddScoped<IUnitOfWork, UnitOfWork<AppDbContext>>();
 
         //services.AddMemoryCache();
         //services.AddSingleton<ICacheService, InMemoryCacheService>();
@@ -60,7 +54,10 @@ public static class Register
         services.AddScoped<IPessoaQueryRepository, PessoaQueryRepository>();
         services.AddScoped<IPessoaCommandRepository, PessoaCommandRepository>();
 
-        services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
+        //services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+        //services.AddTransient<IUserRepository, UserRepository>();
+
+        // services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
         //services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetAssembly(typeof(ICore))!));
 
         services.AddServiceDomain();
@@ -78,7 +75,7 @@ public static class Register
         services.AddHealthChecks()
             .AddNpgSql(connectionString!)
             .AddRedis(connectionStringRedis, name: "Redis", timeout: TimeSpan.FromSeconds(5));
-            //.AddCheck<HealthCheckService>("Serviço Externo");
+        //.AddCheck<HealthCheckService>("Serviço Externo");
 
         return services;
     }

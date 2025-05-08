@@ -1,5 +1,6 @@
-﻿using Cache.Shared.Core.Dtos;
-using MediatR;
+﻿using MediatR;
+
+using Cache.Shared.Core.Dtos;
 
 namespace Cache.Shared.Core.Queries;
 

@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System.Net;
 
-namespace Cache.Shared.Filters;
+namespace Cache.Infra.Bootstrap.Filters;
 
 public sealed class ValidateModelFilterAttribute : ActionFilterAttribute
 {

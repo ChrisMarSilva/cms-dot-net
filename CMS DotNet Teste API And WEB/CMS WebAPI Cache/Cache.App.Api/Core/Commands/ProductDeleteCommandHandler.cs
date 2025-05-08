@@ -1,6 +1,4 @@
-﻿using MediatR;
-
-namespace Cache.Shared.Core.Commands;
+﻿namespace Cache.Shared.Core.Commands;
 
 //public class ProductDeleteCommandHandler(AppDbContext context) : IRequestHandler<ProductDeleteCommand>
 //{

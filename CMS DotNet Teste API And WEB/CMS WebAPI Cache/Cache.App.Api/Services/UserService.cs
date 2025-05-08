@@ -56,7 +56,7 @@ public class UserService : IUserService
 
     public async Task<UserModel?> UpdateAsync(UserModel userModel, CancellationToken cancellationToken = default)
     {
-       // _repository.Update(userModel, cancellationToken);
+        // _repository.Update(userModel, cancellationToken);
         await _repository.SaveChangesAsync();
 
         return userModel;

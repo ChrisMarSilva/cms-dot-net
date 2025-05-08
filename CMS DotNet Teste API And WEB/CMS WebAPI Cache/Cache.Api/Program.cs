@@ -1,7 +1,5 @@
 using Cache.Infra.Bootstrap;
-using Cache.Shared.Filters;
-using Cache.Shared.Middleware;
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Cache.Infra.Bootstrap.Filters;
 using Serilog;
 using System.Text.Json.Serialization;
 
@@ -23,18 +21,9 @@ try
         configure.Filters.Add<ValidateModelFilterAttribute>(-9999);
     }).AddJsonOptions(opt =>
     {
-        //opt.JsonSerializerOptions.PropertyNamingPolicy = null;
-        //opt.JsonSerializerOptions.WriteIndented = true;
-        //opt.JsonSerializerOptions.AllowTrailingCommas = true;
         opt.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
     });
     builder.Services.AddOpenApi();
-    builder.Services.AddDefaultResponseCompression();
-    builder.Services.AddDefaultApiVersioning();
-    builder.Services.AddDefaultCorsPolicy();
-    builder.Services.AddDefaultIdempotency(builder.Configuration);
-    // builder.Services.AddDefaultHealthChecks(builder.Configuration);
-    builder.Services.AddDefaultMetricsPrometheus(builder.Configuration);
     builder.Services.AddServicesForApi(builder.Configuration);
 
     var app = builder.Build();
@@ -42,14 +31,6 @@ try
     if (app.Environment.IsDevelopment())
     {
         app.MapOpenApi();
-        //app.UseOpenConnection();
-
-        //await using (var serviceScope = app.Services.CreateAsyncScope())
-        //await using (var dbContext = serviceScope.ServiceProvider.GetRequiredService<AppDbContext>())
-        //{
-        //    // await dbContext.Database.EnsureCreatedAsync();
-        //    await dbContext.OpenConnection();
-        //}
     }
     else
     {
@@ -59,40 +40,13 @@ try
     app.UseResponseCompression();
     app.UseHttpsRedirection();
     app.UseAuthorization();
-    app.UseDefaultCors();
-    app.UseIdempotency();
-    app.UseHealthCheck();
-    //app.UseMetricsPrometheus(builder.Configuration);
+    app.UseServicesForApi();
     app.MapControllers();
-    //if (builder.Configuration.GetValue("Metrics:Enabled", false))
-    //    app.MapMetrics();
 
-    //await using (var localScope = app.Services.CreateAsyncScope())
+    //await using (var serviceScope = app.Services.CreateAsyncScope())
     //{
-    //    await localScope.ServiceProvider.GetRequiredService<IDataContext>().OpenConnection();
+    //    await serviceScope.ServiceProvider.GetRequiredService<IDataContext>().OpenConnection();
     //}
-
-    app.MapHealthChecks("/health", new HealthCheckOptions
-    {
-        ResponseWriter = async (context, report) =>
-        {
-            context.Response.ContentType = "application/json";
-
-            var result = new
-            {
-                status = report.Status.ToString(),
-                checks = report.Entries.Select(entry => new
-                {
-                    name = entry.Key,
-                    status = entry.Value.Status.ToString(),
-                    description = entry.Value.Description
-                }),
-                duration = report.TotalDuration
-            };
-
-            await context.Response.WriteAsJsonAsync(result);
-        }
-    });
 
     await app.RunAsync();
 }

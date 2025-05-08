@@ -1,6 +1,4 @@
-﻿using Cache.Domain.Models;
-
-namespace Cache.Shared.Core.Commands;
+﻿namespace Cache.Shared.Core.Commands;
 
 //public class ProductCreateCommandHandler(AppDbContext context) : IRequestHandler<ProductCreateCommand, Guid>
 //{

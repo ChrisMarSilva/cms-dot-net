@@ -18,4 +18,10 @@ public static class Register
 
         return services;
     }
+
+    public static IServiceCollection AddAppServicesForAuth(this IServiceCollection services, IConfiguration configuration)
+    {
+
+        return services;
+    }
 }
