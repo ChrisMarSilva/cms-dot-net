@@ -1,4 +1,4 @@
-using Cache.Worker;
+using Cache.Worker.Workers;
 
 var builder = Host.CreateApplicationBuilder(args);
 builder.Services.AddHostedService<Worker>();

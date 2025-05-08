@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-Console.WriteLine(new string('-', 60)); 
+Console.WriteLine(new string('-', 60));
 Console.WriteLine($"[{DateTime.Now.TimeOfDay}]: INICIO");
 Console.WriteLine(new string('-', 60));
 try
@@ -33,7 +33,7 @@ try
     var pes = new PessoaModel($"Pessoa {DateTime.Now.TimeOfDay}");
     pes.Pendente();
     pes.Aceita();
-   
+
     pessoaCommandRepository.Add(pes);
 
     await using var transacation = await pessoaCommandRepository.BeginTransactionAsync();

@@ -1,10 +1,18 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Cache.Domain.Models;
+using Microsoft.EntityFrameworkCore;
 using System.Data;
 using System.Reflection;
 
 namespace Cache.Infra.Data.Context;
 
-public sealed class AppDbContext: DbContext
+// dotnet tool update --global dotnet-ef
+// dotnet build 
+
+// dotnet ef migrations bundle --project Movies.Api/Movies.Api.csproj --output efbundle
+// dotnet ef migrations add AddMovies
+// dotnet ef database update
+// dotnet ef migrations remove
+public sealed class AppDbContext : DbContext
 {
 
 #if DEBUG
@@ -42,6 +50,9 @@ public sealed class AppDbContext: DbContext
         //}
 #endif
     }
+
+    public DbSet<UserModel> Users { get; set; }
+    public DbSet<ProductModel> Products { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -105,7 +116,7 @@ public sealed class AppDbContext: DbContext
     {
         if (Database.GetDbConnection().State != ConnectionState.Open)
         {
-            try { await Database.OpenConnectionAsync();  } catch { }
+            try { await Database.OpenConnectionAsync(); } catch { }
         }
     }
 }

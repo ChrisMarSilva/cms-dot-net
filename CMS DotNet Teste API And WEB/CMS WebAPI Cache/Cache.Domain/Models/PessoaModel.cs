@@ -35,9 +35,9 @@ public sealed class PessoaModel
     public void Pendente() =>
         NovaSituacao(SituacaoPessoa.Pendente);
 
-    public void Rejeitada(string cdErro, string? txtErro) => 
+    public void Rejeitada(string cdErro, string? txtErro) =>
         NovaSituacao(SituacaoPessoa.Rejeitado, cdErro, txtErro);
 
-    public void Aceita() => 
+    public void Aceita() =>
         NovaSituacao(SituacaoPessoa.Aceita);
 }

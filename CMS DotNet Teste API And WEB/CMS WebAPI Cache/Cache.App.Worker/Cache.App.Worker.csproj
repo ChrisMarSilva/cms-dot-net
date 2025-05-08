@@ -7,7 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Folder Include="Adapters\" />
     <Folder Include="Services\" />
   </ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Cache.Domain\Cache.Domain.csproj" />
+		<ProjectReference Include="..\Cache.Shared\Cache.Shared.csproj" />
+	</ItemGroup>
 
 </Project>

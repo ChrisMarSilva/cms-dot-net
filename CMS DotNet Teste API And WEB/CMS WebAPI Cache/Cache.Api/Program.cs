@@ -1,87 +1,106 @@
-using Cache.Api.Database.Contexts;
-using Cache.Api.Extensions;
-using Cache.Api.Filters;
+using Cache.Infra.Bootstrap;
+using Cache.Shared.Filters;
+using Cache.Shared.Middleware;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Prometheus;
+using Serilog;
 using System.Text.Json.Serialization;
 
-var builder = WebApplication.CreateBuilder(args);
-
-builder.Configuration
-    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-    .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true)
-    .AddEnvironmentVariables();
-
-builder.Services.AddControllers(opt =>
+ConfigureSerilog.CreateLogger<Program>();
+try
 {
-    opt.Filters.Add<ValidateModelFilterAttribute>(-9999);
-    //opt.Filters.Add<ValidateIdempotencyKeyFilterAttribute>();
-}).AddJsonOptions(opt => 
-{
-    //opt.JsonSerializerOptions.PropertyNamingPolicy = null;
-    //opt.JsonSerializerOptions.WriteIndented = true;
-    //opt.JsonSerializerOptions.AllowTrailingCommas = true;
-    opt.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull; 
-});
+    var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddOpenApi();
-builder.Services.AddCompression();
-builder.Services.AddInfra(builder.Configuration);
-builder.Services.AddServices();
-builder.Services.AddCors();
-builder.Services.AddIdempotency(builder.Configuration);
-builder.Services.AddHealthCheck(builder.Configuration);
-builder.Services.AddMetricsPrometheus(builder.Configuration);
+    builder.Host.UseSerilog();
 
-//builder.WebHost.UseUrls("http://0.0.0.0:5042"); // Configure o Kestrel para aceitar conexões de qualquer IP
+    builder.Configuration
+        .SetBasePath(Directory.GetCurrentDirectory())
+        .AddJsonFile("appsettings.json", false, false)
+        .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", true, false)
+        .AddEnvironmentVariables();
 
-var app = builder.Build();
-
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
-    app.UseOpenConnection();
-
-    await using (var serviceScope = app.Services.CreateAsyncScope())
-    await using (var dbContext = serviceScope.ServiceProvider.GetRequiredService<AppDbContext>())
+    builder.Services.AddControllers(configure =>
     {
-        // await dbContext.Database.EnsureCreatedAsync();
-        await dbContext.OpenConnection();
+        configure.Filters.Add<ValidateModelFilterAttribute>(-9999);
+    }).AddJsonOptions(opt =>
+    {
+        //opt.JsonSerializerOptions.PropertyNamingPolicy = null;
+        //opt.JsonSerializerOptions.WriteIndented = true;
+        //opt.JsonSerializerOptions.AllowTrailingCommas = true;
+        opt.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+    });
+    builder.Services.AddOpenApi();
+    builder.Services.AddDefaultResponseCompression();
+    builder.Services.AddDefaultApiVersioning();
+    builder.Services.AddDefaultCorsPolicy();
+    builder.Services.AddDefaultIdempotency(builder.Configuration);
+    // builder.Services.AddDefaultHealthChecks(builder.Configuration);
+    builder.Services.AddDefaultMetricsPrometheus(builder.Configuration);
+    builder.Services.AddServicesForApi(builder.Configuration);
+
+    var app = builder.Build();
+
+    if (app.Environment.IsDevelopment())
+    {
+        app.MapOpenApi();
+        //app.UseOpenConnection();
+
+        //await using (var serviceScope = app.Services.CreateAsyncScope())
+        //await using (var dbContext = serviceScope.ServiceProvider.GetRequiredService<AppDbContext>())
+        //{
+        //    // await dbContext.Database.EnsureCreatedAsync();
+        //    await dbContext.OpenConnection();
+        //}
     }
-}
-
-app.UseResponseCompression();
-app.UseHttpsRedirection();
-app.UseAuthorization();
-app.MapControllers();
-app.UseAppCors();
-app.UseIdempotency();
-app.UseHealthCheck();
-app.UseMetricsPrometheus(builder.Configuration);
-
-app.MapHealthChecks("/health", new HealthCheckOptions
-{
-    ResponseWriter = async (context, report) =>
+    else
     {
-        context.Response.ContentType = "application/json";
+        app.UseDefaultExceptionHandler()
+           .UseDefaultStatusCodePages();
+    }
+    app.UseResponseCompression();
+    app.UseHttpsRedirection();
+    app.UseAuthorization();
+    app.UseDefaultCors();
+    app.UseIdempotency();
+    app.UseHealthCheck();
+    //app.UseMetricsPrometheus(builder.Configuration);
+    app.MapControllers();
+    //if (builder.Configuration.GetValue("Metrics:Enabled", false))
+    //    app.MapMetrics();
 
-        var result = new
+    //await using (var localScope = app.Services.CreateAsyncScope())
+    //{
+    //    await localScope.ServiceProvider.GetRequiredService<IDataContext>().OpenConnection();
+    //}
+
+    app.MapHealthChecks("/health", new HealthCheckOptions
+    {
+        ResponseWriter = async (context, report) =>
         {
-            status = report.Status.ToString(),
-            checks = report.Entries.Select(entry => new
+            context.Response.ContentType = "application/json";
+
+            var result = new
             {
-                name = entry.Key,
-                status = entry.Value.Status.ToString(),
-                description = entry.Value.Description
-            }),
-            duration = report.TotalDuration
-        };
+                status = report.Status.ToString(),
+                checks = report.Entries.Select(entry => new
+                {
+                    name = entry.Key,
+                    status = entry.Value.Status.ToString(),
+                    description = entry.Value.Description
+                }),
+                duration = report.TotalDuration
+            };
 
-        await context.Response.WriteAsJsonAsync(result);
-    }
-});
+            await context.Response.WriteAsJsonAsync(result);
+        }
+    });
 
-if (builder.Configuration.GetValue("Metrics:Enabled", false))
-    app.MapMetrics();
-
-app.Run();
+    await app.RunAsync();
+}
+catch (Exception ex)
+{
+    Log.Fatal(ex, "Host encerrado inesperadamente");
+}
+finally
+{
+    ConfigureSerilog.CloseAndFlush();
+}

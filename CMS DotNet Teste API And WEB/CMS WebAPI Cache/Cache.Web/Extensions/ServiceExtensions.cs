@@ -24,7 +24,7 @@ public static class ServiceExtensions
 
     public static IApplicationBuilder UseCollections(this IApplicationBuilder app, IConfiguration configuration)
     {
-        
+
 
         return app;
     }
@@ -33,7 +33,7 @@ public static class ServiceExtensions
     {
         services.AddQuickGridEntityFrameworkAdapter();
         services.AddDbContext<AppDbContext>(opt => opt.UseInMemoryDatabase("MensagensInMemoryDb")); //.UseAsyncSeeding(async (context, _, ct) => { });
-  
+
         return services;
     }
 
@@ -482,7 +482,7 @@ public static class ServiceExtensions
         services.AddMassTransit(x =>
         {
             x.SetKebabCaseEndpointNameFormatter(); // formatar os nomes de fila para Caso Kebab "MyQueue" -> "my-queue"
-            
+
             x.AddConsumer<MessagemConsumer>();
             //m.AddConsumers(Assembly.GetExecutingAssembly());
 

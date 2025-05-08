@@ -250,19 +250,19 @@ public class BaseRepository<TEntity> : IBaseRepositoryTransaction, IBaseReposito
         return await query.SingleOrDefaultAsync(cancellationToken: cancellationToken);
     }
 
-    public virtual IQueryable<TEntity> FromSql(string sql, params object[] parameters) => 
+    public virtual IQueryable<TEntity> FromSql(string sql, params object[] parameters) =>
         _dbSet.FromSqlRaw(sql, parameters);
 
-    public virtual TEntity Find(params object[] keyValues) => 
+    public virtual TEntity Find(params object[] keyValues) =>
         _dbSet.Find(keyValues);
 
-    public virtual ValueTask<TEntity> FindAsync(params object[] keyValues) => 
+    public virtual ValueTask<TEntity> FindAsync(params object[] keyValues) =>
         _dbSet.FindAsync(keyValues);
 
-    public virtual ValueTask<TEntity> FindAsync(object[] keyValues, CancellationToken cancellationToken) => 
+    public virtual ValueTask<TEntity> FindAsync(object[] keyValues, CancellationToken cancellationToken) =>
         _dbSet.FindAsync(keyValues, cancellationToken);
 
-    public IQueryable<TEntity> GetAll() => 
+    public IQueryable<TEntity> GetAll() =>
         _dbSet;
 
     public IQueryable<TEntity> GetAll(Expression<Func<TEntity, bool>> predicate, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include = null, bool asSplitQuery = false, bool includeCondition = true, bool disableTracking = true, bool ignoreQueryFilters = false)
@@ -303,7 +303,7 @@ public class BaseRepository<TEntity> : IBaseRepositoryTransaction, IBaseReposito
         return orderBy is not null ? orderBy(query).Select(selector) : query.Select(selector);
     }
 
-    public async Task<IList<TEntity>> GetAllAsync(CancellationToken cancellationToken = default) => 
+    public async Task<IList<TEntity>> GetAllAsync(CancellationToken cancellationToken = default) =>
         await _dbSet.ToListAsync(cancellationToken: cancellationToken);
 
     public async Task<IList<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>> predicate, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include = null, bool asSplitQuery = false, bool includeCondition = true, bool disableTracking = true, bool ignoreQueryFilters = false, CancellationToken cancellationToken = default)
@@ -434,7 +434,7 @@ public class BaseRepository<TEntity> : IBaseRepositoryTransaction, IBaseReposito
             : query.Select(selector).ToPagedListAsync(pageIndex, pageSize, 0, executeCount: executeCount, cancellationToken);
     }
 
-    public virtual int Count(Expression<Func<TEntity, bool>> predicate = null) => 
+    public virtual int Count(Expression<Func<TEntity, bool>> predicate = null) =>
         predicate is null
             ? _dbSet.Count()
             : _dbSet.Count(predicate);
@@ -447,12 +447,12 @@ public class BaseRepository<TEntity> : IBaseRepositoryTransaction, IBaseReposito
         return await _dbSet.CountAsync(predicate, cancellationToken: cancellationToken);
     }
 
-    public virtual long LongCount(Expression<Func<TEntity, bool>> predicate = null) => 
+    public virtual long LongCount(Expression<Func<TEntity, bool>> predicate = null) =>
         predicate is null
             ? _dbSet.LongCount()
             : _dbSet.LongCount(predicate);
 
-    public virtual async Task<long> LongCountAsync(Expression<Func<TEntity, bool>> predicate = null, CancellationToken cancellationToken = default) 
+    public virtual async Task<long> LongCountAsync(Expression<Func<TEntity, bool>> predicate = null, CancellationToken cancellationToken = default)
     {
         if (predicate is null)
             return await _dbSet.LongCountAsync(cancellationToken: cancellationToken);
@@ -473,7 +473,7 @@ public class BaseRepository<TEntity> : IBaseRepositoryTransaction, IBaseReposito
         return await _dbSet.Where(predicate).MaxAsync(selector, cancellationToken: cancellationToken);
     }
 
-    public virtual T Min<T>(Expression<Func<TEntity, T>> selector, Expression<Func<TEntity, bool>> predicate = null) => 
+    public virtual T Min<T>(Expression<Func<TEntity, T>> selector, Expression<Func<TEntity, bool>> predicate = null) =>
         predicate is null
             ? _dbSet.Min(selector)
             : _dbSet.Where(predicate).Min(selector);
@@ -486,7 +486,7 @@ public class BaseRepository<TEntity> : IBaseRepositoryTransaction, IBaseReposito
         return await _dbSet.Where(predicate).MinAsync(selector, cancellationToken: cancellationToken);
     }
 
-    public virtual decimal Average(Expression<Func<TEntity, decimal>> selector, Expression<Func<TEntity, bool>> predicate = null) => 
+    public virtual decimal Average(Expression<Func<TEntity, decimal>> selector, Expression<Func<TEntity, bool>> predicate = null) =>
         predicate is null
             ? _dbSet.Average(selector)
             : _dbSet.Where(predicate).Average(selector);
@@ -499,7 +499,7 @@ public class BaseRepository<TEntity> : IBaseRepositoryTransaction, IBaseReposito
         return await _dbSet.Where(predicate).AverageAsync(selector, cancellationToken: cancellationToken);
     }
 
-    public virtual decimal Sum(Expression<Func<TEntity, decimal>> selector, Expression<Func<TEntity, bool>> predicate = null) => 
+    public virtual decimal Sum(Expression<Func<TEntity, decimal>> selector, Expression<Func<TEntity, bool>> predicate = null) =>
         predicate is null
             ? _dbSet.Sum(selector)
             : _dbSet.Where(predicate).Sum(selector);
@@ -512,7 +512,7 @@ public class BaseRepository<TEntity> : IBaseRepositoryTransaction, IBaseReposito
         return await _dbSet.Where(predicate).SumAsync(selector, cancellationToken: cancellationToken);
     }
 
-    public bool Exists(Expression<Func<TEntity, bool>> selector = null) => 
+    public bool Exists(Expression<Func<TEntity, bool>> selector = null) =>
         selector is null
             ? _dbSet.Any()
             : _dbSet.Any(selector);
@@ -525,34 +525,34 @@ public class BaseRepository<TEntity> : IBaseRepositoryTransaction, IBaseReposito
         return await _dbSet.AnyAsync(selector, cancellationToken: cancellationToken);
     }
 
-    public virtual TEntity Insert(TEntity entity) => 
+    public virtual TEntity Insert(TEntity entity) =>
         _dbSet.Add(entity).Entity;
 
-    public virtual void Insert(params TEntity[] entities) => 
+    public virtual void Insert(params TEntity[] entities) =>
         _dbSet.AddRange(entities);
 
-    public virtual void Insert(IEnumerable<TEntity> entities) => 
+    public virtual void Insert(IEnumerable<TEntity> entities) =>
         _dbSet.AddRange(entities);
 
-    public virtual ValueTask<EntityEntry<TEntity>> InsertAsync(TEntity entity, CancellationToken cancellationToken = default) => 
+    public virtual ValueTask<EntityEntry<TEntity>> InsertAsync(TEntity entity, CancellationToken cancellationToken = default) =>
         _dbSet.AddAsync(entity, cancellationToken);
 
-    public virtual Task InsertAsync(params TEntity[] entities) => 
+    public virtual Task InsertAsync(params TEntity[] entities) =>
         _dbSet.AddRangeAsync(entities);
 
-    public virtual Task InsertAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default) => 
+    public virtual Task InsertAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default) =>
         _dbSet.AddRangeAsync(entities, cancellationToken);
 
-    public virtual void Update(TEntity entity) => 
+    public virtual void Update(TEntity entity) =>
         _dbSet.Update(entity);
 
     public virtual void Update(params TEntity[] entities) =>
         _dbSet.UpdateRange(entities);
 
-    public virtual void Update(IEnumerable<TEntity> entities) => 
+    public virtual void Update(IEnumerable<TEntity> entities) =>
         _dbSet.UpdateRange(entities);
 
-    public virtual void Delete(TEntity entity) => 
+    public virtual void Delete(TEntity entity) =>
         _dbSet.Remove(entity);
 
     public virtual void Delete(object id)
@@ -578,13 +578,13 @@ public class BaseRepository<TEntity> : IBaseRepositoryTransaction, IBaseReposito
         }
     }
 
-    public virtual void Delete(params TEntity[] entities) => 
+    public virtual void Delete(params TEntity[] entities) =>
         _dbSet.RemoveRange(entities);
 
-    public virtual void Delete(IEnumerable<TEntity> entities) => 
+    public virtual void Delete(IEnumerable<TEntity> entities) =>
         _dbSet.RemoveRange(entities);
 
-    public void ChangeEntityState(TEntity entity, EntityState state) => 
+    public void ChangeEntityState(TEntity entity, EntityState state) =>
         DataContext.Entry(entity).State = state;
 
     protected virtual void Dispose(bool disposing)
@@ -601,7 +601,7 @@ public class BaseRepository<TEntity> : IBaseRepositoryTransaction, IBaseReposito
 
     private async Task DisposeAsync(bool disposing)
     {
-        if (_disposedValue) 
+        if (_disposedValue)
             return;
 
         if (disposing)

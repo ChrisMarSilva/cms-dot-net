@@ -6,4 +6,10 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Cache.App.Api\Cache.App.Api.csproj" />
+    <ProjectReference Include="..\Cache.App.Worker\Cache.App.Worker.csproj" />
+    <ProjectReference Include="..\Cache.Infra.Data\Cache.Infra.Data.csproj" />
+  </ItemGroup>
+
 </Project>

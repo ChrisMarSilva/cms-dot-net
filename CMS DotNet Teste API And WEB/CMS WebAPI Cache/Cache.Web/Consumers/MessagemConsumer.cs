@@ -22,7 +22,7 @@ public class MessagemConsumer : IConsumer<MensagemDto>
         try
         {
             var message = ctx.Message;
-            var mensagemModel = new MensagemModel{ Id = Guid.NewGuid(), IdMsgJdPi = message.IdMsgJdPi!, IdMsg = message.IdMsg!, TpMsg = message.TpMsg!, QueueMsg = message.QueueMsg!, XmlMsg = message.XmlMsg!, DtHrRegistro = DateTime.UtcNow};
+            var mensagemModel = new MensagemModel { Id = Guid.NewGuid(), IdMsgJdPi = message.IdMsgJdPi!, IdMsg = message.IdMsg!, TpMsg = message.TpMsg!, QueueMsg = message.QueueMsg!, XmlMsg = message.XmlMsg!, DtHrRegistro = DateTime.UtcNow };
             _context.Mensagens.Add(mensagemModel);
 
             await using var transaction = await _context.Database.BeginTransactionAsync();

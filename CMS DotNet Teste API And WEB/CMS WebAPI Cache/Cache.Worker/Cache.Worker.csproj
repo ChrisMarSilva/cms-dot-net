@@ -10,4 +10,12 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.4" />
   </ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Cache.App.Worker\Cache.App.Worker.csproj" />
+		<ProjectReference Include="..\Cache.Contracts\Cache.Contracts.csproj" />
+		<ProjectReference Include="..\Cache.Infra.Bootstrap\Cache.Infra.Bootstrap.csproj" />
+		<ProjectReference Include="..\Cache.Infra.Data\Cache.Infra.Data.csproj" />
+		<ProjectReference Include="..\Cache.Shared\Cache.Shared.csproj" />
+	</ItemGroup>
 </Project>

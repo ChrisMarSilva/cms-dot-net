@@ -1,6 +1,6 @@
-﻿using Cache.Api.Core.Commands;
-using Cache.Api.Core.Notifications;
-using Cache.Api.Core.Queries;
+﻿using Cache.Shared.Core.Commands;
+using Cache.Shared.Core.Notifications;
+using Cache.Shared.Core.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -34,7 +34,7 @@ public class ProductController : ControllerBase
     {
         var product = await _mediatr.Send(new ProductGetQuery(id));
 
-        if (product == null) 
+        if (product == null)
             return NotFound();
 
         return Ok(product);
@@ -45,7 +45,7 @@ public class ProductController : ControllerBase
     {
         var productId = await _mediatr.Send(command);
 
-        if (Guid.Empty == productId) 
+        if (Guid.Empty == productId)
             return BadRequest();
 
         await _mediatr.Publish(new ProductCreatedNotification(productId));

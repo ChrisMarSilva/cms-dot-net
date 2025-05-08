@@ -43,7 +43,7 @@ public class MessageWorker : BackgroundService
         {
             using var scope = _serviceProvider.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-           
+
             //var message = new MensagemDto(IdMsgJdPi: Guid.NewGuid().ToString(), IdMsg: $"M{DateTime.UtcNow:yyyyMMddHHmmss}00000000000MDKGPXJKU3U", TpMsg: "pain.XXX", QueueMsg: "jd.pi.bacen.send.command.queue", XmlMsg: @"<?xml version=""1.0"" encoding=""UTF-8"" standalone=""no""?><Envelope xmlns=""https://www.bcb.gov.br/pi/pain.009/1.0""></Envelope>");
             //var queueName = _configuration["RabbitMQ:Queue"];
             //var sendProvider = scope.ServiceProvider.GetRequiredService<ISendEndpointProvider>();

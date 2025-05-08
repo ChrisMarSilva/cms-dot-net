@@ -1,9 +1,8 @@
-﻿using Cache.Api.Contracts.Mappings;
-using Cache.Api.Contracts.Requests;
-using Cache.Api.Contracts.Responses;
-using Cache.Api.Database.Contexts;
-using Cache.Api.Filters;
-using Cache.Api.Services;
+﻿using Cache.App.Api.Services;
+using Cache.Contracts.Request;
+using Cache.Contracts.Response;
+using Cache.Domain.Models;
+using Cache.Infra.Bootstrap.Filters;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
@@ -217,4 +216,25 @@ public class UserController : ControllerBase
             return StatusCode(StatusCodes.Status500InternalServerError, ErrorResponseDto.Iniciar(HttpStatusCode.InternalServerError, "Falha interna durante o processamente. Favor tentar novamente"));
         }
     }
+}
+
+
+public static class ContraUserMappingctMapping
+{
+    public static UserModel MapToUserModel(this UserRequestDto request) =>
+        new UserModel(
+            name: request.Name,
+            email: request.Email,
+            password: request.Password);
+
+    public static UserResponseDto MapToResponse(this UserModel userModel) =>
+        new UserResponseDto(
+            id: userModel.Id,
+            name: userModel.Name,
+            email: userModel.Email,
+            password: userModel.Password,
+            dtHrCreated: userModel.DtHrCreated);
+
+    public static IEnumerable<UserResponseDto> MapToResponse(this IEnumerable<UserModel> userModel) =>
+        userModel.Select(userModel => userModel.MapToResponse());
 }

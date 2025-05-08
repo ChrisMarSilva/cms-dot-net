@@ -1,5 +1,4 @@
-﻿using Cache.Domain.Repository;
-using Microsoft.EntityFrameworkCore.Storage;
+﻿using Microsoft.EntityFrameworkCore.Storage;
 using System.Transactions;
 
 namespace Cache.Infra.Data.Context;

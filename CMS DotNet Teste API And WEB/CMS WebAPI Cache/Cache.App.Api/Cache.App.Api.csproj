@@ -7,7 +7,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Services\" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.Abstractions" Version="9.0.3" />
+	  <PackageReference Include="StackExchange.Redis" Version="2.8.31" />
+	  <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="9.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Cache.Contracts\Cache.Contracts.csproj" />
+    <ProjectReference Include="..\Cache.Domain\Cache.Domain.csproj" />
   </ItemGroup>
 
 </Project>

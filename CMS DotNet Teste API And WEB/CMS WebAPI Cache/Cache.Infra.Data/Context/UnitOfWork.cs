@@ -36,12 +36,12 @@ public class UnitOfWork<TContext> : IUnitOfWork where TContext : DbContext
     public void Commit() =>
             _context.SaveChanges();
 
-    public async Task<bool> CommitAsync() => 
+    public async Task<bool> CommitAsync() =>
         await _context.SaveChangesAsync() > 0;
 
     public void Rollback() { }
 
-    public async Task<bool> RollbackAsync() 
+    public async Task<bool> RollbackAsync()
         => true;
 
     public int SaveChanges(bool ensureAutoHistory = false, Transaction transaction = null)
