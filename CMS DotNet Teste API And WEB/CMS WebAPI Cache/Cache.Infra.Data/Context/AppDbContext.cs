@@ -43,18 +43,15 @@ public sealed class AppDbContext: DbContext
 #endif
     }
 
-    //public DbSet<PessoaModel> Pessoas { get; set; }
-    //public DbSet<PessoaSituacaoModel> SituacaoPessoas { get; set; }
-
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         //if (!optionsBuilder.IsConfigured)
         //optionsBuilder.UseNpgsql("Server=localhost;Port=5432;Database=postgres;User ID=postgres;Password=postgres;");
     }
 
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    protected override void OnModelCreating(ModelBuilder builder)
     {
-        modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetAssembly(typeof(AppDbContext))!);
+        builder.ApplyConfigurationsFromAssembly(assembly: Assembly.GetAssembly(typeof(AppDbContext))!);
 
         //if (Database.IsNpgsql())
         //{
@@ -101,7 +98,7 @@ public sealed class AppDbContext: DbContext
         //    }
         //}
 
-        base.OnModelCreating(modelBuilder);
+        base.OnModelCreating(builder);
     }
 
     public async Task OpenConnection()

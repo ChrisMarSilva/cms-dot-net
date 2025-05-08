@@ -78,4 +78,5 @@ finally
     Console.WriteLine(new string('-', 60));
     Console.WriteLine($"[{DateTime.Now.TimeOfDay}]: FIM");
     Console.WriteLine(new string('-', 60));
+    Console.ReadKey();
 }

@@ -1,23 +1,46 @@
-var builder = WebApplication.CreateBuilder(args);
+using Cache.Auth.Middleware;
+using Serilog;
+using System.Text.Json.Serialization;
 
-// Add services to the container.
-
-builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
-
-var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+ConfigureSerilog.CreateLogger<Program>();
+try
 {
-    app.MapOpenApi();
+    var builder = WebApplication.CreateBuilder(args);
+
+    builder.Host.UseSerilog();
+
+    builder.Configuration
+        .SetBasePath(Directory.GetCurrentDirectory())
+        .AddJsonFile("appsettings.json", false, false)
+        .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", true, false)
+        .AddEnvironmentVariables();
+
+    builder.Services.AddControllers().AddJsonOptions(opt => { opt.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull; });
+    builder.Services.AddOpenApi();
+    builder.Services.AddDefaultResponseCompression();
+    builder.Services.AddDefaultApiVersioning();
+    builder.Services.AddDefaultCorsPolicy();
+
+    var app = builder.Build();
+
+    if (app.Environment.IsDevelopment())
+    {
+        app.MapOpenApi();
+    }
+
+    app.UseResponseCompression();
+    app.UseHttpsRedirection();
+    app.UseAuthorization();
+    app.UseDefaultCors();
+    app.MapControllers();
+
+    await app.RunAsync();
 }
-
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
-app.MapControllers();
-
-app.Run();
+catch (Exception ex)
+{
+    Log.Fatal(ex, "Host encerrado inesperadamente");
+}
+finally
+{
+    ConfigureSerilog.CloseAndFlush();
+}

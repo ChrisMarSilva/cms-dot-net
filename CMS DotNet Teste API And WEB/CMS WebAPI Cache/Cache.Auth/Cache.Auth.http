@@ -1,6 +1,21 @@
-@Cache.Auth_HostAddress = http://localhost:5186
+@HostAddress = https://localhost:7193
 
-GET {{Cache.Auth_HostAddress}}/weatherforecast/
+### Auth: Get
+GET {{HostAddress}}/api/v1/auth
 Accept: application/json
+###
 
+### Auth: Create
+GET {{HostAddress}}/api/v1/auth
+Content-Type: application/json
+{
+    "name": "Personal 004",
+    "email": "perssonal.001@gmail.com",
+    "password": "12345678"
+}
+###
+
+### Data: Get
+GET {{HostAddress}}/api/v1/data
+Accept: application/json
 ###

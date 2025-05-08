@@ -52,6 +52,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cache.Tests.Misc.Stress", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cache.Tests.Misc.Database", "Cache.Tests.Misc.Data\Cache.Tests.Misc.Database.csproj", "{7E305A45-22B3-458B-B312-51350C68B398}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cache.Tests.Misc.Serilog", "Cache.Tests.Misc.Serilog\Cache.Tests.Misc.Serilog.csproj", "{F626C154-0A6D-4723-840D-5B653E107E8E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -110,6 +112,10 @@ Global
 		{7E305A45-22B3-458B-B312-51350C68B398}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7E305A45-22B3-458B-B312-51350C68B398}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7E305A45-22B3-458B-B312-51350C68B398}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F626C154-0A6D-4723-840D-5B653E107E8E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F626C154-0A6D-4723-840D-5B653E107E8E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F626C154-0A6D-4723-840D-5B653E107E8E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F626C154-0A6D-4723-840D-5B653E107E8E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -135,6 +141,7 @@ Global
 		{43781D0B-9398-40CA-9855-B918F938397D} = {F26D0A7C-2BF8-49EB-BF3F-6DE21C554EAA}
 		{FF8586E8-00D7-47C3-89A5-23D6A20243DF} = {43781D0B-9398-40CA-9855-B918F938397D}
 		{7E305A45-22B3-458B-B312-51350C68B398} = {43781D0B-9398-40CA-9855-B918F938397D}
+		{F626C154-0A6D-4723-840D-5B653E107E8E} = {43781D0B-9398-40CA-9855-B918F938397D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A2CB80E8-B5B7-43BF-B126-03B76663314E}
