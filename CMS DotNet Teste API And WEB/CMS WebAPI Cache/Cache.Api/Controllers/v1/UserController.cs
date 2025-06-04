@@ -7,7 +7,7 @@ using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
-namespace Cache.Api.Controllers;
+namespace Cache.Api.Controllers.v1;
 
 [ApiController]
 //[ApiVersion("1")]
@@ -35,7 +35,7 @@ public class UserController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ErrorResponseDto))]
     [ProducesResponseType(StatusCodes.Status451UnavailableForLegalReasons, Type = typeof(ErrorResponseDto))]
     [ProducesDefaultResponseType(typeof(ErrorResponseDto))]
-    [ValidateIdempotencyKeyFilterAttribute(cacheTimeInMinutes: 60)]
+    [ValidateIdempotencyKeyFilter(cacheTimeInMinutes: 60)]
     //[ServiceFilter(typeof(ValidateIdempotencyKeyFilterAttribute))]
     public async Task<IActionResult> GetAll(CancellationToken cancellationToken = default)
     {
@@ -105,7 +105,7 @@ public class UserController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ErrorResponseDto))]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     [ProducesDefaultResponseType(typeof(ErrorResponseDto))]
-    [ValidateIdempotencyKeyFilterAttribute]
+    [ValidateIdempotencyKeyFilter]
     public async Task<IActionResult> Create([FromBody] UserRequestDto request, [FromHeader(Name = "Idempotency-Key")] string idempotenceKey, CancellationToken cancellationToken = default)
     {
         try
@@ -120,7 +120,7 @@ public class UserController : ControllerBase
             var response = result.MapToResponse();
             // return Created(nameof(FindById), response);
 
-            var idempotencyResult = AcceptedAtAction(nameof(FindById), new { Id = response.Id }, response);
+            var idempotencyResult = AcceptedAtAction(nameof(FindById), new { response.Id }, response);
             HttpContext.Items["idempotency-response-body"] = idempotencyResult;
             return idempotencyResult;
         }
@@ -143,7 +143,7 @@ public class UserController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ErrorResponseDto))]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     [ProducesDefaultResponseType(typeof(ErrorResponseDto))]
-    [ValidateIdempotencyKeyFilterAttribute]
+    [ValidateIdempotencyKeyFilter]
     public async Task<IActionResult> Update([FromBody] UserRequestDto request, [FromHeader(Name = "Idempotency-Key")] string idempotenceKey, Guid id, CancellationToken cancellationToken = default)
     {
         try
@@ -165,7 +165,7 @@ public class UserController : ControllerBase
             var response = result!.MapToResponse();
             // return Ok(response);
 
-            var idempotencyResult = AcceptedAtAction(nameof(FindById), new { Id = response.Id }, response);
+            var idempotencyResult = AcceptedAtAction(nameof(FindById), new { response.Id }, response);
             HttpContext.Items["idempotency-response-body"] = idempotencyResult;
             return idempotencyResult;
         }
@@ -188,7 +188,7 @@ public class UserController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ErrorResponseDto))]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     [ProducesDefaultResponseType(typeof(ErrorResponseDto))]
-    [ValidateIdempotencyKeyFilterAttribute]
+    [ValidateIdempotencyKeyFilter]
     public async Task<IActionResult> Delete(Guid id, CancellationToken cancellationToken = default)
     {
         try

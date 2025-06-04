@@ -11,7 +11,7 @@ public sealed class AuthContext : IdentityDbContext<ApplicationUser, Application
 {
 
 #if DEBUG
-    private static bool _scriptGenerated;
+    //private static bool _scriptGenerated;
 #endif
 
     public AuthContext(DbContextOptions options) : base(options)

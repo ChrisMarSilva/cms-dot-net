@@ -2,6 +2,7 @@
 using Cache.App.Api;
 using Cache.App.Worker;
 using Cache.Contracts.Response;
+using Cache.Domain.Models.Auth;
 using Cache.Infra.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -62,6 +63,11 @@ public static class Register
             options.DefaultApiVersion = new ApiVersion(1, 0);
             options.AssumeDefaultVersionWhenUnspecified = true;
             options.ReportApiVersions = true;
+            options.ApiVersionReader = ApiVersionReader.Combine(
+                new UrlSegmentApiVersionReader(),
+                new QueryStringApiVersionReader("v"),
+                new HeaderApiVersionReader("X-API-VERSION")
+            );
         });
 
         return services;
@@ -142,9 +148,24 @@ public static class Register
 
     private static IApplicationBuilder UseHealthCheck(this IApplicationBuilder app)
     {
-        // app.MapHealthChecks("/health");
+        //using HealthChecks.UI.Client;
+        //using Microsoft.AspNetCore.Builder;
+        //using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 
-        //app.MapHealthChecks("/health", new HealthCheckOptions
+        // app.MapHealthChecks("/hc");
+
+        //app.UseHealthChecks("/hc", new HealthCheckOptions
+        //{
+        //    Predicate = _ => true,
+        //    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+        //});
+
+        //app.UseHealthChecks("/liveness", new HealthCheckOptions
+        //{
+        //    Predicate = r => r.Name.Contains("self")
+        //});
+
+        //app.UseHealthChecks("/hc", new HealthCheckOptions
         //{
         //    ResponseWriter = async (context, report) =>
         //    {
@@ -179,6 +200,16 @@ public static class Register
 
         return app;
     }
+   
+    //private static IDictionary<string, string[]> ToDictionary(this ValidationResult validationResult)
+    //{
+    //    return validationResult.Errors
+    //      .GroupBy(x => x.PropertyName)
+    //      .ToDictionary(
+    //        g => g.Key,
+    //        g => g.Select(x => x.ErrorMessage).ToArray()
+    //      );
+    //}
 
     public static IApplicationBuilder UseDefaultExceptionHandler(this IApplicationBuilder app)
     {
@@ -209,16 +240,6 @@ public static class Register
 
         return app;
     }
-
-    //private static IDictionary<string, string[]> ToDictionary(this ValidationResult validationResult)
-    //{
-    //    return validationResult.Errors
-    //      .GroupBy(x => x.PropertyName)
-    //      .ToDictionary(
-    //        g => g.Key,
-    //        g => g.Select(x => x.ErrorMessage).ToArray()
-    //      );
-    //}
 
     //---------------------------------------------------------------------------------------
     //---------------------------------------------------------------------------------------
@@ -313,8 +334,8 @@ public static class ConfigureSerilog
     public static void CreateLogger<T>() where T : class
     {
         var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")
-                          ?? Environment.GetEnvironmentVariable("DOTNET_ENVIRONMENT")
-                          ?? "Development";
+            ?? Environment.GetEnvironmentVariable("DOTNET_ENVIRONMENT")
+            ?? "Development";
 
         var configurationBuilder = new ConfigurationBuilder()
             .SetBasePath(Directory.GetCurrentDirectory())
@@ -323,9 +344,7 @@ public static class ConfigureSerilog
             .AddEnvironmentVariables("JDPI_");
 
         if (environment.Equals("Development", StringComparison.OrdinalIgnoreCase))
-        {
             configurationBuilder.AddUserSecrets<T>(true);
-        }
 
         var configuration = configurationBuilder.Build();
 
@@ -371,10 +390,16 @@ public static class ConfigureSerilog
             .ReadFrom.Configuration(configuration)
             //.WriteTo.Tracing()
             //.WriteTo.File("logs/log.txt", LogEventLevel.Warning, rollingInterval: RollingInterval.Day, outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level:u3}] {Message:lj}{NewLine}{Exception}"));
+            //.WriteTo.MSSqlServer(connectionString: "SuaConnectionString", tableName: "Logs", autoCreateSqlTable: true)
             .WriteTo.Async(a =>
             {
-                //a.Console(LogEventLevel.Verbose, "{NewLine}{Timestamp:HH:mm:ss.fff} [{Level}] ({CorrelationToken}) {Message:lj}{NewLine}{Exception} {Properties:j}", theme: AnsiConsoleTheme.Literate, formatProvider: new CultureInfo("pt-BR"));
-                a.Console(LogEventLevel.Verbose, "{NewLine}{Timestamp:HH:mm:ss.fff} [{Level}] {Message:lj}", theme: AnsiConsoleTheme.Literate, formatProvider: new CultureInfo("pt-BR"));
+                a.Console(
+                    restrictedToMinimumLevel: LogEventLevel.Verbose,
+                    outputTemplate: "{NewLine}{Timestamp:dd-MM-yyy HH:mm:ss.fff zzz} [{Level:u3}] {Message:lj} {NewLine}{Exception}",  // "{NewLine}{Timestamp:HH:mm:ss.fff} [{Level}] ({CorrelationToken}) {Message:lj}{NewLine}{Exception} {Properties:j}"
+                    //rollingInterval: RollingInterval.Day,
+                    formatProvider: new CultureInfo("pt-BR"),
+                    theme: AnsiConsoleTheme.Literate);
+
             }, bufferSize: 500);
 
         Log.Logger = loggerConfiguration.CreateLogger();

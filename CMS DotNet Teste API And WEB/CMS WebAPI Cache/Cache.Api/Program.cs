@@ -39,6 +39,7 @@ try
     }
     app.UseResponseCompression();
     app.UseHttpsRedirection();
+    app.UseAuthentication();
     app.UseAuthorization();
     app.UseServicesForApi();
     app.MapControllers();

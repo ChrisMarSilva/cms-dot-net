@@ -1,4 +1,6 @@
 ﻿using Cache.App.Api.Services;
+using Cache.Domain.Models.Auth;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -21,7 +23,26 @@ public static class Register
 
     public static IServiceCollection AddAppServicesForAuth(this IServiceCollection services, IConfiguration configuration)
     {
+        services.AddAuthorization();
+        services.AddAuthentication().AddCookie(IdentityConstants.ApplicationScheme);
 
+        services
+            .AddIdentityCore<ApplicationUser>();
+            //.AddEntityFrameworkStores<AuthDbContext>()
+            //.AddApiEndpoints();
+
+        /*
+         
+         builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("ApiScope", policy =>
+    {
+        policy.RequireAuthenticatedUser();
+        policy.RequireClaim("scope", "geek_shopping");
+    });
+});
+
+         */
         return services;
     }
 }

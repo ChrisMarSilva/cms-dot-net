@@ -1,7 +1,7 @@
 ﻿using Cache.Shared.Core.Commands;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Cache.Api.Controllers;
+namespace Cache.Api.Controllers.v1;
 
 [ApiController]
 [Route("api/v1/[controller]")]
