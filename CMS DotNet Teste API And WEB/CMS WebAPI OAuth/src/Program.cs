@@ -16,8 +16,7 @@ builder.Configuration
 
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
-builder.Services.AddDbContext<AppDbContext>(opt => 
-    opt.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddDbContext<AppDbContext>(opt => opt.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services
     .AddAuthentication(x =>
@@ -27,41 +26,28 @@ builder.Services
     })
     .AddJwtBearer(opt =>
     {
-        //opt.Authority = "https://localhost:7256/";
-        //opt.Audience = builder.Configuration["Jwt:Audience"];
+        opt.RequireHttpsMetadata = false;
         opt.TokenValidationParameters = new TokenValidationParameters
         {
-            //RoleClaimType = "role",
-            //ValidateActor = true,
-
             ValidateIssuer = true,
             ValidIssuer = builder.Configuration["Jwt:Issuer"],
-
             ValidateAudience = true,
             ValidAudience = builder.Configuration["Jwt:Audience"],
-
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Secret"]!)),
-            ClockSkew = TimeSpan.FromMinutes(2.0),
+            ClockSkew = TimeSpan.Zero,
         };
     });
 
 builder.Services.AddAuthorization(opt =>
 {
-    //opt.FallbackPolicy = new AuthorizationPolicyBuilder()
-    //  .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
-    //  .RequireAuthenticatedUser()
-    //  .Build();
     opt.AddPolicy("ApiScope", policy  => policy .RequireAuthenticatedUser().RequireClaim("aud", "api"));
     opt.AddPolicy("FrontScope", p => p.RequireAuthenticatedUser().RequireClaim("aud", "front"));
 });
 
 builder.Services
-    //.AddIdentityCore<ApplicationUser, ApplicationRole>()
-    //.AddIdentityApiEndpoints<IdentityUser>()
-    //.AddDefaultIdentity<IdentityUser>(opt => opt.SignIn.RequireConfirmedAccount = true)
-    .AddIdentity<ApplicationUser, ApplicationRole>(opt => // builder.Services.Configure<IdentityOptions>(opt =>
+    .AddIdentity<ApplicationUser, ApplicationRole>(opt =>
     {
         // Password settings.
         opt.Password.RequireDigit = true;
@@ -81,7 +67,6 @@ builder.Services
         opt.User.RequireUniqueEmail = false;
     })
     .AddEntityFrameworkStores<AppDbContext>()
-    //.AddApiEndpoints()
     .AddDefaultTokenProviders();
 
 var app = builder.Build();

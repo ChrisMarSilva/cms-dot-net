@@ -44,24 +44,28 @@ Content-Type: application/json
     "grant_type": "client_credentials",
     "scope": "api"
 }
-###Content-Type: application/x-www-form-urlencoded
-###> {% 
-###  const response = await response.json();
-###  client.global.set("access_token", response.access_token);
-###%}
+###
+
+### Get Refresh-Token
+POST {{HostAddress}}/refresh-token
+Content-Type: application/json
+{
+    "accesstoken": "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiYmI4YTlmOTU3ZDBlNDY0ZGI2YWQwOTM4OWU1MzA3NTIiLCJkaXNwbGF5X25hbWUiOiJBZG1pbmlzdHJhZG9yIiwicm9sZSI6ImZ1bGwiLCJhdWQiOlsiZnJvbnQiLCJhcGkiLCJvYXV0aC1hcGkiXSwiZXhwIjoxNzQ5NDc5MzIzLCJpc3MiOiJvYXV0aC1zZXJ2ZXIifQ.aHPWb9Ij5E83xT9LPkuLmpxFaaqUu3lUtEW8X2fgoAWiIrRuAPVD-6C827p6Zy3uwmnhQM0p1TqfJBXeAU03CA",
+    "refreshtoken": "OyzkzhqCaYYDxKUJ/Iik1soBslTqWi38XbBKu+T1966EFYRT3w0rVlTQLKMRnyIgL/8RoLVxiVPKFulOJWJCQw=="
+}
 ###
 
 ### Get authorize
 GET {{HostAddress}}/authorize-only
-Authorization: Bearer {{access_token}}
+Authorization: Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiYmI4YTlmOTU3ZDBlNDY0ZGI2YWQwOTM4OWU1MzA3NTIiLCJkaXNwbGF5X25hbWUiOiJBZG1pbmlzdHJhZG9yIiwicm9sZSI6ImZ1bGwiLCJhdWQiOlsiZnJvbnQiLCJhcGkiLCJvYXV0aC1hcGkiXSwiZXhwIjoxNzQ5NDc3MTU5LCJpc3MiOiJvYXV0aC1zZXJ2ZXIifQ.Q-yLebwf4w2TIOqHKnEB9xmaq_UXl6Jd8Hy9vgm5gB8b2Fnlqz-jHxYR3-cLOirvpgLzpELqlTmy75fznTfIHg
 ###
 
 ### Get full
 GET {{HostAddress}}/full-only
-Authorization: Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiYmI4YTlmOTU3ZDBlNDY0ZGI2YWQwOTM4OWU1MzA3NTIiLCJkaXNwbGF5X25hbWUiOiJBZG1pbmlzdHJhZG9yIiwicm9sZSI6ImZ1bGwiLCJhdWQiOlsiZnJvbnQiLCJhcGkiLCJhdWRpZW5jZSJdLCJleHAiOjE3NDkzOTE4MzUsImlzcyI6Im9hdXRoIn0.nI4AWPar94kdQZI0bvOfUFa2CP6XPXbhyS5L1xXXZTUjZqUpz5aBKwKYi1GRy_PaEK_tekL4msDikt28vkBExQ
+Authorization: Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiYmI4YTlmOTU3ZDBlNDY0ZGI2YWQwOTM4OWU1MzA3NTIiLCJkaXNwbGF5X25hbWUiOiJBZG1pbmlzdHJhZG9yIiwicm9sZSI6ImZ1bGwiLCJhdWQiOlsiZnJvbnQiLCJhcGkiLCJvYXV0aC1hcGkiXSwiZXhwIjoxNzQ5NDc3MTU5LCJpc3MiOiJvYXV0aC1zZXJ2ZXIifQ.Q-yLebwf4w2TIOqHKnEB9xmaq_UXl6Jd8Hy9vgm5gB8b2Fnlqz-jHxYR3-cLOirvpgLzpELqlTmy75fznTfIHg
 ###
 
 ### Get admin
 GET {{HostAddress}}/admin-only
-Authorization: Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiYmI4YTlmOTU3ZDBlNDY0ZGI2YWQwOTM4OWU1MzA3NTIiLCJkaXNwbGF5X25hbWUiOiJBZG1pbmlzdHJhZG9yIiwicm9sZSI6ImZ1bGwiLCJhdWQiOlsiZnJvbnQiLCJhcGkiLCJhdWRpZW5jZSJdLCJleHAiOjE3NDkzOTE4MzUsImlzcyI6Im9hdXRoIn0.nI4AWPar94kdQZI0bvOfUFa2CP6XPXbhyS5L1xXXZTUjZqUpz5aBKwKYi1GRy_PaEK_tekL4msDikt28vkBExQ
+Authorization: Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiYmI4YTlmOTU3ZDBlNDY0ZGI2YWQwOTM4OWU1MzA3NTIiLCJkaXNwbGF5X25hbWUiOiJBZG1pbmlzdHJhZG9yIiwicm9sZSI6ImZ1bGwiLCJhdWQiOlsiZnJvbnQiLCJhcGkiLCJvYXV0aC1hcGkiXSwiZXhwIjoxNzQ5NDc3MTU5LCJpc3MiOiJvYXV0aC1zZXJ2ZXIifQ.Q-yLebwf4w2TIOqHKnEB9xmaq_UXl6Jd8Hy9vgm5gB8b2Fnlqz-jHxYR3-cLOirvpgLzpELqlTmy75fznTfIHg
 ###

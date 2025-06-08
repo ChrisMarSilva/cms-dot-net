@@ -1,5 +1,6 @@
 using CMS_WebAPI_OAuth.Contract.Request;
 using CMS_WebAPI_OAuth.Contract.Response;
+using CMS_WebAPI_OAuth.Data.Context;
 using CMS_WebAPI_OAuth.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -8,11 +9,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Data;
 using System.IdentityModel.Tokens.Jwt;
-using System.Net.WebSockets;
 using System.Security.Claims;
 using System.Security.Cryptography;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
 
 namespace CMS_WebAPI_OAuth.Controllers.v1;
 
@@ -24,13 +22,15 @@ public class AuthController : ControllerBase
 {
     private readonly ILogger<AuthController> _logger;
     private readonly IConfiguration _configuration;
+    private readonly AppDbContext _context;
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly SignInManager<ApplicationUser> _signInManager;
 
-    public AuthController(ILogger<AuthController> logger, IConfiguration configuration, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
+    public AuthController(ILogger<AuthController> logger, IConfiguration configuration, AppDbContext context, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
     {
         _logger = logger;
         _configuration = configuration;
+        _context = context;
         _userManager = userManager;
         _signInManager = signInManager;
     }
@@ -203,7 +203,6 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("token")]
-    //[Consumes("application/x-www-form-urlencoded")] // FromForm
     public async Task<ActionResult<TokenResponseDto>> GenerateToken([FromBody] TokenRequestDto request)
     {
         try
@@ -222,7 +221,6 @@ public class AuthController : ControllerBase
             }
 
             var login = await _signInManager.CheckPasswordSignInAsync(applicationUser, request.client_secret, false);
-            //var login = await _signInManager.PasswordSignInAsync(applicationUser, request.client_secret, false, false);
 
             if (login is null || !login.Succeeded)
             {
@@ -257,7 +255,6 @@ public class AuthController : ControllerBase
            
             var claims = new List<Claim>
             {
-                //new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString("N")),
                 new Claim("user_id", applicationUser.Id.ToString("N")),
                 new Claim("display_name", friendlyName ?? "-")
             };
@@ -280,26 +277,23 @@ public class AuthController : ControllerBase
                 claims.Add(new Claim("aud", item)); // AllowedScopes 
             }
 
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetValue<string>("Jwt:Secret")!));
+            var securityKey = new SymmetricSecurityKey(Convert.FromBase64String(_configuration.GetValue<string>("Jwt:Secret")!));
             var tokenExpire = DateTime.UtcNow.AddSeconds(_configuration.GetValue<int>("Jwt:Expire"));
-
-            var token = new JwtSecurityTokenHandler()
-                .WriteToken(new JwtSecurityToken(
+            
+            var tokenDescriptor = new JwtSecurityToken(
                 issuer: _configuration.GetValue<string>("Jwt:Issuer"),
                 audience: _configuration.GetValue<string>("Jwt:Audience"),
-                claims: claims, //new ClaimsIdentity(claims),
+                claims: claims,
                 expires: tokenExpire,
                 signingCredentials: new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha512)
-            ));
+            );
 
-            var randomNumber = new byte[32];
-            using var rng = RandomNumberGenerator.Create();
-            rng.GetBytes(randomNumber);
-            var refreshToken = Convert.ToBase64String(randomNumber); // Convert.ToBase64String(RandomNumberGenerator.GetBytes(64))
+            var token = new JwtSecurityTokenHandler().WriteToken(tokenDescriptor);
 
-            //user.RefreshToken = refreshToken;
-            //user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
-            //await context.SaveChangesAsync();
+            var refreshToken = Convert.ToBase64String(RandomNumberGenerator.GetBytes(64));
+
+            applicationUser.SetRefreshToken(refreshToken, tokenExpire);
+            await _context.SaveChangesAsync();
 
             var response = new TokenResponseDto
             {
@@ -319,7 +313,107 @@ public class AuthController : ControllerBase
         }
     }
 
-    [HttpGet("authorize-only")] [Authorize] public IActionResult AuthorizeOnly() => Ok("You are and authorize!");
-    [HttpGet("full-only")] [Authorize(Roles = "full")] public IActionResult FullOnly() => Ok("You are and full!");
-    [HttpGet("admin-only")] [Authorize(Roles = "Admin")] public IActionResult AdminOnly() => Ok("You are and admin!");
+    private async Task<bool> UserStillHasScopes(ApplicationUser user, string scopes)
+    {
+        var audience = _configuration.GetValue<string>("Jwt:Audience")!;
+        var scopeValidate = true;
+        foreach (var scope in scopes.Split(',', StringSplitOptions.RemoveEmptyEntries))
+        {
+            if (audience.Equals(scope, StringComparison.OrdinalIgnoreCase)) continue;
+            if (await _userManager.IsInRoleAsync(user, scope)) continue;
+            scopeValidate = false;
+            break;
+        }
+
+        return scopeValidate;
+    }
+
+    [HttpPost("refresh-token")]
+    public async Task<ActionResult<RefreshTokenResponseDto>> GenerateRefreshToken([FromBody] RefreshTokenRequestDto request)
+    {
+        try
+        {
+            var securityKey = new SymmetricSecurityKey(Convert.FromBase64String(_configuration.GetValue<string>("Jwt:Secret")!));
+            var key = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha512);
+
+            var tokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateAudience = false,
+                ValidateIssuer = false,
+                ValidateIssuerSigningKey = true,
+                ValidateLifetime = false,
+                IssuerSigningKey = key.Key
+            };
+            var handler = new JwtSecurityTokenHandler();
+            var principal = handler.ValidateToken(request.AccessToken, tokenValidationParameters, out var securityToken);
+
+            if (securityToken is not JwtSecurityToken jwtSecurityToken || !jwtSecurityToken.Header.Alg.Equals(key.Algorithm, StringComparison.InvariantCultureIgnoreCase))
+            {
+                _logger.LogWarning("access token/refresh token inválido.");
+                return BadRequest("access token/refresh token inválido.");
+            }
+
+            var userId = principal.Claims.FirstOrDefault(c => c.Type == "user_id")?.Value; // ClaimTypes.Name // principal.Identity!.Name
+            var applicationUser = await _userManager.FindByIdAsync(userId); 
+
+            if (applicationUser is null ||
+                string.IsNullOrEmpty(applicationUser.RefreshToken) || 
+                !applicationUser.RefreshToken.Equals(request.RefreshToken, StringComparison.Ordinal) || 
+                applicationUser.DtHrExpireRefreshToken <= DateTime.UtcNow)
+            {
+                _logger.LogWarning("access token/refresh token inválido.");
+                return BadRequest("access token/refresh token inválido.");
+            }
+
+            if (await _userManager.IsLockedOutAsync(applicationUser))
+            {
+                _logger.LogWarning("Usuário bloqueado: {idUser}.", applicationUser.Id.ToString());
+                return BadRequest("Usuário bloqueado.");
+            }
+
+            var scopes = string.Join(',', principal.Claims.Where(x => x.Type == "aud").Select(y => y.Value.Normalize().ToLowerInvariant()));
+            if (!await UserStillHasScopes(applicationUser, scopes))
+            {
+                _logger.LogWarning("Usuário perdeu algum escopo: {idUser}.", applicationUser.Id.ToString());
+                return BadRequest("Usuário perdeu algum escopo.");
+            }
+
+            var tokenExpire = DateTime.UtcNow.AddSeconds(_configuration.GetValue<int>("Jwt:Expire"));
+
+            var tokenDescriptor = new JwtSecurityToken(
+                issuer: _configuration.GetValue<string>("Jwt:Issuer"),
+                audience: _configuration.GetValue<string>("Jwt:Audience"),
+                claims: principal.Claims,
+                expires: tokenExpire,
+                signingCredentials: key
+            );
+
+            var token = new JwtSecurityTokenHandler().WriteToken(tokenDescriptor);
+
+            var refreshToken = Convert.ToBase64String(RandomNumberGenerator.GetBytes(64));
+
+            applicationUser.SetRefreshToken(refreshToken, tokenExpire);
+            await _context.SaveChangesAsync();
+
+            var response = new RefreshTokenResponseDto
+            {
+                expires_in = new DateTimeOffset(tokenExpire).ToUnixTimeSeconds(),
+                access_token = token,
+                refresh_token = refreshToken,
+                token_type = "Bearer",
+                scope = string.Join(',', principal.Claims.Where(x => x.Type == "aud").Select(y => y.Value)),
+            };
+
+            return Ok(response);
+        }
+        catch (Exception e)
+        {
+            _logger.LogCritical(e, "Falha crítica, segue a descrição: {description}.", e.Message);
+            return StatusCode(StatusCodes.Status500InternalServerError, "Falha interna durante o processamente. Favor tentar novamente");
+        }
+    }
+
+    [HttpGet("authorize-only")] [Authorize]                 public IActionResult AuthorizeOnly() => Ok("You are and authorize!");
+    [HttpGet("full-only")]      [Authorize(Roles = "full")] public IActionResult FullOnly() => Ok("You are and full!");
+    [HttpGet("admin-only")]     [Authorize(Roles = "Admin")] public IActionResult AdminOnly() => Ok("You are and admin!");
 }
