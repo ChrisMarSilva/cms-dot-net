@@ -1,46 +1,93 @@
-﻿using System.Data.OracleClient;
+﻿
+
+using Oracle.ManagedDataAccess.Client;
 
 Console.WriteLine("Inicio");
 try
 {
+    var dbDatabase = "PIXHML-ORACLE21C"; //  "JDDSVDB";
+    var dbDatabaseIp = "10.1.4.11:1521/JDPI_SPI_PIX_AUT_AUTORIZACAO";  // "JDDSVDB.JDCONSULTORES.COM.BR,1522/JDDSVDB"; //  "10.204.1.3:1521/PROD"; 
+    var dbDatabaseFull = "(DESCRIPTION = (ADDRESS = (PROTOCOL = TCP)(HOST = 10.1.4.11)(PORT = 1521))(CONNECT_DATA = (SERVER = DEDICATED)(SERVICE_NAME = XE)))"; // "(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=JDDSVDB.JDCONSULTORES.COM.BR)(PORT=1522))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=JDDSVDB.JDCONSULTORES.COM.BR)))"; 
+    var dbUser = "JDPI_SPI_PIX_AUT_AUTORIZACAO"; // "CRIS_JDPCS";
+    var dbPass = "JDPI_SPI_PIX_AUT_AUTORIZACAO"; // "CRIS_JDPCS";
 
-    var connectionString = "";
-    connectionString = "User Id=ALDO_JDNPC;Password=ALDO_JDNPC;Data Source=JDDSVDB;Integrated Security=yes;";
-    connectionString = "User Id=ALDO_JDNPC;Password=ALDO_JDNPC;Data Source=JDDSVDB.JDCONSULTORES.COM.BR;Integrated Security=yes;";
-    connectionString = "Data Source=JDDSVDB;User Id=ALDO_JDNPC;Password=ALDO_JDNPC;";
-    connectionString = "Data Source=JDDSVDB;Integrated Security=yes;";
-    connectionString = "Data Source=JDDSVDB;User Id=ALDO_JDNPC;Password=ALDO_JDNPC;DBA Privilege=SYSDBA;";
-    connectionString = "Provider=MSDAORA.1;Data Source=JDDSVDB;User Id=ALDO_JDNPC;Password=ALDO_JDNPC;Persist Security Info=False;";
-    connectionString = "User Id=JDPIX;Password=JDPIX;Data Source=10.0.27.97:1521/XE;";
-    connectionString = "Data Source=JDDSVDB.JDCONSULTORES.COM.BR,1522;User Id=ALDO_JDNPC;Password=ALDO_JDNPC;";
-    connectionString = "user id=ALDO_JDNPC;password=ALDO_JDNPC;data source=(DESCRIPTION =(ADDRESS = (PROTOCOL = TCP)(HOST = JDDSVDB.JDCONSULTORES.COM.BR)(PORT = 1522))(CONNECT_DATA =(SERVER = DEDICATED)(SERVICE_NAME = JDDSVDB.JDCONSULTORES.COM.BR)))";
-    connectionString = "Data Source=(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=JDDSVDB.JDCONSULTORES.COM.BR)(PORT=1522))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=JDDSVDB.JDCONSULTORES.COM.BR)));User Id=ALDO_JDNPC;Password=ALDO_JDNPC;";
-    connectionString = "Server=JDDSVDB;Uid=ALDO_JDNPC;Pwd=ALDO_JDNPC;";
-    connectionString = "User Id=ALDO_JDNPC;Password=ALDO_JDNPC;Data Source=10.10.20.35:1521/XE;";
+    //var databases = new List<string>
+    //{
+    //    $"JDDSVDB",
+    //    $"10.204.1.3:1521/PROD",
+    //    $"(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=JDDSVDB.JDCONSULTORES.COM.BR)(PORT=1522))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=JDDSVDB.JDCONSULTORES.COM.BR)))",
+    //};
 
-    // "Data Source=(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST=myserver.sys.mycompany.com)(PORT=1521)))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=mydb.mycompany.com)));User Id=MyLanId;Password=MyPasswors;Validate Connection=True;"
-
-    // Foi feita uma tentativa de se carregar um programa com um formato incorreto. (0x8007000B)
-
-    using (OracleConnection connection = new OracleConnection(connectionString))
+    var connectionStrings = new List<string>
     {
-        connection.Open();
+        $"Data Source={dbDatabase};User Id={dbUser};Password={dbPass};",
+       // $"Data Source={dbDatabase};User Id={dbUser};Password={dbPass};DBA Privilege=SYSDBA;",
+        //$"Data Source={dbDatabase};User Id={dbUser};Password={dbPass};DBA Privilege=Normal;",
+        //$"Data Source={dbUser}/{dbPass}@10.1.4.11:1521/{dbDatabase};",
+        //$"Data Source={dbUser}/{dbPass}@10.1.4.11/{dbDatabase};",
+        //$"Data Source=(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST=10.1.4.11)(PORT=1521)))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=XE)));User Id=JDPI_SPI_PIX_AUT_AUTORIZACAO;Password=JDPI_SPI_PIX_AUT_AUTORIZACAO;",
+        //$"Data Source={dbDatabaseIp};User Id={dbUser};Password={dbPass};",
+        //$"Data Source={dbDatabaseFull};User Id={dbUser};Password={dbPass};",
+        //"Data Source=10.1.4.11:1521/JDPI_SPI_PIX_AUT_AUTORIZACAO;User Id=JDPI_SPI_PIX_AUT_AUTORIZACAO;Password=JDPI_SPI_PIX_AUT_AUTORIZACAO;",
+
+        //$"uid={dbUser};pwd={dbPass};Data Source={dbDatabase};",
+        //$"uid={dbUser};pwd={dbPass};Data Source={dbDatabaseIp};",
+        //$"uid={dbUser};pwd={dbPass};Data Source={dbDatabaseFull};",
+
+        //$"USER ID={dbUser};Data Source={dbDatabase};",
+        //$"USER ID={dbUser};Data Source={dbDatabaseIp};",
+        //$"USER ID={dbUser};Data Source={dbDatabaseFull};",
+
+        //$"USER ID={dbUser};Password={dbPass};Data Source={dbDatabase};",
+        //$"USER ID={dbUser};Password={dbPass};Data Source={dbDatabase};Integrated Security=yes;",
+        //$"USER ID={dbUser};Password={dbPass};Data Source={dbDatabase};DBA Privilege=SYSDBA;",
+        //$"USER ID={dbUser};Password={dbPass};Data Source={dbDatabase};Persist Security Info=False;Provider=MSDAORA.1;",
+        //$"USER ID={dbUser};PASSWORD={dbPass};DATA SOURCE={dbDatabase};PERSIST SECURITY INFO=True;",
+        //$"USER ID={dbUser};PASSWORD={dbPass};DATA SOURCE={dbDatabase};PERSIST SECURITY INFO=True;Pooling=False;",
+        //$"USER ID={dbUser};Password={dbPass};Data Source={dbDatabase};Validate Connection=True;",
+
+        //$"USER ID={dbUser};Password={dbPass};Data Source={dbDatabaseIp};",
+        //$"USER ID={dbUser};Password={dbPass};Data Source={dbDatabaseIp};Integrated Security=yes;",
+        //$"USER ID={dbUser};Password={dbPass};Data Source={dbDatabaseIp};DBA Privilege=SYSDBA;",
+        //$"USER ID={dbUser};Password={dbPass};Data Source={dbDatabaseIp};Persist Security Info=False;Provider=MSDAORA.1;",
+        //$"USER ID={dbUser};PASSWORD={dbPass};DATA SOURCE={dbDatabaseIp};PERSIST SECURITY INFO=True;",
+        //$"USER ID={dbUser};PASSWORD={dbPass};DATA SOURCE={dbDatabaseIp};PERSIST SECURITY INFO=True;Pooling=False;",
+        //$"USER ID={dbUser};Password={dbPass};Data Source={dbDatabaseIp};Validate Connection=True;",
+
+        //$"USER ID={dbUser};Password={dbPass};Data Source={dbDatabaseFull};",
+        //$"USER ID={dbUser};Password={dbPass};Data Source={dbDatabaseFull};Integrated Security=yes;",
+        //$"USER ID={dbUser};Password={dbPass};Data Source={dbDatabaseFull};DBA Privilege=SYSDBA;",
+        //$"User ID={dbUser};Password={dbPass};Data Source={dbDatabaseFull};Persist Security Info=False;Provider=MSDAORA.1;",
+        //$"USER ID={dbUser};PASSWORD={dbPass};DATA SOURCE={dbDatabaseFull};PERSIST SECURITY INFO=True;",
+        //$"USER ID={dbUser};PASSWORD={dbPass};DATA SOURCE={dbDatabaseFull};PERSIST SECURITY INFO=True;Pooling=False;",
+        //$"USER ID={dbUser};Password={dbPass};Data Source={dbDatabaseFull};Validate Connection=True;",
+
+        //$"USER ID={dbUser};Password={dbPass};Data Source=JDDSVDB.JDCONSULTORES.COM.BR,1522;",
+        //$"USER ID={dbUser};Password={dbPass};Data Source=JDDSVDB.JDCONSULTORES.COM.BR;Integrated Security=yes;",
+
+        //$"Uid={dbUser};Pwd={dbPass};Server={dbDatabase};",
+
+        //$"User Id=jdpiapi;Password=jdpiapi;Data Source=localhost:1521/orclpdb1;",
+        //$"User Id={dbUser};Password={dbUser};Data Source={dbDatabase};",
+    };
+
+    foreach (var connStr in connectionStrings)
+    {
+        try
+        {
+            using var conn = new OracleConnection(connStr);
+            conn.Open();
+            Console.WriteLine($"✅ Conexão OK: {connStr}");
+        }
+        //catch (OracleException ex)
+        //{
+        //    Console.WriteLine($"❌ Falha na conexão oracle: {ex.Code} - {ex.Message}");
+        //}
+        catch (Exception ex)
+        {
+            Console.WriteLine($"❌ Falha na conexão: {ex.Message}");
+        }
     }
-
-}
-catch (OracleException ex)
-{
-    string errorMessage = "Code: " + ex.Code + "\n" +"Message: " + ex.Message;
-    //System.Diagnostics.EventLog log = new System.Diagnostics.EventLog();
-    //log.Source = "My Application";
-    //log.WriteEntry(errorMessage);
-    // Console.WriteLine("An exception occurred. Please contact your system administrator.");
-    Console.WriteLine($"ErroOracle: {errorMessage}");
-}
-catch (Exception ex)
-{
-    Console.WriteLine($"Erro: {ex.Message}");
-
 }
 finally
 {
