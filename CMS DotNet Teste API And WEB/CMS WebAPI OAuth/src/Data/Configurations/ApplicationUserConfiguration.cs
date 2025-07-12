@@ -13,5 +13,9 @@ public class ApplicationUserConfiguration : IEntityTypeConfiguration<Application
         builder.Property(x => x.PhoneNumberConfirmed).IsRequired().HasColumnType("numeric(1)");
         builder.Property(x => x.TwoFactorEnabled).IsRequired().HasColumnType("numeric(1)");
         builder.Property(x => x.LockoutEnabled).IsRequired().HasColumnType("numeric(1)");
+        builder.Property(x => x.RefreshToken).IsRequired(false).HasMaxLength(250);
+        builder.Property(x => x.DtHrExpireRefreshToken).IsRequired(false);
+
+        //builder.HasIndex(x => x.RefreshToken).IsUnique();
     }
 }

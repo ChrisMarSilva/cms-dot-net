@@ -1,5 +1,6 @@
 @HostAddress = https://localhost:7256/api/v1/auth
 
+
 ### Add user
 POST {{HostAddress}}/register
 Content-Type: application/json
@@ -35,6 +36,9 @@ GET {{HostAddress}}/users
 Accept: application/json
 ###
 
+
+
+
 ### Get Token
 POST {{HostAddress}}/token
 Content-Type: application/json
@@ -55,17 +59,22 @@ Content-Type: application/json
 }
 ###
 
+
+
+
 ### Get authorize
-GET {{HostAddress}}/authorize-only
+GET {{HostAddress}}/authorize
 Authorization: Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiYmI4YTlmOTU3ZDBlNDY0ZGI2YWQwOTM4OWU1MzA3NTIiLCJkaXNwbGF5X25hbWUiOiJBZG1pbmlzdHJhZG9yIiwicm9sZSI6ImZ1bGwiLCJhdWQiOlsiZnJvbnQiLCJhcGkiLCJvYXV0aC1hcGkiXSwiZXhwIjoxNzQ5NDc3MTU5LCJpc3MiOiJvYXV0aC1zZXJ2ZXIifQ.Q-yLebwf4w2TIOqHKnEB9xmaq_UXl6Jd8Hy9vgm5gB8b2Fnlqz-jHxYR3-cLOirvpgLzpELqlTmy75fznTfIHg
 ###
 
 ### Get full
-GET {{HostAddress}}/full-only
+GET {{HostAddress}}/full
 Authorization: Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiYmI4YTlmOTU3ZDBlNDY0ZGI2YWQwOTM4OWU1MzA3NTIiLCJkaXNwbGF5X25hbWUiOiJBZG1pbmlzdHJhZG9yIiwicm9sZSI6ImZ1bGwiLCJhdWQiOlsiZnJvbnQiLCJhcGkiLCJvYXV0aC1hcGkiXSwiZXhwIjoxNzQ5NDc3MTU5LCJpc3MiOiJvYXV0aC1zZXJ2ZXIifQ.Q-yLebwf4w2TIOqHKnEB9xmaq_UXl6Jd8Hy9vgm5gB8b2Fnlqz-jHxYR3-cLOirvpgLzpELqlTmy75fznTfIHg
 ###
 
 ### Get admin
-GET {{HostAddress}}/admin-only
+GET {{HostAddress}}/admin
 Authorization: Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiYmI4YTlmOTU3ZDBlNDY0ZGI2YWQwOTM4OWU1MzA3NTIiLCJkaXNwbGF5X25hbWUiOiJBZG1pbmlzdHJhZG9yIiwicm9sZSI6ImZ1bGwiLCJhdWQiOlsiZnJvbnQiLCJhcGkiLCJvYXV0aC1hcGkiXSwiZXhwIjoxNzQ5NDc3MTU5LCJpc3MiOiJvYXV0aC1zZXJ2ZXIifQ.Q-yLebwf4w2TIOqHKnEB9xmaq_UXl6Jd8Hy9vgm5gB8b2Fnlqz-jHxYR3-cLOirvpgLzpELqlTmy75fznTfIHg
 ###
+
+

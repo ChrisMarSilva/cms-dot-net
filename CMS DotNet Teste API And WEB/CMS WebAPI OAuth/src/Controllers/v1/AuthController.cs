@@ -91,7 +91,7 @@ public class AuthController : ControllerBase
             var listAllUsers = await _userManager.Users.ToListAsync();
             var response = new List<UserResponseDto>();
 
-            if (listAllUsers.Count() > 0)
+            if (listAllUsers.Count > 0)
             {
                 foreach (var user in listAllUsers)
                 {
@@ -109,7 +109,7 @@ public class AuthController : ControllerBase
                         Escopos = scopes
                     });
                 }
-
+                
                 response = response.OrderBy(x => x.UserName).ToList();
             }
 
@@ -208,6 +208,7 @@ public class AuthController : ControllerBase
         try
         {
             var applicationUser = await _userManager.FindByNameAsync(request.client_id);
+            
             if (applicationUser is null)
             {
                 _logger.LogWarning("Usuário inválido: {userName}.", request.client_id);
@@ -313,21 +314,6 @@ public class AuthController : ControllerBase
         }
     }
 
-    private async Task<bool> UserStillHasScopes(ApplicationUser user, string scopes)
-    {
-        var audience = _configuration.GetValue<string>("Jwt:Audience")!;
-        var scopeValidate = true;
-        foreach (var scope in scopes.Split(',', StringSplitOptions.RemoveEmptyEntries))
-        {
-            if (audience.Equals(scope, StringComparison.OrdinalIgnoreCase)) continue;
-            if (await _userManager.IsInRoleAsync(user, scope)) continue;
-            scopeValidate = false;
-            break;
-        }
-
-        return scopeValidate;
-    }
-
     [HttpPost("refresh-token")]
     public async Task<ActionResult<RefreshTokenResponseDto>> GenerateRefreshToken([FromBody] RefreshTokenRequestDto request)
     {
@@ -353,7 +339,7 @@ public class AuthController : ControllerBase
                 return BadRequest("access token/refresh token inválido.");
             }
 
-            var userId = principal.Claims.FirstOrDefault(c => c.Type == "user_id")?.Value; // ClaimTypes.Name // principal.Identity!.Name
+            var userId = principal.Claims.FirstOrDefault(c => c.Type == "user_id")?.Value!; // ClaimTypes.Name // principal.Identity!.Name
             var applicationUser = await _userManager.FindByIdAsync(userId); 
 
             if (applicationUser is null ||
@@ -372,6 +358,7 @@ public class AuthController : ControllerBase
             }
 
             var scopes = string.Join(',', principal.Claims.Where(x => x.Type == "aud").Select(y => y.Value.Normalize().ToLowerInvariant()));
+           
             if (!await UserStillHasScopes(applicationUser, scopes))
             {
                 _logger.LogWarning("Usuário perdeu algum escopo: {idUser}.", applicationUser.Id.ToString());
@@ -413,7 +400,23 @@ public class AuthController : ControllerBase
         }
     }
 
-    [HttpGet("authorize-only")] [Authorize]                 public IActionResult AuthorizeOnly() => Ok("You are and authorize!");
-    [HttpGet("full-only")]      [Authorize(Roles = "full")] public IActionResult FullOnly() => Ok("You are and full!");
-    [HttpGet("admin-only")]     [Authorize(Roles = "Admin")] public IActionResult AdminOnly() => Ok("You are and admin!");
+    [HttpGet("authorize")] [Authorize]                  public IActionResult AuthorizeOnly() => Ok("You are and authorize!");
+    [HttpGet("full")]      [Authorize(Roles = "full")]  public IActionResult FullOnly()      => Ok("You are and full!");
+    [HttpGet("admin")]     [Authorize(Roles = "Admin")] public IActionResult AdminOnly()     => Ok("You are and admin!");
+    
+    private async Task<bool> UserStillHasScopes(ApplicationUser user, string scopes)
+    {
+        var audience = _configuration.GetValue<string>("Jwt:Audience")!;
+        var scopeValidate = true;
+
+        foreach (var scope in scopes.Split(',', StringSplitOptions.RemoveEmptyEntries))
+        {
+            if (audience.Equals(scope, StringComparison.OrdinalIgnoreCase)) continue;
+            if (await _userManager.IsInRoleAsync(user, scope)) continue;
+            scopeValidate = false;
+            break;
+        }
+
+        return scopeValidate;
+    }
 }
